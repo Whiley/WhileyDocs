@@ -7,6 +7,7 @@
 
 \newcommand{\nullc}{\token{null}}
 \newcommand{\comma}{\token{,}}
+\newcommand{\colont}{\token{:}}
 \newcommand{\dott}{\token{.}}
 \newcommand{\lb}{\token{(}\;}
 \newcommand{\rb}{\;\token{)}}
@@ -41,23 +42,29 @@ e & $::=$ & & {\em // Expressions}\\
 
 &{\huge\strut}$|$&$ \vbar\;e\;\vbar  $ & {\em // Size expressions}\\
 
-&{\huge\strut}$|$&$ \lsb [\;e_1\;(\;\comma\;\;e_i\;)^*\;]\rsb $ & {\em // List expressions}\\
-
-&{\huge\strut}$|$&$ \lcb [\;e_1\;(\;\comma\;\;e_i\;)^*\;]\rcb $ & {\em // Set expressions}\\
-
 &{\huge\strut}$|$&$ e_1\;\lsb e_2\rsb $ & {\em // Index Expressions}\\
 
 &{\huge\strut}$|$&$ e\;\dott\;n $ & {\em // Access Expressions}\\
 
-&{\huge\strut}$|$&$ \lcb [\;e^k_1\;\ra\;e^v_1\;(\;\comma\;\;e^k_i\;\ra\;e^v_i\;)^*\;]\rcb $ & {\em // Map expressions}\\
+&{\huge\strut}$|$&$ (\;\token{-}\;|\;\token{!}\;|\;\token{\~}\;|\;\token{\&}\;|\;\token{*}\;)\;e $ & {\em // Unary expressions}\\
 
-&{\huge\strut}$|$&$ op_1\;e $ & {\em // Unary expressions}\\
-
-&{\huge\strut}$|$&$ e_1\;[\;op_2\;e_2\;]^+ $ & {\em // Binary expressions}\\
+&{\huge\strut}$|$&$ e_1\;[\;op^2\;e_2\;]^+ $ & {\em // Binary expressions}\\
 
 &{\huge\strut}$|$&$ e\;\lb\;\overline{e}\;\rb $ & {\em // Invocation expressions}\\
 
+&{\huge\strut}$|$&$ \token{new}\;e $ & {\em // Allocation expressions}\\
+
+&{\huge\strut}$|$&$ \lsb [\;e_1\;(\;\comma\;\;e_i\;)^*\;]\rsb $ & {\em // List expressions}\\
+
+&{\huge\strut}$|$&$ \lcb [\;e_1\;(\;\comma\;\;e_i\;)^*\;]\rcb $ & {\em // Set expressions}\\
+
+&{\huge\strut}$|$&$ \lcb [\;n_1\colont\;e_1\;(\;\comma\;\;n_i\;\colont\;e_i\;)^*\;]\rcb $ & {\em // Record expressions}\\
+
+&{\huge\strut}$|$&$ \lcb [\;e^k_1\;\ra\;e^v_1\;(\;\comma\;\;e^k_i\;\ra\;e^v_i\;)^*\;]\rcb $ & {\em // Map expressions}\\
+
 &{\huge\strut}$|$&$ \{ e_1\;|\;\overline{n\;in\;e}, e_2\} $ & {\em // Comprehension expressions}\\
+&&&\\
+$op^2$ & $::=$ & $\token{+}\;|\;\token{-}\;|\;\token{*}\;|\;\token{/}$& {\em // Binary Operators}\\
 \end{tabular}}
 \caption{Syntax for Expressions}
 \end{figure}
