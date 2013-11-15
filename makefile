@@ -1,4 +1,4 @@
-TARGET = whiley-spec
+TARGET = wls
 DEPS = introduction.tex syntax.tex
 
 all: $(TARGET).ps $(TARGET).pdf

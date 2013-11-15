@@ -10,6 +10,7 @@
 \newcommand{\dott}{\token{.}}
 \newcommand{\lb}{\token{(}\;}
 \newcommand{\rb}{\;\token{)}}
+\newcommand{\ra}{\token{=>}}
 \newcommand{\lsb}{\token{[}\;}
 \newcommand{\rsb}{\;\token{]}}
 \newcommand{\lcb}{\token{\{}\;}
@@ -17,7 +18,7 @@
 \newcommand{\vbar}{\token{|}}
 % ======================================================
 
-\chapter{Language Syntax}
+\chapter{Syntax}
 
 \begin{figure}[!t]
 \centering
@@ -34,25 +35,25 @@ e & $::=$ & & {\em // Expressions}\\
 
 &{\huge\strut}$|$& $\nullc$ & {\em // Null constant}\\
 
-&{\huge\strut}$|$&$ e_1\;(\;\comma\;e_k\;)^+$ & {\em // Tuple expressions}\\
+&{\huge\strut}$|$&$ e_1\;(\;\comma\;e_i\;)^+$ & {\em // Tuple expressions}\\
 
 &{\huge\strut}$|$&$ \lb e \rb $ & {\em // Bracketed expressions}\\
 
 &{\huge\strut}$|$&$ \vbar\;e\;\vbar  $ & {\em // Size expressions}\\
 
-&{\huge\strut}$|$&$ \lsb [\;e_1\;(\;\comma\;\;e_k\;)^*\;]\rsb $ & {\em // List expressions}\\
+&{\huge\strut}$|$&$ \lsb [\;e_1\;(\;\comma\;\;e_i\;)^*\;]\rsb $ & {\em // List expressions}\\
 
-&{\huge\strut}$|$&$ \lcb [\;e_1\;(\;\comma\;\;e_k\;)^*\;]\rcb $ & {\em // Set expressions}\\
+&{\huge\strut}$|$&$ \lcb [\;e_1\;(\;\comma\;\;e_i\;)^*\;]\rcb $ & {\em // Set expressions}\\
 
 &{\huge\strut}$|$&$ e_1\;\lsb e_2\rsb $ & {\em // Index Expressions}\\
 
 &{\huge\strut}$|$&$ e\;\dott\;n $ & {\em // Access Expressions}\\
 
-&{\huge\strut}$|$&$ \{\overline{e^1\Rightarrow e^2}\} $ & {\em // Map expressions}\\
+&{\huge\strut}$|$&$ \lcb [\;e^k_1\;\ra\;e^v_1\;(\;\comma\;\;e^k_i\;\ra\;e^v_i\;)^*\;]\rcb $ & {\em // Map expressions}\\
 
 &{\huge\strut}$|$&$ op_1\;e $ & {\em // Unary expressions}\\
 
-&{\huge\strut}$|$&$ e_1\;op_2\;e_2 $ & {\em // Binary expressions}\\
+&{\huge\strut}$|$&$ e_1\;[\;op_2\;e_2\;]^+ $ & {\em // Binary expressions}\\
 
 &{\huge\strut}$|$&$ e\;\lb\;\overline{e}\;\rb $ & {\em // Invocation expressions}\\
 
