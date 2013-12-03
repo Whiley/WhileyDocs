@@ -6,7 +6,7 @@ implementation (see http://whiley.org for more on Whiley).  This
 includes:
 
 
-1) The Whiley Language Specification.  This gives a concise
+1) *The Whiley Language Specification*.  This gives a concise
    description of the language, including a grammar, semantics, typing
    rules and more.
 
