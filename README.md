@@ -20,4 +20,4 @@ includes:
    the language, including a grammar, semantics, typing rules and
    more.
 
-More documents will be added in the future.
+Currently, these documents are all in early draft form.
