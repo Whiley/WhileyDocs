@@ -1,5 +1,5 @@
-TARGET = getting-started 
-DEPS = $(ls *.tex)
+TARGET = getting-started
+DEPS = abstract.tex introduction.tex
 
 all: $(TARGET).pdf
 
