@@ -1,5 +1,5 @@
 TARGET = getting-started
-DEPS = abstract.tex introduction.tex
+DEPS = abstract.tex introduction.tex first-example.tex twisty-types.tex functional-or-not.tex flow-types.tex calculator.tex objects.tex verification.tex
 
 all: $(TARGET).pdf
 

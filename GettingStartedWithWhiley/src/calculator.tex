@@ -1,0 +1,178 @@
+\section{Calculator Example}
+\begin{figure}[!p]
+\begin{lstlisting}[numbers=left]
+ define Var as string
+ define Op as { ADD, SUB, MUL, DIV }
+ define BinOp as { Op op, Expr lhs, Expr rhs } 
+ define ListAccess as { Expr lhs, Expr rhs } 
+
+ define Value as int | [Value] | null
+
+ define Expr as int | Var | BinOp | [Expr] | ListAccess 
+
+ Value eval(Expr e, {Var->Value} env):
+    if e is int:
+        return e
+    else if e is Var && e in env:
+        // look up variable's value
+        return env[e]
+    else if e is BinOp:
+        // evaluate left and right expressions
+        lhs = eval(e.lhs,env)
+        rhs = eval(e.rhs,env)
+        // sanity check
+        if !(lhs is int && rhs is int):
+            return null // stuck
+        // evaluate result
+        switch e.op:
+            case ADD:
+                return lhs + rhs
+            case SUB:
+                return lhs - rhs
+            case MUL:
+                return lhs * rhs
+            case DIV:
+                if rhs != 0:
+                    return lhs / rhs
+    else if e is ListAccess:
+        // evaluate src and index expressions
+        src = eval(e.lhs,env)
+        index = eval(e.rhs,env)
+        // santity check
+        if src is [Value] && index is int
+           && index >= 0 && index < |src|:
+            return src[index]
+    else if e is [Expr]:
+        lv = []
+        // evaluate items in list constructor
+        for i in e:
+            v = eval(i,env)
+            if v == null:
+                return v
+            else:
+                lv = lv + [v]
+        return lv
+    // some kind of error occurred, so propagate upwards
+    return null
+\end{lstlisting}
+\caption{Whiley code for a simple expression tree and evaluation
+  function.  This makes extensive use of type tests, both for
+  distinguishing expressions and error handling.  Flow-sensitive
+  typing greatly simplifies the code, which would otherwise require
+  numerous unnecessary casts.}
+\label{eg1}
+\end{figure}
+
+Figure~\ref{eg1} provides a simple implementation of expressions,
+along with code for evaluating them.  The types \lstinline{Expr} and
+\lstinline{Value} are algebraic data types, with the latter defining
+the set of allowed values.  Type \lstinline{Op} is an enumeration,
+whilst \lstinline{BinOp} and \lstinline{ListAccess} are records which
+form part of \lstinline{Expr}.  Parameter \lstinline{env} is a map
+from variables to \lstinline{Values}.  Finally, \lstinline{null} is
+used as an error condition to indicate a ``stuck'' state (i.e. the
+evaluation cannot proceed).
+
+The code in Figure~\ref{eg1} makes extensive use of runtime type tests
+to distinguish different expression forms (e.g.  
+``\lstinline{e is int}'').  These work in a similar fashion to Java's
+\lstinline{instanceof} operator, with one important difference: they
+operate in a flow-sensitive fashion and automatically {\em retype}
+variables after the test.  As an example, consider the type test
+``\lstinline{e is int}'' on Line 11.  On the true branch, variable
+\lstinline{e} is automatically retyped to have type \lstinline{int}.
+Likewise, on the false branch, \lstinline{e} is now known {\em not} to
+have type \lstinline{int} (and any attempt to retest this yields a
+compile-time error).
+
+Figure~\ref{eg1} also employs runtime type tests to identify and
+propagate errors.  For example, having evaluated the left- and
+right-hand sides of a \lstinline{BinOp}, we check on Line 21 that both
+are \lstinline{int} values (i.e. not list values or
+\lstinline{null}).  After the check, Whiley's flow-sensitive type
+system automatically retypes both \lstinline{lhs} and \lstinline{rhs}
+to \lstinline{int}.  For \lstinline{ListAccess} expressions, we check
+on Line~39 that \lstinline{src} is a list value, and that
+\lstinline{index} is an \lstinline{int}.  The latter is achieved with
+``\lstinline{index is int}''.  As \lstinline{src} is retyped within the
+condition itself, the subsequent use of \lstinline{|src|} on Line~40
+is type safe.
+
+Implementing our expression language in a statically-typed language,
+such as Java, would require code that was more cumbersome, and more verbose
+than that of Figure~\ref{eg1}.  One reason for this is that, in
+languages like Java, variables must be {\em explicitly} retyped after
+\lstinline{instanceof} tests.  That is, we must insert casts to update
+the types of tested variables and, since variables can have only one
+type in Java, introduce temporary variables to hold these new types.
+For example, after a test ``\lstinline{e instanceof BinOp}'' we must
+introduce a new variable, say \lstinline{r}, with type
+\lstinline{BinOp} and assign \lstinline{e} to \lstinline{r} using an
+appropriate cast.  A Java implementation would also (most likely)
+break up the test on Line 39, since it would otherwise need two
+identical casts (one inside the condition for \lstinline{|src|}, and
+one on the true branch for \lstinline{src[index]}).
+
+In an object-oriented language, such as Java, a direct conversion of
+Figure~\ref{eg1} might not be optimal.  Instead, the {\em visitor
+  pattern}~\cite{gofbook} can be used to distinguish different
+expression forms.  Using the visitor pattern reduces the amount of
+explicit retyping required.  This is because the different expression
+forms are explicitly given as parameters to the visitor methods.
+However, using the visitor pattern is a heavyweight solution which is
+not suitable in all situations.  In particular, it would not eliminate
+all forms of explicit retyping from Figure~\ref{eg1}.  In this case,
+explicit variable retyping will still be required to properly handle
+the different values returned from \lstinline{eval()}.  For example,
+to check \lstinline{BinOp}s are evaluated on \lstinline{int} operands
+(Line~21), and that \lstinline{src} gives a list and \lstinline{index}
+an \lstinline{int} (Line~39).
+
+%% Functional programming languages provide {\em pattern matching} to
+%% distinguish different forms of algebraic data type~\cite{duny}.  Like
+%% the visitor pattern, this can be used to reduce the amount of explicit
+%% retyping that is required.  {\bf [WHAT ELSE TO SAY HERE?]}
+
+
+\paragraph{Code Reuse.}
+Whiley's flow type system can expose greater opportunities
+for code reuse:
+\begin{lstlisting}[numbers=left]
+{string} usedVariables(Expr e):
+    if e is Var:
+        return {e}
+    else if e is BinOp || e is ListAccess:
+        l = useVariables(e.lhs)
+        r = useVariables(e.rhs)
+        return l + r  // set union
+    else if e is [Expr]:
+        ...
+    else:
+        return {}
+\end{lstlisting}
+
+On Line 5, variable \lstinline{e} has type
+\lstinline{BinOp|ListAcccess}.  The use of \lstinline{e.lhs} at this
+point is type safe, since we can perform operations common to all
+types of a union and, in particular, unions of records expose common
+fields (similar to a {\em common initial sequence} for
+\lstinline{union}s of \lstinline{struct}s in
+C~\cite[\S6.3.2.3]{ISO90}).
+
+In languages like Java, exploiting code reuse in this way requires
+careful planning, as common types must be explicitly related in the
+class hierarchy.  In contrast, Whiley's flow-sensitive type system
+lets us exploit opportunities for code reuse in an ad-hoc fashion, as
+and when they occur.
+
+\subsubsection{Primitive Subtyping.} 
+Whiley also provides strong guarantees regarding subtyping of
+primitive types (i.e. integers and reals).  In Whiley,
+\lstinline{int}s and \lstinline{real}s represent unbounded integers
+and rationals, which ensures \lstinline{int}$\;\le\;$\lstinline{real}
+has true subset semantics (i.e. every \lstinline{int} can be
+represented by a \lstinline{real}).  This is not true for e.g. Java,
+where there are \lstinline{int} (resp. \lstinline{long}) values which
+cannot be represented using \lstinline{float}
+(resp. \lstinline{double})~\cite[\S5.1.2]{GJSB05}.
+

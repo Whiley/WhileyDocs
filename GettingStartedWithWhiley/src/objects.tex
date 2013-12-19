@@ -1,0 +1,34 @@
+\subsection{Objective Objects}
+%% \subsection{Processes}
+%% As discussed already, Whiley adopts the Actor model of concurrency.
+%% Here, processes --- or {\em actors} --- communicate via message
+%% passing.  In Whiley, messages are processed using {\em methods} which,
+%% unlike functions, may have side-effects.  The following illustrates a
+%% simple example:
+%% \begin{lstlisting}
+%%  define Queue as process { [Packet] pkts }
+
+%%  Packet Queue::get():
+%%      pkt = items[0]
+%%      this->pkts = pkts[1:]
+%%      return pkt
+
+%%   void Queue::put(Packet pkt):
+%%       this->pkts = pkts + [pkt]
+%%  \end{lstlisting}
+%% Instances of \lstinline{Queue} are processes containing lists of
+%% \lstinline{Packet}s.  Two methods, \lstinline{get()} and
+%% \lstinline{put()}, are provided for manipulating them.  Methods are
+%% distinguished from functions in Whiley by the \lstinline{R::m()}
+%% syntax, where \lstinline{R} is the type of the receiver, and
+%% \lstinline{m} the message name.  Furthermore, methods with
+%% \lstinline{void} return type are {\em asynchronous}, whilst those
+%% producing a value are {\em synchronous}.  
+
+%% The semantics of processes dictates that each invocation of
+%% \lstinline{get()} or \lstinline{put()} is processed atomically.  That
+%% is, we cannot have two invocations of these methods executing
+%% simultaneously.  Thus, there is no need to explicitly synchronise on
+%% the field \lstinline{pkts}, as it can never be modified concurrently.
+%% % %{\bf [BROADCASTING, ERROR HANDLING]}
+
