@@ -9,42 +9,55 @@ maximum of two integers:
 
 \begin{lstlisting}
 function max(int x, int y) => (int z)
-// Must return either x or y
+// must return either x or y
 ensures x == z || y == z
-// Return must be as large as x and y
+// return must be as large as x and y
 ensures x <= z ${\tt \&\&}$ y <= z:
-    ...
+    // implementation
+    if x > y:
+        return x
+    else:
+        return y
 \end{lstlisting}
 Here, we see our first piece of Whiley code.  This declares a function
 called \lstinline{max} which accepts two integers \lstinline{x} and
-\lstinline{y}, and returns an integer \lstinline{z}.  For now, we've
-left out the body of this function and put ``\lstinline{...}'' in its
-place.  The two \lstinline{requires} clauses form the function's {\em
+\lstinline{y}, and returns an integer \lstinline{z}.  The body of the
+function simply compares the two parameters and returns the largest.
+The two \lstinline{requires} clauses form the function's {\em
   post-condition}, which is a guarantee made to any caller of this
 function.  In this case, the \lstinline{max} function guarantees to
 return one of the two parameters, and that the return will be as large
 as both of them.  In plain English, this means it will return the
-maximum of the two parameter values.  
+maximum of the two parameter values.
 
 When verification is enabled the Whiley compiler will check that every
 function meets its specification.  For our \lstinline{max()} function,
 this means it will check that body of the function guarantees to
-return a value which meets the function's post-condition.  If not, the
-compiler will report an error.  The advantage of supporting
-specifications, is that they can help uncover bugs and other, more
-serious, problems earlier in the development cycle.  This leads to
-software which is both more reliable and more easily maintained (since
-the specifications provide important documentation).
+return a value which meets the function's post-condition.  To do this,
+it will explore the two execution paths of the function and check each
+one separately.  If it finds a path which does not meet the
+post-condition, the compiler will report an error.  In this case, the
+\lstinline{max()} function above is implemented correctly and so it
+will find no errors.  The advantage of providing specifications is
+that they can help uncover bugs and other, more serious, problems
+earlier in the development cycle.  This leads to software which is
+both more reliable and more easily maintained (since the
+specifications provide important documentation).
 
 \subsection{Objectives}
 
 Although the primary purpose of Whiley is to allow us to write
 specifications on functions, we will not talk about that again until
-the end of the document.  This goal of this article is to introduce
-the core language without worrying too much about verification (since
-this presents many challenges).  Indeed, it is only once we've
+later in the document.  Furthermore, we will not consider this aspect
+in detail and, for more, the reader is referred to our tutorial on
+verification~\cite{Pea13x}.
+
+The primary goal of this article is to introduce the core language of
+Whiley without worrying about verification (since this presents many
+challenges and adds complexity).  Indeed, it is only once we've
 understood the basics of Whiley that we will will be ready to
-investigate verification.
+investigate verification.  Furthermore, Whiley's core language turns
+out to be rather interesting even without considering verification!
 
 \subsection{Installation}
 
@@ -76,7 +89,7 @@ and you can get the latest code from \url{http://github.com/Whiley}.
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=0.9\textwidth]{../images/WhileyPlay.png}
+\includegraphics[width=0.75\textwidth]{../images/WhileyPlay.png}
 \caption{Compiling a Whiley program using a web browser (Mozilla
   Firefox).  At the moment, the user's program is not correct since
   the system is reporting an error in red.}
@@ -85,9 +98,9 @@ and you can get the latest code from \url{http://github.com/Whiley}.
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=0.9\textwidth]{../images/WyclipseInstallation.png}
+\includegraphics[width=0.75\textwidth]{../images/WyclipseInstallation.png}
 \caption{Installing the Whiley Eclipse Plugin from within Eclipse.}
 \label{wyclipseinstall}
 \end{figure}
 
-\clearpage
+%\clearpage
