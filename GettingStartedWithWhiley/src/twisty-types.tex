@@ -1,0 +1,118 @@
+\section{Some Twisty Types!}
+Look at some of the interesting types in Whiley's armoury
+
+
+%\subsection{Polymorphism \& Encapsulation}
+%Two important hallmarks of the object-oriented paradigm are
+%polymorphism and encapsulation.  The former is typically achieved
+%through inheritance and/or interfaces, whilst the latter typically
+%exploits \lstinline{public} / \lstinline{private} modifiers.  Whiley
+%does not permit \lstinline{public} or \lstinline{private} modifiers in
+%records.  Instead, Whiley employs a simple form of {\em existential
+%type}~\cite{}, illustrated as follows:
+%
+%\begin{lstlisting}
+% define Shape as { 
+%   bool contains(int x, int y, Shape this), 
+%   ... 
+% }
+%\end{lstlisting}
+%This declares what is, essentially, an interface.  The
+%``\lstinline{...}''  notation is significant here, as it denotes
+%unknown --- or {\em existential} --- state~\cite{Cook09}.  We can then
+%``implement'' this interface as follows:
+%
+%\begin{lstlisting}
+% define Square as {
+%   int x, int y, int width, int height,   
+%   bool contains(int x, int y, Square this)
+% }
+%
+% bool defSqContains(int x, int y, Square sq):
+%     if x >= sq.x && x < (sq.x + sq.width):
+%         return y >= sq.y && 
+%                y < (sq.y + sq.height)
+%     return false
+%
+% Square defSquare(int x, int y, int w, int h):
+%     return {x: x, y: y, width: w, height: h,
+%             contains: &defSqContains}
+%\end{lstlisting}
+%{\bf THIS NEEDS WORK --- IT'S BROKEN}
+
+\subsection{Structural Types}
+Statically typed languages, such as Java, employ nominal typing for
+recursive data types.  This results in rigid hierarchies which are
+often difficult to extend~\cite{MA08}.  In contrast, Whiley employs
+{\em structural subtyping} of records~\cite{Card88} to give greater
+flexibility.
+
+Suppose we wish to extend our expressions from Figure~\ref{eg1} with
+assignment statements.  A common issue arises as the left-hand side of
+an assignment is a restricted form of expression, often called an {\em
+  lval}.  In a language like Java, we can capture this nicely using
+interfaces:
+\begin{lstlisting}
+ interface Expr { ... }
+ interface LVal { ... }
+ class ListAccess implements Expr,LVal { ...}
+ class Var implements Expr,LVal { ... }
+ class Int implements Expr { ... }
+\end{lstlisting}
+However, suppose the code for expressions was part of an existing
+library, and we are trying to add statements after the fact.  In a
+language like Java, this presents a problem as we cannot
+retroactively insert the necessary \lstinline{LVal} interface to
+\lstinline{Var} and \lstinline{ListAccess}.
+
+In Whiley, adding the notion of an \lstinline{LVal} is easy to do
+retroactively because of structural subtyping:
+
+\begin{lstlisting}
+ define LVal as Var | ListAccess 
+ define Assign as {LVal lhs, Expr rhs}
+ 
+ Expr parseExpression():
+     ...
+
+ null|Assign parseAssign():
+     le = parseExpression()
+     match(":=")
+     re = parseExpression()
+     if le is LVal:
+         return {lhs: le, rhs: re}
+     else:
+         return null // syntax error
+\end{lstlisting}
+Here, \lstinline{LVal} is implicitly a subtype of \lstinline{Expr} ---
+i.e. there is no need for an explicit declaration of this, as would be
+required in Java.  That is, they can be defined entirely separately
+from each other (e.g. in different files, packages or entirely
+separate programs) --- and yet, \lstinline{LVal} remains a subtype of
+\lstinline{Expr}.
+
+\subsubsection{Structural Subtyping.}
+Whiley permits subtyping between recursive structural types.
+\begin{lstlisting}
+ define Link as {int data, LinkedList next}
+ define LinkedList as null | Link
+ define OrderedList as null | {
+   int data, int order, OrderedList next
+ }
+
+ int sum(LinkedList l):
+     if l is null:
+         return 0
+     else:
+         return l.data + sum(l.next)
+\end{lstlisting}
+Here, we have defined a standard linked list and a specialised
+``ordered'' list where \lstinline{order < next.order} for each node
+(see e.g.~\cite{DS87}).  Whiley type checks this function by showing
+that \lstinline{OrderedList} is a structural subtype of
+\lstinline{LinkedList} --- despite this relationship not being
+identified explicitly in the program.  Type checking in the presence
+of recursive structural types is a well-known and challenging
+problem~\cite{GLP02,CA93,KPS93} which is further compounded in Whiley
+by the presence of flow-sensitive reasoning.
+
