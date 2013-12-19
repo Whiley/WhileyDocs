@@ -1,1 +1,38 @@
 \section{Introduction}
+The Whiley programming language has been in active development since
+2009.  The language was designed specifically to help the programmer
+eliminate bugs from his/her software.  The key feature is that Whiley
+allows programmers to write {\em specifications} for their functions,
+which are then checked by the compiler.  For example, here is the
+specification for the \lstinline{max()} function which returns the
+maximum of two integers:
+
+\begin{lstlisting}
+function max(int x, int y) => (int z)
+// Must return either x or y
+ensures x == z || y == z
+// Return must be as large as x and y
+ensures x <= z ${\tt \&\&}$ y <= z:
+    ...
+\end{lstlisting}
+Here, we see our first piece of Whiley code.  This declares a function
+called \lstinline{max} which accepts two integers \lstinline{x} and
+\lstinline{y}, and returns an integer \lstinline{z}.  For now, we've
+left out the body of this function and put ``\lstinline{...}'' in its
+place.  The two \lstinline{requires} clauses form the function's {\em
+  post-condition}, which is a guarantee made to any caller of this
+function.  In this case, the \lstinline{max} function guarantees to
+return one of the two parameters, and that the return will be as large
+as both of them.  In plain English, this means it will return the
+maximum of the two parameter values.  
+
+When verification is enabled the Whiley compiler will check that every
+function meets its specification.  For our \lstinline{max()} function,
+this means it will check that body of the function guarantees to
+return a value which meets the function's post-condition.  If not, the
+compiler will report an error.  The advantage of supporting
+specifications, is that they can help uncover bugs and other, more
+serious, problems earlier in the development cycle.  This leads to
+software which is both more reliable and more easily maintained (since
+the specifications provide important documentation).
+
