@@ -39,13 +39,55 @@ the specifications provide important documentation).
 \subsection{Objectives}
 
 Although the primary purpose of Whiley is to allow us to write
-specifications on our functions, we are not going to talk about that
-again until the end of the document.  This goal of this article is to
-introduce the core language without worrying too much about
-verification, since this presents many challenges.  Only once we've
-understood the basics of the Whiley language will be ready to
-investigate the verification side of things.
+specifications on functions, we will not talk about that again until
+the end of the document.  This goal of this article is to introduce
+the core language without worrying too much about verification (since
+this presents many challenges).  Indeed, it is only once we've
+understood the basics of Whiley that we will will be ready to
+investigate verification.
 
 \subsection{Installation}
 
+There are currently three ways to get setup with the Whiley
+programming language:
 
+\begin{itemize}
+\item {\bf Web Browser.} By far the simplest way to get started with
+  Whiley is by running it in your web browser (see
+  Figure~\ref{whileyplay}).  Go to \url{http://whiley.org/play/} and
+  you can get started straight away!
+\item {\bf Eclipse Plugin.} If you're familiar with the Eclipse IDE or
+  want to develop more serious programs in Whiley, then installing the
+  Eclipse plugin is easy to do.  From within Eclipse, choose {\em
+    Help$\rightarrow$Install New Software} from the menu.  Enter
+  \url{http://whiley.org/eclipse} as the site, select the ``Whiley
+  Eclipse Plugin'' and follow the on-screen instructions (see Figure~\ref{wyclipseinstall}).
+\item {\bf Development Kit.} For those familiar with the command-line,
+  installing the Whiley Development Kit (WDK) is another option.
+  Furthermore, you'll be able to explore the source code for the
+  Whiley system, and see how it all works!  To do this, visit
+  \url{http://whiley.org/downloads/}.
+\end{itemize}
+
+More information of getting started with Whiley can be found at
+\url{http://whiley.org/getting-started/}.  Finally, the Whiley system
+is completely free and released under an open source license (BSD),
+and you can get the latest code from \url{http://github.com/Whiley}.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.9\textwidth]{../images/WhileyPlay.png}
+\caption{Compiling a Whiley program using a web browser (Mozilla
+  Firefox).  At the moment, the user's program is not correct since
+  the system is reporting an error in red.}
+\label{whileyplay}
+\end{figure}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.9\textwidth]{../images/WyclipseInstallation.png}
+\caption{Installing the Whiley Eclipse Plugin from within Eclipse.}
+\label{wyclipseinstall}
+\end{figure}
+
+\clearpage
