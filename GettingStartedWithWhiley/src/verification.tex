@@ -77,12 +77,44 @@ it requires {\em quantification}.  There are several quantifiers
 available in Whiley, including: \lstinline{all}, which allows us to
 say ``for all elements in a list something is true''; and
 \lstinline{no}, which allows us to say ``there is no element in the list
-where something is true''.
+where something is true''. 
+
+In Whiley, we can express property (2) from above in several different
+ways.  The most direct translation would be:
 
 \begin{lstlisting}
-function indexOf([int] items, int item) => (int|null i)
-// When return value is an int i, then items[i] == item
-ensures i is int ==> items[i] == item
-// When
-ensures no { x in items | x == item }:
+...
+// If return is null, there is no index i where items[i] == item
+ensures no { i in 0..|items| | items[i] == item }:
+    ...
 \end{lstlisting}
+
+\noindent Here, the expression \lstinline{|items|} gives the length of
+the items list, whilst the range expression \lstinline{0..|items|}
+returns a list of consecutive integers from \lstinline{0} up to, but
+not including, \lstinline{|items|}.  Instead of using the
+\lstinline{no} quantifier, we could have equally used the
+\lstinline{all} quantifier, like so:
+
+\begin{lstlisting}
+...
+// If return is null, there is no index i where items[i] == item
+ensures all { i in 0..|items| | items[i] != item }:
+    ...
+\end{lstlisting}
+
+The above, however, is perhaps not as clear as the first translation.
+Finally we can, in this case, avoid talking about indices altogether
+like so:
+
+\begin{lstlisting}
+...
+// If return is null, there is no index i where items[i] == item
+ensures no { x in items | x == item }:
+    ...
+\end{lstlisting}
+
+The above simple says ``there is no element \lstinline{x} in
+\lstinline{items} where \lstinline{x == item}''.  Although this is
+also not a direct translation of the original property, it is a rather
+convenient translation which achieves the same thing.
