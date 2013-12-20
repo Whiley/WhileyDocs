@@ -139,3 +139,21 @@ ensures i is int ==> no { j in 0 .. i | items[j] == item }:
     //
     return null
 \end{lstlisting}
+
+The implementation of \lstinline{indexOf()} given above meets the
+function's specification.  Unfortunately, whilst this is true, the
+Whiley compiler needs us to help it determine this.  Figure~\ref{}
+illustrates what happens when we try to compile the above code with
+verification enabled.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=1.0\textwidth]{../images/indexOf.png}
+\caption{Illustrating our first working version of the
+  \lstinline{indexOf} function being compiled with verification
+  enabled.  The compiler is reporting an error stating ``{\em index out of
+  bounds (negative)}''.  This is because the compiler believes
+  \lstinline{i} may be negative at this point.  Although we know this
+  is not true, we must write a {\em loop invariant} to help the
+  compiler see this.}
+\end{figure}
