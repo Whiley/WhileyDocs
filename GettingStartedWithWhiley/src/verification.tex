@@ -41,7 +41,7 @@ specification.\\
 \item If the return is an integer \lstinline{i}, then
   \lstinline{items[i] == item}.
 \item If the return is \lstinline{null}, there is no index
-  \lstinline{i} where \lstinline{items[i] == item}.
+  \lstinline{j} where \lstinline{items[j] == item}.
 \item If the return is an integer \lstinline{i}, then there is
   no index \lstinline{j} where \lstinline{j < i} and
   \lstinline{items[j] == item}.
@@ -52,7 +52,7 @@ specifying that in Whiley.  At the same time, we'll also give an
 initial implementation which satisfies this partial specification:
 
 \begin{lstlisting}
-function indexOf([int] items, int item) => (int|null i)
+function indexOf([int] items, int item) => (int|null r)
 // If return value is an int i, then items[i] == item
 ensures i is int ==> items[i] == item:
     //
@@ -84,8 +84,8 @@ ways.  The most direct translation would be:
 
 \begin{lstlisting}
 ...
-// If return is null, there is no index i where items[i] == item
-ensures no { i in 0..|items| | items[i] == item }:
+// If return is null, there is no index j where items[j] == item
+ensures i is null ==> no { j in 0..|items| | items[j] == item }:
     ...
 \end{lstlisting}
 
@@ -98,8 +98,8 @@ not including, \lstinline{|items|}.  Instead of using the
 
 \begin{lstlisting}
 ...
-// If return is null, there is no index i where items[i] == item
-ensures all { i in 0..|items| | items[i] != item }:
+// If return is null, there is no index j where items[j] == item
+ensures i is null ==> all { j in 0..|items| | items[j] != item }:
     ...
 \end{lstlisting}
 
@@ -109,12 +109,33 @@ like so:
 
 \begin{lstlisting}
 ...
-// If return is null, there is no index i where items[i] == item
-ensures no { x in items | x == item }:
+// If return is null, there is no index j where items[j] == item
+ensures i is null ==> no { x in items | x == item }:
     ...
 \end{lstlisting}
 
 The above simple says ``there is no element \lstinline{x} in
 \lstinline{items} where \lstinline{x == item}''.  Although this is
-also not a direct translation of the original property, it is a rather
-convenient translation which achieves the same thing.
+also not the most direct translation of the original property, it is a
+rather convenient translation which achieves the same thing.
+
+At this point, we can now give the complete specification for the
+\lstinline{indexOf()} function, along with an initial implementation:
+
+\begin{lstlisting}
+function indexOf([int] items, int item) => (int|null i)
+// If return is an int r, then items[r] == item
+ensures i is int ==> items[i] == item
+// If return is null, then no element x in items where x == item
+ensures i is null ==> no { x in items | x == item }
+// If return is an int i, then no index j where j $<$ i and items[j] == item
+ensures i is int ==> no { j in 0 .. i | items[j] == item }:
+    //
+    i = 0
+    while i < |items|:
+       if items[i] == item:
+           return i 
+       i = i + 1
+    //
+    return null
+\end{lstlisting}
