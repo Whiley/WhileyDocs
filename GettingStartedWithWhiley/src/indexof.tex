@@ -31,9 +31,11 @@ specification.\\
   \lstinline{items[j] == item}.
 \end{enumerate}
 
-These properties determine how a correct implementation of the \lstinline{indexOf()} function should behave.
+These properties determine how a correct implementation of the
+\lstinline{indexOf()} function should behave.  We refer to them as the
+{\em specification} of the \lstinline{indexOf()} function.
 
-\subsection{Property 1}
+\subsection{Property 1 --- Return Valid Indexes}
 
 The first of the above properties is the easiest, so lets start by
 specifying that in Whiley.  At the same time, we'll also give an
@@ -60,7 +62,7 @@ not \lstinline{items[0] == item}.  This implementation meets the
 specification we have so far although, obviously, this is an
 incomplete implementation of the \lstinline{indexOf} function!
 
-\subsection{Properties 2 + 3}
+\subsection{Property 2 --- Return Null if No Match}
 Property (2) from our list above is more difficult to specify, because
 it requires {\em quantification}.  There are several quantifiers
 available in Whiley, including: \lstinline{all}, which allows us to
@@ -108,6 +110,9 @@ The above simple says ``there is no element \lstinline{x} in
 also not the most direct translation of the original property, it is a
 rather convenient translation which achieves the same thing.
 
+\subsection{Property 3 --- Return Least Index}
+\subsection{Final Version}
+
 At this point, we can now give the complete specification for the
 \lstinline{indexOf()} function, along with an initial implementation:
 
@@ -147,5 +152,3 @@ verification enabled.
   compiler see this.}
 \label{eg_indexOf}
 \end{figure}
-
-\subsection{Final Version}
