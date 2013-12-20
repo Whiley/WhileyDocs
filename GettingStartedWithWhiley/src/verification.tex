@@ -13,4 +13,23 @@ development.  In this section, we'll explore the basics of
 verification in Whiley and, in the following section, we'll look at
 practical example.
 
-\paragraph{Example 1 --- Contains.}
+\paragraph{Example.}  To illustrate verification in Whiley, we'll
+consider specifying a simple example function.  This is the
+\lstinline{contains()} function, described as follows:
+
+\begin{lstlisting}
+// Returns true if the items list contains the given item and false otherwise.
+function contains([int] items, int item) => bool:
+    ...
+\end{lstlisting}
+
+This is a common function found in the standard libraries of many
+programming languages.  The body of the function examines each element
+of the \lstinline{items} list and check whether or not it equals
+\lstinline{item}.  To start with, we won't worry too much about the
+body of the \lstinline{contains()} function.  Instead, we'll
+progressively build up the specification until we are happy with it.
+Then, we'll give an implementation of the function which meets this
+specification.
+
+
