@@ -35,7 +35,7 @@ These properties determine how a correct implementation of the
 \lstinline{indexOf()} function should behave.  We refer to them as the
 {\em specification} of the \lstinline{indexOf()} function.
 
-\subsection{Property 1 --- Return Valid Indexes}
+\subsection{Specifying Property 1 --- Return Valid Indexes}
 
 The first of the above properties is the easiest, so lets start by
 specifying that in Whiley.  At the same time, we'll also give an
@@ -62,7 +62,7 @@ not \lstinline{items[0] == item}.  This implementation meets the
 specification we have so far although, obviously, this is an
 incomplete implementation of the \lstinline{indexOf} function!
 
-\subsection{Property 2 --- Return Null if No Match}
+\subsection{Specifying Property 2 --- Return Null if No Match}
 Property (2) from our list above is more difficult to specify, because
 it requires {\em quantification}.  There are several quantifiers
 available in Whiley, including: \lstinline{all}, which allows us to
@@ -110,8 +110,8 @@ The above simple says ``there is no element \lstinline{x} in
 also not the most direct translation of the original property, it is a
 rather convenient translation which achieves the same thing.
 
-\subsection{Property 3 --- Return Least Index}
-\subsection{Final Version}
+\subsection{Specifying Property 3 --- Return Least Index}
+\subsection{Working Implementation}
 
 At this point, we can now give the complete specification for the
 \lstinline{indexOf()} function, along with an initial implementation:
@@ -152,3 +152,36 @@ verification enabled.
   compiler see this.}
 \label{eg_indexOf}
 \end{figure}
+
+\subsection{Verified Implementation}
+Although our implementation of \lstinline{indexOf()} given above is
+correct, it currently does not verify.  Although this distinction may
+seem unimportant, it goes to the heart of what verification is about.
+That is, we know the implementation of \lstinline{indexOf()} is
+correct because we, {\em as humans}, have looked at it and believe it
+is.  Whilst may be a reasonable approach for small examples, it
+certainly is not for larger and more complex programs.  Humans are
+fallible and we can easily believe something is true when it is not.
+Therefore, we want a mechanical system which can examine a program and
+report ``{\em Yes, I agree that this is correct}''.  Whiley provides
+such a system when verification is enabled.  
+
+Unfortunately, Whiley is not as smart as a human and often there will
+be things we know that it does not.  In such cases, we need to help
+Whiley by adding hints into our programs.  In this case, we need to
+add some loop invariants (recall \S\ref{loop_invariants}) to help
+Whiley verify our implementation of \lstinline{indexOf()}.  The first
+part of the loop invariant we need is straightforward.  Since
+\lstinline{i} is modified in the loop, we need am invariant to ensure
+\lstinline{i >= 0} when \lstinline{items[i]} is accessed:
+
+\begin{lstlisting}
+    ...
+    i = 0
+    while i < |items| where i >= 0:
+        ...
+        i = i + 1    
+\end{lstlisting}
+We can see that this invariant holds on entry to the loop (i.e. since
+\lstinline{i = 0} on entry).  Furthermore, if \lstinline{i >= 0} then \lstinline{i+1 >= 0} follows and, hence, the loop
+invariant holds after each iteration.
