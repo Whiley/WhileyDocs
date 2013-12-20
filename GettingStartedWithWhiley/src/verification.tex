@@ -14,7 +14,7 @@ development.  In this section, we'll explore the basics of
 verification in Whiley using some small examples.  In the following
 section, we'll look at a larger and more example.
 
-\subsection{Example: indexOf()} 
+\subsection{The indexOf() Function} 
 To illustrate verification in Whiley, we'll consider specifying a
 simple example function.  This is the \lstinline{contains()} function,
 described as follows:
@@ -72,6 +72,7 @@ not \lstinline{items[0] == item}.  This implementation meets the
 specification we have so far although, obviously, this is an
 incomplete implementation of the \lstinline{indexOf} function!
 
+\subsection{Quantification}
 Property (2) from our list above is more difficult to specify, because
 it requires {\em quantification}.  There are several quantifiers
 available in Whiley, including: \lstinline{all}, which allows us to
@@ -142,8 +143,8 @@ ensures i is int ==> no { j in 0 .. i | items[j] == item }:
 
 The implementation of \lstinline{indexOf()} given above meets the
 function's specification.  Unfortunately, whilst this is true, the
-Whiley compiler needs us to help it determine this.  Figure~\ref{}
-illustrates what happens when we try to compile the above code with
+Whiley compiler needs help to determine this.  Figure~\ref{eg_indexOf}
+illustrates what happens when we compile the above code with
 verification enabled.
 
 \begin{figure}[!t]
@@ -156,4 +157,18 @@ verification enabled.
   \lstinline{i} may be negative at this point.  Although we know this
   is not true, we must write a {\em loop invariant} to help the
   compiler see this.}
+\label{eg_indexOf}
 \end{figure}
+
+\subsection{Loop Invariants}
+
+To complete our implementation of the \lstinline{indexOf()} function,
+we need to add some hints to help the Whiley compiler.  These are
+called {\em loop invariants}.  A loop invariant is a property which
+holds before and after each iteration of the loop.  There are three
+key points about loop invariants:
+\begin{enumerate}
+\item The loop invariant must hold on entry to the loop.
+\item Assuming the loop invariant holds at the start of the loop, it
+  must hold at the end.
+\end{enumerate}
