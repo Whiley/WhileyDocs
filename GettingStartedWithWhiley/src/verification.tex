@@ -37,11 +37,11 @@ specification.\\
 \noindent To specify this function, we want to ensure three things:
 
 \begin{enumerate}
-\item When the return is an integer \lstinline{i}, then
+\item If the return is an integer \lstinline{i}, then
   \lstinline{items[i] == item}.
-\item When the return is \lstinline{null}, there is no index
+\item If the return is \lstinline{null}, there is no index
   \lstinline{i} where \lstinline{items[i] == item}.
-\item When the return is an integer \lstinline{i}, then there is
+\item If the return is an integer \lstinline{i}, then there is
   no index \lstinline{j} where \lstinline{j < i} and
   \lstinline{items[j] == item}.
 \end{enumerate}
@@ -52,28 +52,29 @@ initial implementation which satisfies this partial specification:
 
 \begin{lstlisting}
 function indexOf([int] items, int item) => (int|null i)
-// When return value is an int i, then items[i] == item
+// If return value is an int i, then items[i] == item
 ensures i is int ==> items[i] == item:
     //
     if |items| > 0 && items[0] == item:
-        return item
+        return 0
     else:
         return null
 \end{lstlisting}
 
 Here, we can see property (1) above written as an \lstinline{ensures}
-clause in Whiley.  In particular, the phrase ``When the return value
-is an integer'' is translated into the condition ``\lstinline{i is int}''.  The implementation given checks whether or not the
-first element of \lstinline{items} equals \lstinline{item}.  If it
-does, then the index \lstinline{0} is returned; otherwise,
-\lstinline{null} is returned.  This implementation meets the
-specification we currently have although, obviously, it's not how we want the
-\lstinline{indexOf} function to work!
+clause in Whiley.  In particular, the phrase ``the return value is an
+integer'' is translated into the condition ``\lstinline{i is int}''.
+Likewise, the implication operator (i.e. \lstinline{==>}) is used to
+say ``If ... then ...''.  We've also given an initial implementation
+for the \lstinline{indexOf()} function which simply checks whether or
+not \lstinline{items[0] == item}.  This implementation meets the
+specification we have so far although, obviously, this is an
+incomplete implementation of the \lstinline{indexOf} function!
 
 Property (2) from our list above is more difficult to specify, because
 it requires {\em quantification}.  There are several quantifiers
 available in Whiley, including: \lstinline{all}, which allows us to
-say ``for all elements in a list something is true''; and,
+say ``for all elements in a list something is true''; and
 \lstinline{no}, which allows us to say ``there is no element in the list
 where something is true''.
 
