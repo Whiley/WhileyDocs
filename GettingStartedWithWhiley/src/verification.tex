@@ -32,4 +32,12 @@ progressively build up the specification until we are happy with it.
 Then, we'll give an implementation of the function which meets this
 specification.
 
+To specify this function, we want to ensures two things:
+
+\begin{enumerate}
+\item When the return value is \lstinline{true}, there exists an index
+  \lstinline{i} where \lstinline{items[i] == item}.
+\item When the return value is \lstinline{false}, there is no index
+  \lstinline{i} where \lstinline{items[i] == item}.
+\end{enumerate}
 
