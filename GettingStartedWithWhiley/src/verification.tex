@@ -51,8 +51,6 @@ specifying that in Whiley.  At the same time, we'll also give an
 initial implementation which satisfies this partial specification:
 
 \begin{lstlisting}
-// Return the lowest index in the items list which equals the given item.
-// If no such index exists, return null.
 function indexOf([int] items, int item) => (int|null i)
 // When return value is an int i, then items[i] == item
 ensures i is int ==> items[i] == item:
@@ -72,5 +70,17 @@ does, then the index \lstinline{0} is returned; otherwise,
 specification we currently have although, obviously, it's not how we want the
 \lstinline{indexOf} function to work!
 
+Property (2) from our list above is more difficult to specify, because
+it requires {\em quantification}.  There are several quantifiers
+available in Whiley, including: \lstinline{all}, which allows us to
+say ``for all elements in a list something is true''; and,
+\lstinline{no}, which allows us to say ``there is no element in the list
+where something is true''.
 
-
+\begin{lstlisting}
+function indexOf([int] items, int item) => (int|null i)
+// When return value is an int i, then items[i] == item
+ensures i is int ==> items[i] == item
+// When
+ensures no { x in items | x == item }:
+\end{lstlisting}
