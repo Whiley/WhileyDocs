@@ -11,12 +11,13 @@ Unfortunately, specifications is not always straightforward and
 requires considerable attention to detail.  Nevertheless, with
 practice, it can easily fit into the routine of day-to-day
 development.  In this section, we'll explore the basics of
-verification in Whiley and, in the following section, we'll look at
-practical example.
+verification in Whiley using some small examples.  In the following
+section, we'll look at a larger and more example.
 
-\paragraph{Example.}  To illustrate verification in Whiley, we'll
-consider specifying a simple example function.  This is the
-\lstinline{contains()} function, described as follows:
+\subsection{Example: indexOf()} 
+To illustrate verification in Whiley, we'll consider specifying a
+simple example function.  This is the \lstinline{contains()} function,
+described as follows:
 
 \begin{lstlisting}
 // Return the lowest index in the items list which equals the given item.
