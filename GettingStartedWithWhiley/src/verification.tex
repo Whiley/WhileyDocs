@@ -1,3 +1,4 @@
+\newpage
 \section{Verification}
 
 As discussed in the introduction, an important feature of Whiley is
@@ -18,8 +19,9 @@ consider specifying a simple example function.  This is the
 \lstinline{contains()} function, described as follows:
 
 \begin{lstlisting}
-// Returns true if the items list contains the given item and false otherwise.
-function contains([int] items, int item) => bool:
+// Return the lowest index in the items list which equals the given item.
+// If no such index exists, return null.
+function indexOf([int] items, int item) => int|null:
     ...
 \end{lstlisting}
 
@@ -27,17 +29,48 @@ This is a common function found in the standard libraries of many
 programming languages.  The body of the function examines each element
 of the \lstinline{items} list and check whether or not it equals
 \lstinline{item}.  To start with, we won't worry too much about the
-body of the \lstinline{contains()} function.  Instead, we'll
+body of the \lstinline{indexOf()} function.  Instead, we'll
 progressively build up the specification until we are happy with it.
 Then, we'll give an implementation of the function which meets this
-specification.
+specification.\\
 
-To specify this function, we want to ensures two things:
+\noindent To specify this function, we want to ensure three things:
 
 \begin{enumerate}
-\item When the return value is \lstinline{true}, there exists an index
+\item When the return is an integer \lstinline{i}, then
+  \lstinline{items[i] == item}.
+\item When the return is \lstinline{null}, there is no index
   \lstinline{i} where \lstinline{items[i] == item}.
-\item When the return value is \lstinline{false}, there is no index
-  \lstinline{i} where \lstinline{items[i] == item}.
+\item When the return is an integer \lstinline{i}, then there is
+  no index \lstinline{j} where \lstinline{j < i} and
+  \lstinline{items[j] == item}.
 \end{enumerate}
+
+The first of the above properties is the easiest, so lets start by
+specifying that in Whiley.  At the same time, we'll also give an
+initial implementation which satisfies this partial specification:
+
+\begin{lstlisting}
+// Return the lowest index in the items list which equals the given item.
+// If no such index exists, return null.
+function indexOf([int] items, int item) => (int|null i)
+// When return value is an int i, then items[i] == item
+ensures i is int ==> items[i] == item:
+    //
+    if |items| > 0 && items[0] == item:
+        return item
+    else:
+        return null
+\end{lstlisting}
+
+Here, we can see property (1) above written as an \lstinline{ensures}
+clause in Whiley.  In particular, the phrase ``When the return value
+is an integer'' is translated into the condition ``\lstinline{i is int}''.  The implementation given checks whether or not the
+first element of \lstinline{items} equals \lstinline{item}.  If it
+does, then the index \lstinline{0} is returned; otherwise,
+\lstinline{null} is returned.  This implementation meets the
+specification we currently have although, obviously, it's not how we want the
+\lstinline{indexOf} function to work!
+
+
 
