@@ -18,7 +18,7 @@ characters, etc.  Of these, the most commonly used are:
   Whiley are {\em unbounded}. This means that, in theory at least, a
   variable of type int can take on {\em any possible integer value};
   this differs from many other languages (e.g. Java), which limit the
-  number of possible values (e.g. following 32-bit two’s complement).
+  number of possible values (e.g. following 32-bit two's complement).
 \item {\bf Real Numbers} are denoted by the type
   \lstinline{real}. Reals in Whiley are {\em unbounded
     rationals}. This means that, in theory at least, a variable of
@@ -28,7 +28,25 @@ characters, etc.  Of these, the most commonly used are:
   found in other languages (e.g. Java).
 \end{itemize}
 
+\begin{eg}
+\noindent A very simple example which illustrates the \lstinline{int} and
+\lstinline{bool} types is the following:
+\begin{lstlisting}
+function isLessThan(int x, int y) => bool:
+    //
+    if x < y:
+        return true
+    else:
+        return false
+\end{lstlisting}
+This declares a simple function which returns \lstinline{true} if the
+first parameter, \lstinline{x}, is less than the second,
+\lstinline{y}, and \lstinline{false} otherwise.
+\end{eg}
 
+\begin{insight}{Indentation Syntax.}
+asdasd
+\end{insight}
 
 \paragraph{Subtyping.} Whiley also provides strong guarantees
 regarding subtyping of primitive types.  In Whiley, \lstinline{int}s

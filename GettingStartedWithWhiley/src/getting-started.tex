@@ -5,7 +5,18 @@
 \usepackage{url} % for typesetting urls
 \usepackage{color}
 \usepackage{fancybox}
+\usepackage{amssymb}
+\usepackage{amsmath}
 \usepackage[a4paper,lmargin=35mm,tmargin=35mm,bmargin=35mm,rmargin=35mm,twoside=false,marginpar=30mm]{geometry}
+
+% ------------------------------------------------------------------------
+\definecolor{lightgray}{RGB}{225,225,225}
+
+\newenvironment{eg}{\par\noindent{\bf Example.}}{\hfill$\blacksquare$}
+\newenvironment{insight}[1]{
+  {\Huge ?}\paragraph{#1}}{}
+% ------------------------------------------------------------------------
+
 \input{listings}
 
 \title{\Huge Getting Started with Whiley}
