@@ -2,6 +2,10 @@
 \section{Typing}
 Look at some of the interesting types in Whiley's armoury
 
+\subsection{Unions}
+
+\subsection{Recursive Types}
+
 %\subsection{Polymorphism \& Encapsulation}
 %Two important hallmarks of the object-oriented paradigm are
 %polymorphism and encapsulation.  The former is typically achieved
@@ -91,7 +95,7 @@ from each other (e.g. in different files, packages or entirely
 separate programs) --- and yet, \lstinline{LVal} remains a subtype of
 \lstinline{Expr}.
 
-\subsubsection{Structural Subtyping.}
+\subsection{Structural Subtyping.}
 Whiley permits subtyping between recursive structural types.
 \begin{lstlisting}
  define Link as {int data, LinkedList next}
@@ -116,7 +120,7 @@ of recursive structural types is a well-known and challenging
 problem~\cite{GLP02,CA93,KPS93} which is further compounded in Whiley
 by the presence of flow-sensitive reasoning.
 
-\section{Flowing Types}
+\subsection{Flow Typing}
 We now examine Whiley's flow-sensitive type system in more detail, and
  identify several ways in which it leads to improved code quality.
 

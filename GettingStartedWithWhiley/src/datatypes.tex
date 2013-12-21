@@ -1,8 +1,53 @@
 \newpage
-\section{Data Types}
+\section{Basic Concepts}
 
 \subsection{Primitives}
 
 \subsection{Sets, Lists and Maps}
 
 \subsection{Records and Tuples}
+
+\subsection{Primitive Subtyping.} 
+Whiley also provides strong guarantees regarding subtyping of
+primitive types (i.e. integers and reals).  In Whiley,
+\lstinline{int}s and \lstinline{real}s represent unbounded integers
+and rationals, which ensures \lstinline{int}$\;\le\;$\lstinline{real}
+has true subset semantics (i.e. every \lstinline{int} can be
+represented by a \lstinline{real}).  This is not true for e.g. Java,
+where there are \lstinline{int} (resp. \lstinline{long}) values which
+cannot be represented using \lstinline{float}
+(resp. \lstinline{double})~\cite[\S5.1.2]{GJSB05}.
+
+\subsection{Value Semantics}
+\label{value_semantics}
+In Whiley, all compound structures (e.g. lists, sets, and records)
+have {\em value semantics}.  This means they are passed and returned
+by-value (as in Pascal, MATLAB or most functional languages).  But, unlike
+functional languages (and like Pascal), values of compound types can
+be updated in place.
+
+Value semantics implies that updates to a variable only affects that
+variable, and that information can only flow out of a function through
+its return value.  Whiley has no general, mutable heap comparable to
+those found in object-oriented languages.  Consider:
+\begin{lstlisting}
+ int f([int] xs):
+     ys = xs
+     xs[0] = 1
+     ...
+\end{lstlisting}
+The semantics of Whiley dictate that, having assigned \lstinline{xs}
+to \lstinline{ys} as above, the subsequent update to \lstinline{xs}
+does not affect \lstinline{ys}.  Arguments are also passed by value,
+hence \lstinline{xs} is updated inside \lstinline{f()} and this does
+not affect \lstinline{f}'s caller.  That is, \lstinline{xs} is not a
+{\em reference} to a list of \lstinline{int}; rather, it {\em is} a
+list of \lstinline{int}s and assignments to it do not affect state
+visible outside of \lstinline{f()}. 
+
+Whilst this approach may seem inefficient, a variety of techniques
+exist (e.g. reference counting) to ensure efficiency (see
+e.g.~\cite{LH11,Shank01,Ode91}).  Indeed, the underlying
+implementation does pass compound structures by reference and copies
+them only when absolutely necessary.
+

@@ -166,14 +166,4 @@ class hierarchy.  In contrast, Whiley's flow-sensitive type system
 lets us exploit opportunities for code reuse in an ad-hoc fashion, as
 and when they occur.
 
-\subsubsection{Primitive Subtyping.} 
-Whiley also provides strong guarantees regarding subtyping of
-primitive types (i.e. integers and reals).  In Whiley,
-\lstinline{int}s and \lstinline{real}s represent unbounded integers
-and rationals, which ensures \lstinline{int}$\;\le\;$\lstinline{real}
-has true subset semantics (i.e. every \lstinline{int} can be
-represented by a \lstinline{real}).  This is not true for e.g. Java,
-where there are \lstinline{int} (resp. \lstinline{long}) values which
-cannot be represented using \lstinline{float}
-(resp. \lstinline{double})~\cite[\S5.1.2]{GJSB05}.
 
