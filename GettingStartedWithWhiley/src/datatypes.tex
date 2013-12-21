@@ -66,6 +66,16 @@ values which cannot be represented using \lstinline{float}
 (resp. \lstinline{double})~\cite[\S5.1.2]{GJSB05}.
 \end{insight}
 
+\begin{lstlisting}
+function floor(real x) => int:
+    int num, int den = x    // extract numerator and denominator
+    int r = num / den       // integer division
+    if x < 0.0 && den != 1: 	 
+        return r - 1 
+    else:
+        return r 
+\end{lstlisting}
+
 \subsection{Sets, Lists and Maps}
 
 \subsection{Records and Tuples}
