@@ -1,5 +1,5 @@
 TARGET = getting-started
-DEPS = listings.tex abstract.tex introduction.tex first-example.tex twisty-types.tex functional-or-not.tex flow-types.tex calculator.tex objects.tex verification.tex indexof.tex microwave.tex
+DEPS = listings.tex abstract.tex introduction.tex datatypes.tex twisty-types.tex functional-or-not.tex flow-types.tex calculator.tex objects.tex verification.tex indexof.tex microwave.tex
 
 all: $(TARGET).pdf
 
