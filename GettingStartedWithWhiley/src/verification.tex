@@ -68,18 +68,6 @@ satisfy its precondition.  In other words, when the Whiley compiler
 verifies a function's implementation meets its specification, this
 means it does so {\em for all possible input values}.  
 
-\subsection{Function Invocation}
-
-To keep verification tractable, the Whiley compiler verifies each
-function in a program one at a time, independently of
-others.\footnote{This corresponds to performing an {\em
-    intra-procedural} analysis, compared with a more involved {\em
-    inter-procedural} analysis.}  Thus, when verifying a given
-function, it assumes that all other functions correctly meet their
-specification.  Of course, if this is not the case, then eventually
-this will be discovered by the compiler as it progresses through the
-program.
-
 \subsection{Data Type Invariants}
 
 The above illustrates a function specification given through explicit pre- and
@@ -160,6 +148,42 @@ clause.  Thus, in the above example, the loop invariant is
 enabled will fail with an error.   This is because the loop invariant
 does not hold on entry to the loop (item 1 above).
 
+\subsection{Explicit Assumptions}
+
+\subsection{Function Invocation}
+
+To keep verification tractable, the Whiley compiler verifies each
+function in a program one at a time, independently of
+others.\footnote{This corresponds to performing an {\em
+    intra-procedural} analysis, compared with a more involved {\em
+    inter-procedural} analysis.}  Thus, when verifying a given
+function, it assumes that all other functions correctly meet their
+specification.  Of course, if this is not the case, then this will
+eventually be discovered as the compiler progresses through the
+program.  For example, consider this program:
+
+\begin{lstlisting}
+function f(int x) => (int y)
+// Return cannot be negative
+ensures y >= 0:
+    //
+    return x
+
+function g() => (int y)
+// Return cannot be negative
+ensures y >= 0:
+    //
+    return f(1)
+\end{lstlisting}
+
+This program will not verify because the implementation of
+\lstinline{f()} does not meet its specification.  For example,
+\lstinline{f(-1)} gives \lstinline{-1} but the post-condition for
+\lstinline{f()} allows only non-negative integers to be returned.
+However, the Whiley compiler will verify that the implementation of
+\lstinline{g()} meets its specification as, when doing this, it
+assumes that \lstinline{f()} meets it specification.
+ 
 \subsection{BIN}
 \paragraph{Example 1 --- Constrained Types.}
 
