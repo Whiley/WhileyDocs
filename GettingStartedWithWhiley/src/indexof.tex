@@ -1,11 +1,13 @@
 \newpage
 \section{Example: IndexOf Function}
 
-To better illustrate verification in Whiley, we'll consider specifying a simple function.  This is the \lstinline{contains()} function, described as follows:
+To better illustrate verification in Whiley, we'll develop the
+specification for a slightly more challenging function.  This is the
+\lstinline{indexOf()} function, described as follows:
 
 \begin{lstlisting}
 // Return the lowest index in the items list which equals the given item.
-// If no such index exists, return null.
+// If no such index exists, returns null.
 function indexOf([int] items, int item) => int|null:
     ...
 \end{lstlisting}
