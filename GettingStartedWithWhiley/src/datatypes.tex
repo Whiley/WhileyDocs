@@ -55,15 +55,16 @@ first parameter, \lstinline{x}, is less than the second,
   statements with the same indentation are included.
 \end{insight}
 
-\paragraph{Subtyping.} Whiley also provides strong guarantees
-regarding subtyping of primitive types.  In Whiley, \lstinline{int}s
-and \lstinline{real}s represent unbounded integers and rationals,
-which ensures \lstinline{int}$\;\le\;$\lstinline{real} has true subset
-semantics (i.e. every \lstinline{int} can be represented by a
-\lstinline{real}).  This is not true for e.g. Java, where there are
-\lstinline{int} (resp. \lstinline{long}) values which cannot be
-represented using \lstinline{float}
+\begin{insight}{Ints versus Reals.}
+Unlike many other languages, Whiley provides a strong relationship
+between values of type \lstinline{int} and those of type
+\lstinline{real}.  Specifically, every \lstinline{int} value can be
+represented precisely as a \lstinline{real} value.  Although it may
+seem surprising, this is not true for many other languages
+(e.g. Java), where there are \lstinline{int} (resp. \lstinline{long})
+values which cannot be represented using \lstinline{float}
 (resp. \lstinline{double})~\cite[\S5.1.2]{GJSB05}.
+\end{insight}
 
 \subsection{Sets, Lists and Maps}
 
