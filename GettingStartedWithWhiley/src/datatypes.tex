@@ -45,7 +45,14 @@ first parameter, \lstinline{x}, is less than the second,
 \end{eg}
 
 \begin{insight}{Indentation Syntax.}
-asdasd
+  From the above example you should notice that Whiley, unlike many
+  languages, does not use curly braces (i.e. \verb+{ ... }+) to
+  demarcate blocks of code.  Instead, Whiley uses {\em indentation
+    syntax} which was popularised by the Python programming language.
+  The start of a new code block is signalled by a preceding \verb+:+
+  on the previous line.  The new block must be indented by at least
+  one space (the actual amount doesn't matter) and all subsequent
+  statements with the same indentation are included.
 \end{insight}
 
 \paragraph{Subtyping.} Whiley also provides strong guarantees

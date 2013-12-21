@@ -7,6 +7,7 @@
 \usepackage{fancybox}
 \usepackage{amssymb}
 \usepackage{amsmath}
+\usepackage{framed}
 \usepackage[a4paper,lmargin=35mm,tmargin=35mm,bmargin=35mm,rmargin=35mm,twoside=false,marginpar=30mm]{geometry}
 
 % ------------------------------------------------------------------------
@@ -14,7 +15,14 @@
 
 \newenvironment{eg}{\par\noindent{\bf Example.}}{\hfill$\blacksquare$}
 \newenvironment{insight}[1]{
-  {\Huge ?}\paragraph{#1}}{}
+\begin{framed}
+\noindent\begin{minipage}[t]{0.05\textwidth}
+{\Huge ?}
+\end{minipage}%
+\begin{minipage}[m]{0.95\textwidth}
+{\bf #1}
+}{\end{minipage}\end{framed}}
+
 % ------------------------------------------------------------------------
 
 \input{listings}
