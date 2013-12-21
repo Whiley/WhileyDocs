@@ -135,7 +135,7 @@ function f(int x) => (int y)
 // return cannot be negative
 ensures y >= 0:
     //
-    i = 0
+    int i = 0
     while i < x where i > 0:
         i = i + 1 
     //
@@ -147,6 +147,50 @@ clause.  Thus, in the above example, the loop invariant is
 ``\lstinline{i > 0}''.  Compiling the above program with verification
 enabled will fail with an error.   This is because the loop invariant
 does not hold on entry to the loop (item 1 above).
+
+\subsection{Strategies for Loop Invariants}
+Loop invariants can be tricky to get right, and there are some useful
+tricks which can simplify things.  We'll now consider some examples to
+illustrate this.
+
+\paragraph{Example 1.} Summing over a list of natural numbers is
+guaranteed to produce a natural number.  The following Whiley program
+illustrates this:
+
+\begin{lstlisting}
+type nat is (int x) where x >= 0
+
+nat sum([nat] items):
+    int r = 0
+    int i = 0
+    //
+    while i < |items| where i >= 0 && r >= 0:
+        r = r + items[i]
+        i = i + 1
+    //
+    return r
+\end{lstlisting}
+The Whiley compiler statically verifies that \lstinline{sum()} does
+indeed meet this specification.  This is true in Whiley because
+integer arithmetic is {\em unbounded} --- meaning it does not suffer
+from overflow as other languages do (e.g. Java).  The loop invariant
+is necessary to help the Whiley compiler verify this function.
+However, we can avoid the need for a loop invariant by declaring
+variables \lstinline{i} and \lstinline{r} more precisely:
+\begin{lstlisting}
+nat sum([nat] items):
+    nat r = 0
+    nat i = 0
+    //
+    while i < |items|:
+        ...
+\end{lstlisting}
+
+This time, we have declared the variables \lstinline{i} and
+\lstinline{r} as having type \lstinline{nat}.  The Whiley compiler
+will now enforce the \lstinline{nat} property for \lstinline{i} and
+\lstinline{r} at all points in the function, and the loop invariant is
+no longer required.
 
 \subsection{Explicit Assumptions}
 
@@ -183,76 +227,3 @@ This program will not verify because the implementation of
 However, the Whiley compiler will verify that the implementation of
 \lstinline{g()} meets its specification as, when doing this, it
 assumes that \lstinline{f()} meets it specification.
- 
-\subsection{BIN}
-\paragraph{Example 1 --- Constrained Types.}
-
-
-\paragraph{Example 2 --- Implicit Retyping.}
-
-A similar, but slightly more complex example is that for computing the
-maximum of two integers:
-\begin{lstlisting}
- int max(int x, int y) ensures $\$$ >= x && $\$$ >= y 
-                                && ($\$$==x || $\$$==y):
-     if x > y:
-         return x
-     else:
-         return y
-\end{lstlisting}
-Again, the Whiley compiler statically verifies this function meets its
-specification.  Here, the body of the function is almost completely
-determined by the specification --- however, in general, this not the
-case.
-
-\paragraph{Example 3 --- Bounds Checking.}
-An interesting example which tests the automated theorem prover
-more thoroughly is the following:
-\begin{lstlisting}
- null|int indexOf(string str, char c):
-     for i in 0..|str|:
-         if str[i] == c:
-             return i
-     return null
-\end{lstlisting}
-In this case, the access \lstinline{str[i]} must be shown as within
-the bounds of the list \lstinline{str}.  The Whiley compiler
-statically verifies this is true and, hence, that
-\lstinline{indexOf()} cannot cause an out-of-bounds error.  
-% In fact,
-% the specification for \lstinline{indexOf()} could be made more precise
-% as follows:
-% \begin{lstlisting}
-%  null|int indexOf(string str, char c) ensures $\$$ == null 
-%                                       || (0 <= $\$$ && $\$$ < |str|):
-%      ...
-% \end{lstlisting}
-% In this case, we are additionally requiring that, when the return
-% value is an \lstinline{int}, then it is a valid index into
-% \lstinline{str}.  Again, the Whiley compiler statically verifies this
-% is the case.
-\paragraph{Example 4 --- Loop Invariants.}
-Another example illustrates the use of {\em loop invariants} in Whiley:
-\begin{lstlisting}
- define natlist as [int] where all { x in $\$$ | x >= 0 }
-
- int sum(natlist list) ensures $\$$>=0:
-     r = 0
-     for v in list where r >= 0:
-         r = r + v
-     return r
-\end{lstlisting}
-Here, bounded quantifiers are used to define a list of natural numbers
-which is accepted by the \lstinline{sum()} function.  Equivalently, we could
-have used \lstinline{[nat]} (with \lstinline{nat} defined as before)
---- and these two alternative definitions of the same concept are, in
-a strong sense, identical.
-
-A key constraint is that summing a list of natural numbers yields a
-natural number (recall arithmetic is unbounded and does not overflow
-in Whiley).  The Whiley compiler statically verifies that
-\lstinline{sum()} does indeed meet this specification.  The loop
-invariant is necessary to help the compiler generate a sufficiently
-powerful verification condition to prove the function meets the post
-condition.  In the future, we hope to automatically synthesize simple
-loop invariants such as this.
