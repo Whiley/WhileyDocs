@@ -4,22 +4,47 @@ This section provides a quick walk through of the main concepts and
 ideas in the Whiley language.  Through a series of short examples,
 we'll introduce the basic building blocks of the language.
 
-\subsection{Primitives}
+\subsection{Booleans and Numbers}
+
+As found in many languages, Whiley supports a range of primitive
+datatypes for representing boolean, integers, real numbers, bytes,
+characters, etc.  Of these, the most commonly used are:
+
+\begin{itemize}
+\item {\bf Booleans} are denoted by the type \lstinline{bool}.  This is the
+  simplest of the primitive datatypes, and has only two possible
+  values: \lstinline{true} or \lstinline{false}.
+\item {\bf Integers} are denoted by the type \lstinline{int}.  Integers in
+  Whiley are {\em unbounded}. This means that, in theory at least, a
+  variable of type int can take on {\em any possible integer value};
+  this differs from many other languages (e.g. Java), which limit the
+  number of possible values (e.g. following 32-bit two’s complement).
+\item {\bf Real Numbers} are denoted by the type
+  \lstinline{real}. Reals in Whiley are {\em unbounded
+    rationals}. This means that, in theory at least, a variable of
+  type real can take on {\em any possible rational value}. Again, this
+  offers significantly better precision than, for example,
+  \lstinline{float} or \lstinline{double} types based on IEEE754 as
+  found in other languages (e.g. Java).
+\end{itemize}
+
+
+
+\paragraph{Subtyping.} Whiley also provides strong guarantees
+regarding subtyping of primitive types.  In Whiley, \lstinline{int}s
+and \lstinline{real}s represent unbounded integers and rationals,
+which ensures \lstinline{int}$\;\le\;$\lstinline{real} has true subset
+semantics (i.e. every \lstinline{int} can be represented by a
+\lstinline{real}).  This is not true for e.g. Java, where there are
+\lstinline{int} (resp. \lstinline{long}) values which cannot be
+represented using \lstinline{float}
+(resp. \lstinline{double})~\cite[\S5.1.2]{GJSB05}.
 
 \subsection{Sets, Lists and Maps}
 
 \subsection{Records and Tuples}
 
-\subsection{Primitive Subtyping.} 
-Whiley also provides strong guarantees regarding subtyping of
-primitive types (i.e. integers and reals).  In Whiley,
-\lstinline{int}s and \lstinline{real}s represent unbounded integers
-and rationals, which ensures \lstinline{int}$\;\le\;$\lstinline{real}
-has true subset semantics (i.e. every \lstinline{int} can be
-represented by a \lstinline{real}).  This is not true for e.g. Java,
-where there are \lstinline{int} (resp. \lstinline{long}) values which
-cannot be represented using \lstinline{float}
-(resp. \lstinline{double})~\cite[\S5.1.2]{GJSB05}.
+\subsection{Strings and Characters}
 
 \subsection{Value Semantics}
 \label{value_semantics}
