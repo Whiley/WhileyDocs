@@ -192,6 +192,55 @@ will now enforce the \lstinline{nat} property for \lstinline{i} and
 \lstinline{r} at all points in the function, and the loop invariant is
 no longer required.
 
+\paragraph{Example 2.}  Generally speaking, the loop condition and
+invariant are used independently to increase knowledge.  However,
+sometimes they need to be used in concert.  Consider the following
+function for initialising a list of a given size:
+
+\begin{lstlisting}
+function create(int count, int value) => ([int] r)
+// Cannot create negatively sized lists!
+requires count >= 0, 
+// Returned list must have count elements
+ensures |r| == count:
+   //
+   int i = 0
+   [int] r = []
+   while i < count:
+      r = r + [value]
+      i = i + 1
+   //
+   return r
+\end{lstlisting}
+
+This example uses the list append operator (i.e. \lstinline{r + [value]})
+ and is surprisingly challenging to verify.  An obvious
+approach is to connect the size of \lstinline{r} with \lstinline{i} as
+follows:
+
+\begin{lstlisting}
+   ...
+   while i < count where |r| == i:
+      ...
+\end{lstlisting}
+
+Unfortunately, this loop invariant is not strong enough to allow this
+function to be verified.  To understand this, recall from
+\S\ref{loop_invariants} that, after a loop is complete, the loop
+invariant holds along with the {\em negated} condition.  Thus, after
+the above loop, we have \lstinline{i >= count && |r| == i} which is
+insufficient to establish \lstinline{|r| == count}.  In fact, we can
+resolve this by using an {\em overriding loop invariant} as follows:
+
+\begin{lstlisting}
+   ...
+   while i < count where i <= count && |r| == i:
+      ...
+\end{lstlisting}
+
+In this case, \lstinline{i >= count && i <= count && |r| == i} holds
+after the loop and, hence, it follows that \lstinline{|r| == count}.
+
 \subsection{Explicit Assumptions}
 
 \subsection{Function Invocation}
