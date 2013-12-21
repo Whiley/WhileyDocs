@@ -1,7 +1,6 @@
 \newpage
-\section{More Data Types}
+\section{Typing}
 Look at some of the interesting types in Whiley's armoury
-
 
 %\subsection{Polymorphism \& Encapsulation}
 %Two important hallmarks of the object-oriented paradigm are
@@ -117,3 +116,49 @@ of recursive structural types is a well-known and challenging
 problem~\cite{GLP02,CA93,KPS93} which is further compounded in Whiley
 by the presence of flow-sensitive reasoning.
 
+\section{Flowing Types}
+We now examine Whiley's flow-sensitive type system in more detail, and
+ identify several ways in which it leads to improved code quality.
+
+\paragraph{Error Handling.}
+Nullable references have proved a significant source of error in
+e.g. Java~\cite{Hoa09}.  The issue is that, in such
+languages, one can treat {\em nullable} references as though they are
+{\em non-null} references~\cite{Pier02}.  Many solutions have been
+proposed which distinguish these two forms using static type
+systems (e.g.~\cite{PQVHV01,FL03,KH07,CFJJ06,CJ07,MPPD08,Hub08,HJP08}).
+
+Whiley's flow-sensitive type system lends itself naturally to handling
+this problem because it supports {\em union types}
+(e.g.~\cite{BC91,IN07}).  These allow variables to hold values from
+different types, rather than just one type.  For example:
+
+\begin{lstlisting}
+ null|int indexOf(string str, char c):
+    ...
+
+ [string] split(string str, char c):
+    idx = indexOf(str,c)
+    // idx has type null$|$int
+    if idx is int:
+        // idx now has type int
+        below = str[0..idx]
+        above = str[idx..]
+        return [below,above]
+    else:
+        // idx now has type null
+        return [str] // no occurrence
+\end{lstlisting}
+Here, \lstinline{indexOf()} returns the first index of a character in
+the string, or \lstinline{null} if there is none.  The type
+\lstinline{null|int} is a union type, meaning it is either an
+\lstinline{int} or \lstinline{null}.
+
+In the above example, Whiley's flow-sensitive type system seamlessly
+ensures that \lstinline{null} is never dereferenced.  This is because
+the type \lstinline{null|int} cannot be treated as an \lstinline{int}.
+Instead, one must first check it {\em is} an \lstinline{int} using a
+type test, such as ``\lstinline{idx is int}''.  Whiley automatically
+retypes \lstinline{idx} to \lstinline{int} when this is known to be
+true, thereby avoiding any awkward and unnecessary syntax (e.g. a cast
+as required in e.g.~\cite{ANMM06,MPPD08}).
