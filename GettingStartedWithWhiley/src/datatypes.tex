@@ -28,7 +28,7 @@ characters, etc.  Of these, the most commonly used are:
   found in other languages (e.g. Java).
 \end{itemize}
 
-\begin{eg}
+
 \noindent A very simple example which illustrates the \lstinline{int} and
 \lstinline{bool} types is the following:
 \begin{lstlisting}
@@ -42,7 +42,6 @@ function isLessThan(int x, int y) => bool:
 This declares a simple function which returns \lstinline{true} if the
 first parameter, \lstinline{x}, is less than the second,
 \lstinline{y}, and \lstinline{false} otherwise.
-\end{eg}
 
 \begin{insight}{Indentation Syntax.}
   From the above example you should notice that Whiley, unlike many
@@ -66,17 +65,46 @@ values which cannot be represented using \lstinline{float}
 (resp. \lstinline{double})~\cite[\S5.1.2]{GJSB05}.
 \end{insight}
 
-\begin{lstlisting}
-function floor(real x) => int:
-    int num, int den = x    // extract numerator and denominator
-    int r = num / den       // integer division
-    if x < 0.0 && den != 1: 	 
-        return r - 1 
-    else:
-        return r 
-\end{lstlisting}
+% \begin{lstlisting}
+% function floor(real x) => int:
+%     int num / int den = x    // extract numerator and denominator
+%     int r = num / den        // integer division
+%     if x < 0.0 && den != 1: 	 
+%         return r - 1 
+%     else:
+%         return r 
+% \end{lstlisting}
 
 \subsection{Sets, Lists and Maps}
+
+Like many modern programming languages, Whiley provides built-in types
+for representing collections.  The following illustrates a short
+function which multiplies a vector by a scalar:
+\begin{lstlisting}
+[real] vectorMultiply([real] vector, real scalar):
+    for i in 0 .. |vector|:
+        vector[i] = vector[i] * scalar
+    return vector
+\end{lstlisting}
+This illustrates a few of the common collection operations.  Firstly,
+the size of a collection is obtained using the {\em length} operator
+(i.e. \lstinline{|vector|} returns the length of \lstinline{vector}).
+Secondly, the \lstinline{for} loop is useful for iterating over the
+elements of a collection.  In this case, \lstinline{0 .. |vector|}
+returns a {\em list} of consecutive integers from \lstinline{0} up to
+(but not including) \lstinline{|vector|}.  Finally, the {\em list
+  access} expression, \lstinline{vector[i]}, returns the element at
+index \lstinline{i}.  The three different kinds of collections
+supported in Whiley are:
+\begin{itemize}
+\item {\bf Sets} (e.g. \lstinline|{int}|)
+
+\item {\bf Maps} (e.g. \lstinline|{int=>string}|)
+
+\item {\bf Lists} (e.g. \lstinline{[int]})
+
+\end{itemize}
+
 
 \subsection{Records and Tuples}
 
