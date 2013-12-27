@@ -105,7 +105,7 @@ supported in Whiley are:
   (e.g. in Java), but they can also be resized.  As can be seen above,
   they support the {\em list access} operator
   (e.g. \lstinline{vector[i]}).  They also support the {\em list
-    append} operator (e.g. \lstinline{[1,2,3] + [4,5,6]}) and {\em
+    append} operator (e.g. \lstinline{[1,2,3] ++ [4,5,6]}) and {\em
     sublist} operator (e.g. \lstinline{vector[0..2]}).  Finally, lists are constructed using a {\em list constructor} (e.g. \lstinline{[1,2,3]}).
 
 \end{itemize}
@@ -114,6 +114,7 @@ All collection kinds can be iterated using the built-in
 \lstinline{for} loop construct.  For example, here is a function to iterate a map looking for a particular value:
 
 \begin{lstlisting}
+// Return the set of all keys which map to a given value
 function keysOf({int=>string} map, string value) => {string}:
     {string} result = {} // initialise result with empty set
     for k,v in map:      // loop over every key,value pair in map
@@ -122,6 +123,8 @@ function keysOf({int=>string} map, string value) => {string}:
     // return result
     return result
 \end{lstlisting}
+
+\noindent This function iterates over each key$\times$value pair (i.e. \lstinline{k,v}) in a from integers to strings (i.e. \lstinline|{int=>string}|) using the \lstinline{for} statement.
 
 \subsection{Records and Tuples}
 
