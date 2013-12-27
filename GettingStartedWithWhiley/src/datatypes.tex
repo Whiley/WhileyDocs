@@ -97,14 +97,31 @@ returns a {\em list} of consecutive integers from \lstinline{0} up to
 index \lstinline{i}.  The three different kinds of collections
 supported in Whiley are:
 \begin{itemize}
-\item {\bf Sets} (e.g. \lstinline|{int}|)
+\item {\bf Sets} (e.g. \lstinline|{int}|) provide the simplest form of collection, and are constructing using a {\em set constructor} (e.g. \lstinline|{1,2,3}|).  They support the {\em set union} (e.g. \lstinline{xs + ys}), {\em set intersection} (e.g. \lstinline{xs & ys}) and {\em set difference} (e.g. \lstinline{xs - ys}) operators.  One can test for inclusion using the {\em element of} operator (e.g. \lstinline{x in xs}), or the {\em subset} (e.g. \lstinline{xs $\subset$ ys}) and {\em subset or equal} (e.g. \lstinline{xs $\subseteq$ ys}) operators.
+  
+\item {\bf Maps} (e.g. \lstinline|{int=>string}|) provide a halfway point between sets and lists.  They are similar to dictionaries in Python or the \lstinline{Map} interface in Java.  They can be viewed as a set of {\em key$\times$ value} pairs, where every key maps to exactly one value.  Maps are constructed using a {\em map constructor} (e.g. \lstinline|{1=>"hello",2=>"world"}|), and elements are accessed using the {\em map access} operator (e.g. \lstinline{map[i]}).  
 
-\item {\bf Maps} (e.g. \lstinline|{int=>string}|)
-
-\item {\bf Lists} (e.g. \lstinline{[int]})
+\item {\bf Lists} (e.g. \lstinline{[int]}) are similar to arrays
+  (e.g. in Java), but they can also be resized.  As can be seen above,
+  they support the {\em list access} operator
+  (e.g. \lstinline{vector[i]}).  They also support the {\em list
+    append} operator (e.g. \lstinline{[1,2,3] + [4,5,6]}) and {\em
+    sublist} operator (e.g. \lstinline{vector[0..2]}).  Finally, lists are constructed using a {\em list constructor} (e.g. \lstinline{[1,2,3]}).
 
 \end{itemize}
 
+All collection kinds can be iterated using the built-in
+\lstinline{for} loop construct.  For example, here is a function to iterate a map looking for a particular value:
+
+\begin{lstlisting}
+function keysOf({int=>string} map, string value) => {string}:
+    {string} result = {} // initialise result with empty set
+    for k,v in map:      // loop over every key,value pair in map
+        if v == value:
+            result = result + {k} // add matching keys to result set
+    // return result
+    return result
+\end{lstlisting}
 
 \subsection{Records and Tuples}
 
