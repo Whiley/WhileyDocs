@@ -1,5 +1,5 @@
 TARGET = wls
-DEPS = $(ls *.tex)
+DEPS = syntax.tex
 
 all: $(TARGET).pdf
 

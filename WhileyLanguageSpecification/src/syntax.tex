@@ -21,45 +21,98 @@
 
 \chapter{Syntax}
 
+
+
 \begin{figure}[!t]
 \centering
 \fbox{
 \begin{tabular}{rcll}
-e & $::=$ & & {\em // Expressions}\\
-&{\huge\strut}$|$&$ b $ & {\em // Boolean constants}\\
-
-&{\huge\strut}$|$&$ i $ & {\em // Integer constants}\\
-
-&{\huge\strut}$|$&$ r $ & {\em // Rational constants}\\
-
-&{\huge\strut}$|$&$ n $ & {\em // Variables}\\
-
-&{\huge\strut}$|$& $\nullc$ & {\em // Null constant}\\
-
-&{\huge\strut}$|$&$ e_1\;(\;\comma\;e_i\;)^+$ & {\em // Tuple expressions}\\
-
-&{\huge\strut}$|$&$ \lb e \rb $ & {\em // Bracketed expressions}\\
-
-&{\huge\strut}$|$&$ \vbar\;e\;\vbar  $ & {\em // Size expressions}\\
-
-&{\huge\strut}$|$&$ e_1\;\lsb e_2\rsb $ & {\em // Index Expressions}\\
-
-&{\huge\strut}$|$&$ e\;\dott\;n $ & {\em // Access Expressions}\\
-
-&{\huge\strut}$|$&$ (\;\token{-}\;|\;\token{!}\;|\;\token{\~}\;|\;\token{\&}\;|\;\token{*}\;)\;e $ & {\em // Unary expressions}\\
-
-&{\huge\strut}$|$&$ e_1\;[\;op^2\;e_2\;]^+ $ & {\em // Binary expressions}\\
-
-&{\huge\strut}$|$&$ e\;\lb\;\overline{e}\;\rb $ & {\em // Invocation expressions}\\
-
-&{\huge\strut}$|$&$ \token{new}\;e $ & {\em // Allocation expressions}\\
-
-&{\huge\strut}$|$&$ \lsb [\;e_1\;(\;\comma\;\;e_i\;)^*\;]\rsb $ & {\em // List expressions}\\
-
-&{\huge\strut}$|$&$ \lcb [\;n_1\colont\;e_1\;(\;\comma\;\;n_i\;\colont\;e_i\;)^*\;]\rcb $ & {\em // Record expressions}\\
+Expr & $::=$ & $ Cond\;[\;(\;\token{\&\&}\;|\;\token{||}\;)\;Expr\;] $ & {\em // Expressions}\\
+&&&\\
+Cond & $::=$ & $ Append\;[\;Cop\;Expr\;] $ & {\em // Condition Expressions}\\
+&&&\\
+Append & $::=$ & $ Range\;[\;\token{++}\;Expr\;] $ & {\em // Append Expressions}\\
+&&&\\
+Range & $::=$ & $ AddSub\;[\;\token{..}\;Expr\;] $ & {\em // Range Expressions}\\
+&&&\\
+AddSub & $::=$ & $
+MulDiv\;[\;(\;\token{+}\;|\;\token{-}\;)\;Expr\;] $ & {\em //
+  Additive Expressions}\\
+&&&\\
+MulDiv& $::=$ & $
+Index\;[\;(\;\token{*}\;|\;\token{/}\;|\;\token{\%}\;)\;Expr\;] $ & {\em //
+Multiplicative Expressions}\\
 
 &&&\\
-$op^2$ & $::=$ & $\token{+}\;|\;\token{-}\;|\;\token{*}\;|\;\token{/}$& {\em // Binary Operators}\\
+Index& $::=$ & ??? & {\em //
+Index Expressions}\\
 \end{tabular}}
-\caption{Syntax for Expressions}
+\caption{Syntax for Binary Expressions}
 \end{figure}
+
+
+
+\begin{figure}[!t]
+\centering
+\fbox{
+\begin{tabular}{rcll}
+Term& $::=$ & {\em // Terms} \\
+&{\huge\strut}$|$& $Constant$ & {\em // Constant expressions}\\
+&{\huge\strut}$|$& $Identifier$ & {\em // Identifier expressions}\\
+&{\huge\strut}$|$&$ Expr_1\;(\;\comma\;Expr_i\;)^+$ & {\em // Tuple expressions}\\
+
+&{\huge\strut}$|$&$ \lb Expr \rb $ & {\em // Bracketed expressions}\\
+
+&{\huge\strut}$|$&$ \vbar\;Expr\;\vbar  $ & {\em // Size expressions}\\
+
+&{\huge\strut}$|$&$ n\;\lb\;[\;Expr_1\;(\;\comma\;Expr_i\;)^+\;]\;\rb $ & {\em // Invocation expressions}\\
+
+&{\huge\strut}$|$&$
+(\;\token{-}\;|\;\token{!}\;|\;\token{\~}\;|\;\token{\&}\;|\;\token{*}\;)\;Expr
+$ & {\em // Unary expressions}\\
+
+&{\huge\strut}$|$&$ \token{new}\;Expr $ & {\em // Allocation expressions}\\
+
+&{\huge\strut}$|$&$ \lcb [\;Expr_1\;(\;\comma\;\;Expr_i\;)^*\;]\rcb $ & {\em
+  // Set expressions}\\
+
+&{\huge\strut}$|$&$ \lcb [\;Expr_1\:\token{=>}\:Expr'_1\;(\;\comma\;\;Expr_i\:\token{=>}\:Expr'_i\;)^*\;]\rcb $ & {\em
+  // Map expressions}\\
+
+&{\huge\strut}$|$&$ \lsb [\;Expr_1\;(\;\comma\;\;Expr_i\;)^*\;]\rsb $ & {\em // List expressions}\\
+
+&{\huge\strut}$|$&$ \lcb [\;n_1\colont\;Expr_1\;(\;\comma\;\;n_i\;\colont\;Expr_i\;)^*\;]\rcb $ & {\em // Record expressions}\\
+\end{tabular}}
+\caption{Syntax for Term Expressions}
+\end{figure}
+
+
+\begin{figure}[!t]
+\centering
+\fbox{
+\begin{tabular}{rcll}
+Constant& $::=$ & {\em // Constants} \\
+&{\Huge\strut}$|$&$ (\;\token{0}\;|\;\token{1}\;)^+\;\token{b} $ & {\em // Boolean constants}\\
+
+&{\Huge\strut}$|$&$ (\;\token{0-9}\;)^+ $ &
+{\em // Integer constants}\\
+
+&{\Huge\strut}$|$&$ (\;\token{0-9}\;)^+\;\dott\;(\;\token{0-9}\;)^+$ &
+{\em // Decimal constants}\\
+
+&{\Huge\strut}$|$& $\nullc$ & {\em // Null constant}\\
+\end{tabular}}
+\caption{Syntax for Constant Expressions}
+\end{figure}
+
+\begin{figure}[!t]
+\centering
+\fbox{
+\begin{tabular}{rcll}
+Identifier& $::=$ & $ (\;\token{\_}\;|\;\token{a-z}\;|\;\token{A-Z}\;)\;(\;\token{\_}\;|\;\token{a-z}\;|\;\token{A-Z}\;|\;\token{0-9}\;)^* $ & {\em // Identifiers}\\
+
+
+\end{tabular}}
+\caption{Syntax for Identifiers}
+\end{figure}
+
