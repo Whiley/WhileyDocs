@@ -11,10 +11,9 @@ detail.
 To improve the programmer experience and reduce unnecessary tedium,
 Whiley employs a {\em flow typing} system.  What this means is that
 the type of a variable can vary at different points within a function.
-To make this work, Whiley employs {\em union types}
-(e.g.~\cite{BC91,IN07}) along with {\em variable retyping}.  The
-following example illustrates how this works, where the body of
-\lstinline{indexOf()} is left out for brevity:
+To make this work, Whiley employs {\em union types}~\cite{BC91,IN07} along with {\em variable retyping}.  The
+following example illustrates how this works (where the body of
+\lstinline{indexOf()} is left out for brevity):
 
 \begin{lstlisting}
  function indexOf(string str, char c) => null|int:
@@ -34,17 +33,17 @@ following example illustrates how this works, where the body of
 \end{lstlisting}
 Here, \lstinline{indexOf()} returns the first index of a character in
 the string, or \lstinline{null} if there is none.  The type
-\lstinline{null|int} is a union type, meaning it is either an
+\lstinline{null|int} is a {\em union type}, meaning it is either an
 \lstinline{int} or \lstinline{null}.
 
-In the above example, Whiley's flow-sensitive type system seamlessly
-ensures that \lstinline{null} is never dereferenced.  This is because
-the type \lstinline{null|int} cannot be treated as an \lstinline{int}.
-Instead, one must first check it {\em is} an \lstinline{int} using a
-type test, such as ``\lstinline{idx is int}''.  Whiley automatically
-retypes \lstinline{idx} to \lstinline{int} when this is known to be
+In the above example, Whiley's flow typing system seamlessly ensures
+that \lstinline{null} is never dereferenced.  This is because the type
+\lstinline{null|int} cannot be treated as an \lstinline{int}.
+Instead, one must first check it is an \lstinline{int} using a type
+test, such as ``\lstinline{idx is int}''.  Whiley automatically
+{\em retypes} \lstinline{idx} to \lstinline{int} when this is known to be
 true, thereby avoiding any awkward and unnecessary syntax (e.g. a cast
-as required in e.g.~\cite{ANMM06,MPPD08}).
+as required in many languages).
 
 \begin{insight}{Null References.}  In many languages (e.g. C/C++,
   Java, etc) the use of \lstinline{null} is a significant source of
@@ -67,6 +66,10 @@ as required in e.g.~\cite{ANMM06,MPPD08}).
   are generally less useful than unions.
 \end{insight}
 
+\begin{insight}{Untagged Unions}.  Often confusion surrounding untagged
+    versus tagged unions.  The latter are more common, and sometimes
+    known as {\em sum types}.
+\end{insight}
 \subsection{Recursive Types}
 
 %\subsection{Polymorphism \& Encapsulation}
