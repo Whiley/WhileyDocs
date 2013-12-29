@@ -1,5 +1,5 @@
 \newpage
-\section{More Types}
+\section{Flexible Types}
 The previous section introduced us to the basic types found in Whiley,
 such as integers (\lstinline{int}), rationals (\lstinline{real}) and
 booleans (\lstinline{bool}).  However, unlike many languages, Whiley
@@ -70,7 +70,55 @@ as required in many languages).
     versus tagged unions.  The latter are more common, and sometimes
     known as {\em sum types}.
 \end{insight}
+
 \subsection{Recursive Types}
+To represent tree-like structures, Whiley provides {\em recursive
+  types} which are similar to the abstract data types found in
+functional languages (e.g. Haskell, ML, etc).  For example:
+\begin{lstlisting}
+// A linked list is either the empty list or a link
+type LinkedList is EmptyList | Link
+
+// The empty list contains no links
+type EmptyList is null
+
+// A single link in a linked list
+type Link is {int data, LinkedList next}
+
+// Return the length of a linked list (i.e. the number of links it contains)
+int length(LinkedList l):
+  if l is null:    
+    return 0 // l now has type null
+  else:    
+    return 1 + length(l.next) // l now has type \{int data, LinkedList next\}
+\end{lstlisting}
+Here, \lstinline{LinkedList} is a recursive type representing a linked
+list (i.e. a sequence of zero or more links).  The empty list is
+defined as \lstinline{null}, whilst each link contains a
+\lstinline{data} field.  The type \lstinline{LinkedList} is defined in
+terms of itself (i.e. it is recursive) and describes linked lists of
+arbitrary size.
+
+\begin{insight}{Value Semantics.}
+  As discussed in \S\ref{value_semantics} all compounds structures in
+  Whiley are passed by value, {\em including recursive types}.  This
+  differs from common languages (e.g. Java), where linked structures
+  are typically composed from {\em references} to link objects.  This
+  means, for example, that linked structures in such languages can
+  share substructures, leading to subtle and hard-to-find bugs.  In
+  Whiley linked structures, such as \lstinline{LinkedList}, can never
+  share substructure.
+\end{insight}
+
+The above example also serves as another illustration of flow typing
+in Whiley.  More specifically, on the false branch of the type test
+``\lstinline{l is null}'', variable \lstinline{l} is automatically
+retyped to \lstinline+{int data, LinkedList next}+ --- thus ensuring
+the subsequent dereference of \lstinline{l.next} is safe.  No casts
+are required as would be needed for a conventional imperative language
+(e.g. Java).  Finally, like all compound structures, the semantics of
+Whiley dictates that recursive data types are passed by value (or, at
+least, appear to be from the programmer's perspective).
 
 %\subsection{Polymorphism \& Encapsulation}
 %Two important hallmarks of the object-oriented paradigm are
