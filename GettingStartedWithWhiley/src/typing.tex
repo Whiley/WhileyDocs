@@ -34,7 +34,13 @@ following example illustrates how this works (where the body of
 Here, \lstinline{indexOf()} returns the first index of a character in
 the string, or \lstinline{null} if there is none.  The type
 \lstinline{null|int} is a {\em union type}, meaning it is either an
-\lstinline{int} or \lstinline{null}.
+\lstinline{int} or \lstinline{null}.  The \lstinline{split()} function
+splits a string into two pieces based on the first occurrence of a
+given character \lstinline{c}, or leaves the string as is otherwise.
+It calls \lstinline{indexOf()} to determine the first occurrence of
+\lstinline{c} in \lstinline{str}.  Observe that variable
+\lstinline{idx} has been declared as type \lstinline{var}, meaning the
+compiler will automatically infer the best possible type for it.
 
 In the above example, Whiley's flow typing system seamlessly ensures
 that \lstinline{null} is never dereferenced.  This is because the type
