@@ -1,4 +1,4 @@
-TARGET = getting-started
+TARGET = GettingStartedWithWhiley
 DEPS = listings.tex abstract.tex introduction.tex walkthrough.tex typing.tex functional-or-not.tex calculator.tex modules.tex verification.tex indexof.tex microwave.tex ffi.tex vcs.tex
 
 all: $(TARGET).pdf

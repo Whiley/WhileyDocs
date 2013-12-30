@@ -1,15 +1,15 @@
 \chapter{Expressions}
 \section{Binary Expressions}
 \begin{figure}[!t]
-\centering
-\fbox{
-\begin{tabular}{rcll}
-Expr & $::=$ & $ Cond\;[\;(\;\token{\&\&}\;|\;\token{||}\;)\;Expr\;] $ & {\em // Expressions}\\
-&&&\\
-Cond & $::=$ & $ Append\;[\;Cop\;Expr\;] $ & {\em // Condition Expressions}\\
-&&&\\
-Append & $::=$ & $ Range\;[\;\token{++}\;Expr\;] $ & {\em // Append Expressions}\\
-&&&\\
+  \centering
+  \fbox{
+    \begin{tabular}{rcll}
+      Expr & $::=$ & $ Cond\;[\;(\;\token{\&\&}\;|\;\token{||}\;)\;Expr\;] $ & {\em // Expressions}\\
+      &&&\\
+      Cond & $::=$ & $ Append\;[\;Cop\;Expr\;] $ & {\em // Condition Expressions}\\
+      &&&\\
+      Append & $::=$ & $ Range\;[\;\token{++}\;Expr\;] $ & {\em // Append Expressions}\\
+      &&&\\
 Range & $::=$ & $ AddSub\;[\;\token{..}\;Expr\;] $ & {\em // Range Expressions}\\
 &&&\\
 AddSub & $::=$ & $
