@@ -1,4 +1,4 @@
-TARGET = wls
+TARGET = WhileyLanguageSpec
 DEPS = introduction.tex lexical.tex compilation-units.tex types.tex expressions.tex statements.tex 
 
 all: $(TARGET).pdf
@@ -9,4 +9,4 @@ all: $(TARGET).pdf
 	done
 
 clean:
-	rm *.bbl *.aux *.dvi *.log *.ps *.pdf *~ *.blg *.bak
+	rm *.toc *.bbl *.aux *.dvi *.log *.ps *.pdf *~ *.blg *.bak
