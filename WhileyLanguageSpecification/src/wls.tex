@@ -13,11 +13,37 @@
   and Computer Science\\Victoria University of Wellington, New
   Zealand\\djp@ecs.vuw.ac.nz}
 
+% ======================================================
+%\newcommand{\token}[1]{\;\texttt{"#1"}\;}
+\definecolor{lightgray}{RGB}{215,215,215}
+\newcommand{\token}[1]{\fcolorbox{black}{lightgray}{\strut\texttt{#1}}}
+
+% --- tokens ---
+
+\newcommand{\nullc}{\token{null}}
+\newcommand{\comma}{\token{,}}
+\newcommand{\colont}{\token{:}}
+\newcommand{\dott}{\token{.}}
+\newcommand{\lb}{\token{(}\;}
+\newcommand{\rb}{\;\token{)}}
+\newcommand{\ra}{\token{=>}}
+\newcommand{\lsb}{\token{[}\;}
+\newcommand{\rsb}{\;\token{]}}
+\newcommand{\lcb}{\token{\{}\;}
+\newcommand{\rcb}{\;\token{\}}}
+\newcommand{\vbar}{\token{|}}
+% ======================================================
+
 \begin{document}
 \maketitle
 \tableofcontents
+
 \input{introduction}
-\input{syntax}
+\input{lexical}
+\input{compilation-units}
+\input{types}
+\input{expressions}
+\input{statements}
 
 \bibliographystyle{unsrt}
 \bibliography{abbrevs,references}

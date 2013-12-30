@@ -1,5 +1,5 @@
 TARGET = wls
-DEPS = syntax.tex
+DEPS = introduction.tex lexical.tex compilation-units.tex types.tex expressions.tex statements.tex 
 
 all: $(TARGET).pdf
 
