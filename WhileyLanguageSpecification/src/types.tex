@@ -137,7 +137,7 @@ used to represent the element type of an empty list of set.
 \section{Collection Types}
 
 % =======================================================================
-% Real
+% Set
 % =======================================================================
 
 \subsection{Set Type}
@@ -155,7 +155,7 @@ used to represent the element type of an empty list of set.
 \paragraph{Notes.} 
 
 % =======================================================================
-% Real
+% Map
 % =======================================================================
 
 \subsection{Map Type}
@@ -173,7 +173,7 @@ used to represent the element type of an empty list of set.
 \paragraph{Notes.} 
 
 % =======================================================================
-% Real
+% List
 % =======================================================================
 
 \subsection{List Type}
@@ -190,9 +190,79 @@ used to represent the element type of an empty list of set.
 
 \paragraph{Notes.} 
 
+% =======================================================================
+% Unions
+% =======================================================================
+
 \section{Union Types}
+
+\begin{syntax}
+  UnionType & $::=$ & IntersectionType\ \big(\ \token{|}\ IntersectionType\
+  \big)$^+$&\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Semantics.}
+
+\paragraph{Notes.}
+
+% =======================================================================
+% Intersections
+% =======================================================================
+
 \section{Intersection Types}
+
+\begin{syntax}
+  IntersectionType & $::=$ & TermType\ \big(\ \token{\&}\ TermType\
+  \big)$^+$&\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Semantics.}
+
+\paragraph{Notes.}
+
+% =======================================================================
+% Negations
+% =======================================================================
+
 \section{Negation Types}
+
+\begin{syntax}
+  NegationType & $::=$ & \token{!}\ \ Type&\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Semantics.}
+
+\paragraph{Notes.}
+
+% =======================================================================
+% Negations
+% =======================================================================
+
 \section{Reference Types}
+
+\begin{syntax}
+  \verb+ReferenceType+ & $::=$ & \token{\&}\ \ \verb+Type+&\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Semantics.}
+
+\paragraph{Notes.}
+
 \section{Subtyping}
 Discussion or present subtyping algorithm?
