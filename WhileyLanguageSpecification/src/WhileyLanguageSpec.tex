@@ -1,11 +1,14 @@
-\documentclass{book}
+\documentclass[10pt]{book}
 
 \usepackage{times}
 \usepackage{graphicx}
 \usepackage{url} % for typesetting urls
 \usepackage{color}
 \usepackage{fancybox}
+\usepackage{framed}
 \usepackage[a4paper,lmargin=35mm,tmargin=35mm,bmargin=35mm,rmargin=35mm,twoside=false,marginpar=30mm]{geometry}
+
+\input{listings}
 
 \title{\Huge The Whiley Language Specification}
 
@@ -16,7 +19,7 @@
 % ======================================================
 %\newcommand{\token}[1]{\;\texttt{"#1"}\;}
 \definecolor{lightgray}{RGB}{215,215,215}
-\newcommand{\token}[1]{\fcolorbox{black}{lightgray}{\strut\texttt{#1}}}
+\newcommand{\token}[1]{\fcolorbox{black}{white}{\strut\texttt{#1}}}
 
 % --- tokens ---
 
@@ -34,11 +37,18 @@
 \newcommand{\vbar}{\token{|}}
 % ======================================================
 
-\newenvironment{syntax}[1]{
+% \newenvironment{syntax}[1]{
+%   \begin{center}
+%     \begin{minipage}{0.8\textwidth}
+%       \centering
+% }{\end{minipage}\end{center}}
+\newenvironment{syntax}{
+  \def\FrameCommand{\fboxsep=\FrameSep \fcolorbox {black}{lightgray}}
   \begin{center}
-    \begin{minipage}{0.8\textwidth}
-      \centering
-}{\end{minipage}\end{center}}
+    \begin{framed}
+      \noindent\begin{minipage}{0.7\textwidth}
+        \begin{tabular}{rcll}
+        }{\end{tabular}\end{minipage}\end{framed}\end{center}}
 
 \begin{document}
 \maketitle

@@ -2,34 +2,194 @@
 \section{Overview}
 Discuss syntactic versus semantic types.
 \section{Primitives}
-\subsection{Any}
 
-\begin{center}
-  \fbox{
-    \begin{minipage}{0.8\textwidth}
-      \centering
-      \begin{tabular}{rcll}
-        AnyType & $::=$ \token{any} & {\em // type any}\\
-      \end{tabular}
-    \end{minipage}
-  }
-\end{center}
+% =======================================================================
+% Any
+% =======================================================================
+
+\subsection{Any Type}
 
 \begin{syntax}
-  % \begin{tabular}{rcl}
-  %   AnyType & $::=$ \token{any} & {\em // type any}\\
-  % \end{tabular}
-  Hello
+  AnyType & $::=$ & \token{any} & {\em // type any}\\
 \end{syntax}
 
+\paragraph{Description.}
 
-\subsection{Void}
-\subsection{Null}
-\subsection{Bool}
-\subsection{Char}
-\subsection{Int}
-\subsection{Real}
+\paragraph{Examples.}
+
+\paragraph{Semantics.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% Void 
+% =======================================================================
+
+\subsection{Void Type}
+
+\begin{syntax}
+   VoidType & $::=$ & \token{void} & {\em // type void}\\
+\end{syntax}
+
+\paragraph{Description.} The \lstinline{void} type represents the type whose variables cannot exist! That is, they cannot hold any possible value. Void is used to represent the return type of a function which does not return anything. However, it is also
+used to represent the element type of an empty list of set. 
+
+\paragraph{Examples.}
+
+\paragraph{Semantics.}
+
+\paragraph{Notes.} The void type is a subtype of everything; that is, it is bottom in the type lattice.
+
+% =======================================================================
+% Null
+% =======================================================================
+
+\subsection{Null Type}
+
+\begin{syntax}
+  NullType & $::=$ & \token{null} & {\em // type null}\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Semantics.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% Bool 
+% =======================================================================
+
+\subsection{Bool Type}
+
+\begin{syntax}
+  BoolType & $::=$ & \token{bool} & {\em // type bool}\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Semantics.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% Char
+% =======================================================================
+
+\subsection{Char Type}
+
+\begin{syntax}
+  CharType & $::=$ & \token{char} & \\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Semantics.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% Int
+% =======================================================================
+
+\subsection{Int Type}
+
+\begin{syntax}
+  IntType & $::=$ & \token{int} &\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Semantics.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% Real
+% =======================================================================
+
+\subsection{Real Type}
+
+\begin{syntax}
+  RealType & $::=$ & \token{real} &\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Semantics.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% Collections
+% =======================================================================
+
 \section{Collection Types}
+
+% =======================================================================
+% Real
+% =======================================================================
+
+\subsection{Set Type}
+
+\begin{syntax}
+  SetType & $::=$ & \token{\{} \ Type \ \token{\}} &\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Semantics.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% Real
+% =======================================================================
+
+\subsection{Map Type}
+
+\begin{syntax}
+  MapType & $::=$ & \token{\{} \ Type \ \token{=>} \ Type \ \token{\}} &\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Semantics.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% Real
+% =======================================================================
+
+\subsection{List Type}
+
+\begin{syntax}
+  ListType & $::=$ & \token{[} \ Type \ \token{]}&\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Semantics.}
+
+\paragraph{Notes.} 
+
 \section{Union Types}
 \section{Intersection Types}
 \section{Negation Types}

@@ -8,9 +8,10 @@
 \lstloadlanguages{Java}
 \lstset{
         language=Java,
-        keywords={function, assert, for, while, switch, is, if, case, return,
+        keywords={function, method, type, assert, for, while, switch, is, if, case, return,
           else, process, define, as, requires, ensures, where, no,
-          all, bool, int, byte, void, real, in, any, null
+          all, bool, int, byte, char, string, void, real, in, any,
+          null, var
         },
         basicstyle=\small\ttfamily,
         commentstyle=\rmfamily\itshape,
@@ -19,6 +20,10 @@
         stringstyle=\small\itshape,
         moredelim=*[s][commentstyle]{/*}{*/}, % allows keyword highlighting inside comments
         morecomment=[l][commentstyle]{//},      % single line comments are set by...
+        backgroundcolor=\color{lightgray},
+        frame=single, % adds a frame around the code
+        frameround=tttt,
+        framesep=0.25cm,
         texcl,                                                          % ...LaTeX
         moredelim=[is][\ttfamily]{<code>}{</code>}, % allows setting code inside multi-line comments
         moredelim=*[s][\ttfamily]{/*@}{*/}, % JML annotations
@@ -29,12 +34,12 @@
         mathescape=true,                % allow $ $ for math mode (will this break things?}
         tabsize=4,
 	tab=\rightarrowfill,
-        xleftmargin=0.3cm,
+        xleftmargin=1cm,
+        xrightmargin=1cm,
         showspaces=false,
         showtabs=false,
         columns=fullflexible,
         numberstyle=\tiny,
-        numbersep=0pt,
         keepspaces=true,
         mathescape=true, % allows $ to switch in and out of math mode within listings
         literate={->}{{$\rightarrow$}}1 {<<}{{$\langle$}}1 {>>}{{$\rangle$}}1
@@ -42,5 +47,4 @@
            {-*-}{{$\times$}}1 {||_}{{$\lceilfloor$}}1 {_||}{{$\rceilfloor$}}1
            {/0}{{$\emptyset$}}1 {/bul}{{$\unit$}}1 {:->}{{$\mapsto$}}1
            {~}{$\sim$}1,
-	escapechar=\&% char to escape out of listings and back to LaTeX
 }
