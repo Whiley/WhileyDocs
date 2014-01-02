@@ -1,6 +1,7 @@
 \chapter{Types}
 \section{Overview}
-Discuss syntactic versus semantic types.
+Discuss syntactic versus semantic types.  Also, need to consider
+constrained types as well as type patterns.
 
 \begin{syntax}
   \verb+Type+ & $::=$ & &\\
@@ -18,6 +19,8 @@ Discuss syntactic versus semantic types.
   & $|$ & \verb+NominalType+ &\\
   & $|$ & \verb+CollectionType+ &\\
   & $|$ & \verb+NegationType+ &\\
+  & $|$ & \verb+FunctionType+ &\\
+  & $|$ & \verb+MethodType+ &\\
 \end{syntax}
 
 
@@ -238,7 +241,7 @@ type. One can think of a record as a special kind of "fixed" map
 
 \paragraph{Semantics.}
 
-\paragraph{Notes.}
+\paragraph{Notes.}  Syntax for functions?  Open versus closed records?
 
 % =======================================================================
 % References
@@ -346,6 +349,44 @@ elements are subtypes of the element type. For example,
 \paragraph{Notes.} 
 
 % =======================================================================
+% Functions
+% =======================================================================
+
+\section{Function Types}
+
+\begin{syntax}
+  \verb+FunctionType+ & $::=$ & \token{function}\ \token{(}\
+  \big[\ \verb+Type+\ \big(\ \token{,}\ \verb+Type+\ \big)$^*$\ \big]\ \token{)}\ \token{=>}\ \verb+Type+&\\
+\end{syntax}
+
+\paragraph{Description.}  
+
+\paragraph{Examples.}
+
+\paragraph{Semantics.}
+
+\paragraph{Notes.}
+
+% =======================================================================
+% Functions
+% =======================================================================
+
+\section{Method Types}
+
+\begin{syntax}
+  \verb+MethodType+ & $::=$ & \token{method}\ \token{(}\
+  \big[\ \verb+Type+\ \big(\ \token{,}\ \verb+Type+\ \big)$^*$\ \big]\ \token{)}\ \token{=>}\ \verb+Type+&\\
+\end{syntax}
+
+\paragraph{Description.}  
+
+\paragraph{Examples.}
+
+\paragraph{Semantics.}
+
+\paragraph{Notes.}
+
+% =======================================================================
 % Unions
 % =======================================================================
 
@@ -411,5 +452,5 @@ accepts values {\em not} in a given type.
 \subsection{Effective Records}
 \subsection{Effective Collections}
 
-\section{Subtyping}
-Discussion or present subtyping algorithm?
+\section{Subtyping Algorithms}
+Discussion of soundness and completeness.
