@@ -159,15 +159,32 @@ int z = x + y
 
 \begin{syntax}
   \verb+IfStmt+$^\ell$ & $::=$ & \token{if}\ \verb+Expr+\ \token{:}
-  \verb+Block+$^\gamma$\ \big[ \token{else} \token{:}
-  \verb+Block+$^\omega$\ \big]\\
+  \verb+Block+$^\gamma$\ \big( \token{else} \token{if}\ \verb+Expr+\ \token{:}
+  \verb+Block+$^{\omega_i}$\ \big)$^*$ \\
+&& \big[ \token{else} \token{:} \verb+Block+$^\phi$\ \big]\\
 &&\\
-\multicolumn{3}{r}{(where $\ell < \gamma$ and $\ell < \omega$)}\\
+\multicolumn{3}{r}{(where $\ell < \gamma$ and $\forall i.\ell <
+  \omega_i$ and $\ell < \phi$)}\\
 \end{syntax}
 
-\paragraph{Description.}
+\paragraph{Description.} Represents a classical \lstinline{if}
+statement which supports chaining and an optional \lstinline{else}
+branch.  The expression(s) are referred to as {\em conditions} and must
+be \gls{boolean_expression}s.  The first block is referred to as the
+{\em true branch}, whilst the optional \lstinline{else} block is
+referred to as the {\em false branch}.
 
-\paragraph{Examples.}
+\paragraph{Examples.} The following illustrates:
+
+\begin{lstlisting}
+function max(int x, int y) => int:
+    if(x > y):
+        return x
+    else if(x == y):
+        return 0
+    else:
+        return y
+\end{lstlisting}
 
 \paragraph{Notes.} 
 
@@ -178,8 +195,8 @@ int z = x + y
 \section{While Statement}
 
 \begin{syntax}
-  \verb+WhileStmt+$^\ell$ & $::=$ & \token{while}\ \verb+Expr+\ \token{:}
-  \verb+Block+$^\gamma$\ \big(\ \token{where}\ \verb+Expr+\ \big)$^*$\\
+  \verb+WhileStmt+$^\ell$ & $::=$ & \token{while}\ \verb+Expr+\ \big(\
+  \token{where}\ \verb+Expr+\ \big)$^*$\ \token{:}\ \verb+Block+$^\gamma$\ \\
 &&\\
 \multicolumn{3}{r}{(where $\ell < \gamma$)}\\
 \end{syntax}
@@ -217,7 +234,11 @@ int z = x + y
 \section{For Statement}
 
 \begin{syntax}
-  \verb+ForStmt+ & $::=$ &\\
+  \verb+ForStmt+$^\ell$ & $::=$ & \token{for}\ \verb+VarPattern+\
+  \token{in}\ \verb+Expr+\ \big(\ \token{where}\ \verb+Expr+\
+  \big)$^*$\ \token{:} \verb+Block+$^\gamma$\\
+&&\\
+\multicolumn{3}{r}{(where $\ell < \gamma$)}\\
 \end{syntax}
 
 \paragraph{Description.}
