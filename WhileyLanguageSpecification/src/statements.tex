@@ -1,7 +1,155 @@
 \chapter{Statements}
+
+% =======================================================================
+% AssertStatement
+% =======================================================================
+
+\section{Assert Statement}
+
+\begin{syntax}
+  \verb+AssertStmt+ & $::=$ & \token{assert}\ \verb+Expr+ &\\
+\end{syntax}
+
+\paragraph{Description.}  Represents an {\em assert statement} of the form
+``\lstinline{assert e}'', where \lstinline{e} is a boolean expression. 
+
+\paragraph{Examples.} The following illustrates:
+\begin{lstlisting}
+function abs(int x) => int:
+    if x < 0:
+        x = -x
+    assert x >= 0
+    return x
+\end{lstlisting}
+
+\paragraph{Notes.}  Assertions are either {\em statically checked} by the
+verifier, or turned into {\em runtime checks}.
+
+
+% =======================================================================
+% Assignment Statement
+% =======================================================================
+
+\section{Assignment Statement}
+
+\begin{syntax}
+  \verb+AssignStmt+ & $::=$ & \verb+LVal+\ \token{=}\ \verb+Expr+&\\
+\end{syntax}
+
+\paragraph{Description.}  Represents an {\em assignment statement} of the
+form \lstinline{lhs = rhs}.  Here, the \lstinline{rhs} is any
+expression, whilst the \lstinline{lhs} must be an \lstinline{LVal} ---
+that is, an expression permitted on the left-side of an assignment.
+
+\paragraph{Examples.} The following illustrates different possible assignment statements:
+\begin{lstlisting}
+x = y       // variable assignment
+x.f = y     // field assignment
+x[i] = y    // list assignment
+x[i].f = y  // compound assignment
+\end{lstlisting}
+
+The last assignment here illustrates that the left-hand side of an
+assignment can be arbitrarily complex, involving nested assignments
+into lists and records.
+
+\paragraph{Semantics.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% Assume Statement
+% =======================================================================
+
+\section{Assume Statement}
+
+\begin{syntax}
+  \verb+AssumeStmt+ & $::=$ & \token{assume}\ \verb+Expr+ &\\
+\end{syntax}
+
+\paragraph{Description.}  Represents an {\em assume statement} of the form
+``\lstinline{assume e}'', where \lstinline{e} is a boolean expression. 
+
+\paragraph{Examples.}  The following illustrates a simple function
+which uses an \lstinline{assume} statement to meet its
+postcondition:
+
+\begin{lstlisting}
+function abs(int x) => int:
+    assume x >= 0
+    return x
+\end{lstlisting}
+
+\paragraph{Notes.} Assumptions are {\em assumed} by the verifier and, since
+this may be unsound, are always turned into {\em runtime checks}.
+
+% =======================================================================
+% ReturnStatement
+% =======================================================================
+
+\section{Return Statement}
+
+\begin{syntax}
+  \verb+ReturnStmt+ & $::=$ & \token{return}\ \big[\ \verb+Expr+\ \big] &\\
+\end{syntax}
+
+\paragraph{Description.}  Represents a {\em return statement} with an
+optional expression is referred to as the {\em return value}.
+
+\paragraph{Examples.} The following illustrates a simple function
+which returns the increment of its parameter \lstinline{x}:
+
+\begin{lstlisting}
+function f(int x) => int:
+    return x + 1
+\end{lstlisting}
+
+Here, we see a simple \lstinline{return} statement which returns an \lstinline{int} value.
+
+\paragraph{Notes.}  The returned expression (if there is one) must
+begin on the same line as the return statement itself.
+
+% =======================================================================
+% ThrowStatement
+% =======================================================================
+
+\section{Throw Statement}
+
+\begin{syntax}
+  \verb+ThrowStmt+ & $::=$ & \token{throw}\ \verb+Expr+ &\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% Variable Declarations
+% =======================================================================
+
 \section{Variable Declarations}
-\section{Assign Statements}
-\section{Return Statements}
+
+\begin{syntax}
+  \verb+VarDecl+ & $::=$ & \verb+Type+\ \verb+Ident+\ \big[\
+  \token{=}\ \verb+Expr+\ \big]&\\
+\end{syntax}
+
+\paragraph{Description.}  Represents a {\em variable declaration}
+which has an optional expression assignment referred to as an {\em
+  initialiser}.  If an initialiser is given, then this will be evaluated and assigned to the variable when the declaration is executed.
+
+\paragraph{Examples.} Some example variable declarations are:
+\begin{lstlisting}
+int x
+int y = 1
+int z = x + y
+\end{lstlisting}
+
+\paragraph{Notes.} 
+
+
 \section{If/Else Statements}
 \section{While Statements}
 \section{Do/While Statements}
