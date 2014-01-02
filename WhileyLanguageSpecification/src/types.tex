@@ -1,7 +1,35 @@
 \chapter{Types}
 \section{Overview}
 Discuss syntactic versus semantic types.
+
+\begin{syntax}
+  \verb+Type+ & $::=$ & &\\
+  & $|$ & \verb+PrimitiveType+ &\\
+  & $|$ & \verb+TupleType+ &\\
+  & $|$ & \verb+RecordType+ &\\
+  & $|$ & \verb+ReferenceType+ &\\
+  & $|$ & \verb+NominalType+ &\\
+  & $|$ & \verb+CollectionType+ &\\
+  & $|$ & \verb+UnionType+ &\\
+  & $|$ & \verb+IntersectionType+ &\\
+  & $|$ & \verb+NegationType+ &\\
+
+\end{syntax}
+
+
 \section{Primitives}
+
+\begin{syntax}
+  \verb+PrimitiveType+ & $::=$ & &\\
+  & $|$ & \verb+AnyType+ &\\
+  & $|$ & \verb+VoidType+ &\\
+  & $|$ & \verb+NullType+ &\\
+  & $|$ & \verb+BoolType+ &\\
+  & $|$ & \verb+CharType+ &\\
+  & $|$ & \verb+IntType+ &\\
+  & $|$ & \verb+RealType+ &\\
+\end{syntax}
+
 
 % =======================================================================
 % Any
@@ -10,7 +38,7 @@ Discuss syntactic versus semantic types.
 \subsection{Any Type}
 
 \begin{syntax}
-  AnyType & $::=$ & \token{any} & {\em // type any}\\
+  \verb+AnyType+ & $::=$ & \token{any} &\\
 \end{syntax}
 
 \paragraph{Description.}
@@ -28,7 +56,7 @@ Discuss syntactic versus semantic types.
 \subsection{Void Type}
 
 \begin{syntax}
-   VoidType & $::=$ & \token{void} & {\em // type void}\\
+   \verb+VoidType+ & $::=$ & \token{void} &\\
 \end{syntax}
 
 \paragraph{Description.} The \lstinline{void} type represents the type whose variables cannot exist! That is, they cannot hold any possible value. Void is used to represent the return type of a function which does not return anything. However, it is also
@@ -47,7 +75,7 @@ used to represent the element type of an empty list of set.
 \subsection{Null Type}
 
 \begin{syntax}
-  NullType & $::=$ & \token{null} & {\em // type null}\\
+  \verb+NullType+ & $::=$ & \token{null} &\\
 \end{syntax}
 
 \paragraph{Description.}
@@ -65,7 +93,7 @@ used to represent the element type of an empty list of set.
 \subsection{Bool Type}
 
 \begin{syntax}
-  BoolType & $::=$ & \token{bool} & {\em // type bool}\\
+ \verb+BoolType+ & $::=$ & \token{bool} &\\
 \end{syntax}
 
 \paragraph{Description.}
@@ -83,7 +111,7 @@ used to represent the element type of an empty list of set.
 \subsection{Char Type}
 
 \begin{syntax}
-  CharType & $::=$ & \token{char} & \\
+  \verb+CharType+ & $::=$ & \token{char} & \\
 \end{syntax}
 
 \paragraph{Description.}
@@ -101,7 +129,7 @@ used to represent the element type of an empty list of set.
 \subsection{Int Type}
 
 \begin{syntax}
-  IntType & $::=$ & \token{int} &\\
+  \verb+IntType+ & $::=$ & \token{int} &\\
 \end{syntax}
 
 \paragraph{Description.}
@@ -119,7 +147,7 @@ used to represent the element type of an empty list of set.
 \subsection{Real Type}
 
 \begin{syntax}
-  RealType & $::=$ & \token{real} &\\
+  \verb+RealType+ & $::=$ & \token{real} &\\
 \end{syntax}
 
 \paragraph{Description.}
@@ -129,6 +157,80 @@ used to represent the element type of an empty list of set.
 \paragraph{Semantics.}
 
 \paragraph{Notes.} 
+
+% =======================================================================
+% Tuples
+% =======================================================================
+
+\section{Tuple Types}
+
+\begin{syntax}
+  \verb+TupleType+ & $::=$ & \token{(}\ \verb+Type+\ \big(\ \token{,}\
+  \verb+Type+\ \big)$^*$\ \token{)}&\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Semantics.}
+
+\paragraph{Notes.}
+
+% =======================================================================
+% Records
+% =======================================================================
+
+\section{Record Types}
+
+\begin{syntax}
+  \verb+RecordType+ & $::=$ & \token{\{}\ \verb+Type+\
+  \verb+Identifier+\ \big(\ \token{,}\ \verb+Type+\ \verb+Identifier+\ \big)$^*$ \token{\}}&\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Semantics.}
+
+\paragraph{Notes.}
+
+% =======================================================================
+% References
+% =======================================================================
+
+\section{Reference Types}
+
+\begin{syntax}
+  \verb+ReferenceType+ & $::=$ & \token{\&}\ \ \verb+Type+&\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Semantics.}
+
+\paragraph{Notes.}
+
+% =======================================================================
+% Nominal
+% =======================================================================
+
+\section{Nominal Types}
+
+\begin{syntax}
+  \verb+NominalType+ & $::=$ & \verb+Identifier+&\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Semantics.}
+
+\paragraph{Notes.}
 
 % =======================================================================
 % Collections
@@ -143,7 +245,7 @@ used to represent the element type of an empty list of set.
 \subsection{Set Type}
 
 \begin{syntax}
-  SetType & $::=$ & \token{\{} \ Type \ \token{\}} &\\
+  \verb+SetType+ & $::=$ & \token{\{} \ \verb+Type+ \ \token{\}} &\\
 \end{syntax}
 
 \paragraph{Description.}
@@ -161,7 +263,7 @@ used to represent the element type of an empty list of set.
 \subsection{Map Type}
 
 \begin{syntax}
-  MapType & $::=$ & \token{\{} \ Type \ \token{=>} \ Type \ \token{\}} &\\
+  \verb+MapType+ & $::=$ & \token{\{} \ \verb+Type+ \ \token{=>} \ \verb+Type+ \ \token{\}} &\\
 \end{syntax}
 
 \paragraph{Description.}
@@ -179,7 +281,7 @@ used to represent the element type of an empty list of set.
 \subsection{List Type}
 
 \begin{syntax}
-  ListType & $::=$ & \token{[} \ Type \ \token{]}&\\
+  \verb+ListType+ & $::=$ & \token{[} \ \verb+Type+ \ \token{]}&\\
 \end{syntax}
 
 \paragraph{Description.}
@@ -197,7 +299,7 @@ used to represent the element type of an empty list of set.
 \section{Union Types}
 
 \begin{syntax}
-  UnionType & $::=$ & IntersectionType\ \big(\ \token{|}\ IntersectionType\
+  \verb+UnionType+ & $::=$ & \verb+IntersectionType+\ \big(\ \token{|}\ \verb+IntersectionType+\
   \big)$^+$&\\
 \end{syntax}
 
@@ -216,7 +318,7 @@ used to represent the element type of an empty list of set.
 \section{Intersection Types}
 
 \begin{syntax}
-  IntersectionType & $::=$ & TermType\ \big(\ \token{\&}\ TermType\
+  \verb+IntersectionType+ & $::=$ & \verb+TermType+\ \big(\ \token{\&}\ \verb+TermType+\
   \big)$^+$&\\
 \end{syntax}
 
@@ -236,24 +338,6 @@ used to represent the element type of an empty list of set.
 
 \begin{syntax}
   NegationType & $::=$ & \token{!}\ \ Type&\\
-\end{syntax}
-
-\paragraph{Description.}
-
-\paragraph{Examples.}
-
-\paragraph{Semantics.}
-
-\paragraph{Notes.}
-
-% =======================================================================
-% Negations
-% =======================================================================
-
-\section{Reference Types}
-
-\begin{syntax}
-  \verb+ReferenceType+ & $::=$ & \token{\&}\ \ \verb+Type+&\\
 \end{syntax}
 
 \paragraph{Description.}
