@@ -9,4 +9,4 @@ all: $(TARGET).pdf
 	done
 
 clean:
-	rm *.toc *.bbl *.aux *.dvi *.log *.ps *.pdf *~ *.blg *.bak
+	rm *.toc *.bbl *.aux *.dvi *.log *.ps *.pdf *~ *.blg *.glo *.gls *.glg *.idx *.xdy *.out *.ist *.bak
