@@ -29,6 +29,7 @@ Discuss syntactic versus semantic types.
   & $|$ & \verb+VoidType+ &\\
   & $|$ & \verb+NullType+ &\\
   & $|$ & \verb+BoolType+ &\\
+  & $|$ & \verb+ByteType+ &\\
   & $|$ & \verb+CharType+ &\\
   & $|$ & \verb+IntType+ &\\
   & $|$ & \verb+RealType+ &\\
@@ -109,13 +110,34 @@ e.g. Java).
  \verb+BoolType+ & $::=$ & \token{bool} &\\
 \end{syntax}
 
-\paragraph{Description.}
+\paragraph{Description.} Represents the set of boolean values (i.e. \lstinline{true} and \lstinline{false}).
 
 \paragraph{Examples.}
 
 \paragraph{Semantics.}
 
 \paragraph{Notes.} 
+
+% =======================================================================
+% Bool 
+% =======================================================================
+
+\subsection{Byte Type}
+
+\begin{syntax}
+ \verb+ByteType+ & $::=$ & \token{byte} &\\
+\end{syntax}
+
+\paragraph{Description.}  Represents a sequence of 8 bits. 
+\paragraph{Examples.}
+
+\paragraph{Semantics.}
+
+\paragraph{Notes.}  Unlike for many languages, there is no
+representation associated with a byte. For example, to extract an
+integer value from a byte, it must be explicitly decoded according to
+some representation (e.g. two's compliment) using an auxillary function (e.g. \lstinline{Byte.toInt()}).
+
 
 % =======================================================================
 % Char
