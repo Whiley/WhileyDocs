@@ -4,38 +4,38 @@ Discuss syntactic versus semantic types.  Also, need to consider
 constrained types as well as type patterns.
 
 \begin{syntax}
-  \verb+Type+ & $::=$ & &\\
-  & $|$ & \verb+TermType+ &\\
-  & $|$ & \verb+UnionType+ &\\
-  & $|$ & \verb+IntersectionType+ &\\
+  \verb+Type+ & $::=$ & \\
+  & $|$ & \verb+TermType+ \\
+  & $|$ & \verb+UnionType+ \\
+  & $|$ & \verb+IntersectionType+ \\
 \end{syntax}
 
 \begin{syntax}
-  \verb+TermType+ & $::=$ & &\\
-  & $|$ & \verb+PrimitiveType+ &\\
-  & $|$ & \verb+TupleType+ &\\
-  & $|$ & \verb+RecordType+ &\\
-  & $|$ & \verb+ReferenceType+ &\\
-  & $|$ & \verb+NominalType+ &\\
-  & $|$ & \verb+CollectionType+ &\\
-  & $|$ & \verb+NegationType+ &\\
-  & $|$ & \verb+FunctionType+ &\\
-  & $|$ & \verb+MethodType+ &\\
+  \verb+TermType+ & $::=$ & \\
+  & $|$ & \verb+PrimitiveType+ \\
+  & $|$ & \verb+TupleType+ \\
+  & $|$ & \verb+RecordType+ \\
+  & $|$ & \verb+ReferenceType+ \\
+  & $|$ & \verb+NominalType+ \\
+  & $|$ & \verb+CollectionType+ \\
+  & $|$ & \verb+NegationType+ \\
+  & $|$ & \verb+FunctionType+ \\
+  & $|$ & \verb+MethodType+ \\
 \end{syntax}
 
 
 \section{Primitives}
 
 \begin{syntax}
-  \verb+PrimitiveType+ & $::=$ & &\\
-  & $|$ & \verb+AnyType+ &\\
-  & $|$ & \verb+VoidType+ &\\
-  & $|$ & \verb+NullType+ &\\
-  & $|$ & \verb+BoolType+ &\\
-  & $|$ & \verb+ByteType+ &\\
-  & $|$ & \verb+CharType+ &\\
-  & $|$ & \verb+IntType+ &\\
-  & $|$ & \verb+RealType+ &\\
+  \verb+PrimitiveType+ & $::=$ & \\
+  & $|$ & \verb+AnyType+ \\
+  & $|$ & \verb+VoidType+ \\
+  & $|$ & \verb+NullType+ \\
+  & $|$ & \verb+BoolType+ \\
+  & $|$ & \verb+ByteType+ \\
+  & $|$ & \verb+CharType+ \\
+  & $|$ & \verb+IntType+ \\
+  & $|$ & \verb+RealType+ \\
 \end{syntax}
 
 
@@ -46,7 +46,7 @@ constrained types as well as type patterns.
 \subsection{Any Type}
 
 \begin{syntax}
-  \verb+AnyType+ & $::=$ & \token{any} &\\
+  \verb+AnyType+ & $::=$ & \token{any} \\
 \end{syntax}
 
 \paragraph{Description.}  The type \lstinline{any} represents the type whose variables may hold any possible value.
@@ -65,7 +65,7 @@ lattice.  That is, it is the supertype of all other types.
 \subsection{Void Type}
 
 \begin{syntax}
-   \verb+VoidType+ & $::=$ & \token{void} &\\
+   \verb+VoidType+ & $::=$ & \token{void} \\
 \end{syntax}
 
 \paragraph{Description.} The \lstinline{void} type represents the type whose variables cannot exist! That is, they cannot hold any possible value. Void is used to represent the return type of a function which does not return anything. However, it is also
@@ -84,7 +84,7 @@ used to represent the element type of an empty list of set.
 \subsection{Null Type}
 
 \begin{syntax}
-  \verb+NullType+ & $::=$ & \token{null} &\\
+  \verb+NullType+ & $::=$ & \token{null} \\
 \end{syntax}
 
 \paragraph{Description.}  The null type is a special type which should
@@ -110,7 +110,7 @@ e.g. Java).
 \subsection{Bool Type}
 
 \begin{syntax}
- \verb+BoolType+ & $::=$ & \token{bool} &\\
+ \verb+BoolType+ & $::=$ & \token{bool} \\
 \end{syntax}
 
 \paragraph{Description.} Represents the set of boolean values (i.e. \lstinline{true} and \lstinline{false}).
@@ -128,7 +128,7 @@ e.g. Java).
 \subsection{Byte Type}
 
 \begin{syntax}
- \verb+ByteType+ & $::=$ & \token{byte} &\\
+ \verb+ByteType+ & $::=$ & \token{byte} \\
 \end{syntax}
 
 \paragraph{Description.}  Represents a sequence of 8 bits. 
@@ -149,7 +149,7 @@ some representation (e.g. two's compliment) using an auxillary function (e.g. \l
 \subsection{Char Type}
 
 \begin{syntax}
-  \verb+CharType+ & $::=$ & \token{char} & \\
+  \verb+CharType+ & $::=$ & \token{char} \\
 \end{syntax}
 
 \paragraph{Description.}  Represents a unicode character.
@@ -167,7 +167,7 @@ some representation (e.g. two's compliment) using an auxillary function (e.g. \l
 \subsection{Int Type}
 
 \begin{syntax}
-  \verb+IntType+ & $::=$ & \token{int} &\\
+  \verb+IntType+ & $::=$ & \token{int} \\
 \end{syntax}
 
 \paragraph{Description.}  Represents the set of (unbound) integer
@@ -187,7 +187,7 @@ is no equivalent to Java's \lstinline{MIN_VALUE} and \lstinline{MAX_VALUE} for \
 \subsection{Real Type}
 
 \begin{syntax}
-  \verb+RealType+ & $::=$ & \token{real} &\\
+  \verb+RealType+ & $::=$ & \token{real} \\
 \end{syntax}
 
 \paragraph{Description.}  Represents the set of (unbound) rational
@@ -207,7 +207,7 @@ numbers.
 
 \begin{syntax}
   \verb+TupleType+ & $::=$ & \token{(}\ \verb+Type+\ \big(\ \token{,}\
-  \verb+Type+\ \big)$^+$\ \token{)}&\\
+  \verb+Type+\ \big)$^+$\ \token{)}\\
 \end{syntax}
 
 \paragraph{Description.}  A tuple type describes a compound type made
@@ -229,7 +229,7 @@ that fields are effectively anonymous.
 \begin{syntax}
   \verb+RecordType+ & $::=$ & \token{\{}\ \verb+Type+\
   \verb+Ident+\ \big(\ \token{,}\ \verb+Type+\ \verb+Ident+\
-  \big)$^*$ \big[\ \token{,}\ \token{...}\ \big]\ \token{\}}&\\
+  \big)$^*$ \big[\ \token{,}\ \token{...}\ \big]\ \token{\}}\\
 \end{syntax}
 
 \paragraph{Description.}   A record is made up of a number of fields,
@@ -250,7 +250,7 @@ type. One can think of a record as a special kind of "fixed" map
 \section{Reference Types}
 
 \begin{syntax}
-  \verb+ReferenceType+ & $::=$ & \token{\&}\ \ \verb+Type+&\\
+  \verb+ReferenceType+ & $::=$ & \token{\&}\ \ \verb+Type+\\
 \end{syntax}
 
 \paragraph{Description.}  Represents a reference to an object in Whiley.
@@ -268,7 +268,7 @@ type. One can think of a record as a special kind of "fixed" map
 \section{Nominal Types}
 
 \begin{syntax}
-  \verb+NominalType+ & $::=$ & \verb+Ident+&\\
+  \verb+NominalType+ & $::=$ & \verb+Ident+\\
 \end{syntax}
 
 \paragraph{Description.} The existential type represents the an
@@ -293,7 +293,7 @@ unknown type, defined at a given position.
 \subsection{Set Type}
 
 \begin{syntax}
-  \verb+SetType+ & $::=$ & \token{\{} \ \verb+Type+ \ \token{\}} &\\
+  \verb+SetType+ & $::=$ & \token{\{} \ \verb+Type+ \ \token{\}} \\
 \end{syntax}
 
 \paragraph{Description.}  A set type describes set values whose
@@ -314,7 +314,7 @@ however, \lstinline|{1.345}| is not.
 \subsection{Map Type}
 
 \begin{syntax}
-  \verb+MapType+ & $::=$ & \token{\{} \ \verb+Type+ \ \token{=>} \ \verb+Type+ \ \token{\}} &\\
+  \verb+MapType+ & $::=$ & \token{\{} \ \verb+Type+ \ \token{=>} \ \verb+Type+ \ \token{\}} \\
 \end{syntax}
 
 \paragraph{Description.}  A map represents a one-many mapping from
@@ -335,7 +335,7 @@ values. A valid instance of this type might be \lstinline|{1=>1.2,2=>3.0}|.
 \subsection{List Type}
 
 \begin{syntax}
-  \verb+ListType+ & $::=$ & \token{[} \ \verb+Type+ \ \token{]}&\\
+  \verb+ListType+ & $::=$ & \token{[} \ \verb+Type+ \ \token{]}\\
 \end{syntax}
 
 \paragraph{Description.}  A list type describes list values whose
@@ -356,7 +356,7 @@ elements are subtypes of the element type. For example,
 
 \begin{syntax}
   \verb+FunctionType+ & $::=$ & \token{function}\ \token{(}\
-  \big[\ \verb+Type+\ \big(\ \token{,}\ \verb+Type+\ \big)$^*$\ \big]\ \token{)}\ \token{=>}\ \verb+Type+&\\
+  \big[\ \verb+Type+\ \big(\ \token{,}\ \verb+Type+\ \big)$^*$\ \big]\ \token{)}\ \token{=>}\ \verb+Type+\\
 \end{syntax}
 
 \paragraph{Description.}  
@@ -375,7 +375,7 @@ elements are subtypes of the element type. For example,
 
 \begin{syntax}
   \verb+MethodType+ & $::=$ & \token{method}\ \token{(}\
-  \big[\ \verb+Type+\ \big(\ \token{,}\ \verb+Type+\ \big)$^*$\ \big]\ \token{)}\ \token{=>}\ \verb+Type+&\\
+  \big[\ \verb+Type+\ \big(\ \token{,}\ \verb+Type+\ \big)$^*$\ \big]\ \token{)}\ \token{=>}\ \verb+Type+\\
 \end{syntax}
 
 \paragraph{Description.}  
@@ -394,7 +394,7 @@ elements are subtypes of the element type. For example,
 
 \begin{syntax}
   \verb+UnionType+ & $::=$ & \verb+IntersectionType+\ \big(\ \token{|}\ \verb+IntersectionType+\
-  \big)$^+$&\\
+  \big)$^+$\\
 \end{syntax}
 
 \paragraph{Description.}   A union type represents a type whose
@@ -416,7 +416,7 @@ an integer value, or \lstinline{null}.
 
 \begin{syntax}
   \verb+IntersectionType+ & $::=$ & \verb+TermType+\ \big(\ \token{\&}\ \verb+TermType+\
-  \big)$^+$&\\
+  \big)$^+$\\
 \end{syntax}
 
 \paragraph{Description.}
@@ -434,7 +434,7 @@ an integer value, or \lstinline{null}.
 \section{Negation Types}
 
 \begin{syntax}
-  NegationType & $::=$ & \token{!}\ \ \verb+Type+&\\
+  NegationType & $::=$ & \token{!}\ \ \verb+Type+\\
 \end{syntax}
 
 \paragraph{Description.}  A negation type represents a type which

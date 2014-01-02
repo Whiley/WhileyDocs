@@ -7,11 +7,11 @@
 \section{Assert Statement}
 
 \begin{syntax}
-  \verb+AssertStmt+ & $::=$ & \token{assert}\ \verb+Expr+ &\\
+  \verb+AssertStmt+ & $::=$ & \token{assert}\ \verb+Expr+\\
 \end{syntax}
 
 \paragraph{Description.}  Represents an {\em assert statement} of the form
-``\lstinline{assert e}'', where \lstinline{e} is a boolean expression. 
+``\lstinline{assert e}'', where \lstinline{e} is a \gls{boolean_expression}. 
 
 \paragraph{Examples.} The following illustrates:
 \begin{lstlisting}
@@ -33,7 +33,7 @@ verifier, or turned into {\em runtime checks}.
 \section{Assignment Statement}
 
 \begin{syntax}
-  \verb+AssignStmt+ & $::=$ & \verb+LVal+\ \token{=}\ \verb+Expr+&\\
+  \verb+AssignStmt+ & $::=$ & \verb+LVal+\ \token{=}\ \verb+Expr+\\
 \end{syntax}
 
 \paragraph{Description.}  Represents an {\em assignment statement} of the
@@ -64,11 +64,11 @@ into lists and records.
 \section{Assume Statement}
 
 \begin{syntax}
-  \verb+AssumeStmt+ & $::=$ & \token{assume}\ \verb+Expr+ &\\
+  \verb+AssumeStmt+ & $::=$ & \token{assume}\ \verb+Expr+\\
 \end{syntax}
 
 \paragraph{Description.}  Represents an {\em assume statement} of the form
-``\lstinline{assume e}'', where \lstinline{e} is a boolean expression. 
+``\lstinline{assume e}'', where \lstinline{e} is a \gls{boolean_expression}. 
 
 \paragraph{Examples.}  The following illustrates a simple function
 which uses an \lstinline{assume} statement to meet its
@@ -90,7 +90,8 @@ this may be unsound, are always turned into {\em runtime checks}.
 \section{Return Statement}
 
 \begin{syntax}
-  \verb+ReturnStmt+ & $::=$ & \token{return}\ \big[\ \verb+Expr+\ \big] &\\
+  \verb+ReturnStmt+ & $::=$ & \token{return}\ \big[\ \verb+Expr+\
+  \big]\\
 \end{syntax}
 
 \paragraph{Description.}  Represents a {\em return statement} with an
@@ -116,7 +117,7 @@ begin on the same line as the return statement itself.
 \section{Throw Statement}
 
 \begin{syntax}
-  \verb+ThrowStmt+ & $::=$ & \token{throw}\ \verb+Expr+ &\\
+  \verb+ThrowStmt+ & $::=$ & \token{throw}\ \verb+Expr+\\
 \end{syntax}
 
 \paragraph{Description.}
@@ -133,7 +134,7 @@ begin on the same line as the return statement itself.
 
 \begin{syntax}
   \verb+VarDecl+ & $::=$ & \verb+Type+\ \verb+Ident+\ \big[\
-  \token{=}\ \verb+Expr+\ \big]&\\
+  \token{=}\ \verb+Expr+\ \big]\\
 \end{syntax}
 
 \paragraph{Description.}  Represents a \gls{variable_declaration}
@@ -150,9 +151,109 @@ int z = x + y
 \paragraph{Notes.} 
 
 
-\section{If/Else Statements}
-\section{While Statements}
-\section{Do/While Statements}
-\section{For Statements}
-\section{Switch Statements}
-\section{Try/Catch Statements}
+% =======================================================================
+% If Statement
+% =======================================================================
+
+\section{If Statement}
+
+\begin{syntax}
+  \verb+IfStmt+$^\ell$ & $::=$ & \token{if}\ \verb+Expr+\ \token{:}
+  \verb+Block+$^\gamma$\ \big[ \token{else} \token{:}
+  \verb+Block+$^\omega$\ \big]\\
+&&\\
+\multicolumn{3}{r}{(where $\ell < \gamma$ and $\ell < \omega$)}\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% While Statement
+% =======================================================================
+
+\section{While Statement}
+
+\begin{syntax}
+  \verb+WhileStmt+$^\ell$ & $::=$ & \token{while}\ \verb+Expr+\ \token{:}
+  \verb+Block+$^\gamma$\ \big(\ \token{where}\ \verb+Expr+\ \big)$^*$\\
+&&\\
+\multicolumn{3}{r}{(where $\ell < \gamma$)}\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% Do/While Statement
+% =======================================================================
+
+\section{Do/While Statement}
+
+\begin{syntax}
+  \verb+DoWhileStmt+$^\ell$ & $::=$ & \token{do}\ \token{:}
+  \verb+Block+$^\gamma$\ \token{while}\ \verb+Expr+\ \big(\
+  \token{where}\ \verb+Expr+\ \big)$^*$\\
+&&\\
+\multicolumn{3}{r}{(where $\ell < \gamma$)}\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% For Statement
+% =======================================================================
+
+\section{For Statement}
+
+\begin{syntax}
+  \verb+ForStmt+ & $::=$ &\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% Switch Statement
+% =======================================================================
+
+\section{Switch Statement}
+
+\begin{syntax}
+  \verb+SwitchStmt+ & $::=$ &\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% Try/Catch Block
+% =======================================================================
+
+\section{Try/Catch Statement}
+
+\begin{syntax}
+  \verb+TryCatchStmt+ & $::=$ &\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Notes.} 
