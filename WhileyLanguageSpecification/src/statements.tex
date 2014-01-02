@@ -201,11 +201,24 @@ function max(int x, int y) => int:
 \multicolumn{3}{r}{(where $\ell < \gamma$)}\\
 \end{syntax}
 
-\paragraph{Description.}
+\paragraph{Description.} Represents a while statement with optional
+\lstinline{where} clause(s) commonly referred to as \gls{loop_invariant}s.
 
-\paragraph{Examples.}
+\paragraph{Examples.} As an example:
 
-\paragraph{Notes.} 
+\begin{lstlisting}
+function sum([int] xs) => int:
+  int r = 0
+  int i = 0
+  while i < |xs| where i >= 0:
+    r = r + xs[i]
+    i = i + 1
+  return r
+\end{lstlisting}
+
+\paragraph{Notes.}   When multiple \lstinline{where} clauses are
+given, these are combined using a conjunction. The combined invariant
+defines a condition which must be true on every iteration of the loop.
 
 % =======================================================================
 % Do/While Statement
