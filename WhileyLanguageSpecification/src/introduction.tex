@@ -1,7 +1,95 @@
 \chapter{Introduction}
 
-\section{Overview}
+This document provides a specification of the {\em Whiley Programming
+  Language}.  Whiley is a hybrid imperative and functional programming
+language designed to produce programs with fewer errors that those
+developed by more convention means.  Whiley allows explicit
+specifications to be given for functions, methods and data structures,
+and employs a \gls{verifying_compiler} to check whether programs meet their specifications.  As such, Whiley is ideally suited
+for use in \gls{safety_critical_system}s.  However, there are many
+benefits to be gained from using Whiley in a general setting
+(e.g. improved documentation, maintainability, reliability, etc).
+Finally, this document is {\em not} intended as a general introduction
+to the language, and the reader is referred to alternative documents
+for learning the language~\cite{X}.
+
+
+\section{Background}
+
+Reliability of large software systems is a difficult problem facing
+software engineering, where subtle errors can have disastrous
+consequences.  Infamous examples include: the Therac-25 disaster where
+a computer-operated X-ray machine gave lethal doses to
+patients~\cite{LT93}; the 1988 worm which reeked havoc on the internet
+by exploiting a buffer overrun~\cite{ER89}; the 1991 Patriot missile
+failure where a rounding error resulted in the missile catastrophically
+hitting a barracks~\cite{GAO}; and, the Ariane 5 rocket which exploded
+shortly after launch because of an integer overflow, costing the ESA
+an estimated \$500 million~\cite{ARIAN5}.
+
+The most widely used and accepted approach to improving software
+reliability is through extensive testing and manual code inspection.
+Whilst this does increase confidence, it cannot guarantee the absence
+of errors --- which is particularly problematic in a safety-critical
+setting.  Another successful approach is to prove the correctness of
+{\em models of software}, rather than of the software itself.  For
+example, model checkers
+(e.g~\cite{Clarke99,Holz01,BR02}) and SAT solvers % Mcm93,,CDHLPZ00
+(e.g.~\cite{MMZZM01,MFM04}) have proved highly % ,HDZM04,LS04,VB03
+effective at checking correctness properties of finite models of
+software systems, including microprocessor
+designs~\cite{VB03,Schub03}, flight-control
+systems~\cite{GH02,Choi05}, network protocols~\cite{Boli98,AC03} and
+spaceflight-control systems~\cite{HP00b}.  Some model checkers % ,NP02
+(e.g. CBMC~\cite{CKL04}, Java Pathfinder~\cite{HP00b},
+BLAST~\cite{HJMS03}, SLAM~\cite{BMMR01}) can also be applied directly
+on the program code although, in such cases, either significant
+abstraction is performed (hence, reducing the scope) or scalability is
+sacrificed.
+
+Prof. Sir Tony Hoare (ACM Turing Award Winner, FRS) proposed the
+creation of a {\em verifying compiler} as a grand challenge for
+computer science \cite{Hoare03}.  A verifying compiler ``{\em uses
+  automated mathematical and logical reasoning to check the
+  correctness of the programs that it compiles.}''  There have been
+numerous attempts to construct a verifying compiler system, although
+none has yet made it into the mainstream.  Early examples include that
+of King~\cite{King69}, Deutsch~\cite{Deutsch73}, the Gypsy
+Verification Environment~\cite{Good85} and the Stanford Pascal
+Verifier~\cite{LGHKMOPS95}.  More recently, the Extended Static
+Checker for Modula-3~\cite{DLNS98} which became the Extended Static
+Checker for Java (ESC/Java) --- a widely acclaimed and influential work~\cite{FLLNSS02}.  Building on this success was JML and its
+associated tooling which provided a standard notation for specifying
+functions in Java~\cite{LCCRC05}.  Finally, Microsoft %,CR08,JC10
+developed the Spec\# system which is built on top of
+C\#~\cite{BLS04}.% ,BDFLS04,BCDJL06
+
+Both ESC/Java and Spec\# build on existing object-oriented languages
+(i.e. Java and C\#) but, as a result, suffer numerous limitations.
+The problem is that such languages were not designed for use with
+verifying compilers.  Ireland, in his survey on the history of
+verifying compilers, noted the following~\cite{Ire04}:
+\begin{quote} {\em ``The choice of programming language(s) targeted by
+    the verifying compiler will have a significant effect on the
+    chances of success.''}
+\end{quote}
+Likewise, a report on future directions in verifying compilers, put
+together by several researchers in this area, makes a similar
+comment~\cite{LABBCFHJMPSSS06}:
+\begin{quote} {\em ``Programming language design can reduce the cost
+    of specification and verification by keeping the language simple,
+    by automating more of the work, and by eliminating common
+    errors.''}
+\end{quote}
 
 \section{Goals}
+
+The Whiley Programming Language has been designed from scratch in
+conjunction with a verifying compiler.  The intention of this is to
+provide an open framework for research in automated software
+verification.  The initial goal is to automatically eliminate common
+errors, such as {\em null dereferences}, {\em array-out-of-bounds},
+{\em divide-by-zero} and more.  In the future, the intention is to
+consider more complex issues, such as termination, proof-carrying code and user-supplied proofs.
 
 \section{History}

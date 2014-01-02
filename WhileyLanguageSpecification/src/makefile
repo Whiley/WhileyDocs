@@ -1,11 +1,11 @@
 TARGET = WhileyLanguageSpec
-DEPS = introduction.tex lexical.tex compilation-units.tex types.tex expressions.tex statements.tex glossary.tex
+DEPS = introduction.tex lexical.tex compilation-units.tex types.tex expressions.tex statements.tex glossary.tex references.bib
 
 all: $(TARGET).pdf
 
 %.pdf : %.tex $(DEPS)
 	@for X in 1 2 3 ; do \
-        ( echo "---------------- Latex ($$X) ----------------" && pdflatex $< ; makeglossaries $(TARGET) ) \
+        ( echo "---------------- Latex ($$X) ----------------" && pdflatex $< && makeglossaries $(TARGET) && bibtex $* ) \
 	done
 
 clean:
