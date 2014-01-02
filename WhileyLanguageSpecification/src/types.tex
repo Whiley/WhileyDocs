@@ -149,7 +149,7 @@ some representation (e.g. two's compliment) using an auxillary function (e.g. \l
   \verb+CharType+ & $::=$ & \token{char} & \\
 \end{syntax}
 
-\paragraph{Description.}
+\paragraph{Description.}  Represents a unicode character.
 
 \paragraph{Examples.}
 
@@ -167,13 +167,15 @@ some representation (e.g. two's compliment) using an auxillary function (e.g. \l
   \verb+IntType+ & $::=$ & \token{int} &\\
 \end{syntax}
 
-\paragraph{Description.}
+\paragraph{Description.}  Represents the set of (unbound) integer
+values. 
 
 \paragraph{Examples.}
 
 \paragraph{Semantics.}
 
-\paragraph{Notes.} 
+\paragraph{Notes.}  Since integer types in Whiley are unbounded, there
+is no equivalent to Java's \lstinline{MIN_VALUE} and \lstinline{MAX_VALUE} for \lstinline{int} types.
 
 % =======================================================================
 % Real
@@ -185,7 +187,8 @@ some representation (e.g. two's compliment) using an auxillary function (e.g. \l
   \verb+RealType+ & $::=$ & \token{real} &\\
 \end{syntax}
 
-\paragraph{Description.}
+\paragraph{Description.}  Represents the set of (unbound) rational
+numbers.
 
 \paragraph{Examples.}
 
@@ -201,10 +204,12 @@ some representation (e.g. two's compliment) using an auxillary function (e.g. \l
 
 \begin{syntax}
   \verb+TupleType+ & $::=$ & \token{(}\ \verb+Type+\ \big(\ \token{,}\
-  \verb+Type+\ \big)$^*$\ \token{)}&\\
+  \verb+Type+\ \big)$^+$\ \token{)}&\\
 \end{syntax}
 
-\paragraph{Description.}
+\paragraph{Description.}  A tuple type describes a compound type made
+up of two or more subcomponents. It is similar to a record, except
+that fields are effectively anonymous.
 
 \paragraph{Examples.}
 
@@ -220,10 +225,14 @@ some representation (e.g. two's compliment) using an auxillary function (e.g. \l
 
 \begin{syntax}
   \verb+RecordType+ & $::=$ & \token{\{}\ \verb+Type+\
-  \verb+Identifier+\ \big(\ \token{,}\ \verb+Type+\ \verb+Identifier+\ \big)$^*$ \token{\}}&\\
+  \verb+Ident+\ \big(\ \token{,}\ \verb+Type+\ \verb+Ident+\
+  \big)$^*$ \big[\ \token{,}\ \token{...}\ \big]\ \token{\}}&\\
 \end{syntax}
 
-\paragraph{Description.}
+\paragraph{Description.}   A record is made up of a number of fields,
+each of which has a unique name. Each field has a corresponding
+type. One can think of a record as a special kind of "fixed" map
+(i.e. where we know exactly which entries we have).
 
 \paragraph{Examples.}
 
@@ -241,7 +250,7 @@ some representation (e.g. two's compliment) using an auxillary function (e.g. \l
   \verb+ReferenceType+ & $::=$ & \token{\&}\ \ \verb+Type+&\\
 \end{syntax}
 
-\paragraph{Description.}
+\paragraph{Description.}  Represents a reference to an object in Whiley.
 
 \paragraph{Examples.}
 
@@ -256,10 +265,11 @@ some representation (e.g. two's compliment) using an auxillary function (e.g. \l
 \section{Nominal Types}
 
 \begin{syntax}
-  \verb+NominalType+ & $::=$ & \verb+Identifier+&\\
+  \verb+NominalType+ & $::=$ & \verb+Ident+&\\
 \end{syntax}
 
-\paragraph{Description.}
+\paragraph{Description.} The existential type represents the an
+unknown type, defined at a given position.
 
 \paragraph{Examples.}
 
@@ -382,6 +392,12 @@ some representation (e.g. two's compliment) using an auxillary function (e.g. \l
 \paragraph{Semantics.}
 
 \paragraph{Notes.}
+
+\section{Abstract Types}
+\subsection{Recursive Types}
+\subsection{Effective Tuples}
+\subsection{Effective Records}
+\subsection{Effective Collections}
 
 \section{Subtyping}
 Discussion or present subtyping algorithm?
