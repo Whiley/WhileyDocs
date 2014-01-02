@@ -314,7 +314,10 @@ however, \lstinline|{1.345}| is not.
   \verb+MapType+ & $::=$ & \token{\{} \ \verb+Type+ \ \token{=>} \ \verb+Type+ \ \token{\}} &\\
 \end{syntax}
 
-\paragraph{Description.}
+\paragraph{Description.}  A map represents a one-many mapping from
+variables of one type to variables of another type. For example, the
+map type \lstinline|{int=>real}| represents a map from integers to real
+values. A valid instance of this type might be \lstinline|{1=>1.2,2=>3.0}|.
 
 \paragraph{Examples.}
 
