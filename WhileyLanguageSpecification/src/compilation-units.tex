@@ -1,10 +1,94 @@
-\chapter{Compilation Units}
-\section{Type Declarations}
-\section{Constant Declarations}
-\section{Function \& Method Declarations}
-\section{Visibility Modifiers}
-\section{Packages}
-\section{Imports}
+\chapter{Source Files}
+
+Whiley programs are split across one or more \gls{source_file}s which
+are compiled into \gls{wyil_file}s prior to execution.
+\Gls{source_file}s contain declarations which describe the functions,
+methods, data types and constants which form the program.
+\Gls{source_file}s are grouped together into coherent units called
+\gls{package}s.
+
+
+\section{Compilation Units}
+
+\section{Packages \& Imports}
+
+\section{Declarations}
+
+\subsection{Access Control}
+
+% =======================================================================
+% Type Declarations
+% =======================================================================
+
+\subsection{Type Declaration}
+
+\begin{syntax}
+  \verb+TypeDecl+ & $::=$ & \token{type}\ \verb+Ident+\ \token{is}\
+  \verb+TypePattern+\ \big[\ \token{where}\ \verb+Expr+\ \big]\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Notes.}
+
+% =======================================================================
+% Constant Declarations
+% =======================================================================
+
+\subsection{Constant Declaration}
+
+\begin{syntax}
+  \verb+ConstantDecl+ & $::=$ & \token{constant}\ \verb+Ident+\
+  \token{is}\ \verb+Expr+\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Notes.}
+
+% =======================================================================
+% Function Declarations
+% =======================================================================
+
+\subsection{Function Declaration}
+
+\begin{syntax}
+  \verb+FunctionDecl+ & $::=$ & \token{function}\ \verb+Ident+\
+  \verb+TypePattern+\ \token{=>}\ \verb+TypePattern+\ \big(\\
+  && \ \ \token{throws}\ \verb+Type+\ $|$\ \token{requires}\
+  \verb+Expr+\ $|$\ \token{ensures}\ \verb+Expr+\\
+  && \big)$^*$\ \token{:}\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Notes.}
+
+% =======================================================================
+% Method Declarations
+% =======================================================================
+
+\subsection{Method Declaration}
+
+\begin{syntax}
+  \verb+MethodDecl+ & $::=$ & \token{method}\ \verb+Ident+\
+  \verb+TypePattern+\ \token{=>}\ \verb+TypePattern+\ \big(\\
+  && \ \ \token{throws}\ \verb+Type+\ $|$\ \token{requires}\
+  \verb+Expr+\ $|$\ \token{ensures}\ \verb+Expr+\\
+  && \big)$^*$\ \token{:}\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Notes.}
 
 
 

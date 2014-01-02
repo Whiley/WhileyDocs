@@ -22,6 +22,12 @@
 % C
 % ===============================================
 
+\newglossaryentry{compilation_unit}{
+  name={compilation unit},
+  description={A single unit of compilation.  In Whiley, this includes
+    \gls{source_file}s and also binary \gls{wyil_file}s}
+}
+
 % ===============================================
 % D
 % ===============================================
@@ -84,6 +90,11 @@
 % P
 % ===============================================
 
+\newglossaryentry{package}{
+  name={package},
+  description={A unit of hierarchical organisation within the Whiley namespace.}
+}
+
 % ===============================================
 % Q
 % ===============================================
@@ -99,6 +110,14 @@
 \newglossaryentry{safety_critical_system}{
   name={safety critical system},
   description={A system which operates in a high-risk setting where failure can lead to loss of life, injury, significant damage or environmental harm}
+}
+
+\newglossaryentry{source_file}{
+  name={source file},
+  description={A file in which source code is located.  Source files
+    for the Whiley programming language have the extension
+    \lstinline{.whiley}.  In Whiley, source files must be compiled into a
+    binary form before they can be executed.}
 }
 
 % ===============================================
@@ -136,6 +155,12 @@
 % ===============================================
 % W
 % ===============================================
+
+
+\newglossaryentry{wyil_file}{
+  name={WyIL file},
+  description={A compiled (i.e. binary) form of a Whiley \gls{source_file}}
+}
 
 % ===============================================
 % X

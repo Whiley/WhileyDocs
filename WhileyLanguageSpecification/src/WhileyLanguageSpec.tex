@@ -47,11 +47,10 @@
 % }{\end{minipage}\end{center}}
 \newenvironment{syntax}{
   \def\FrameCommand{\fboxsep=\FrameSep \fcolorbox {black}{lightgray}}
-  \begin{center}
     \begin{framed}
       \noindent\begin{minipage}{0.9\textwidth}
         \begin{tabular}{rcl}
-        }{\end{tabular}\end{minipage}\end{framed}\end{center}}
+        }{\end{tabular}\end{minipage}\end{framed}}
 
 \begin{document}
 \maketitle
@@ -61,8 +60,8 @@
 \input{lexical}
 \input{compilation-units}
 \input{types}
-\input{expressions}
 \input{statements}
+\input{expressions}
 
 \printglossaries
 
