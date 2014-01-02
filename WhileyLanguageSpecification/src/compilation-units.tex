@@ -36,8 +36,8 @@ refer to itself (either directly or indirectly).
 
 The optional \lstinline{where} clause defines a
 \gls{boolean_expression} which holds for any instance of this type.
-This is often referred to as the type's {\em constraint} or {\em
-  invariant}.  Variables declared within the {\em type pattern} may be
+This is often referred to as the type {\em invariant} or {\em
+  constraint}.  Variables declared within the {\em type pattern} may be
 referred to within the optional \lstinline{where} clause.
 
 \paragraph{Examples.}  Some simple examples illustrating type
@@ -108,6 +108,16 @@ above).
 
 \subsection{Function Declarations}
 
+A {\em function declaration} defines a function within a Whiley
+\gls{source_file}.  Functions are {\em pure} and may not have
+side-effects.  This means they are guaranteed to always return the
+same result given the same arguments, and are permitted within
+specifications (i.e. in type invariants, \gls{loop_invariant}s, and
+function/method \gls{precondition}s or \gls{postcondition}s).
+Functions may call other functions, but may not call other methods.
+They also may not allocate memory on the heap and/or instigate
+concurrent computation.
+
 \begin{syntax}
   \verb+FunctionDecl+ & $::=$ & \token{function}\ \verb+Ident+\
   \verb+TypePattern+\ \token{=>}\ \verb+TypePattern+\ \big(\\
@@ -116,17 +126,70 @@ above).
   && \big)$^*$\ \token{:}\ \verb+Block+\\
 \end{syntax}
 
-\paragraph{Description.}
+The first type pattern (i.e. before "\lstinline{=>}") is referred to
+as the {\em parameter}, whilst the second is referred to as the {\em
+  return}.  There are three kinds of optional clause which follow:
+
+\begin{itemize}
+\item {\bf Throws clause}. This defines the exceptions which may be
+  thrown by this function. Multiple clauses may be given, and these
+  are taken together as a union. Furthermore, the convention is to
+  specify the throws clause before the others.
+
+\item {\bf Requires clause(s)}. These define constraints on the
+  permissible values of the parameters on entry to the function or
+  method, and are often collectively referred to as the
+  \gls{precondition}. These expressions may refer to any variables
+  declared within the parameter type pattern. Multiple clauses may be
+  given, and these are taken together as a conjunction. Furthermore,
+  the convention is to specify the requires clause(s) before any
+  ensure(s) clauses.
+
+\item {\bf Ensures clause(s)}. These define constraints on the
+  permissible values of the the function or method's return value, and
+  are often collectively referred to as the \gls{postcondition}. These
+  expressions may refer to any variables declared within either the
+  parameter or return type pattern.  Multiple clauses may be given,
+  and these are taken together as a conjunction. Furthermore, the
+  convention is to specify the requires clause(s) after the others.
+\end{itemize}
 
 \paragraph{Examples.}
+The following function declaration provides a small example to
+illustrate:
 
-\paragraph{Notes.}
+\begin{lstlisting}
+function max(int x, int y) => (int z)
+// return must be greater than either parameter
+ensures x <= z && y <= z
+// return must equal one of the parmaeters
+ensures x == z || y == z:
+    // implementation
+    if x > y:
+        return x
+    else:
+        return y
+\end{lstlisting}
+
+This defines the specification and implementation of the well-known
+\lstinline{max()} function which returns the largest of its
+parameters. This does not throw any exceptions, and does not enforce
+any preconditions on its parameters.
 
 % =======================================================================
 % Method Declarations
 % =======================================================================
 
 \subsection{Method Declarations}
+
+A {\em method declaration} defines a method within a Whiley
+\gls{source_file}.  Methods are {\em impure} and may have
+side-effects.  Thus, they cannot be used within specifications
+(i.e. in type invariants, \gls{loop_invariant}s, and function/method
+\gls{precondition}s or \gls{postcondition}s).  However, unlike
+functions, they methods call other functions and/or methods (including
+\lstinline{native} methods).  They may also allocate memory on the
+heap, and/or instigate concurrent computation.
 
 \begin{syntax}
   \verb+MethodDecl+ & $::=$ & \token{method}\ \verb+Ident+\
@@ -136,11 +199,27 @@ above).
   && \big)$^*$\ \token{:}\ \verb+Block+\\
 \end{syntax}
 
-\paragraph{Description.}
+The first type pattern (i.e. before "\lstinline{=>}") is referred to
+as the {\em parameter}, whilst the second is referred to as the {\em
+  return}.  The three optional clauses are defined identically as for
+functions above.
 
-\paragraph{Examples.}
+\paragraph{Examples.}  The following method declaration provides a
+small example to illustrate:
 
-\paragraph{Notes.}
+\begin{lstlisting}
+// Define the well-known concept of a linked list
+type LinkedList is null | { &LinkedList next, int data }
+
+// Define a method which inserts a new item onto the end of the list
+method insertAfter(&LinkedList list, int item):
+    if *list is null:
+        // reached the end of the list, so allocate new node
+        *list = new { next: null, data: item }
+    else:
+        // continue traversing the list
+        insertAfter(list->next, item)
+\end{lstlisting}
 
 
 
