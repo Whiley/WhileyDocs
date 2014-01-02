@@ -14,54 +14,106 @@ methods, data types and constants which form the program.
 
 \section{Declarations}
 
+Camel case
+
 \subsection{Access Control}
 
 % =======================================================================
 % Type Declarations
 % =======================================================================
 
-\subsection{Type Declaration}
+\subsection{Type Declarations}
+
+A {\em type declaration} declares a named type within a Whiley
+\gls{source_file}.  The declaration may refer to named types in this
+or other source filess and may also {\em recursively}
+refer to itself (either directly or indirectly).
 
 \begin{syntax}
   \verb+TypeDecl+ & $::=$ & \token{type}\ \verb+Ident+\ \token{is}\
   \verb+TypePattern+\ \big[\ \token{where}\ \verb+Expr+\ \big]\\
 \end{syntax}
 
-\paragraph{Description.}
+The optional \lstinline{where} clause defines a
+\gls{boolean_expression} which holds for any instance of this type.
+This is often referred to as the type's {\em constraint} or {\em
+  invariant}.  Variables declared within the {\em type pattern} may be
+referred to within the optional \lstinline{where} clause.
 
-\paragraph{Examples.}
+\paragraph{Examples.}  Some simple examples illustrating type
+declarations are:
 
-\paragraph{Notes.}
+\begin{lstlisting}
+// Define a simple point type
+type Point is { int x, int y }
+
+// Define the type of natural numbers
+type nat is (int x) where x >= 0
+\end{lstlisting}
+
+The first declaration defines an unconstrained record type named
+\lstinline{Point}, whilst the second defines a constrained integer
+type \lstinline{nat}.
+
+\paragraph{Notes.}  A convention is that type declarations for {\em
+  records} or {\em unions of records} begin with an upper case
+character (e.g. \lstinline{Point} above).  All other type declarations
+begin with lower case.  This reflects the fact that records are most
+commonly used to describe objects in the domain.
 
 % =======================================================================
 % Constant Declarations
 % =======================================================================
 
-\subsection{Constant Declaration}
+\subsection{Constant Declarations}
+
+A {\em constant declaration} declares a named constant within a Whiley
+\gls{source_file}.  The declaration may refer to named constants in this
+or other source filess, although it may not refer to itself (either
+directly or indirectly).
 
 \begin{syntax}
   \verb+ConstantDecl+ & $::=$ & \token{constant}\ \verb+Ident+\
   \token{is}\ \verb+Expr+\\
 \end{syntax}
 
-\paragraph{Description.}
+The given {\em constant expression} is evaluated at {\em compile time}
+and must produce a constant value.  This prohibits the use of function
+or method calls within the constant expression.  However, general
+operators (e.g. for arithmetic) are permitted.
 
-\paragraph{Examples.}
+\paragraph{Examples.}  Some example to illustrate constant
+declarations are:
 
-\paragraph{Notes.}
+\begin{lstlisting}
+// Define the well-known mathematical constant to 10 decimal places.
+constant PI is 3.141592654
+
+// Define a constant expression which is twice PI
+constant TWO_PI is PI * 2.0
+\end{lstlisting}
+
+The first declaration defines the constant \lstinline{PI} to have the
+\lstinline{real} value \lstinline{3.141592654}.  The second
+declaration illustrates a more interesting constant expression which
+is evaluated to \lstinline{6.283185308} at compile time.
+
+\paragraph{Notes.}  A convention is that constants are named in upper
+case with underscores separating words (i.e. as in \lstinline{TWO_PI}
+above).
 
 % =======================================================================
 % Function Declarations
 % =======================================================================
 
-\subsection{Function Declaration}
+\subsection{Function Declarations}
 
 \begin{syntax}
   \verb+FunctionDecl+ & $::=$ & \token{function}\ \verb+Ident+\
   \verb+TypePattern+\ \token{=>}\ \verb+TypePattern+\ \big(\\
   && \ \ \token{throws}\ \verb+Type+\ $|$\ \token{requires}\
   \verb+Expr+\ $|$\ \token{ensures}\ \verb+Expr+\\
-  && \big)$^*$\ \token{:}\\
+  && \big)$^*$\ \token{:}\ \verb+Block+\\
 \end{syntax}
 
 \paragraph{Description.}
@@ -74,14 +126,14 @@ methods, data types and constants which form the program.
 % Method Declarations
 % =======================================================================
 
-\subsection{Method Declaration}
+\subsection{Method Declarations}
 
 \begin{syntax}
   \verb+MethodDecl+ & $::=$ & \token{method}\ \verb+Ident+\
   \verb+TypePattern+\ \token{=>}\ \verb+TypePattern+\ \big(\\
   && \ \ \token{throws}\ \verb+Type+\ $|$\ \token{requires}\
   \verb+Expr+\ $|$\ \token{ensures}\ \verb+Expr+\\
-  && \big)$^*$\ \token{:}\\
+  && \big)$^*$\ \token{:}\ \verb+Block+\\
 \end{syntax}
 
 \paragraph{Description.}
