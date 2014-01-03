@@ -189,7 +189,17 @@ It is possible to simulate nominal types in Whiley.
 
 \subsection{Subtyping}
 
-An important concept in many modern programming languages is that of {\em subtyping}.  This defines a relationship between otherwise different types (i.e. which do not have identical structure).  To understand this, consider the following type declarations:
+An important concept in many modern programming languages is that of {\em subtyping}.  This defines a relationship between otherwise different types (i.e. which do not have identical structure).  
+
+\subsection{Coercions}
+
+A {\em coercion} converts a value of one type into a corresponding value of another type.  For example, in Whiley, we can coerce the \lstinline{int} value ``\lstinline{0}'' into the \lstinline{real} value ``\lstinline{0.0}''.  Many programming languages permit both {\em implicit} and {\em explicit} coercions, with the latter more commonly referred to as {\em casting}.  Implicit coercions occur without explicit direction from the programmer, and are often considered dangerous because of this.  
+
+\begin{insight}{Lossless Coercions?}
+The Java programming language attempts to enforce a requirement that implicit coercions are {\em lossless}.  Thus, any coercion which may result in a loss of information must be made explicit through the use of a cast.  Unfortunately, Java does permit implicit lossy coercions by, for example, allowing \lstinline{int} values to be implicitly coerced into \lstinline{float} values --- because not every \lstinline{int} value can be represented by a \lstinline{float} in Java.
+\end{insight}
+
+To address the issues surrounding implicit coercions, Whiley only permits implicit coercions which are lossless.  That is, which do not result in a loss of information.  In contrast, {\em lossy} coercions require an explicit cast be used to ``force'' the coercion.  The following example illustrates:
 \begin{lstlisting}
 type Link is {int data, LinkedList next}
 type LinkedList is null | Link
@@ -198,7 +208,7 @@ type OrderedList is null | {
 }
 \end{lstlisting}
 Here, we have defined a standard linked list and a specialised
-``ordered'' list.  The intuition is that \lstinline{order < next.order} for each node in an \lstinline{OrderedList} (although the details of how this is done are unimportant here).   These two types are not considered identical because they have different structure (i.e. \lstinline{OrderedList} has an additional field, \lstinline{order}).  However, there is still a {\em subtyping relationship} between them.  More specifically, \lstinline{OrderedList} is considered a {\em subtype} of \lstinline{LinkedList}.  This means that an instance of \lstinline{OrderedList} can be used where a \lstinline{LinkedList} was expected.  For example:
+``ordered'' list.  The intuition is that \lstinline{order < next.order} for each node in an \lstinline{OrderedList} (although the details of how this is done are unimportant here).   These two types are not considered identical because they have different structure (i.e. \lstinline{OrderedList} has an additional field, \lstinline{order}).  However, there is still a subtyping relationship between them (i.e. \lstinline{OrderedList} subtypes \lstinline{LinkedList}).  Thus, an instance of \lstinline{OrderedList} can be used where a \lstinline{LinkedList} was expected.  For example:
 
 \begin{lstlisting}
 function sum(LinkedList l) => int:
@@ -208,8 +218,18 @@ function sum(LinkedList l) => int:
         return l.data + sum(l.next)
 \end{lstlisting}
 
-This defines a simple recursive function for computing the length of a \lstinline{LinkedList}.  Furthermore, instances of \lstinline{OrderedList} can be passed into this function to compute their length as well.
+This defines a simple recursive function for computing the length of a \lstinline{LinkedList}.  Instances of \lstinline{OrderedList} can be passed into this function by {\em coercing} them to instances of \lstinline{LinkedList}:
 
-\begin{insight}{Implicit Coercions.}
-This is an example of an implicit coercion.  I think perhaps we should require a cast to avoid the implicitness and make explicit that things are being thrown away.
+\begin{lstlisting}
+function sum(OrderedList l) => int:
+    return sum((LinkedList) l)
+\end{lstlisting}
+
+Here, we have used an explicit coercion (i.e. a cast) from \lstinline{OrderedList} to \lstinline{LinkedList}.  This must be done explicitly because the coercion is lossy because the field \lstinline{order} is discarded during the coercion.
+
+\begin{insight}{Lossless Coercions.}
+Whiley (unlike Java) supports lossless coercion from \lstinline{int} values to \lstinline{real} values.  This is because arithmetic in Whiley is unbounded and, hence, every value of \lstinline{int} type has a corresponding value of \lstinline{real} type (though not vice-versa).
 \end{insight}
+
+{\bf DO I REALLY WANT TO PERMIT IMPLICIT COERCION OF [INT] TO [REAL]?  WHAT ABOUT [INT] to \{INT=$>$INT\}}
+
