@@ -164,79 +164,52 @@ least, appear to be from the programmer's perspective).
 %\end{lstlisting}
 %{\bf THIS NEEDS WORK --- IT'S BROKEN}
 
-\subsection{Structural Types}
-Statically typed languages, such as Java, employ nominal typing for
-recursive data types.  This results in rigid hierarchies which are
-often difficult to extend~\cite{MA08}.  In contrast, Whiley employs
-{\em structural subtyping} of records~\cite{Card88} to give greater
-flexibility.
+\subsection{Structural vs Nominal Types}
+Statically typed languages, such as Java, employ {\em nominal typing}
+for recursive data types.  This means that two otherwise identical
+types with different names are considered distinct and, for example, a
+variable of one type cannot flow into the other.  In contrast, Whiley employs {\em structural typing} of records~\cite{Card88} to give greater flexibility.  This means that the name of a type is, generally speaking, unimportant.  Instead, identical types (i.e. those with identical {\em structure}) with different names are still considered identical in Whiley.  For example:
 
-Suppose we wish to extend our expressions from Figure~\ref{eg1} with
-assignment statements.  A common issue arises as the left-hand side of
-an assignment is a restricted form of expression, often called an {\em
-  lval}.  In a language like Java, we can capture this nicely using
-interfaces:
 \begin{lstlisting}
- interface Expr { ... }
- interface LVal { ... }
- class ListAccess implements Expr,LVal { ...}
- class Var implements Expr,LVal { ... }
- class Int implements Expr { ... }
+// Define the notion of a "rectangle"
+type Rectangle is { int x, int y, int width, int height }
+// Define the notion of a "bounding box"
+type BoundingBox is { int x, int y, int width, int height }
+
+// Define a function for computing the area of a rectangle
+function area(Rectangle rect) => int:
+    return rect.width * rect.height
 \end{lstlisting}
-However, suppose the code for expressions was part of an existing
-library, and we are trying to add statements after the fact.  In a
-language like Java, this presents a problem as we cannot
-retroactively insert the necessary \lstinline{LVal} interface to
-\lstinline{Var} and \lstinline{ListAccess}.
 
-In Whiley, adding the notion of an \lstinline{LVal} is easy to do
-retroactively because of structural subtyping:
+In this example, the types \lstinline{Rectangle} and \lstinline{BoundingBox} are {\em identical} and can be used interchangeably.  For example, if we have a variable of type \lstinline{BoundingBox}, we can safely pass it to the \lstinline{area()} function above to compute its area.
 
+\subsubsection{Nominal Types}
+
+It is possible to simulate nominal types in Whiley.
+
+\subsection{Subtyping}
+
+An important concept in many modern programming languages is that of {\em subtyping}.  This defines a relationship between otherwise different types (i.e. which do not have identical structure).  To understand this, consider the following type declarations:
 \begin{lstlisting}
- define LVal as Var | ListAccess 
- define Assign as {LVal lhs, Expr rhs}
- 
- Expr parseExpression():
-     ...
-
- null|Assign parseAssign():
-     le = parseExpression()
-     match(":=")
-     re = parseExpression()
-     if le is LVal:
-         return {lhs: le, rhs: re}
-     else:
-         return null // syntax error
-\end{lstlisting}
-Here, \lstinline{LVal} is implicitly a subtype of \lstinline{Expr} ---
-i.e. there is no need for an explicit declaration of this, as would be
-required in Java.  That is, they can be defined entirely separately
-from each other (e.g. in different files, packages or entirely
-separate programs) --- and yet, \lstinline{LVal} remains a subtype of
-\lstinline{Expr}.
-
-\subsection{Structural Subtyping.}
-Whiley permits subtyping between recursive structural types.
-\begin{lstlisting}
- define Link as {int data, LinkedList next}
- define LinkedList as null | Link
- define OrderedList as null | {
-   int data, int order, OrderedList next
- }
-
- int sum(LinkedList l):
-     if l is null:
-         return 0
-     else:
-         return l.data + sum(l.next)
+type Link is {int data, LinkedList next}
+type LinkedList is null | Link
+type OrderedList is null | {
+  int data, int order, OrderedList next
+}
 \end{lstlisting}
 Here, we have defined a standard linked list and a specialised
-``ordered'' list where \lstinline{order < next.order} for each node
-(see e.g.~\cite{DS87}).  Whiley type checks this function by showing
-that \lstinline{OrderedList} is a structural subtype of
-\lstinline{LinkedList} --- despite this relationship not being
-identified explicitly in the program.  Type checking in the presence
-of recursive structural types is a well-known and challenging
-problem~\cite{GLP02,CA93,KPS93} which is further compounded in Whiley
-by the presence of flow-sensitive reasoning.
+``ordered'' list.  The intuition is that \lstinline{order < next.order} for each node in an \lstinline{OrderedList} (although the details of how this is done are unimportant here).   These two types are not considered identical because they have different structure (i.e. \lstinline{OrderedList} has an additional field, \lstinline{order}).  However, there is still a {\em subtyping relationship} between them.  More specifically, \lstinline{OrderedList} is considered a {\em subtype} of \lstinline{LinkedList}.  This means that an instance of \lstinline{OrderedList} can be used where a \lstinline{LinkedList} was expected.  For example:
 
+\begin{lstlisting}
+function sum(LinkedList l) => int:
+    if l is null:
+        return 0
+    else:
+        return l.data + sum(l.next)
+\end{lstlisting}
+
+This defines a simple recursive function for computing the length of a \lstinline{LinkedList}.  Furthermore, instances of \lstinline{OrderedList} can be passed into this function to compute their length as well.
+
+\begin{insight}{Implicit Coercions.}
+This is an example of an implicit coercion.
+\end{insight}
