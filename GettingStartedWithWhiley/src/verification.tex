@@ -75,11 +75,14 @@ post-conditions.  However, we may also employ {\em constrained types}
 to simplify it as follows:
 
 \begin{lstlisting}
- define nat as int where $\$$ >= 0
- define pos as int where $\$$ > 0
+type nat is (int n) where n >= 0
+type pos is (int p) where p > 0
 
- nat f(pos x) ensures $\$$ != x:
-     return x-1
+function f(pos x) => (nat n)
+// Return must differ from parameter
+ensures n != x:
+    //
+    return x-1
 \end{lstlisting}
 
 Here, the \lstinline{define} statement includes a \lstinline{where}
