@@ -45,18 +45,16 @@ constrained types as well as type patterns.
 
 \subsection{Any Type}
 
+The type \lstinline{any} represents the type whose variables may hold any possible value.  Thus, \lstinline{any} is the {\em top type} (i.e. $\top$) in the lattice of types and, hence, is the supertype of all other types.
+
 \begin{syntax}
   \verb+AnyType+ & $::=$ & \token{any} \\
 \end{syntax}
 
-\paragraph{Description.}  The type \lstinline{any} represents the type whose variables may hold any possible value.
 
 \paragraph{Examples.}
 
 \paragraph{Semantics.}
-
-\paragraph{Notes.} The \lstinline{any} type is top in the type
-lattice.  That is, it is the supertype of all other types.
 
 % =======================================================================
 % Void 
@@ -64,18 +62,15 @@ lattice.  That is, it is the supertype of all other types.
 
 \subsection{Void Type}
 
+The \lstinline{void} type represents the type whose variables cannot exist (i.e. because they cannot hold any possible value).  Thus, \lstinline{void} is the {\em bottom type} (i.e. $\bot$) in the lattice of types and, hence, is the {\em subtype} of all other types.  Void is used to represent the return type of a method which does not return anything.  Furthermore, it is also used to represent the element type of an empty list of set. 
+
 \begin{syntax}
    \verb+VoidType+ & $::=$ & \token{void} \\
 \end{syntax}
 
-\paragraph{Description.} The \lstinline{void} type represents the type whose variables cannot exist! That is, they cannot hold any possible value. Void is used to represent the return type of a function which does not return anything. However, it is also
-used to represent the element type of an empty list of set. 
-
 \paragraph{Examples.}
 
 \paragraph{Semantics.}
-
-\paragraph{Notes.} The void type is a subtype of everything; that is, it is bottom in the type lattice.
 
 % =======================================================================
 % Null
@@ -83,14 +78,11 @@ used to represent the element type of an empty list of set.
 
 \subsection{Null Type}
 
+The null type is a special type which should be used to show the absence of something. It is distinct from void, since variables can hold the special \lstinline{null}> value (where as there is no special "\lstinline{void}" value).
+
 \begin{syntax}
   \verb+NullType+ & $::=$ & \token{null} \\
 \end{syntax}
-
-\paragraph{Description.}  The null type is a special type which should
-be used to show the absence of something. It is distinct from void,
-since variables can hold the special \lstinline{null}> value (where as
-there is no special "\lstinline{void}" value).
 
 \paragraph{Examples.}
 
@@ -109,11 +101,11 @@ e.g. Java).
 
 \subsection{Bool Type}
 
+Represents the set of boolean values (i.e. \lstinline{true} and \lstinline{false}).
+
 \begin{syntax}
  \verb+BoolType+ & $::=$ & \token{bool} \\
 \end{syntax}
-
-\paragraph{Description.} Represents the set of boolean values (i.e. \lstinline{true} and \lstinline{false}).
 
 \paragraph{Examples.}
 
@@ -127,11 +119,12 @@ e.g. Java).
 
 \subsection{Byte Type}
 
+Represents a sequence of 8 bits. 
+
 \begin{syntax}
  \verb+ByteType+ & $::=$ & \token{byte} \\
 \end{syntax}
 
-\paragraph{Description.}  Represents a sequence of 8 bits. 
 \paragraph{Examples.}
 
 \paragraph{Semantics.}
@@ -148,11 +141,11 @@ some representation (e.g. two's compliment) using an auxillary function (e.g. \l
 
 \subsection{Char Type}
 
+Represents a arbitrary unicode character.
+
 \begin{syntax}
   \verb+CharType+ & $::=$ & \token{char} \\
 \end{syntax}
-
-\paragraph{Description.}  Represents a unicode character.
 
 \paragraph{Examples.}
 
@@ -166,12 +159,11 @@ some representation (e.g. two's compliment) using an auxillary function (e.g. \l
 
 \subsection{Int Type}
 
+Represents the set of (unbound) integer values. 
+
 \begin{syntax}
   \verb+IntType+ & $::=$ & \token{int} \\
 \end{syntax}
-
-\paragraph{Description.}  Represents the set of (unbound) integer
-values. 
 
 \paragraph{Examples.}
 
@@ -186,12 +178,11 @@ is no equivalent to Java's \lstinline{MIN_VALUE} and \lstinline{MAX_VALUE} for \
 
 \subsection{Real Type}
 
+Represents the set of (unbound) rational numbers.
+
 \begin{syntax}
   \verb+RealType+ & $::=$ & \token{real} \\
 \end{syntax}
-
-\paragraph{Description.}  Represents the set of (unbound) rational
-numbers.
 
 \paragraph{Examples.}
 
@@ -205,14 +196,12 @@ numbers.
 
 \section{Tuple Types}
 
+A tuple type describes a compound type made up of two or more subcomponents. It is similar to a record, except that fields are effectively anonymous.
+
 \begin{syntax}
   \verb+TupleType+ & $::=$ & \token{(}\ \verb+Type+\ \big(\ \token{,}\
   \verb+Type+\ \big)$^+$\ \token{)}\\
 \end{syntax}
-
-\paragraph{Description.}  A tuple type describes a compound type made
-up of two or more subcomponents. It is similar to a record, except
-that fields are effectively anonymous.
 
 \paragraph{Examples.}
 
@@ -226,16 +215,13 @@ that fields are effectively anonymous.
 
 \section{Record Types}
 
+A record is made up of a number of fields, each of which has a unique name. Each field has a corresponding type. One can think of a record as a special kind of "fixed" map (i.e. where we know exactly which entries we have).
+
 \begin{syntax}
   \verb+RecordType+ & $::=$ & \token{\{}\ \verb+Type+\
   \verb+Ident+\ \big(\ \token{,}\ \verb+Type+\ \verb+Ident+\
   \big)$^*$ \big[\ \token{,}\ \token{...}\ \big]\ \token{\}}\\
 \end{syntax}
-
-\paragraph{Description.}   A record is made up of a number of fields,
-each of which has a unique name. Each field has a corresponding
-type. One can think of a record as a special kind of "fixed" map
-(i.e. where we know exactly which entries we have).
 
 \paragraph{Examples.}
 
@@ -249,11 +235,11 @@ type. One can think of a record as a special kind of "fixed" map
 
 \section{Reference Types}
 
+Represents a reference to an object in Whiley.
+
 \begin{syntax}
   \verb+ReferenceType+ & $::=$ & \token{\&}\ \ \verb+Type+\\
 \end{syntax}
-
-\paragraph{Description.}  Represents a reference to an object in Whiley.
 
 \paragraph{Examples.}
 
@@ -267,12 +253,11 @@ type. One can think of a record as a special kind of "fixed" map
 
 \section{Nominal Types}
 
+The existential type represents the an unknown type, defined at a given position.
+
 \begin{syntax}
   \verb+NominalType+ & $::=$ & \verb+Ident+\\
 \end{syntax}
-
-\paragraph{Description.} The existential type represents the an
-unknown type, defined at a given position.
 
 \paragraph{Examples.}
 
@@ -292,14 +277,11 @@ unknown type, defined at a given position.
 
 \subsection{Set Type}
 
+A set type describes set values whose elements are subtypes of the element type. For example, \lstinline|{1,2,3}| is an instance of set type \lstinline|{int}|; however, \lstinline|{1.345}| is not.
+
 \begin{syntax}
   \verb+SetType+ & $::=$ & \token{\{} \ \verb+Type+ \ \token{\}} \\
 \end{syntax}
-
-\paragraph{Description.}  A set type describes set values whose
-elements are subtypes of the element type. For example,
-\lstinline|{1,2,3}| is an instance of set type \lstinline|{int}|;
-however, \lstinline|{1.345}| is not.
 
 \paragraph{Examples.}
 
@@ -313,14 +295,11 @@ however, \lstinline|{1.345}| is not.
 
 \subsection{Map Type}
 
+A map represents a one-many mapping from variables of one type to variables of another type. For example, the map type \lstinline|{int=>real}| represents a map from integers to real values. A valid instance of this type might be \lstinline|{1=>1.2,2=>3.0}|.
+
 \begin{syntax}
   \verb+MapType+ & $::=$ & \token{\{} \ \verb+Type+ \ \token{=>} \ \verb+Type+ \ \token{\}} \\
 \end{syntax}
-
-\paragraph{Description.}  A map represents a one-many mapping from
-variables of one type to variables of another type. For example, the
-map type \lstinline|{int=>real}| represents a map from integers to real
-values. A valid instance of this type might be \lstinline|{1=>1.2,2=>3.0}|.
 
 \paragraph{Examples.}
 
@@ -334,13 +313,11 @@ values. A valid instance of this type might be \lstinline|{1=>1.2,2=>3.0}|.
 
 \subsection{List Type}
 
+A list type describes list values whose elements are subtypes of the element type. For example, \lstinline{[1,2,3]} is an instance of list type \lstinline{[int]}; however, \lstinline{[1.345]} is not.
+
 \begin{syntax}
   \verb+ListType+ & $::=$ & \token{[} \ \verb+Type+ \ \token{]}\\
 \end{syntax}
-
-\paragraph{Description.}  A list type describes list values whose
-elements are subtypes of the element type. For example,
-\lstinline{[1,2,3]} is an instance of list type \lstinline{[int]}; however, \lstinline{[1.345]} is not.
 
 \paragraph{Examples.}
 
@@ -392,15 +369,12 @@ elements are subtypes of the element type. For example,
 
 \section{Union Types}
 
+A union type represents a type whose variables may hold values from any of its "bounds". For example, the union type \lstinline{null|int} indicates a variable can either hold an integer value, or \lstinline{null}. 
+
 \begin{syntax}
   \verb+UnionType+ & $::=$ & \verb+IntersectionType+\ \big(\ \token{|}\ \verb+IntersectionType+\
   \big)$^+$\\
 \end{syntax}
-
-\paragraph{Description.}   A union type represents a type whose
-variables may hold values from any of its "bounds". For example, the
-union type \lstinline{null|int} indicates a variable can either hold
-an integer value, or \lstinline{null}. 
 
 \paragraph{Examples.}
 
