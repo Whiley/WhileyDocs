@@ -6,12 +6,11 @@
 
 \section{Assert Statement}
 
+Represents an {\em assert statement} of the form ``\lstinline{assert e}'', where \lstinline{e} is a \gls{boolean_expression}. 
+
 \begin{syntax}
   \verb+AssertStmt+ & $::=$ & \token{assert}\ \verb+Expr+\\
 \end{syntax}
-
-\paragraph{Description.}  Represents an {\em assert statement} of the form
-``\lstinline{assert e}'', where \lstinline{e} is a \gls{boolean_expression}. 
 
 \paragraph{Examples.} The following illustrates:
 \begin{lstlisting}
@@ -32,14 +31,12 @@ verifier, or turned into {\em runtime checks}.
 
 \section{Assignment Statement}
 
+Represents an {\em assignment statement} of the form \lstinline{lhs = rhs}.  Here, the \lstinline{rhs} is any expression, whilst the \lstinline{lhs} must be an \lstinline{LVal} --- that is, an expression permitted on the left-side of an assignment.
+
 \begin{syntax}
   \verb+AssignStmt+ & $::=$ & \verb+LVal+\ \token{=}\ \verb+Expr+\\
 \end{syntax}
 
-\paragraph{Description.}  Represents an {\em assignment statement} of the
-form \lstinline{lhs = rhs}.  Here, the \lstinline{rhs} is any
-expression, whilst the \lstinline{lhs} must be an \lstinline{LVal} ---
-that is, an expression permitted on the left-side of an assignment.
 
 \paragraph{Examples.} The following illustrates different possible assignment statements:
 \begin{lstlisting}
@@ -63,12 +60,12 @@ into lists and records.
 
 \section{Assume Statement}
 
+Represents an {\em assume statement} of the form ``\lstinline{assume e}'', where \lstinline{e} is a \gls{boolean_expression}.
+
 \begin{syntax}
   \verb+AssumeStmt+ & $::=$ & \token{assume}\ \verb+Expr+\\
 \end{syntax}
 
-\paragraph{Description.}  Represents an {\em assume statement} of the form
-``\lstinline{assume e}'', where \lstinline{e} is a \gls{boolean_expression}. 
 
 \paragraph{Examples.}  The following illustrates a simple function
 which uses an \lstinline{assume} statement to meet its
@@ -89,13 +86,12 @@ this may be unsound, are always turned into {\em runtime checks}.
 
 \section{Return Statement}
 
+Represents a {\em return statement} with an optional expression is referred to as the {\em return value}.
+
 \begin{syntax}
   \verb+ReturnStmt+ & $::=$ & \token{return}\ \big[\ \verb+Expr+\
   \big]\\
 \end{syntax}
-
-\paragraph{Description.}  Represents a {\em return statement} with an
-optional expression is referred to as the {\em return value}.
 
 \paragraph{Examples.} The following illustrates a simple function
 which returns the increment of its parameter \lstinline{x}:
@@ -132,14 +128,12 @@ begin on the same line as the return statement itself.
 
 \section{Variable Declarations}
 
+Represents a \gls{variable_declaration} which has an optional expression assignment referred to as an \gls{variable_initialiser}.  If an initialiser is given, then this will be evaluated and assigned to the variable when the declaration is executed.
+
 \begin{syntax}
   \verb+VarDecl+ & $::=$ & \verb+Type+\ \verb+Ident+\ \big[\
   \token{=}\ \verb+Expr+\ \big]\\
 \end{syntax}
-
-\paragraph{Description.}  Represents a \gls{variable_declaration}
-which has an optional expression assignment referred to as an
-\gls{variable_initialiser}.  If an initialiser is given, then this will be evaluated and assigned to the variable when the declaration is executed.
 
 \paragraph{Examples.} Some example variable declarations are:
 \begin{lstlisting}
@@ -157,6 +151,12 @@ int z = x + y
 
 \section{If Statement}
 
+Represents a classical \lstinline{if} statement which supports
+chaining and an optional \lstinline{else} branch.  The expression(s)
+are referred to as {\em conditions} and must be
+\gls{boolean_expression}s.  The first block is referred to as the {\em
+  true branch}, whilst the optional \lstinline{else} block is referred to as the {\em false branch}.
+
 \begin{syntax}
   \verb+IfStmt+$^\ell$ & $::=$ & \token{if}\ \verb+Expr+\ \token{:}
   \verb+Block+$^\gamma$\ \big( \token{else} \token{if}\ \verb+Expr+\ \token{:}
@@ -166,13 +166,6 @@ int z = x + y
 \multicolumn{3}{r}{(where $\ell < \gamma$ and $\forall i.\ell <
   \omega_i$ and $\ell < \phi$)}\\
 \end{syntax}
-
-\paragraph{Description.} Represents a classical \lstinline{if}
-statement which supports chaining and an optional \lstinline{else}
-branch.  The expression(s) are referred to as {\em conditions} and must
-be \gls{boolean_expression}s.  The first block is referred to as the
-{\em true branch}, whilst the optional \lstinline{else} block is
-referred to as the {\em false branch}.
 
 \paragraph{Examples.} The following illustrates:
 
@@ -194,15 +187,14 @@ function max(int x, int y) => int:
 
 \section{While Statement}
 
+Represents a while statement with optional \lstinline{where} clause(s) commonly referred to as \gls{loop_invariant}s.
+
 \begin{syntax}
   \verb+WhileStmt+$^\ell$ & $::=$ & \token{while}\ \verb+Expr+\ \big(\
   \token{where}\ \verb+Expr+\ \big)$^*$\ \token{:}\ \verb+Block+$^\gamma$\ \\
 &&\\
 \multicolumn{3}{r}{(where $\ell < \gamma$)}\\
 \end{syntax}
-
-\paragraph{Description.} Represents a while statement with optional
-\lstinline{where} clause(s) commonly referred to as \gls{loop_invariant}s.
 
 \paragraph{Examples.} As an example:
 
