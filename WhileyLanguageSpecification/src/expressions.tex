@@ -142,7 +142,7 @@
 \section{Range Expressions}
 
 \begin{syntax}
-  \verb+RangeExpr+ & $::=$ &\\
+  \verb+RangeExpr+ & $::=$ & \verb+ShiftExpr+\ \big[\ \token{..}\ \verb+ShiftExpr+\ \big]\\
 \end{syntax}
 
 \paragraph{Description.}
@@ -158,7 +158,8 @@
 \section{Shift Expressions}
 
 \begin{syntax}
-  \verb+ShiftExpr+ & $::=$ &\\
+  \verb+ShiftExpr+ & $::=$ & \verb+AdditiveExpr+\ \big[\ \big(\
+  \token{<<} $|$ \token{>>}\ \big)\ \verb+AdditiveExpr+ \big]
 \end{syntax}
 
 \paragraph{Description.}
