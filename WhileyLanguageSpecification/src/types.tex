@@ -78,7 +78,7 @@ The \lstinline{void} type represents the type whose variables cannot exist (i.e.
 
 \subsection{Null Type}
 
-The null type is a special type which should be used to show the absence of something. It is distinct from void, since variables can hold the special \lstinline{null}> value (where as there is no special "\lstinline{void}" value).
+The null type is a special type which should be used to show the absence of something. It is distinct from void, since variables can hold the special \lstinline{null} value (where as there is no special "\lstinline{void}" value).
 
 \begin{syntax}
   \verb+NullType+ & $::=$ & \token{null} \\
@@ -88,12 +88,7 @@ The null type is a special type which should be used to show the absence of some
 
 \paragraph{Semantics.}
 
-\paragraph{Notes.}  With all of the problems surrounding
-\lstinline{null} and \lstinline{NullPointerException}s in languages
-like Java and C, it may seem that this type should be
-avoided. However, it remains a very useful abstraction to have around
-and, in Whiley, it is treated in a completely safe manner (unlike
-e.g. Java).
+\paragraph{Notes.}  With all of the problems surrounding \lstinline{null} and \lstinline{NullPointerException}s in languages like Java and C, it may seem that this type should be avoided. However, it remains a very useful abstraction around (e.g. for terminating recursive types) and, in Whiley, is treated in a completely safe manner (unlike e.g. Java).
 
 % =======================================================================
 % Bool 
