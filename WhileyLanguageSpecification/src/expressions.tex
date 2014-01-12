@@ -104,7 +104,11 @@
 \section{Quantifier Expressions}
 
 \begin{syntax}
-  \verb+QuantExpr+ & $::=$ &\\
+\verb+QuantExpr+ & $::=$ & \big(\ \token{no} $|$ \token{some} $|$
+\token{all}\ \big)\ \token{\{}\\
+&&\ \verb+Ident+ \token{in} \verb+Expr+ \big( \token{,}\ \verb+Ident+\
+\token{in}\ \verb+Expr+\ \big)$^+$\ \token{|}\ \verb+LogicalExpr+\\
+&& \token{\}}\\
 \end{syntax}
 
 \paragraph{Description.}
@@ -120,7 +124,8 @@
 \section{Append Expressions}
 
 \begin{syntax}
-  \verb+AppendExpr+ & $::=$ &\\
+  \verb+AppendExpr+ & $::=$ & \verb+RangeExpr+\ \big(\ \token{++}\
+  \verb+RangeExpr+\ \big)$^*$\\
 \end{syntax}
 
 \paragraph{Description.}
