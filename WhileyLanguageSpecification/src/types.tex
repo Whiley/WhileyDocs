@@ -68,7 +68,17 @@ The \lstinline{void} type represents the type whose variables cannot exist (i.e.
    \verb+VoidType+ & $::=$ & \token{void} \\
 \end{syntax}
 
-\paragraph{Examples.}
+\paragraph{Examples.} The following example illustrates several uses of the \lstinline{void} type:
+
+\begin{lstlisting}
+// Attempt to update first element
+method update1st(&[int] list, int value) => void:
+    // First, check whether list is empty or not
+    if *list != [void]:
+       // Then, update 1st element
+       (*list)[0] = x
+    // done
+\end{lstlisting}
 
 \paragraph{Semantics.}
 
