@@ -1,7 +1,6 @@
 \chapter{Types \& Values}
 \section{Overview}
-Discuss syntactic versus semantic types.  Also, need to consider
-constrained types as well as type patterns.
+Discuss syntactic versus semantic types, as well as the set of all values.  Probably discuss the different kinds of values which are possible, and the fact that every value has a single {\em concrete} type associate with it.  Also, need to consider constrained types as well as type patterns.
 
 \begin{syntax}
   \verb+Type+ & $::=$ & \\
@@ -38,78 +37,6 @@ constrained types as well as type patterns.
   & $|$ & \verb+RealType+ \\
 \end{syntax}
 
-
-% =======================================================================
-% Any
-% =======================================================================
-
-\subsection{Any Type}
-
-The type \lstinline{any} represents the type whose variables may hold any possible value.  Thus, \lstinline{any} is the {\em top type} (i.e. $\top$) in the lattice of types and, hence, is the supertype of all other types.  Variables of \lstinline{any} type support only equality (\lstinline{==}) and inequality comparisons (\lstinline{!=}) as well as {\em runtime type tests}.
-
-\begin{syntax}
-  \verb+AnyType+ & $::=$ & \token{any} \\
-\end{syntax}
-
-\paragraph{Examples.}  The following illustrates a simple example of
-the \lstinline{any} type:
-
-\begin{lstlisting}
-function toInt(any val) => int:
-    if val is int:
-        return val
-    else if val is real:
-        return Math.floor(val)
-    else:
-        return 0 // default value        
-\end{lstlisting}
-
-Here, the function \lstinline{toInt} accepts {\em any valid Whiley value}, which includes all values of type \lstinline{int}, \lstinline{real}, collections, records, etc.  The function then inspects the value that it has been passed and, in the case of values of type \lstinline{int} and \lstinline{real}, returns an integer approximation; for all other values, it returns \lstinline{0}.
-
-\paragraph{Semantics.}
-
-\paragraph{Notes.}  The any type is roughly comparable to the \lstinline{Object} type found in pure object-oriented languages.  However, in impure object-oriented languages which support primitive types, such as Java, this comparison often falls short because \lstinline{Object} is not a supertype of primitives such as \lstinline{int} or \lstinline{long}.
-
-% =======================================================================
-% Void 
-% =======================================================================
-
-\subsection{Void Type}
-
-The \lstinline{void} type represents the type whose variables cannot exist (i.e. because they cannot hold any possible value).  Thus, \lstinline{void} is the {\em bottom type} (i.e. $\bot$) in the lattice of types and, hence, is the {\em subtype} of all other types.  Void is used to represent the return type of a method which does not return anything.  Furthermore, it is also used to represent the element type of an empty list of set. 
-
-\begin{syntax}
-   \verb+VoidType+ & $::=$ & \token{void} \\
-\end{syntax}
-
-\paragraph{Examples.} The following example illustrates several uses of the \lstinline{void} type:
-
-\begin{lstlisting}
-// Attempt to update first element
-method update1st(&[int] list, int value) => void:
-    // First, check whether list is empty or not
-    if *list != [void]:
-       // Then, update 1st element
-       (*list)[0] = x
-    // done
-\end{lstlisting}
-
-Here, the method \lstinline{update1st} is declared to return
-\lstinline{void} --- meaning it does not return a value.  Instead,
-this method updates some existing state accessible through the
-reference \lstinline{list}.  Within the method body, the value
-accessible via this reference is compared against the
-\lstinline{[void]} (i.e. the {\em empty list}).
-
-\paragraph{Semantics.}  The set of values defined by the type
-\lstinline{void} is given as follows:
-\begin{displaymath}
-\begin{array}{rcl}
-\llbracket{\tt void}\rrbracket & = & \emptyset\\
-\end{array}
-\end{displaymath}
-In other words, the set of values defined by the \lstinline{void} type
-equals the empty set.
 
 % =======================================================================
 % Null
@@ -223,6 +150,84 @@ Represents the set of (unbound) rational numbers.
 \paragraph{Semantics.}
 
 \paragraph{Notes.} 
+
+% =======================================================================
+% Any
+% =======================================================================
+
+\subsection{Any Type}
+
+The type \lstinline{any} represents the type whose variables may hold any possible value.  Thus, \lstinline{any} is the {\em top type} (i.e. $\top$) in the lattice of types and, hence, is the supertype of all other types.  Variables of \lstinline{any} type support only equality (\lstinline{==}) and inequality comparisons (\lstinline{!=}) as well as {\em runtime type tests}.  Finally, unlike the majority of other types, there are no {\em values} of type \lstinline{any}.
+
+\begin{syntax}
+  \verb+AnyType+ & $::=$ & \token{any} \\
+\end{syntax}
+
+\paragraph{Examples.}  The following illustrates a simple example of
+the \lstinline{any} type:
+
+\begin{lstlisting}
+function toInt(any val) => int:
+    if val is int:
+        return val
+    else if val is real:
+        return Math.floor(val)
+    else:
+        return 0 // default value        
+\end{lstlisting}
+
+Here, the function \lstinline{toInt} accepts {\em any valid Whiley value}, which includes all values of type \lstinline{int}, \lstinline{real}, collections, records, etc.  The function then inspects the value that it has been passed and, in the case of values of type \lstinline{int} and \lstinline{real}, returns an integer approximation; for all other values, it returns \lstinline{0}.
+
+\paragraph{Semantics.}  The set of values defined by the type \lstinline{any} is given as follows:
+\begin{displaymath}
+\begin{array}{rcl}
+\llbracket{\tt any}\rrbracket & = & \mathcal{D}\\
+\end{array}
+\end{displaymath}
+In other words, the set of values defined by the \lstinline{any} type equals the {\em domain} (i.e. the set of all values).
+
+\paragraph{Notes.}  The any type is roughly comparable to the \lstinline{Object} type found in pure object-oriented languages.  However, in impure object-oriented languages which support primitive types, such as Java, this comparison often falls short because \lstinline{Object} is not a supertype of primitives such as \lstinline{int} or \lstinline{long}.
+
+% =======================================================================
+% Void 
+% =======================================================================
+
+\subsection{Void Type}
+
+The \lstinline{void} type represents the type whose variables cannot exist (i.e. because they cannot hold any possible value).  Thus, \lstinline{void} is the {\em bottom type} (i.e. $\bot$) in the lattice of types and, hence, is the {\em subtype} of all other types.  Void is used to represent the return type of a method which does not return anything.  Furthermore, it is also used to represent the element type of an empty list of set.  Finally, unlike the majority of other types, there are no {\em values} of type \lstinline{void}.
+
+\begin{syntax}
+   \verb+VoidType+ & $::=$ & \token{void} \\
+\end{syntax}
+
+\paragraph{Examples.} The following example illustrates several uses of the \lstinline{void} type:
+
+\begin{lstlisting}
+// Attempt to update first element
+method update1st(&[int] list, int value) => void:
+    // First, check whether list is empty or not
+    if *list != [void]:
+       // Then, update 1st element
+       (*list)[0] = x
+    // done
+\end{lstlisting}
+
+Here, the method \lstinline{update1st} is declared to return
+\lstinline{void} --- meaning it does not return a value.  Instead,
+this method updates some existing state accessible through the
+reference \lstinline{list}.  Within the method body, the value
+accessible via this reference is compared against the
+\lstinline{[void]} (i.e. the {\em empty list}).
+
+\paragraph{Semantics.}  The set of values defined by the type
+\lstinline{void} is given as follows:
+\begin{displaymath}
+\begin{array}{rcl}
+\llbracket{\tt void}\rrbracket & = & \emptyset\\
+\end{array}
+\end{displaymath}
+In other words, the set of values defined by the \lstinline{void} type
+equals the empty set.  
 
 % =======================================================================
 % Tuples
