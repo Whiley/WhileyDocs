@@ -1,97 +1,221 @@
 \chapter{Expressions}
 \Gls{expression} blah blah.
 
-\section{Binary Expressions}
-\begin{figure}[!t]
-  \centering
-  \fbox{
-    \begin{tabular}{rcll}
-      Expr & $::=$ & $ Cond\;[\;(\;\token{\&\&}\;|\;\token{||}\;)\;Expr\;] $ & {\em // Expressions}\\
-      &&&\\
-      Cond & $::=$ & $ Append\;[\;Cop\;Expr\;] $ & {\em // Condition Expressions}\\
-      &&&\\
-      Append & $::=$ & $ Range\;[\;\token{++}\;Expr\;] $ & {\em // Append Expressions}\\
-      &&&\\
-Range & $::=$ & $ AddSub\;[\;\token{..}\;Expr\;] $ & {\em // Range Expressions}\\
-&&&\\
-AddSub & $::=$ & $
-MulDiv\;[\;(\;\token{+}\;|\;\token{-}\;)\;Expr\;] $ & {\em //
-  Additive Expressions}\\
-&&&\\
-MulDiv& $::=$ & $
-Index\;[\;(\;\token{*}\;|\;\token{/}\;|\;\token{\%}\;)\;Expr\;] $ & {\em //
-Multiplicative Expressions}\\
+% =======================================================================
+% Tuple Expression
+% =======================================================================
 
-&&&\\
-Index& $::=$ & ??? & {\em //
-Index Expressions}\\
-\end{tabular}}
-\caption{Syntax for Binary Expressions}
-\end{figure}
+\section{Tuple Expressions}
+
+\begin{syntax}
+  \verb+TupleExpr+ & $::=$ & \verb+UnitExpr+ \big(\ \token{,}\ \verb+UnitExpr+\ \big)$^+$ \\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% Unit Expression
+% =======================================================================
+
+\section{Unit Expressions}
+
+\begin{syntax}
+  \verb+UnitExpr+ & $::=$ & \verb+LogicalExpr+\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% Logical Expressions
+% =======================================================================
+
+\section{Logical Expressions}
+
+\begin{syntax}
+  \verb+LogicalExpr+ & $::=$ & \verb+LogicalOrExpr+ \\
+  &&\\
+  \verb+LogicalOrExpr+ & $::=$ & \verb+LogicalAndExpr+ \\
+                           & $|$ & \verb+LogicalOrExpr+ \token{||} \verb+LogicalAndExpr+\\
+  &&\\
+  \verb+LogicalAndExpr+ & $::=$ & \verb+BitwiseExpr+ \\
+                            & $|$ & \verb+LogicalAndExpr+ \token{\&\&} \verb+BitwiseExpr+\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% Bitwise Expressions
+% =======================================================================
+
+\section{Bitwise Expressions}
+
+\begin{syntax}
+  \verb+BitwiseExpr+ & $::=$ & \verb+BitwiseOrExpr+ \\
+  &&\\
+  \verb+BitwiseOrExpr+ & $::=$ & \verb+BitwiseXorExpr+ \\
+                           & $|$ & \verb+BitwiseOrExpr+ \token{|} \verb+BitwiseXorExpr+\\
+  &&\\
+  \verb+BitwiseXorExpr+ & $::=$ & \verb+BitwiseAndExpr+ \\
+                            & $|$ & \verb+BitwiseXorExpr+ \token{\^} \verb+BitwiseAndExpr+\\
+  &&\\
+  \verb+BitwiseAndExpr+ & $::=$ & \verb+ConditionExpr+ \\
+                            & $|$ & \verb+BitwiseAndExpr+ \token{\&\&} \verb+ConditionExpr+\\
+
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% Condition Expressions
+% =======================================================================
+
+\section{Condition Expressions}
+
+\begin{syntax}
+  \verb+ConditionExpr+ & $::=$ &\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% Quantifier Expressions
+% =======================================================================
+
+\section{Quantifier Expressions}
+
+\begin{syntax}
+\verb+QuantExpr+ & $::=$ & \big(\ \token{no} $|$ \token{some} $|$
+\token{all}\ \big)\ \token{\{}\\
+&&\ \verb+Ident+ \token{in} \verb+Expr+ \big( \token{,}\ \verb+Ident+\
+\token{in}\ \verb+Expr+\ \big)$^+$\ \token{|}\ \verb+LogicalExpr+\\
+&& \token{\}}\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% Append Expressions
+% =======================================================================
+
+\section{Append Expressions}
+
+\begin{syntax}
+  \verb+AppendExpr+ & $::=$ & \verb+RangeExpr+\ \big(\ \token{++}\
+  \verb+RangeExpr+\ \big)$^*$\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Notes.} 
 
 
+% =======================================================================
+% Range Expressions
+% =======================================================================
 
-\begin{figure}[!t]
-\centering
-\fbox{
-\begin{tabular}{rcll}
-Term& $::=$ & {\em // Terms} \\
-&{\huge\strut}$|$& $Constant$ & {\em // Constant expressions}\\
-&{\huge\strut}$|$& $Identifier$ & {\em // Identifier expressions}\\
-&{\huge\strut}$|$&$ Expr_1\;(\;\comma\;Expr_i\;)^+$ & {\em // Tuple expressions}\\
+\section{Range Expressions}
 
-&{\huge\strut}$|$&$ \lb Expr \rb $ & {\em // Bracketed expressions}\\
+\begin{syntax}
+  \verb+RangeExpr+ & $::=$ & \verb+ShiftExpr+\ \big[\ \token{..}\ \verb+ShiftExpr+\ \big]\\
+\end{syntax}
 
-&{\huge\strut}$|$&$ \vbar\;Expr\;\vbar  $ & {\em // Size expressions}\\
+\paragraph{Description.}
 
-&{\huge\strut}$|$&$ Identifier\;\lb\;[\;Expr_1\;(\;\comma\;Expr_i\;)^+\;]\;\rb $ & {\em // Invocation expressions}\\
+\paragraph{Examples.}
 
-&{\huge\strut}$|$&$
-(\;\token{-}\;|\;\token{!}\;|\;\token{\~}\;|\;\token{\&}\;|\;\token{*}\;)\;Expr
-$ & {\em // Unary expressions}\\
+\paragraph{Notes.} 
 
-&{\huge\strut}$|$&$ \token{new}\;Expr $ & {\em // Allocation expressions}\\
+% =======================================================================
+% Shift Expressions
+% =======================================================================
 
-&{\huge\strut}$|$&$ \lcb [\;Expr_1\;(\;\comma\;\;Expr_i\;)^*\;]\rcb $ & {\em
-  // Set expressions}\\
+\section{Shift Expressions}
 
-&{\huge\strut}$|$&$ \lcb [\;Expr_1\:\token{=>}\:Expr'_1\;(\;\comma\;\;Expr_i\:\token{=>}\:Expr'_i\;)^*\;]\rcb $ & {\em
-  // Map expressions}\\
+\begin{syntax}
+  \verb+ShiftExpr+ & $::=$ & \verb+AdditiveExpr+\ \big[\ \big(\
+  \token{<<} $|$ \token{>>}\ \big)\ \verb+AdditiveExpr+ \big]
+\end{syntax}
 
-&{\huge\strut}$|$&$ \lsb [\;Expr_1\;(\;\comma\;\;Expr_i\;)^*\;]\rsb $ & {\em // List expressions}\\
+\paragraph{Description.}
 
-&{\huge\strut}$|$&$ \lcb [\;n_1\colont\;Expr_1\;(\;\comma\;\;n_i\;\colont\;Expr_i\;)^*\;]\rcb $ & {\em // Record expressions}\\
-\end{tabular}}
-\caption{Syntax for Term Expressions}
-\end{figure}
+\paragraph{Examples.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% Addititve and Multiplicative Expressions
+% =======================================================================
+
+\section{Additive/Multiplicative Expressions}
+
+\begin{syntax}
+  \verb+AdditiveExpr+ & $::=$ &\\
+  \verb+MultiplicativeExpr+ & $::=$ &\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% Access Expressions
+% =======================================================================
+
+\section{Access Expressions}
+
+\begin{syntax}
+  \verb+AccessExpr+ & $::=$ &\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% Term Expressions
+% =======================================================================
+
+\section{Term Expressions}
+
+\begin{syntax}
+  \verb+TermExpr+ & $::=$ &\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Notes.} 
 
 
-\begin{figure}[!t]
-\centering
-\fbox{
-\begin{tabular}{rcll}
-Constant& $::=$ & {\em // Constants} \\
-&{\Huge\strut}$|$&$ (\;\token{0}\;|\;\token{1}\;)^+\;\token{b} $ & {\em // Boolean constants}\\
-
-&{\Huge\strut}$|$&$ (\;\token{0-9}\;)^+ $ &
-{\em // Integer constants}\\
-
-&{\Huge\strut}$|$&$ (\;\token{0-9}\;)^+\;\dott\;(\;\token{0-9}\;)^+$ &
-{\em // Decimal constants}\\
-
-&{\Huge\strut}$|$& $\nullc$ & {\em // Null constant}\\
-\end{tabular}}
-\caption{Syntax for Constant Expressions}
-\end{figure}
-
-\begin{figure}[!t]
-\centering
-\fbox{
-\begin{tabular}{rcll}
-Identifier& $::=$ & $ (\;\token{\_}\;|\;\token{a-z}\;|\;\token{A-Z}\;)\;(\;\token{\_}\;|\;\token{a-z}\;|\;\token{A-Z}\;|\;\token{0-9}\;)^* $ & {\em // Identifiers}\\
-
-
-\end{tabular}}
-\caption{Syntax for Identifiers}
-\end{figure}
 
