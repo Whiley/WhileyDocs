@@ -85,7 +85,7 @@ ensures n != x:
     return x-1
 \end{lstlisting}
 
-Here, the \lstinline{define} statement includes a \lstinline{where}
+Here, the \lstinline{type} declaration includes a \lstinline{where}
 clause constraining the permissible values for the type ($\$$
 represents the variable whose type this will be).  Thus,
 \lstinline{nat} defines the type of non-negative integers (i.e. the
@@ -103,15 +103,15 @@ ${\tt T_2}$ iff the constraint on ${\tt T_1}$ implies that of ${\tt
   T_2}$.  Consider the following:
 
 \begin{lstlisting}
- define anat as int where $\$$ >= 0
- define bnat as int where 2*$\$$ >= $\$$
+ type anat is (int x) where x >= 0
+ type bnat is (int x) where 2*x >= x
 
- bnat f(anat x):
+ function f(anat x) => bnat:
      return x
 \end{lstlisting}
 In this case, we have two alternate (and completely equivalent)
 definitions for a natural number (we can see that \lstinline{bnat} is
-equivalent to \lstinline{anat} by subtracting $\$$ from both sides).
+equivalent to \lstinline{anat} by subtracting \lstinline{x} from both sides).
 The Whiley compiler is able to reason that these types are equivalent
 and statically verifies that this function is correct.
 
@@ -163,7 +163,7 @@ illustrates this:
 \begin{lstlisting}
 type nat is (int x) where x >= 0
 
-nat sum([nat] items):
+function sum([nat] items) => nat:
     int r = 0
     int i = 0
     //
@@ -181,7 +181,7 @@ is necessary to help the Whiley compiler verify this function.
 However, we can avoid the need for a loop invariant by declaring
 variables \lstinline{i} and \lstinline{r} more precisely:
 \begin{lstlisting}
-nat sum([nat] items):
+function sum([nat] items) => nat:
     nat r = 0
     nat i = 0
     //
