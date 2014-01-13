@@ -44,7 +44,7 @@ Discuss syntactic versus semantic types, as well as the set of all values.  Prob
 
 \subsection{Null Type}
 
-The null type is a special type which should be used to show the absence of something. It is distinct from void, since variables can hold the special \lstinline{null} value (where as there is no special ``\lstinline{void}'' value).  The \lstinline{null} value is particularly useful for representing optional values and terminating recursive types.
+The null type is a special type which should be used to show the absence of something. It is distinct from void, since variables can hold the special \lstinline{null} value (where as there is no special ``\lstinline{void}'' value).  Variables of \lstinline{null} type support only equality (\lstinline{==}) and inequality comparisons (\lstinline{!=}).  The \lstinline{null} value is particularly useful for representing optional values and terminating recursive types.
 
 \begin{syntax}
   \verb+NullType+ & $::=$ & \token{null} \\
