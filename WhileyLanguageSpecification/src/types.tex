@@ -1,4 +1,4 @@
-\chapter{Types}
+\chapter{Types \& Values}
 \section{Overview}
 Discuss syntactic versus semantic types.  Also, need to consider
 constrained types as well as type patterns.
@@ -80,7 +80,22 @@ method update1st(&[int] list, int value) => void:
     // done
 \end{lstlisting}
 
-\paragraph{Semantics.}
+Here, the method \lstinline{update1st} is declared to return
+\lstinline{void} --- meaning it does not return a value.  Instead,
+this method updates some existing state accessible through the
+reference \lstinline{list}.  Within the method body, the value
+accessible via this reference is compared against the
+\lstinline{[void]} (i.e. the {\em empty list}).
+
+\paragraph{Semantics.}  The set of values defined by the type
+\lstinline{void} is given as follows:
+\begin{displaymath}
+\begin{array}{rcl}
+\llbracket{\tt void}\rrbracket & = & \emptyset\\
+\end{array}
+\end{displaymath}
+In other words, the set of values defined by the \lstinline{void} type
+equals the empty set.
 
 % =======================================================================
 % Null
