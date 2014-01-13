@@ -45,16 +45,30 @@ constrained types as well as type patterns.
 
 \subsection{Any Type}
 
-The type \lstinline{any} represents the type whose variables may hold any possible value.  Thus, \lstinline{any} is the {\em top type} (i.e. $\top$) in the lattice of types and, hence, is the supertype of all other types.
+The type \lstinline{any} represents the type whose variables may hold any possible value.  Thus, \lstinline{any} is the {\em top type} (i.e. $\top$) in the lattice of types and, hence, is the supertype of all other types.  Variables of \lstinline{any} type support only equality (\lstinline{==}) and inequality comparisons (\lstinline{!=}) as well as {\em runtime type tests}.
 
 \begin{syntax}
   \verb+AnyType+ & $::=$ & \token{any} \\
 \end{syntax}
 
+\paragraph{Examples.}  The following illustrates a simple example of
+the \lstinline{any} type:
 
-\paragraph{Examples.}
+\begin{lstlisting}
+function toInt(any val) => int:
+    if val is int:
+        return val
+    else if val is real:
+        return Math.floor(val)
+    else:
+        return 0 // default value        
+\end{lstlisting}
+
+Here, the function \lstinline{toInt} accepts {\em any valid Whiley value}, which includes all values of type \lstinline{int}, \lstinline{real}, collections, records, etc.  The function then inspects the value that it has been passed and, in the case of values of type \lstinline{int} and \lstinline{real}, returns an integer approximation; for all other values, it returns \lstinline{0}.
 
 \paragraph{Semantics.}
+
+\paragraph{Notes.}  The any type is roughly comparable to the \lstinline{Object} type found in pure object-oriented languages.  However, in impure object-oriented languages which support primitive types, such as Java, this comparison often falls short because \lstinline{Object} is not a supertype of primitives such as \lstinline{int} or \lstinline{long}.
 
 % =======================================================================
 % Void 
