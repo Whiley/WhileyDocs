@@ -44,15 +44,35 @@ Discuss syntactic versus semantic types, as well as the set of all values.  Prob
 
 \subsection{Null Type}
 
-The null type is a special type which should be used to show the absence of something. It is distinct from void, since variables can hold the special \lstinline{null} value (where as there is no special "\lstinline{void}" value).
+The null type is a special type which should be used to show the absence of something. It is distinct from void, since variables can hold the special \lstinline{null} value (where as there is no special ``\lstinline{void}'' value).  The \lstinline{null} value is particularly useful for representing optional values and terminating recursive types.
 
 \begin{syntax}
   \verb+NullType+ & $::=$ & \token{null} \\
 \end{syntax}
 
-\paragraph{Examples.}
+\paragraph{Examples.}  The following illustrates a simple example of the \lstinline{null} type:
 
-\paragraph{Semantics.}
+\begin{lstlisting}
+type Tree is null | { int data, Tree left, Tree right }
+
+function height(Tree t) => int:
+    if t is null:
+        // height of empty tree is zero
+        return 0
+    else:
+        // height is this node plus maximum height of subtrees
+        return 1 + Math.max(height(t.left), height(t.right))
+\end{lstlisting}
+This defines \lstinline{Tree} --- a {\em recursive type} --- which is either empty (i.e. \lstinline{null}) or consists of a field \lstinline{data} and two subtrees, \lstinline{left} and \lstinline{right}.  The \lstinline{height} function calculates the height of a \lstinline{Tree} as the longest path from the root through the tree.
+
+\paragraph{Semantics.}  The set of values defined by the type \lstinline{null} is given as follows:
+\begin{displaymath}
+\begin{array}{rcl}
+\llbracket{\tt null}\rrbracket & = & \{{\tt null}\}\\
+\end{array}
+\end{displaymath}
+In other words, the set of values defined by the \lstinline{null} type is the singleton set containing exactly the \lstinline{null} value.
+
 
 \paragraph{Notes.}  With all of the problems surrounding \lstinline{null} and \lstinline{NullPointerException}s in languages like Java and C, it may seem that this type should be avoided. However, it remains a very useful abstraction around (e.g. for terminating recursive types) and, in Whiley, is treated in a completely safe manner (unlike e.g. Java).
 
@@ -163,8 +183,7 @@ The type \lstinline{any} represents the type whose variables may hold any possib
   \verb+AnyType+ & $::=$ & \token{any} \\
 \end{syntax}
 
-\paragraph{Examples.}  The following illustrates a simple example of
-the \lstinline{any} type:
+\paragraph{Examples.}  The following illustrates a simple example of the \lstinline{any} type:
 
 \begin{lstlisting}
 function toInt(any val) => int:
