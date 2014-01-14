@@ -120,7 +120,7 @@ In other words, the set of values defined by the \lstinline{bool} type is the se
 
 \subsection{Bytes}
 
-The type \lstinline{byte} represents the set of eight-bit sequences expressed numerically using \lstinline{0} and \lstinline{1} followed by \lstinline{b} (e.g. 00101b).  Variables of \lstinline{byte} type support equality (\lstinline{==}), inequality (\lstinline{!=}), bitwise and (\lstinline{&}), bitwise or (\lstinline{|}), bitwise xor (\lstinline{^}), bitwise complement (\lstinline{~}), left shift (\lstinline{<<}) and right shift (\lstinline{>>}).
+The type \lstinline{byte} represents the set of eight-bit sequences, whose values are expressed numerically using \lstinline{0} and \lstinline{1} followed by \lstinline{b} (e.g. 00101b).  Variables of \lstinline{byte} type support equality (\lstinline{==}), inequality (\lstinline{!=}), bitwise and (\lstinline{&}), bitwise or (\lstinline{|}), bitwise xor (\lstinline{^}), bitwise complement (\lstinline{~}), left shift (\lstinline{<<}) and right shift (\lstinline{>>}).
 
 \begin{syntax}
  \verb+ByteType+ & $::=$ & \token{byte}\\
@@ -166,7 +166,7 @@ some representation (e.g. two's compliment) using an auxillary function (e.g. \l
 
 \subsection{Integers}
 
-The type \lstinline{int} represents the set of arbitrary-sized integer values expressed as a sequence of one or more numerical or hexadecimal digits (e.g. \lstinline{123456}, \lstinline{0xffaf}, etc).  Variables of \lstinline{int} type support equality (\lstinline{==}), inequality (\lstinline{!=}), comparators (\lstinline{<},\lstinline{<=},\lstinline{>=},\lstinline{>}), addition (\lstinline{+}), subtraction (\lstinline{-}), multiplication (\lstinline{*}), division (\lstinline{/}), remainder (\lstinline{%}) and negation (\lstinline{-}) operations.
+The type \lstinline{int} represents the set of arbitrary-sized integers, whose values are expressed as a sequence of one or more numerical or hexadecimal digits (e.g. \lstinline{123456}, \lstinline{0xffaf}, etc).  Variables of \lstinline{int} type support equality (\lstinline{==}), inequality (\lstinline{!=}), comparators (\lstinline{<},\lstinline{<=},\lstinline{>=},\lstinline{>}), addition (\lstinline{+}), subtraction (\lstinline{-}), multiplication (\lstinline{*}), division (\lstinline{/}), remainder (\lstinline{%}) and negation (\lstinline{-}) operations.
 
 
 \begin{syntax}
@@ -202,7 +202,7 @@ In other words, the of values defined by the type \lstinline{int} is exactly the
 
 \subsection{Rationals}
 
-The type \lstinline{real} represents the set of arbitrary-sized rational values expressed as a sequence of one or more numerical digits separated by a period (e.g. \lstinline{1.0}, \lstinline{0.223}, \lstinline{12.55}, etc).  Variables of \lstinline{real} type support equality (\lstinline{==}), inequality (\lstinline{!=}), comparators (\lstinline{<},\lstinline{<=},\lstinline{>=},\lstinline{>}), addition (\lstinline{+}), subtraction (\lstinline{-}), multiplication (\lstinline{*}), division (\lstinline{/}), remainder (\lstinline{%}) and negation (\lstinline{-}) operations.  Variables of type \lstinline{real} also support the {\em rational destructuring assignment} to extract the numerator and denominator (illustrated below).
+The type \lstinline{real} represents the set of arbitrary-sized rationals, whose values are expressed as a sequence of one or more numerical digits separated by a period (e.g. \lstinline{1.0}, \lstinline{0.223}, \lstinline{12.55}, etc).  Variables of \lstinline{real} type support equality (\lstinline{==}), inequality (\lstinline{!=}), comparators (\lstinline{<},\lstinline{<=},\lstinline{>=},\lstinline{>}), addition (\lstinline{+}), subtraction (\lstinline{-}), multiplication (\lstinline{*}), division (\lstinline{/}), remainder (\lstinline{%}) and negation (\lstinline{-}) operations.  Variables of type \lstinline{real} also support the {\em rational destructuring assignment} to extract the numerator and denominator (illustrated below).
 
 \begin{syntax}
   \verb+RealType+ & $::=$ & \token{real} \\
@@ -237,17 +237,29 @@ In other words, the of values defined by the type \lstinline{real} is the (infin
 
 \subsection{Characters}
 
-The type \lstinline{char} represents a arbitrary unicode character.
+The type \lstinline{char} represents the set of unicode characters, whose values are expressed as an arbitrary character between quotes (e.g. \lstinline{'c'}, \lstinline{'0'}, \lstinline{'%'}, etc).  Variables of \lstinline{char} type support equality (\lstinline{==}), inequality (\lstinline{!=}), comparators (\lstinline{<},\lstinline{<=},\lstinline{>=},\lstinline{>}), addition (\lstinline{+}), subtraction (\lstinline{-}), multiplication (\lstinline{*}), division (\lstinline{/}), remainder (\lstinline{%}) and negation (\lstinline{-}) operations.
 
 \begin{syntax}
   \verb+CharType+ & $::=$ & \token{char} \\
+  &&\\
+  \verb+CharValue+ & $::=$ & \token{'}\ .\ \token{'} \\
 \end{syntax}
 
-\paragraph{Examples.}
+\paragraph{Examples.}  The following illustrates a simple example of the \lstinline{char} type:
 
-\paragraph{Semantics.}
+\begin{lstlisting}
+function isUpperCase(char c) => bool:
+    return 'A' <= c && c <= 'Z'
+\end{lstlisting}
+This illustrates a very simple function for determining whether an ASCII character is uppercase or not.
 
-\paragraph{Notes.} 
+\paragraph{Semantics.}  The set of values defined by the type \lstinline{int} is given as follows:
+\begin{displaymath}
+\begin{array}{rcl}
+\llbracket{\tt char}\rrbracket & = & \mathbb{Z}\\
+\end{array}
+\end{displaymath}
+In other words, the of values defined by the type \lstinline{char} is exactly the (infinite) set of integers.
 
 % =======================================================================
 % Any
