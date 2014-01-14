@@ -176,7 +176,7 @@ The type \lstinline{int} represents the set of arbitrary-sized integer values ex
   & $|$ & \token{0} \token{x}\ \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ $|$\ \token{a}\ $|$\ \ldots\ $|$\ \token{f}\ $|$\ \token{A}\ $|$\ \ldots\ $|$\ \token{F}\ \big)$^+$\\
 \end{syntax}
 
-\paragraph{Examples.}    The following illustrates a simple example of the \lstinline{int} type:
+\paragraph{Examples.}  The following illustrates a simple example of the \lstinline{int} type:
 
 \begin{lstlisting}
 function fib(int x) => int:
@@ -202,17 +202,34 @@ In other words, the of values defined by the type \lstinline{int} is exactly the
 
 \subsection{Rationals}
 
-Represents the set of (unbound) rational numbers.
+The type \lstinline{real} represents the set of arbitrary-sized rational values expressed as a sequence of one or more numerical digits separated by a period (e.g. \lstinline{1.0}, \lstinline{0.223}, \lstinline{12.55}, etc).  Variables of \lstinline{real} type support equality (\lstinline{==}), inequality (\lstinline{!=}), comparators (\lstinline{<},\lstinline{<=},\lstinline{>=},\lstinline{>}), addition (\lstinline{+}), subtraction (\lstinline{-}), multiplication (\lstinline{*}), division (\lstinline{/}), remainder (\lstinline{%}) and negation (\lstinline{-}) operations.  Variables of type \lstinline{real} also support the {\em rational destructuring assignment} to extract the numerator and denominator (illustrated below).
 
 \begin{syntax}
   \verb+RealType+ & $::=$ & \token{real} \\
+  &&\\
+  \verb+RealValue+ & $::=$ & \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ \big)$^+$\ \token{.}\ \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ \big)$^+$ \\
 \end{syntax}
 
-\paragraph{Examples.}
+\paragraph{Examples.}  The following illustrates a simple example of the \lstinline{real} type:
 
-\paragraph{Semantics.}
+\begin{lstlisting}
+function floor(real x) => int:
+    int num / int den = x    // extract numerator and denominator
+    int r = num / den        // integer division
+    if x < 0.0 && den != 1: 	 
+        return r - 1 
+    else:
+        return r 
+\end{lstlisting}
+This illustrates the well-known function for computing the {\em floor} of a \lstinline{real} variable \lstinline{x} (i.e. the greatest integer not larger than \lstinline{x}).  The rational destructuring assignment is used to extract the numerator and denominator of the parameter \lstinline{x}.
 
-\paragraph{Notes.} 
+\paragraph{Semantics.}  The set of values defined by the type \lstinline{real} is given as follows:
+\begin{displaymath}
+\begin{array}{rcl}
+\llbracket{\tt real}\rrbracket & = & \mathbb{Z}\times\mathbb{Z}\\
+\end{array}
+\end{displaymath}
+In other words, the of values defined by the type \lstinline{real} is the (infinite) set of all integer pairs, where the first element represents the numerator, and the second represents the denominator.
 
 % =======================================================================
 % Char
