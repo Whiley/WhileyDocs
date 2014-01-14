@@ -161,42 +161,41 @@ some representation (e.g. two's compliment) using an auxillary function (e.g. \l
 
 
 % =======================================================================
-% Char
-% =======================================================================
-
-\subsection{Characters}
-
-Represents a arbitrary unicode character.
-
-\begin{syntax}
-  \verb+CharType+ & $::=$ & \token{char} \\
-\end{syntax}
-
-\paragraph{Examples.}
-
-\paragraph{Semantics.}
-
-\paragraph{Notes.} 
-
-% =======================================================================
 % Int
 % =======================================================================
 
 \subsection{Integers}
 
-Represents the set of (unbound) integer values. 
+The type \lstinline{int} represents the set of arbitrary-sized integer values expressed as a sequence of one or more numerical or hexadecimal digits (e.g. \lstinline{123456}, \lstinline{0xffaf}, etc).  Variables of \lstinline{int} type support equality (\lstinline{==}), inequality (\lstinline{!=}), comparators (\lstinline{<},\lstinline{<=},\lstinline{>=},\lstinline{>}), addition (\lstinline{+}), subtraction (\lstinline{-}), multiplication (\lstinline{*}), division (\lstinline{/}), remainder (\lstinline{%}) and negation (\lstinline{-}) operations.
+
 
 \begin{syntax}
   \verb+IntType+ & $::=$ & \token{int} \\
+  &&\\
+  \verb+IntValue+ & $::=$ & \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ \big)$^+$ \\
+  & $|$ & \token{0} \token{x}\ \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ $|$\ \token{a}\ $|$\ \ldots\ $|$\ \token{f}\ $|$\ \token{A}\ $|$\ \ldots\ $|$\ \token{F}\ \big)$^+$\\
 \end{syntax}
 
-\paragraph{Examples.}
+\paragraph{Examples.}    The following illustrates a simple example of the \lstinline{int} type:
 
-\paragraph{Semantics.}
+\begin{lstlisting}
+function fib(int x) => int:
+    if x <= 1:
+        return x
+    else:
+        return fib(x-1) + fib(x-2)
+\end{lstlisting}
+This illustrates the well-known recursive method for computing numbers in the {\em fibonacci} sequence.
 
-\paragraph{Notes.}  Since integer types in Whiley are unbounded, there
-is no equivalent to Java's \lstinline{MIN_VALUE} and \lstinline{MAX_VALUE} for \lstinline{int} types.
+\paragraph{Semantics.}  The set of values defined by the type \lstinline{int} is given as follows:
+\begin{displaymath}
+\begin{array}{rcl}
+\llbracket{\tt int}\rrbracket & = & \mathbb{Z}\\
+\end{array}
+\end{displaymath}
+In other words, the of values defined by the type \lstinline{int} is exactly the (infinite) set of integers.
 
+\paragraph{Notes.}  Since integers in Whiley are of arbitrary size, {\em integer overflow} is not possible.  This contrasts with other languages (e.g. Java) that used {\em fixed-width} number representations (e.g. 32bit two's complement).  Furthermore, there is nothing equivalent to the constants found in such languages for representing the uppermost and least integers expressible (e.g. \lstinline{Integer.MIN_VALUE} and \lstinline{Integer.MAX_VALUE}, as found in Java).
 % =======================================================================
 % Real
 % =======================================================================
@@ -207,6 +206,24 @@ Represents the set of (unbound) rational numbers.
 
 \begin{syntax}
   \verb+RealType+ & $::=$ & \token{real} \\
+\end{syntax}
+
+\paragraph{Examples.}
+
+\paragraph{Semantics.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% Char
+% =======================================================================
+
+\subsection{Characters}
+
+The type \lstinline{char} represents a arbitrary unicode character.
+
+\begin{syntax}
+  \verb+CharType+ & $::=$ & \token{char} \\
 \end{syntax}
 
 \paragraph{Examples.}
