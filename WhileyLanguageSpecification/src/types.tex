@@ -344,18 +344,35 @@ equals the empty set.
 
 \section{Tuples}
 
-A tuple type describes a compound type made up of two or more subcomponents. It is similar to a record, except that fields are effectively anonymous.
+A tuple type describes a compound type made up of two or more elements in sequence, whose values are expressed as sequences of values separated by a comma (e.g. \lstinline{1,2}, \lstinline{2.0,3.32,3.45}, etc).  Tuples are similar to records, except that fields are effectively anonymous.  Variables of tuple type support equality (\lstinline{==}) and inequality (\lstinline{!=}) operations, as well the {\em tuple destructuring assignment} to extract elements (illustrated below).
 
 \begin{syntax}
   \verb+TupleType+ & $::=$ & \token{(}\ \verb+Type+\ \big(\ \token{,}\
   \verb+Type+\ \big)$^+$\ \token{)}\\
+  &&\\
+  \verb+TuplePattern+ & $::=$ & \token{(}\ \verb+TypePattern+\ \big(\ \token{,}\
+  \verb+TypePattern+\ \big)$^+$\ \token{)}\ \verb+Ident+\\
+  &&\\
+  \verb+TupleConstructor+ & $::=$ & \verb+Expr+\ \big(\ \token{,}\
+  \verb+Expr+\ \big)$^+$\\
 \end{syntax}
 
-\paragraph{Examples.}
+\paragraph{Examples.} The following example illustrates several uses of tuples:
 
-\paragraph{Semantics.}
+\begin{lstlisting}
+function swap(int x, int y) => (int,int):
+    return y,x
+\end{lstlisting}
+This function accepts two integer parameters, and returns a tuple type containing two integers.  The function simple reverses the order that the values occur in the tuple passed as a parameter.
 
-\paragraph{Notes.}
+\paragraph{Semantics.}  The set of values defined by a tuple type is given as follows:
+\begin{displaymath}
+\begin{array}{rcl}
+{\tt \llbracket(T_1, \ldots, T_n)\rrbracket} & = & {\tt\{ v_1,\ldots,v_n\;|\;v_1\in\llbracket T_1\rrbracket, \ldots, v_n\in\llbracket T_n\rrbracket\}}\\
+\end{array}
+\end{displaymath}
+In other words, the set of values defined by the \lstinline{void} type
+equals the empty set.  
 
 % =======================================================================
 % Records
