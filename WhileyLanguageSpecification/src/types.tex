@@ -120,15 +120,39 @@ In other words, the set of values defined by the \lstinline{bool} type is the se
 
 \subsection{Bytes}
 
-Represents a sequence of 8 bits. 
+The type \lstinline{byte} represents the set of eight-bit sequences expressed numerically using \lstinline{0} and \lstinline{1} followed by \lstinline{b} (e.g. 00101b).  Variables of \lstinline{byte} type support equality (\lstinline{==}), inequality (\lstinline{!=}), bitwise and (\lstinline{&}), bitwise or (\lstinline{|}), bitwise xor (\lstinline{^}), bitwise complement (\lstinline{~}), left shift (\lstinline{<<}) and right shift (\lstinline{>>}).
 
 \begin{syntax}
- \verb+ByteType+ & $::=$ & \token{byte} \\
+ \verb+ByteType+ & $::=$ & \token{byte}\\
+ &&\\
+ \verb+ByteValue+ & $::=$ & \big(\ \token{0}\ $|$\ \token{1}\ \big)$^+$\ \token{b}\\
 \end{syntax}
 
-\paragraph{Examples.}
+Byte values do not need to contain exactly eight digits and, when fewer digits are given, are padded out to eight digits by appending zero's from the left (e.g. \lstinline{00101b} becomes \lstinline{00101b}).
 
-\paragraph{Semantics.}
+\paragraph{Examples.}  The following illustrates a simple example of the \lstinline{byte} type:
+
+\begin{lstlisting}
+// convert a byte into a string
+function toString(byte b) => string:
+    r = "b"
+    for i in 0..8:
+        if (b & 00000001b) == 00000001b:
+            r = "1" ++ r
+        else:
+            r = "0" ++ r
+        b = b >> 1	
+    return r
+\end{lstlisting}
+This illustrates the conversion from a \lstinline{byte} into a \lstinline{string}.  The conversion is performed one digit at a time, starting from the rightmost bit.
+
+\paragraph{Semantics.}  The set of values defined by the type \lstinline{byte} is given as follows:
+\begin{displaymath}
+\begin{array}{rcl}
+\llbracket{\tt byte}\rrbracket & = & \{???\}\\
+\end{array}
+\end{displaymath}
+In other words, the set of values defined by the \lstinline{byte} type is the set of all 256 possible combinations of eight-bit sequences.
 
 \paragraph{Notes.}  Unlike for many languages, there is no
 representation associated with a byte. For example, to extract an
