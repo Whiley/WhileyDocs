@@ -42,12 +42,14 @@ Discuss syntactic versus semantic types, as well as the set of all values.  Prob
 % Null
 % =======================================================================
 
-\subsection{Null Type}
+\subsection{Null}
 
 The null type is a special type which should be used to show the absence of something. It is distinct from void, since variables can hold the special \lstinline{null} value (where as there is no special ``\lstinline{void}'' value).  Variables of \lstinline{null} type support only equality (\lstinline{==}) and inequality comparisons (\lstinline{!=}).  The \lstinline{null} value is particularly useful for representing optional values and terminating recursive types.
 
 \begin{syntax}
   \verb+NullType+ & $::=$ & \token{null} \\
+  &&\\
+  \verb+NullValue+ & $::=$ & \token{null} \\
 \end{syntax}
 
 \paragraph{Examples.}  The following illustrates a simple example of the \lstinline{null} type:
@@ -80,25 +82,43 @@ In other words, the set of values defined by the \lstinline{null} type is the si
 % Bool 
 % =======================================================================
 
-\subsection{Bool Type}
+\subsection{Booleans}
 
-Represents the set of boolean values (i.e. \lstinline{true} and \lstinline{false}).
+The \lstinline{bool} type represents the set of boolean values (i.e. \lstinline{true} and \lstinline{false}).  Variables of \lstinline{bool} type support equality (\lstinline{==}), inequality (\lstinline{!=}), logical and (\lstinline{&&}), logical or (\lstinline{||}), logical xor (\lstinline{^}) and logical not (\lstinline{!}).
 
 \begin{syntax}
  \verb+BoolType+ & $::=$ & \token{bool} \\
+&&\\
+\verb+BoolValue+ & $::=$ & \token{true} $|$ \token{false} \\
 \end{syntax}
 
-\paragraph{Examples.}
+\paragraph{Examples.} The following illustrates a simple example of the \lstinline{bool} type:
 
-\paragraph{Semantics.}
+\begin{lstlisting}
+// Determine whether item is contained in list or not
+function contains([int] list, int item) => bool:
+    // examine every element of list
+    for l in list:
+        if l == item:
+            return true
+    // done
+    return false
+\end{lstlisting}
+This function determines whether or not a given integer value is contained within a list of integers.  If so, it returns \lstinline{true}, otherwise it returns \lstinline{false}.
 
-\paragraph{Notes.} 
+\paragraph{Semantics.}  The set of values defined by the type \lstinline{bool} is given as follows:
+\begin{displaymath}
+\begin{array}{rcl}
+\llbracket{\tt bool}\rrbracket & = & \{{\tt true},{\tt false}\}\\
+\end{array}
+\end{displaymath}
+In other words, the set of values defined by the \lstinline{bool} type is the set containing exactly the values \lstinline{true} and \lstinline{false}.
 
 % =======================================================================
-% Bool 
+% Byte
 % =======================================================================
 
-\subsection{Byte Type}
+\subsection{Bytes}
 
 Represents a sequence of 8 bits. 
 
@@ -120,7 +140,7 @@ some representation (e.g. two's compliment) using an auxillary function (e.g. \l
 % Char
 % =======================================================================
 
-\subsection{Char Type}
+\subsection{Characters}
 
 Represents a arbitrary unicode character.
 
@@ -138,7 +158,7 @@ Represents a arbitrary unicode character.
 % Int
 % =======================================================================
 
-\subsection{Int Type}
+\subsection{Integers}
 
 Represents the set of (unbound) integer values. 
 
@@ -157,7 +177,7 @@ is no equivalent to Java's \lstinline{MIN_VALUE} and \lstinline{MAX_VALUE} for \
 % Real
 % =======================================================================
 
-\subsection{Real Type}
+\subsection{Rationals}
 
 Represents the set of (unbound) rational numbers.
 
@@ -175,7 +195,7 @@ Represents the set of (unbound) rational numbers.
 % Any
 % =======================================================================
 
-\subsection{Any Type}
+\subsection{Any}
 
 The type \lstinline{any} represents the type whose variables may hold any possible value.  Thus, \lstinline{any} is the {\em top type} (i.e. $\top$) in the lattice of types and, hence, is the supertype of all other types.  Variables of \lstinline{any} type support only equality (\lstinline{==}) and inequality comparisons (\lstinline{!=}) as well as {\em runtime type tests}.  Finally, unlike the majority of other types, there are no {\em values} of type \lstinline{any}.
 
@@ -211,7 +231,7 @@ In other words, the set of values defined by the \lstinline{any} type equals the
 % Void 
 % =======================================================================
 
-\subsection{Void Type}
+\subsection{Void}
 
 The \lstinline{void} type represents the type whose variables cannot exist (i.e. because they cannot hold any possible value).  Thus, \lstinline{void} is the {\em bottom type} (i.e. $\bot$) in the lattice of types and, hence, is the {\em subtype} of all other types.  Void is used to represent the return type of a method which does not return anything.  Furthermore, it is also used to represent the element type of an empty list of set.  Finally, unlike the majority of other types, there are no {\em values} of type \lstinline{void}.
 
@@ -252,7 +272,7 @@ equals the empty set.
 % Tuples
 % =======================================================================
 
-\section{Tuple Types}
+\section{Tuples}
 
 A tuple type describes a compound type made up of two or more subcomponents. It is similar to a record, except that fields are effectively anonymous.
 
@@ -271,7 +291,7 @@ A tuple type describes a compound type made up of two or more subcomponents. It 
 % Records
 % =======================================================================
 
-\section{Record Types}
+\section{Records}
 
 A record is made up of a number of fields, each of which has a unique name. Each field has a corresponding type. One can think of a record as a special kind of "fixed" map (i.e. where we know exactly which entries we have).
 
@@ -291,7 +311,7 @@ A record is made up of a number of fields, each of which has a unique name. Each
 % References
 % =======================================================================
 
-\section{Reference Types}
+\section{References}
 
 Represents a reference to an object in Whiley.
 
@@ -309,7 +329,7 @@ Represents a reference to an object in Whiley.
 % Nominal
 % =======================================================================
 
-\section{Nominal Types}
+\section{Nominals}
 
 The existential type represents the an unknown type, defined at a given position.
 
@@ -327,13 +347,13 @@ The existential type represents the an unknown type, defined at a given position
 % Collections
 % =======================================================================
 
-\section{Collection Types}
+\section{Collections}
 
 % =======================================================================
 % Set
 % =======================================================================
 
-\subsection{Set Type}
+\subsection{Sets}
 
 A set type describes set values whose elements are subtypes of the element type. For example, \lstinline|{1,2,3}| is an instance of set type \lstinline|{int}|; however, \lstinline|{1.345}| is not.
 
@@ -351,7 +371,7 @@ A set type describes set values whose elements are subtypes of the element type.
 % Map
 % =======================================================================
 
-\subsection{Map Type}
+\subsection{Maps}
 
 A map represents a one-many mapping from variables of one type to variables of another type. For example, the map type \lstinline|{int=>real}| represents a map from integers to real values. A valid instance of this type might be \lstinline|{1=>1.2,2=>3.0}|.
 
@@ -369,7 +389,7 @@ A map represents a one-many mapping from variables of one type to variables of a
 % List
 % =======================================================================
 
-\subsection{List Type}
+\subsection{Lists}
 
 A list type describes list values whose elements are subtypes of the element type. For example, \lstinline{[1,2,3]} is an instance of list type \lstinline{[int]}; however, \lstinline{[1.345]} is not.
 
@@ -387,7 +407,7 @@ A list type describes list values whose elements are subtypes of the element typ
 % Functions
 % =======================================================================
 
-\section{Function Types}
+\section{Functions}
 
 \begin{syntax}
   \verb+FunctionType+ & $::=$ & \token{function}\ \token{(}\
@@ -406,7 +426,7 @@ A list type describes list values whose elements are subtypes of the element typ
 % Functions
 % =======================================================================
 
-\section{Method Types}
+\section{Methods}
 
 \begin{syntax}
   \verb+MethodType+ & $::=$ & \token{method}\ \token{(}\
@@ -425,7 +445,7 @@ A list type describes list values whose elements are subtypes of the element typ
 % Unions
 % =======================================================================
 
-\section{Union Types}
+\section{Unions}
 
 A union type represents a type whose variables may hold values from any of its "bounds". For example, the union type \lstinline{null|int} indicates a variable can either hold an integer value, or \lstinline{null}. 
 
@@ -444,7 +464,7 @@ A union type represents a type whose variables may hold values from any of its "
 % Intersections
 % =======================================================================
 
-\section{Intersection Types}
+\section{Intersections}
 
 \begin{syntax}
   \verb+IntersectionType+ & $::=$ & \verb+TermType+\ \big(\ \token{\&}\ \verb+TermType+\
@@ -463,7 +483,7 @@ A union type represents a type whose variables may hold values from any of its "
 % Negations
 % =======================================================================
 
-\section{Negation Types}
+\section{Negations}
 
 \begin{syntax}
   NegationType & $::=$ & \token{!}\ \ \verb+Type+\\
@@ -486,3 +506,6 @@ accepts values {\em not} in a given type.
 
 \section{Subtyping Algorithms}
 Discussion of soundness and completeness.
+
+\section{Equivalences}
+Discuss some obvious equivalences between types.
