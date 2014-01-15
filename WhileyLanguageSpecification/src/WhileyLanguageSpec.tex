@@ -42,6 +42,16 @@
 \newcommand{\vbar}{\token{|}}
 % ======================================================
 
+% SETUP THE MARGINPAR
+\setlength{\marginparwidth}{1cm}
+\let\oldmarginpar\marginpar
+\renewcommand\marginpar[1]{\-\oldmarginpar[\raggedright\footnotesize #1]%
+{\raggedleft\footnotesize #1}}
+\newcommand{\hl}[2]{\marginpar{\tiny #1}\colorbox{yellow}{#2}}
+%\newcommand{\hl}[2]{#2}
+
+% ======================================================
+
 % \newenvironment{syntax}[1]{
 %   \begin{center}
 %     \begin{minipage}{0.8\textwidth}
