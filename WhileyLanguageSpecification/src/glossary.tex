@@ -140,8 +140,14 @@
 
 \newglossaryentry{type}{
   name={type},
-  description={An descriptor for a set of values, typically used to determine the set of values a given variable or \gls{expression} may hold}
+  description={An abstract entity which represents the set of values a given variable may hold, or a given \gls{expression} may evaluate to.}
 }
+
+\newglossaryentry{type_descriptor}{
+  name={type descriptor},
+  description={An source-level description of an underlying \gls{type}.  Unlike many languages, type descriptors and types are quite distinct in Whiley as, for example, two distinct descriptors may describe the same underlying type}
+}
+
 
 % ===============================================
 % U
