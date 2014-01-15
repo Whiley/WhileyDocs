@@ -1,5 +1,86 @@
 \chapter{Lexical Structure}
+
+This chapter specifies the lexical structure of the Whiley programming language.  Programs in Whiley are organised into one or more \gls{source_file}s written in Unicode.  The Whiley language uses \gls{indentation_syntax} to delimit blocks and statements, rather than curly-braces (or similar) as found in many other languages.  
+
 \section{Indentation}
 \section{Blocks}
 \section{Whitespace}
 \section{Identifiers}
+\section{Keywords}
+The following strings are reserved for use as {\em keywords} and may not be used as identifiers:
+
+\begin{syntax}
+\verb+Keyword+ & $::=$ & \token{all} $|$ \token{any} $|$ \token{assert} $|$ \token{assume}\\
+         & $|$ & \token{bool} $|$ \token{break} $|$ \token{byte}\\
+         & $|$ & \token{case} $|$ \token{catch} $|$ \token{char} $|$ \token{constant} $|$ \token{continue}\\
+         & $|$ & \token{debug} $|$ \token{default} $|$ \token{do}\\
+         & $|$ & \token{else} $|$ \token{ensures} $|$ \token{export}\\
+         & $|$ & \token{false} $|$ \token{for} $|$ \token{function}\\
+         & $|$ & \token{if} $|$ \token{import} $|$ \token{in} $|$ \token{int} $|$ \token{is}\\
+         & $|$ & \token{method} \\
+         & $|$ & \token{native} $|$ \token{new} $|$ \token{no} $|$ \token{null}\\
+         & $|$ & \token{package} $|$ \token{private} $|$ \token{protected} $|$ \token{public}\\
+         & $|$ & \token{real} $|$ \token{requires} $|$ \token{return}\\
+         & $|$ & \token{skip} $|$ \token{some} $|$ \token{string} $|$ \token{switch}\\
+         & $|$ & \token{throw} $|$ \token{throws} $|$ \token{true} $|$ \token{try} $|$ \token{type} \\
+         & $|$ & \token{void} \\
+         & $|$ & \token{where} $|$ \token{while}\\
+\end{syntax}
+
+\section{Literals}
+
+A \gls{literal} is a source-level entity which describes a value of primitive type (\S\ref{c_types_primitive_types}).
+
+\begin{syntax}
+\verb+Literal+ & $::=$ &  \verb+NullLiteral+ \\
+  & $|$ & \verb+BoolLiteral+ \\
+  & $|$ & \verb+ByteLiteral+ \\
+  & $|$ & \verb+IntLiteral+ \\
+  & $|$ & \verb+RealLiteral+ \\
+  & $|$ & \verb+CharLiteral+ \\
+  & $|$ & \verb+StringLiteral+ \\
+\\
+\end{syntax}
+
+\subsection{Null Literal}
+
+\begin{syntax}
+  \verb+NullLiteral+ & $::=$ & \token{null} \\
+\end{syntax}
+
+
+\subsection{Boolean Literals}
+
+\begin{syntax}
+  \verb+BoolLiteral+ & $::=$ & \token{true} $|$ \token{false} \\
+\end{syntax}
+
+
+\subsection{Byte Literals}
+
+\begin{syntax}
+ \verb+ByteLiteral+ & $::=$ & \big(\ \token{0}\ $|$\ \token{1}\ \big)$^+$\ \token{b}\\
+\end{syntax}
+
+
+\subsection{Integer Literals}
+
+\begin{syntax}
+  \verb+IntLiteral+ & $::=$ & \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ \big)$^+$ \\
+  & $|$ & \token{0} \token{x}\ \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ $|$\ \token{a}\ $|$\ \ldots\ $|$\ \token{f}\ $|$\ \token{A}\ $|$\ \ldots\ $|$\ \token{F}\ \big)$^+$\\
+\end{syntax}
+
+
+\subsection{Real Literals}
+
+\begin{syntax}
+  \verb+RealLiteral+ & $::=$ & \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ \big)$^+$\ \token{.}\ \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ \big)$^+$ \\
+\end{syntax}
+
+\subsection{Character Literals}
+
+\begin{syntax}
+  \verb+CharLiteral+ & $::=$ & \token{'}\ .\ \token{'} \\
+\end{syntax}
+
+\subsection{String Literals}
