@@ -44,12 +44,16 @@ A \gls{literal} is a source-level entity which describes a value of primitive ty
 
 \subsection{Null Literal}
 
+The \lstinline{null} type (\S\ref{c_types_null}) has a single value expressed as the \lstinline{null} literal.
+
 \begin{syntax}
   \verb+NullLiteral+ & $::=$ & \token{null} \\
 \end{syntax}
 
 
 \subsection{Boolean Literals}
+
+The \lstinline{bool} type (\S\ref{c_types_bool}) has two values expressed as the \lstinline{true} and \lstinline{false} literals.
 
 \begin{syntax}
   \verb+BoolLiteral+ & $::=$ & \token{true} $|$ \token{false} \\
@@ -58,26 +62,39 @@ A \gls{literal} is a source-level entity which describes a value of primitive ty
 
 \subsection{Byte Literals}
 
+The \lstinline{byte} type (\S\ref{c_types_byte}) has 256 values which are expressed as sequences of binary digits, followed by the suffix ``\lstinline{b}'' (e.g. \lstinline{0101b}).
+
+
 \begin{syntax}
  \verb+ByteLiteral+ & $::=$ & \big(\ \token{0}\ $|$\ \token{1}\ \big)$^+$\ \token{b}\\
 \end{syntax}
 
 
+Byte literals do not need to contain exactly eight digits and, when fewer digits are given, are padded out to eight digits by appending zero's from the left (e.g. \lstinline{00101b} becomes \lstinline{00000101b}).
+
+
 \subsection{Integer Literals}
+
+The \lstinline{int} type (\S\ref{c_types_int}) represents the infinite set of integer values which are expressed as sequences of numeric or hexadecimal digits (e.g. \lstinline{123456}, \lstinline{0xffaf}, etc).
 
 \begin{syntax}
   \verb+IntLiteral+ & $::=$ & \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ \big)$^+$ \\
   & $|$ & \token{0} \token{x}\ \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ $|$\ \token{a}\ $|$\ \ldots\ $|$\ \token{f}\ $|$\ \token{A}\ $|$\ \ldots\ $|$\ \token{F}\ \big)$^+$\\
 \end{syntax}
 
+Since integer values in Whiley are of arbitrary size (\S\ref{c_types_int}), there is no limit on the size of an integer literal.
 
 \subsection{Real Literals}
+
+The \lstinline{real} type (\S\ref{c_types_real}) represents the infinite set of rational values which are expressed as sequences of numeric digits separated by a period (e.g. \lstinline{1.0}, \lstinline{0.223}, \lstinline{12.55}, etc).
 
 \begin{syntax}
   \verb+RealLiteral+ & $::=$ & \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ \big)$^+$\ \token{.}\ \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ \big)$^+$ \\
 \end{syntax}
 
 \subsection{Character Literals}
+
+A {\em character literal} is expressed as a single character or an escape sequence enclosed in single quotes.
 
 \begin{syntax}
   \verb+CharLiteral+ & $::=$ & \token{'}\ .\ \token{'} \\

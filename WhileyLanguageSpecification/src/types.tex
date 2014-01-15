@@ -1,4 +1,4 @@
-\chapter{Types \& Values}
+\chapter{Types}
 The Whiley programming language is {\em statically typed}, meaning that every expression has a type determined at compile time, such that any evaluation of that expression yields a value of that type.  Whiley's {\em type system} governs how the type of any variable or expression is determined.  Whiley's type system is unusual in that it incorporates {\em union}, {\em intersection} and {\em negation types}, as well as employing {\em flow typing} and {\em structural typing}.
 
 \section{Overview}
@@ -98,6 +98,7 @@ Type patterns do not exist for all compound structures --- only those where a va
 % =======================================================================
 
 \subsection{Null}
+\label{c_types_null}
 
 The null type is a special type which should be used to show the absence of something. It is distinct from void, since variables can hold the special \lstinline{null} value (where as there is no special ``\lstinline{void}'' value).  Variables of \lstinline{null} type support only equality (\lstinline{==}) and inequality comparisons (\lstinline{!=}).  The \lstinline{null} value is particularly useful for representing optional values and terminating recursive types.
 
@@ -136,6 +137,7 @@ In other words, the set of values defined by the \lstinline{null} type is the si
 % =======================================================================
 
 \subsection{Booleans}
+\label{c_types_bool}
 
 The \lstinline{bool} type represents the set of boolean values (i.e. \lstinline{true} and \lstinline{false}).  Variables of \lstinline{bool} type support equality (\lstinline{==}), inequality (\lstinline{!=}), logical and (\lstinline{&&}), logical or (\lstinline{||}), logical xor (\lstinline{^}) and logical not (\lstinline{!}).
 
@@ -170,16 +172,13 @@ In other words, the set of values defined by the \lstinline{bool} type is the se
 % =======================================================================
 
 \subsection{Bytes}
+\label{c_types_byte}
 
 The type \lstinline{byte} represents the set of eight-bit sequences, whose values are expressed numerically using \lstinline{0} and \lstinline{1} followed by \lstinline{b} (e.g. 00101b).  Variables of \lstinline{byte} type support equality (\lstinline{==}), inequality (\lstinline{!=}), bitwise and (\lstinline{&}), bitwise or (\lstinline{|}), bitwise xor (\lstinline{^}), bitwise complement (\lstinline{~}), left shift (\lstinline{<<}) and right shift (\lstinline{>>}).
 
 \begin{syntax}
  \verb+ByteType+ & $::=$ & \token{byte}\\
- &&\\
- \verb+ByteExpr+ & $::=$ & \big(\ \token{0}\ $|$\ \token{1}\ \big)$^+$\ \token{b}\\
 \end{syntax}
-
-Byte values do not need to contain exactly eight digits and, when fewer digits are given, are padded out to eight digits by appending zero's from the left (e.g. \lstinline{00101b} becomes \lstinline{00101b}).
 
 \paragraph{Examples.}  The following illustrates a simple example of the \lstinline{byte} type:
 
@@ -205,10 +204,7 @@ This illustrates the conversion from a \lstinline{byte} into a \lstinline{string
 \end{displaymath}
 In other words, the set of values defined by the \lstinline{byte} type is the set of all 256 possible combinations of eight-bit sequences.
 
-\paragraph{Notes.}  Unlike for many languages, there is no
-representation associated with a byte. For example, to extract an
-integer value from a byte, it must be explicitly decoded according to
-some representation (e.g. two's compliment) using an auxillary function (e.g. \lstinline{Byte.toInt()}).
+\paragraph{Notes.}  Unlike for many languages, there is no representation associated with a byte. For example, to extract an integer value from a byte, it must be explicitly decoded according to some representation (e.g. two's compliment) using an auxillary function (e.g. \lstinline{Byte.toInt()}).
 
 
 % =======================================================================
@@ -216,6 +212,7 @@ some representation (e.g. two's compliment) using an auxillary function (e.g. \l
 % =======================================================================
 
 \subsection{Integers}
+\label{c_types_int}
 
 The type \lstinline{int} represents the set of arbitrary-sized integers, whose values are expressed as a sequence of one or more numerical or hexadecimal digits (e.g. \lstinline{123456}, \lstinline{0xffaf}, etc).  Variables of \lstinline{int} type support equality (\lstinline{==}), inequality (\lstinline{!=}), comparators (\lstinline{<},\lstinline{<=},\lstinline{>=},\lstinline{>}), addition (\lstinline{+}), subtraction (\lstinline{-}), multiplication (\lstinline{*}), division (\lstinline{/}), remainder (\lstinline{%}) and negation (\lstinline{-}) operations.
 
@@ -249,6 +246,7 @@ In other words, the of values defined by the type \lstinline{int} is exactly the
 % =======================================================================
 
 \subsection{Rationals}
+\label{c_types_real}
 
 The type \lstinline{real} represents the set of arbitrary-sized rationals, whose values are expressed as a sequence of one or more numerical digits separated by a period (e.g. \lstinline{1.0}, \lstinline{0.223}, \lstinline{12.55}, etc).  Variables of \lstinline{real} type support equality (\lstinline{==}), inequality (\lstinline{!=}), comparators (\lstinline{<},\lstinline{<=},\lstinline{>=},\lstinline{>}), addition (\lstinline{+}), subtraction (\lstinline{-}), multiplication (\lstinline{*}), division (\lstinline{/}), remainder (\lstinline{%}) and negation (\lstinline{-}) operations.  Variables of type \lstinline{real} also support the {\em rational destructuring assignment} to extract the numerator and denominator (illustrated below).
 
@@ -282,6 +280,7 @@ In other words, the of values defined by the type \lstinline{real} is the (infin
 % =======================================================================
 
 \subsection{Characters}
+\label{c_types_char}
 
 The type \lstinline{char} represents the set of unicode characters, whose values are expressed as an arbitrary character between quotes (e.g. \lstinline{'c'}, \lstinline{'0'}, \lstinline{'%'}, etc).  Variables of \lstinline{char} type support equality (\lstinline{==}), inequality (\lstinline{!=}), comparators (\lstinline{<},\lstinline{<=},\lstinline{>=},\lstinline{>}), addition (\lstinline{+}), subtraction (\lstinline{-}), multiplication (\lstinline{*}), division (\lstinline{/}), remainder (\lstinline{%}) and negation (\lstinline{-}) operations.
 
@@ -310,6 +309,7 @@ In other words, the of values defined by the type \lstinline{char} is exactly th
 % =======================================================================
 
 \subsection{Any}
+\label{c_types_any}
 
 The type \lstinline{any} represents the type whose variables may hold any possible value.  Thus, \lstinline{any} is the {\em top type} (i.e. $\top$) in the lattice of types and, hence, is the supertype of all other types.  Variables of \lstinline{any} type support only equality (\lstinline{==}) and inequality comparisons (\lstinline{!=}) as well as {\em runtime type tests}.  Finally, unlike the majority of other types, there are no {\em values} of type \lstinline{any}.
 
@@ -346,6 +346,7 @@ In other words, the set of values defined by the \lstinline{any} type equals the
 % =======================================================================
 
 \subsection{Void}
+\label{c_types_void}
 
 The \lstinline{void} type represents the type whose variables cannot exist (i.e. because they cannot hold any possible value).  Thus, \lstinline{void} is the {\em bottom type} (i.e. $\bot$) in the lattice of types and, hence, is the {\em subtype} of all other types.  Void is used to represent the return type of a method which does not return anything.  Furthermore, it is also used to represent the element type of an empty list of set.  Finally, unlike the majority of other types, there are no {\em values} of type \lstinline{void}.
 
@@ -387,6 +388,7 @@ equals the empty set.
 % =======================================================================
 
 \section{Tuples}
+\label{c_types_tuple}
 
 A tuple type describes a compound type made up of two or more elements in sequence, whose values are expressed as sequences of values separated by a comma (e.g. \lstinline{1,2}, \lstinline{2.0,3.32,3.45}, etc).  Tuples are similar to records, except that fields are effectively anonymous.  Variables of tuple type support equality (\lstinline{==}) and inequality (\lstinline{!=}) operations, as well the {\em tuple destructuring assignment} to extract elements (illustrated below).
 
@@ -420,6 +422,7 @@ equals the empty set.
 % =======================================================================
 
 \section{Records}
+\label{c_types_record}
 
 A record is made up of a number of fields, each of which has a unique name. Each field has a corresponding type. One can think of a record as a special kind of "fixed" map (i.e. where we know exactly which entries we have).
 
@@ -458,6 +461,7 @@ Represents a reference to an object in Whiley.
 % =======================================================================
 
 \section{Nominals}
+\label{c_types_nominal}
 
 The existential type represents the an unknown type, defined at a given position.
 
@@ -476,12 +480,14 @@ The existential type represents the an unknown type, defined at a given position
 % =======================================================================
 
 \section{Collections}
+\label{c_types_collection}
 
 % =======================================================================
 % Set
 % =======================================================================
 
 \subsection{Sets}
+\label{c_types_set}
 
 A set type describes set values whose elements are subtypes of the element type. For example, \lstinline|{1,2,3}| is an instance of set type \lstinline|{int}|; however, \lstinline|{1.345}| is not.
 
@@ -500,6 +506,7 @@ A set type describes set values whose elements are subtypes of the element type.
 % =======================================================================
 
 \subsection{Maps}
+\label{c_types_map}
 
 A map represents a one-many mapping from variables of one type to variables of another type. For example, the map type \lstinline|{int=>real}| represents a map from integers to real values. A valid instance of this type might be \lstinline|{1=>1.2,2=>3.0}|.
 
@@ -518,6 +525,7 @@ A map represents a one-many mapping from variables of one type to variables of a
 % =======================================================================
 
 \subsection{Lists}
+\label{c_types_list}
 
 A list type describes list values whose elements are subtypes of the element type. For example, \lstinline{[1,2,3]} is an instance of list type \lstinline{[int]}; however, \lstinline{[1.345]} is not.
 
