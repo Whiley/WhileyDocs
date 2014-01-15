@@ -2,11 +2,32 @@
 \section{Overview}
 Discuss syntactic versus semantic types, as well as the set of all values.  Probably discuss the different kinds of values which are possible, and the fact that every value has a single {\em concrete} type associate with it.  Also, need to consider constrained types as well as type patterns.
 
+\subsection{Semantics}
+\subsection{Values}
 \begin{syntax}
-  \verb+Type+ & $::=$ & \\
-  & $|$ & \verb+TermType+ \\
-  & $|$ & \verb+UnionType+ \\
-  & $|$ & \verb+IntersectionType+ \\
+  \verb+Value+ & $::=$ & \\
+  & $|$ & \verb+NullValue+ \\
+  & $|$ & \verb+BoolValue+ \\
+  & $|$ & \verb+ByteValue+ \\
+  & $|$ & \verb+IntValue+ \\
+  & $|$ & \verb+RealValue+ \\
+  & $|$ & \verb+CharValue+ \\
+\end{syntax}
+
+\subsection{Constructors}
+
+\begin{syntax}
+  \verb+Constructor+ & $::=$ & \\
+  & $|$ & \verb+TupleConstructor+ \\
+  & $|$ & \verb+RecordConstructor+ \\
+  & $|$ & \verb+SetConstructor+ \\
+  & $|$ & \verb+MapConstructor+ \\
+  & $|$ & \verb+ListConstructor+ \\
+\end{syntax}
+
+\subsection{Types}
+\begin{syntax}
+  \verb+Type+ & $::=$ & \verb+UnionType+ \\
 \end{syntax}
 
 \begin{syntax}
@@ -22,6 +43,7 @@ Discuss syntactic versus semantic types, as well as the set of all values.  Prob
   & $|$ & \verb+MethodType+ \\
 \end{syntax}
 
+\subsection{Patterns}
 
 \section{Primitives}
 
@@ -70,7 +92,7 @@ This defines \lstinline{Tree} --- a {\em recursive type} --- which is either emp
 \paragraph{Semantics.}  The set of values defined by the type \lstinline{null} is given as follows:
 \begin{displaymath}
 \begin{array}{rcl}
-\llbracket{\tt null}\rrbracket & = & \{{\tt null}\}\\
+{\tt \llbracket null\rrbracket} & = & {\tt\{null\}}\\
 \end{array}
 \end{displaymath}
 In other words, the set of values defined by the \lstinline{null} type is the singleton set containing exactly the \lstinline{null} value.
@@ -109,7 +131,7 @@ This function determines whether or not a given integer value is contained withi
 \paragraph{Semantics.}  The set of values defined by the type \lstinline{bool} is given as follows:
 \begin{displaymath}
 \begin{array}{rcl}
-\llbracket{\tt bool}\rrbracket & = & \{{\tt true},{\tt false}\}\\
+{\tt\llbracket bool\rrbracket} & = & {\tt\{ true, false\}}\\
 \end{array}
 \end{displaymath}
 In other words, the set of values defined by the \lstinline{bool} type is the set containing exactly the values \lstinline{true} and \lstinline{false}.
@@ -149,7 +171,7 @@ This illustrates the conversion from a \lstinline{byte} into a \lstinline{string
 \paragraph{Semantics.}  The set of values defined by the type \lstinline{byte} is given as follows:
 \begin{displaymath}
 \begin{array}{rcl}
-\llbracket{\tt byte}\rrbracket & = & \{???\}\\
+{\tt\llbracket byte\rrbracket} & = & {\tt\{???\}}\\
 \end{array}
 \end{displaymath}
 In other words, the set of values defined by the \lstinline{byte} type is the set of all 256 possible combinations of eight-bit sequences.
@@ -190,7 +212,7 @@ This illustrates the well-known recursive method for computing numbers in the {\
 \paragraph{Semantics.}  The set of values defined by the type \lstinline{int} is given as follows:
 \begin{displaymath}
 \begin{array}{rcl}
-\llbracket{\tt int}\rrbracket & = & \mathbb{Z}\\
+{\tt\llbracket int\rrbracket} & = & {\tt\mathbb{Z}}\\
 \end{array}
 \end{displaymath}
 In other words, the of values defined by the type \lstinline{int} is exactly the (infinite) set of integers.
@@ -226,10 +248,10 @@ This illustrates the well-known function for computing the {\em floor} of a \lst
 \paragraph{Semantics.}  The set of values defined by the type \lstinline{real} is given as follows:
 \begin{displaymath}
 \begin{array}{rcl}
-\llbracket{\tt real}\rrbracket & = & \mathbb{Z}\times\mathbb{Z}\\
+{\tt \llbracket real\rrbracket} & = & {\tt\{ v_n / v_d \;|\;v_n\in\mathbb{Z},v_d\in\mathbb{Z}\}}\\
 \end{array}
 \end{displaymath}
-In other words, the of values defined by the type \lstinline{real} is the (infinite) set of all integer pairs, where the first element represents the numerator, and the second represents the denominator.
+In other words, the of values defined by the type \lstinline{real} is the (infinite) set of all integer pairs, where the first element is designated the numerator, and the second designated the denominator.
 
 % =======================================================================
 % Char
@@ -256,7 +278,7 @@ This illustrates a very simple function for determining whether an ASCII charact
 \paragraph{Semantics.}  The set of values defined by the type \lstinline{int} is given as follows:
 \begin{displaymath}
 \begin{array}{rcl}
-\llbracket{\tt char}\rrbracket & = & \mathbb{Z}\\
+{\tt\llbracket char\rrbracket} & = & {\tt\mathbb{Z}}\\
 \end{array}
 \end{displaymath}
 In other words, the of values defined by the type \lstinline{char} is exactly the (infinite) set of integers.
@@ -290,7 +312,7 @@ Here, the function \lstinline{toInt} accepts {\em any valid Whiley value}, which
 \paragraph{Semantics.}  The set of values defined by the type \lstinline{any} is given as follows:
 \begin{displaymath}
 \begin{array}{rcl}
-\llbracket{\tt any}\rrbracket & = & \mathcal{D}\\
+{\tt\llbracket any\rrbracket} & = & \mathcal{D}\\
 \end{array}
 \end{displaymath}
 In other words, the set of values defined by the \lstinline{any} type equals the {\em domain} (i.e. the set of all values).
@@ -332,7 +354,7 @@ accessible via this reference is compared against the
 \lstinline{void} is given as follows:
 \begin{displaymath}
 \begin{array}{rcl}
-\llbracket{\tt void}\rrbracket & = & \emptyset\\
+{\tt\llbracket void\rrbracket} & = & \emptyset\\
 \end{array}
 \end{displaymath}
 In other words, the set of values defined by the \lstinline{void} type
@@ -538,7 +560,7 @@ A union type represents a type whose variables may hold values from any of its "
 
 \begin{syntax}
   \verb+UnionType+ & $::=$ & \verb+IntersectionType+\ \big(\ \token{|}\ \verb+IntersectionType+\
-  \big)$^+$\\
+  \big)$^*$\\
 \end{syntax}
 
 \paragraph{Examples.}
@@ -555,7 +577,7 @@ A union type represents a type whose variables may hold values from any of its "
 
 \begin{syntax}
   \verb+IntersectionType+ & $::=$ & \verb+TermType+\ \big(\ \token{\&}\ \verb+TermType+\
-  \big)$^+$\\
+  \big)$^*$\\
 \end{syntax}
 
 \paragraph{Description.}
@@ -573,7 +595,7 @@ A union type represents a type whose variables may hold values from any of its "
 \section{Negations}
 
 \begin{syntax}
-  NegationType & $::=$ & \token{!}\ \ \verb+Type+\\
+  NegationType & $::=$ & \token{!}\ \ \verb+TermType+\\
 \end{syntax}
 
 \paragraph{Description.}  A negation type represents a type which
