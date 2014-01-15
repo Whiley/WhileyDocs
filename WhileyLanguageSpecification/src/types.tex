@@ -2,20 +2,21 @@
 The Whiley programming language is {\em statically typed}, meaning that every expression has a type determined at compile time, such that any evaluation of that expression yields a value of that type.  Whiley's {\em type system} governs how the type of any variable or expression is determined.  Whiley's type system is unusual in that it incorporates {\em union}, {\em intersection} and {\em negation types}, as well as employing {\em flow typing} and {\em structural typing}.
 
 \section{Overview}
-
+\label{c_types_type_overview}
 
 Types in Whiley are unusual (in part) because there is a large gap between their {\em syntactic} description and their underlying {\em semantic} meaning.  In most programming languages (e.g. Java), this gap is either small or non-existent and, hence, there is little to worry about.  However, in Whiley, we must tread carefully to avoid confusion.  The following example attempts to illustrate this gap between the syntax and semantics of types:
 \begin{lstlisting}
 int|null id(null|int x):
     return x
 \end{lstlisting}
-In this function we see two distinct \gls{type_descriptor}s expressed in the program text, namely ``\lstinline{int|null}'' and ``\lstinline{null|int}''.  Type descriptors occur at the source-level and describe \gls{type}s which occur at the abstract (or underlying) level.  In this particular case, we have two distinct type descriptors which describe the {\em same} underlying type --- or, from the perspective of Whiley, they are considered identical.  We will often refer to types as providing the semantics (i.e. meaning) of type descriptors.  
+In this function we see two distinct \gls{type_descriptor}s expressed in the program text, namely ``\lstinline{int|null}'' and ``\lstinline{null|int}''.  Type descriptors occur at the source-level and describe \gls{type}s which occur at the abstract (or underlying) level.  In this particular case, we have two distinct type descriptors which describe the {\em same} underlying type.  We will often refer to types as providing the semantic (i.e. meaning) of type descriptors.  
 
 \subsection{Type Semantics}
+\label{c_types_type_semantics}
 
 Although types are abstract entities we can (for the most part) imagine them as describing sets of {\em abstract values}.  For example, \lstinline{int|null} denotes the set of values containing exactly the (infinite) set of integers and \lstinline{null} (i.e. ${\tt\mathbb{Z}\cup\{null\}}$).  This is often referred to as set-theoretic interpretation of types~\cite{AW93,Damm94,CF05,FCB08}.  Under this interpretation, for example, one type {\em subtypes} another if the set of values it denotes is a {\em subset} of the other.  
 
-We specify the meaning of types by formalising a set theoretic interpretation of them over the language of values given in Figure~\ref{c_types_abstract_values}.  To avoid confusion, care is taken in the figure to ensure that abstract values are represented canonically.  For example, ``${\tt 2\;/\;4}$'' is not a valid abstract value; rather ``${\tt 1\;/\;2}$'' is its canonical representation. Likewise, ``${\tt\{2,1\}}$'' is not a valid abstract value, with ``${\tt\{1,2\}}$'' being its canonical representation.   Figure~\ref{c_types_abstract_values} separates abstract values into distinct categories (e.g. integers, rationals, tuples, etc).  These distinctions are significant.  For example, ``${\tt 0}$'' is distinct from ``${0\;/\;0}$''.  Similarly, byte values are not expressed in the digits ${\tt 0}$ and ${\tt 1}$ (as might be expected), but in terms of the characters ${\tt t}$ and ${\tt f}$.  This ensures binary values are distinct from integer values.
+We specify the meaning of types by formalising a set theoretic interpretation of them over the language of values given in Figure~\ref{c_types_abstract_values}.  To minimise confusion, care is taken in the figure to ensure that abstract values are represented canonically.  For example, ``${\tt 2\;/\;4}$'' is not a valid abstract value since ``${\tt 1\;/\;2}$'' is its canonical representation. Likewise, ``${\tt\{2,1\}}$'' is not a valid abstract value, with ``${\tt\{1,2\}}$'' being its canonical representation.   Figure~\ref{c_types_abstract_values} separates abstract values into distinct categories (e.g. integers, rationals, tuples, etc).  These distinctions are significant.  For example, ``${\tt 0}$'' is distinct \hl{How zero represented?}{from} ``${0\;/\;0}$''.  Similarly, byte values are not expressed using the digits ${\tt 0}$ and ${\tt 1}$ (as might be expected), but in terms of the characters ${\tt t}$ and ${\tt f}$.  This ensures binary values are distinct from integer values.
 
 Finally, an evaluation function ${\tt\llbracket T\rrbracket}$ is defined which returns the set of values associated with a type ${\tt T}$.  For example, ${\tt\llbracket bool\rrbracket=\{true,false\}}$, ${\tt\llbracket int\rrbracket=\mathbb{Z}}$, etc.  In the remainder of this chapter, the body of this function will be give for each type as it is encountered.
 
@@ -44,6 +45,8 @@ Finally, an evaluation function ${\tt\llbracket T\rrbracket}$ is defined which r
 \end{figure}
 
 \subsection{Type Descriptors}
+\label{c_types_type_descriptors}
+As discussed above, type descriptors provide syntax for describing types and, in the remaining sections of this chapter, we explore the range of types supported in Whiley.  The top-level grammar for type descriptors is:
 
 \begin{syntax}
   \verb+Type+ & $::=$ & \verb+UnionType+ \\
@@ -63,13 +66,24 @@ Finally, an evaluation function ${\tt\llbracket T\rrbracket}$ is defined which r
 \end{syntax}
 
 \subsection{Type Patterns}
+\label{c_types_type_patterns}
 
+In Whiley, \gls{type_pattern}s are used to associate variables with types and their subcomponents.  For example, they can be used to declare variables and/or {\em destructuring} types into variables.  Type patterns are a source-level entity which are similar to type descriptors.  The top-level grammar for type patterns is:
 
-\subsection{Values}
+\begin{syntax}
+  \verb+TypePattern+ & $::=$ & \verb+Type+ \big[\ \verb+Ident+\ \big]\\
+              & $|$ & \verb+TuplePattern+ \\
+              & $|$ & \verb+RecordPattern+ \\
+\end{syntax}
 
-A value in Whiley may be stored in a variable of some kind (e.g. local variable, parameter, heap location, etc) and is the result of evaluating an expression.  Every value is associated with a unique (i.e. most precise) {\em concrete type}.  For example, the value ${\tt 1}$ is associated with the type \lstinline{int}, whilst the value ${\tt [1,2.2]}$ is \hl{Is abstract?}{associated} with the type \lstinline{[int|real]}.\\
+Type patterns do not exist for all compound structures --- only those where a value is guaranteed to exist which could be associated with a variable.
 
-Values are generated by evaluating {\em expressions} given in the program source.  Primitive and compound values are generated by evaluating {\em constructor expressions} given in the program source, as described by the following grammar:
+\subsection{Value Constructors}
+\label{c_types_value_constructors}
+
+A {\em value} in Whiley may be stored in a variable of some kind (e.g. local variable, parameter, heap location, etc) and is the result of evaluating an expression.  Every value is associated with a unique (i.e. most precise) {\em concrete type}.  For example, the value ${\tt 1}$ is associated with the type \lstinline{int}, whilst the value ${\tt [1,2.2]}$ is \hl{Is abstract?}{associated} with the type \lstinline{[int|real]}.\\
+
+Values are generated by evaluating {\em expressions} given in the program source.  Values can be generated indirectly by performing operations on existing values, or directly by evaluating {\em constructor expressions}, whose top-level grammar is given below:
 
 \begin{syntax}
   \verb+ConstructorExpr+ & $::=$ & \\
@@ -86,10 +100,6 @@ Values are generated by evaluating {\em expressions} given in the program source
   & $|$ & \verb+ListExpr+ \\
   & $|$ & \verb+NewExpr+ \\
 \end{syntax}
-
-The grammar describing the individual constant and constructor expressions are given in the remaining sections of this chapter.
-
-\newpage
 
 \section{Primitives}
 
@@ -202,7 +212,7 @@ Byte values do not need to contain exactly eight digits and, when fewer digits a
 \begin{lstlisting}
 // convert a byte into a string
 function toString(byte b) => string:
-    r = "b"
+    string r = "b"
     for i in 0..8:
         if (b & 00000001b) == 00000001b:
             r = "1" ++ r
@@ -216,7 +226,7 @@ This illustrates the conversion from a \lstinline{byte} into a \lstinline{string
 \paragraph{Semantics.}  The set of values defined by the type \lstinline{byte} is given as follows:
 \begin{displaymath}
 \begin{array}{rcl}
-{\tt\llbracket byte\rrbracket} & = & {\tt\{???\}}\\
+{\tt\llbracket byte\rrbracket} & = & {\tt\{\;b\;|\;b\in\{t,f\}^8\;\}}\\
 \end{array}
 \end{displaymath}
 In other words, the set of values defined by the \lstinline{byte} type is the set of all 256 possible combinations of eight-bit sequences.
@@ -418,7 +428,7 @@ A tuple type describes a compound type made up of two or more elements in sequen
   \verb+Type+\ \big)$^+$\ \token{)}\\
   &&\\
   \verb+TuplePattern+ & $::=$ & \token{(}\ \verb+TypePattern+\ \big(\ \token{,}\
-  \verb+TypePattern+\ \big)$^+$\ \token{)}\ \verb+Ident+\\
+  \verb+TypePattern+\ \big)$^+$\ \token{)}\ \big[\ \verb+Ident+\ \big]\\
   &&\\
   \verb+TupleExpr+ & $::=$ & \verb+Expr+\ \big(\ \token{,}\
   \verb+Expr+\ \big)$^+$\\
