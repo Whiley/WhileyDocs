@@ -5,7 +5,21 @@ This chapter specifies the lexical structure of the Whiley programming language.
 \section{Indentation}
 \section{Blocks}
 \section{Whitespace}
+\section{Comments}
+There are two kinds of comments in Whiley: \gls{line_comment}s and \gls{block_comment}s.
+
 \section{Identifiers}
+An identifier is a sequence of one or more {\em letters} or {\em digits} which starts with a letter.
+\begin{syntax}
+\verb+Ident+ & $::=$ & \verb+Letter+\ \big(\ \verb+Letter+\ $|$\ \verb+Digit+\ \big)*\\
+&&\\
+\verb+Letter+ & $::=$ & \token{\_} $|$ \token{a} $|$ \ldots $|$ \token{z} $|$ \token{A} $|$ \ldots $|$ \token{Z}\\
+&&\\
+\verb+Digit+ & $::=$ & \token{0} $|$ \token{1} $|$ \token{2} $|$ \token{3} $|$ \token{4} $|$ \token{5} $|$ \token{6} $|$ \token{7} $|$ \token{8} $|$ \token{9}\\
+\end{syntax}
+
+Letters include lowercase and uppercase alphabetic characters (\lstinline+a-z+, \lstinline+A-Z+) and the underscore (\lstinline+_+).
+
 \section{Keywords}
 The following strings are reserved for use as {\em keywords} and may not be used as identifiers:
 
