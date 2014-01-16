@@ -2,14 +2,14 @@
 
 This chapter specifies the lexical structure of the Whiley programming language.  Programs in Whiley are organised into one or more \gls{source_file}s written in Unicode.  The Whiley language uses \gls{indentation_syntax} to delimit blocks and statements, rather than curly-braces (or similar) as found in many other languages.  
 
-\section{Indentation}
-\section{Blocks}
-\section{LineTerminators}
+\section{Line Terminators}
 A Whiley compiler splits the sequence of (Unicode) input characters into lines by identifying {\em line terminators}:
 
 \begin{syntax}
-\verb+LineTerminator+ & $::=$ & \token{\textbackslash n} $|$ \token{\textbackslash r} $|$ \token{\textbackslash r}\token{\textbackslash n}\\
+\verb+LineTerminator+ & $::=$ & \token{\textbackslash n} $|$ \token{\textbackslash r} $|$ \token{\textbackslash r}\ \token{\textbackslash n}\\
 \end{syntax}
+
+Here, \token{\textbackslash n} represents the ASCII character \verb+LF+ (\verb+0xA+), whilst \token{\textbackslash r} represents the ASCII character \verb+CR+ (\verb+0xD+).  The two characters \token{\textbackslash r} \token{\textbackslash n} taken together form one line terminator.
 
 \section{Whitespace}
 \section{Comments}
@@ -22,6 +22,10 @@ The above illustrates a block comment, which is all of the text between \lstinli
 // This is a line comment
 \end{lstlisting}
 The above illustrates a line comment, which is all of the text from \lstinline{//} up to the end-of-line.
+
+
+\section{Indentation}
+\section{Blocks}
 
 \section{Identifiers}
 An identifier is a sequence of one or more {\em letters} or {\em digits} which starts with a letter.
