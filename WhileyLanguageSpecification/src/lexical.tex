@@ -4,9 +4,24 @@ This chapter specifies the lexical structure of the Whiley programming language.
 
 \section{Indentation}
 \section{Blocks}
+\section{LineTerminators}
+A Whiley compiler splits the sequence of (Unicode) input characters into lines by identifying {\em line terminators}:
+
+\begin{syntax}
+\verb+LineTerminator+ & $::=$ & \token{\textbackslash n} $|$ \token{\textbackslash r} $|$ \token{\textbackslash r}\token{\textbackslash n}\\
+\end{syntax}
+
 \section{Whitespace}
 \section{Comments}
-There are two kinds of comments in Whiley: \gls{line_comment}s and \gls{block_comment}s.
+There are two kinds of comments in Whiley: \gls{line_comment}s and \gls{block_comment}s:
+\begin{lstlisting}
+/* This is a block comment */
+\end{lstlisting}
+The above illustrates a block comment, which is all of the text between \lstinline{/*} and \lstinline{*/} inclusive.
+\begin{lstlisting}
+// This is a line comment
+\end{lstlisting}
+The above illustrates a line comment, which is all of the text from \lstinline{//} up to the end-of-line.
 
 \section{Identifiers}
 An identifier is a sequence of one or more {\em letters} or {\em digits} which starts with a letter.
