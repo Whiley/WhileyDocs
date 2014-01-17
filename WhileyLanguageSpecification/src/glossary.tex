@@ -89,6 +89,12 @@
   description={A lexical organisation of \gls{source_file}s where indentation is significant and is used to group statements and blocks}
 }
 
+\newglossaryentry{intersection_type}{
+  name={intersection type},
+  description={A \gls{type} formed by combining two or more types
+    together (e.g. \lstinline{[int]\&[any]}), such that it includes any value contained in both}
+}
+
 % ===============================================
 % J
 % ===============================================
@@ -133,6 +139,13 @@
   name={name resolution},
   description={The process of determining the fully qualified name of an identifier within a \gls{source_file}.  Names are first resolved within the same source file, and then by searching the list of imported entities in reverse order}
 }
+
+\newglossaryentry{negation_type}{
+  name={negation type},
+  description={A \gls{type} formed from another (e.g. \lstinline{!int}), such that it includes
+    any value not contained in the other}
+}
+
 
 % ===============================================
 % O
@@ -209,16 +222,20 @@
   description={A source-level declaration which associates a name with a \gls{type_descriptor}.  The full name of the declared entity is determined from the package and name of the enclosing \gls{source_file}.}
 }
 
-
 \newglossaryentry{type_pattern}{
   name={type pattern},
   description={A source-level description of an underlying \gls{type} (similar to a \gls{type_descriptor}) where one or more variables are associated with its subcomponent(s).}
 }
 
-
 % ===============================================
 % U
 % ===============================================
+
+\newglossaryentry{union_type}{
+  name={union type},
+  description={A \gls{type} formed by combining two or more types
+    together (e.g. \lstinline{int|null}), such that it includes any value contained in either}
+}
 
 % ===============================================
 % V

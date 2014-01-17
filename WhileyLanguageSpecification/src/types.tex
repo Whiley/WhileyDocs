@@ -1,5 +1,5 @@
 \chapter{Types}
-The Whiley programming language is {\em statically typed}, meaning that every expression has a type determined at compile time, such that any evaluation of that expression yields a value of that type.  Whiley's {\em type system} governs how the type of any variable or expression is determined.  Whiley's type system is unusual in that it incorporates {\em union}, {\em intersection} and {\em negation types}, as well as employing {\em flow typing} and {\em structural typing}.
+The Whiley programming language is {\em statically typed}, meaning that every expression has a type determined at compile time.  Furthermore, evaluating an expression is guaranteed to yield a value of its type.  Whiley's {\em type system} governs how the type of any variable or expression is determined.  Whiley's type system is unusual in that it incorporates \gls{union_type}s~(\S\ref{c_types_unions}), \gls{intersection_type}s~(\S\ref{c_types_intersections}) and \gls{negation_type}s~(\S\ref{c_types_negations}), as well as employing {\em flow typing} and {\em structural typing}.
 
 \section{Overview}
 \label{c_types_type_overview}
@@ -582,6 +582,7 @@ A list type describes list values whose elements are subtypes of the element typ
 % =======================================================================
 
 \section{Unions}
+\label{c_types_unions}
 
 A union type represents a type whose variables may hold values from any of its "bounds". For example, the union type \lstinline{null|int} indicates a variable can either hold an integer value, or \lstinline{null}. 
 
@@ -601,6 +602,7 @@ A union type represents a type whose variables may hold values from any of its "
 % =======================================================================
 
 \section{Intersections}
+\label{c_types_intersections}
 
 \begin{syntax}
   \verb+IntersectionType+ & $::=$ & \verb+TermType+\ \big(\ \token{\&}\ \verb+TermType+\
@@ -620,6 +622,7 @@ A union type represents a type whose variables may hold values from any of its "
 % =======================================================================
 
 \section{Negations}
+\label{c_types_negations}
 
 \begin{syntax}
   NegationType & $::=$ & \token{!}\ \ \verb+TermType+\\
