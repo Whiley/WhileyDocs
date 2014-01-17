@@ -11,7 +11,15 @@ A Whiley compiler splits the sequence of (Unicode) input characters into lines b
 
 Here, \token{\textbackslash n} represents the ASCII character \verb+LF+ (\verb+0xA+), whilst \token{\textbackslash r} represents the ASCII character \verb+CR+ (\verb+0xD+).  The two characters \token{\textbackslash r} \token{\textbackslash n} taken together form one line terminator.
 
-\section{Whitespace}
+\section{Indentation}
+After splitting the input characters into lines, a Whiley compiler then identifies the {\em indentation} of each line.  This is necessary because Whiley employs \gls{indentation_syntax} meaning that indentation is significant in the meaning of Whiley programs.  
+
+\begin{syntax}
+\verb+Indentation+ & $::=$ & \^\ \big( \token{\textbackslash t} $|$ \token{ }\ \big)$^*$\\
+\end{syntax}
+
+Here, \^\ demarcates the start of a line and, hence, indentation may only occur at the beginning of a line.  Indentation may be compared using the $\le$ comparator, such that $i\le ir$ always holds (where $i$ is some indentation and $r$ is either empty or represents additional indentation).  In other words, some indentation $i$ is considered less-than-or-equal to another piece of indentation $ir$ which includes the first as a prefix.  This comparator is important for delimiting \gls{statement_block}s (\S\ref{c_stmts_blocks}).
+
 \section{Comments}
 There are two kinds of comments in Whiley: \gls{line_comment}s and \gls{block_comment}s:
 \begin{lstlisting}
@@ -22,10 +30,6 @@ The above illustrates a block comment, which is all of the text between \lstinli
 // This is a line comment
 \end{lstlisting}
 The above illustrates a line comment, which is all of the text from \lstinline{//} up to the end-of-line.
-
-
-\section{Indentation}
-\section{Blocks}
 
 \section{Identifiers}
 An identifier is a sequence of one or more {\em letters} or {\em digits} which starts with a letter.
@@ -127,10 +131,16 @@ The \lstinline{real} type (\S\ref{c_types_real}) represents the infinite set of 
 
 \subsection{Character Literals}
 
-A {\em character literal} is expressed as a single character or an escape sequence enclosed in single quotes.
+A {\em character literal} is expressed as a single character or an escape sequence enclosed in single quotes (e.g. \lstinline{'c'}).
 
 \begin{syntax}
-  \verb+CharLiteral+ & $::=$ & \token{'}\ .\ \token{'} \\
+  \verb+CharLiteral+ & $::=$ & \token{'}\ \big(\ \verb+Character+\ $|$ \verb+Escape+\ \big)\ \token{'} \\
 \end{syntax}
 
 \subsection{String Literals}
+
+A {\em string literal} is expressed as a sequence of zero or more characters or escape sequences enclosed in double quotes (e.g. \lstinline{"Hello World"}).
+
+\begin{syntax}
+  \verb+StringLiteral+ & $::=$ & \token{"}\ \big(\ \verb+Character+\ $|$ \verb+Escape+\ \big)$^*$\ \token{"} \\
+\end{syntax}
