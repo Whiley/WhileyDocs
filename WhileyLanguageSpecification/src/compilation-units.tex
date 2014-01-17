@@ -1,5 +1,5 @@
 \chapter{Source Files}
-
+\label{c_source_files}
 Whiley programs are split across one or more \gls{source_file}s which
 are compiled into \gls{wyil_file}s prior to execution.
 \Gls{source_file}s contain declarations which describe the functions,
@@ -9,10 +9,11 @@ methods, data types and constants which form the program.
 
 
 \section{Compilation Units}
-
+\label{c_source_files_compilation_units}
 Two kinds of \gls{compilation_unit} are taken into consideration when compiling a Whiley \gls{source_file}: other \gls{source_file}s; and, binary \gls{wyil_file}s.  The Whiley Intermediate Language (WyIL) file format is described elsewhere, but defines a binary representation of a Whiley source file.  When one or more Whiley source files are compiled together, a \gls{compilation_group} is formed.  External symbols encountered during compilation are first resolved from the compilation group, and then from previously \gls{wyil_file}s.
 
 \section{Packages}
+\label{c_source_files_packages}
 
 Programs in Whiley are organised into \gls{package}s to help reduce name conflicts and provide some grouping of related concepts.  A Whiley source file may provide an optional \lstinline{package} declaration to identify the package it belongs to.  This declaration must occur at the beginning of the source file.
 
@@ -23,6 +24,31 @@ Programs in Whiley are organised into \gls{package}s to help reduce name conflic
 Any source file which does not provide a \lstinline{package} declaration is considered to be in the \gls{default_package}.
 
 \section{Names}
+\label{c_source_files_names}
+There are four functional entities which can be defined within a Whiley source file: \gls{type_declaration}s (\S\ref{c_source_files_type_decl}), \gls{constant_declaration}s (\S\ref{c_source_files_constant_decl}), \gls{function_declaration}s (\S\ref{c_source_files_function_decl}) and \gls{method_declaration}s (\S\ref{c_source_files_method_decl}).  These define {\em named entities} which may be referenced from other \gls{compilation_unit}s.  Every named entity has a unique {\em fully-qualified} name constructed from the enclosing package name, the source file name and the declared name.  For example:\\
+\pagebreak
+
+\noindent \verb+Graphics.whiley+
+\begin{lstlisting}
+package tracer
+
+type Point is { int x, int y }
+
+constant Origin is { x: 0, y: 0 } 
+\end{lstlisting}
+This declares two named entities: \lstinline{tracer.Graphics.Point} and \lstinline{tracer.Graphics.Origin}.  
+
+Two named entities may {\em clash} if they have the same fully qualified name and are in the same category.  There are three entity categories: {\em types}, {\em constants} and {\em functions/methods}.  The following illustrates a common pattern:
+
+\begin{lstlisting}
+type Point is { int x, int y }
+
+function Point(int x, int y) => Point:
+    return {x: x, y: y}
+\end{lstlisting}
+
+Here, two named entities share the same fully qualified named.  This is permitted because they are in different categories.
+
 
 \section{Imports}
 
@@ -37,6 +63,7 @@ Camel case
 % =======================================================================
 
 \subsection{Type Declarations}
+\label{c_source_files_type_decl}
 
 A {\em type declaration} declares a named type within a Whiley
 \gls{source_file}.  The declaration may refer to named types in this
@@ -80,6 +107,7 @@ commonly used to describe objects in the domain.
 % =======================================================================
 
 \subsection{Constant Declarations}
+\label{c_source_files_constant_decl}
 
 A {\em constant declaration} declares a named constant within a Whiley
 \gls{source_file}.  The declaration may refer to named constants in this
@@ -121,6 +149,7 @@ above).
 % =======================================================================
 
 \subsection{Function Declarations}
+\label{c_source_files_function_decl}
 
 A {\em function declaration} defines a function within a Whiley
 \gls{source_file}.  Functions are {\em pure} and may not have
@@ -195,6 +224,7 @@ any preconditions on its parameters.
 % =======================================================================
 
 \subsection{Method Declarations}
+\label{c_source_files_method_decl}
 
 A {\em method declaration} defines a method within a Whiley
 \gls{source_file}.  Methods are {\em impure} and may have
