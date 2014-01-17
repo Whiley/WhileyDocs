@@ -12,7 +12,19 @@ methods, data types and constants which form the program.
 
 Two kinds of \gls{compilation_unit} are taken into consideration when compiling a Whiley \gls{source_file}: other \gls{source_file}s; and, binary \gls{wyil_file}s.  The Whiley Intermediate Language (WyIL) file format is described elsewhere, but defines a binary representation of a Whiley source file.  When one or more Whiley source files are compiled together, a \gls{compilation_group} is formed.  External symbols encountered during compilation are first resolved from the compilation group, and then from previously \gls{wyil_file}s.
 
-\section{Packages \& Imports}
+\section{Packages}
+
+Programs in Whiley are organised into \gls{package}s to help reduce name conflicts and provide some grouping of related concepts.  A Whiley source file may provide an optional \lstinline{package} declaration to identify the package it belongs to.  This declaration must occur at the beginning of the source file.
+
+\begin{syntax}
+\verb+PackageDecl+ & $::=$ & \token{package}\ \verb+Ident+\ \big(\ \token{.}\ \verb+Ident+\ \big)$^*$\\
+\end{syntax}
+
+Any source file which does not provide a \lstinline{package} declaration is considered to be in the \gls{default_package}.
+
+\section{Names}
+
+\section{Imports}
 
 \section{Declarations}
 
