@@ -52,6 +52,18 @@ Here, two named entities share the same fully qualified named.  This is permitte
 
 \section{Imports}
 
+When performing \gls{name_resolution}, a Whiley compiler first attempts to resolve names within the same source file.  For any remaining unresolved, the compiler examines imported entities in reverse declaration order.  Entities are imported using an \lstinline{import} declaration:
+
+\begin{syntax}
+\verb+ImportDecl+ & $::=$ & \token{import} \Big[\ \verb+FromSpec+\ \Big]\ \verb+Ident+\ \Big(\ \big(\ \token{.} $|$ \token{..}\ \big)\ \big(\ \verb+Ident+\ $|$ \token{*}\big)\ \Big)$^*$\\
+&&\\
+\verb+FromSpec+ & $::=$ & \big(\ \verb+Ident+ $|$ \token{*} \big) \token{from}\\
+\end{syntax}
+
+A declaration of the form ``\lstinline{import some.pkg.File}'' imports the \gls{compilation_unit} ``\lstinline{File}'' residing in package ``\lstinline{some.pkg}''.  Named entities (e.g. ``\lstinline{Entity}'') within that compilation unit can then be referenced using a {\em partially qualified} name which omits the package component (e.g. ``\lstinline{File.Entity}'').  A declaration of the form ``\lstinline{import Entity from some.pkg.File}'' imports the named entity ``\lstinline{Entity}'' from the \gls{compilation_unit} ``\lstinline{File}'' residing in package ``\lstinline{some.pkg}''.  Note, this does {\em not} import the compilation unit ``\lstinline{some.pkg.File}'' (and, hence, does not subsume the statement ``\lstinline{import some.pkg.File}'').
+
+A {\em wildcard} may be used in place of the compilation unit name (e.g. ``\lstinline{import some.pkg.*}'') to import {\em all} compilation units within the given package.  A {\em package match} may be used in place of some of all of the package component (e.g. ``\lstinline{import some..File}'') to import all compilation units same name and matching package {\em prefix} and/or {\em suffix}.  A {\em wildcard} may be used in place of the entity name (e.g. ``\lstinline{import * from some.pkg.File}'') to import {\em all} named entities within the given compilation unit.  
+
 \section{Declarations}
 
 Camel case
