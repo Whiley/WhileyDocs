@@ -24,7 +24,8 @@
 % ======================================================
 %\newcommand{\token}[1]{\;\texttt{"#1"}\;}
 \definecolor{lightgray}{RGB}{215,215,215}
-\newcommand{\token}[1]{\fcolorbox{black}{white}{\strut\texttt{#1}}}
+\definecolor{verylightgray}{RGB}{240,240,240}
+\newcommand{\token}[1]{\fcolorbox{black}{lightgray}{\strut\texttt{#1}}}
 
 % --- tokens ---
 
@@ -58,7 +59,7 @@
 %       \centering
 % }{\end{minipage}\end{center}}
 \newenvironment{syntax}{
-  \def\FrameCommand{\fboxsep=\FrameSep \fcolorbox {black}{lightgray}}
+  \def\FrameCommand{\fboxsep=\FrameSep \fcolorbox {black}{verylightgray}}
     \begin{framed}
       \noindent\begin{minipage}{0.9\textwidth}
         \begin{tabular}{rcl}
