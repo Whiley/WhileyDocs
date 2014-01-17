@@ -6,6 +6,7 @@
 % =======================================================================
 
 \section{Tuple Expressions}
+\label{c_expr_tuple}
 
 \begin{syntax}
   \verb+TupleExpr+ & $::=$ & \verb+UnitExpr+ \big(\ \token{,}\ \verb+UnitExpr+\ \big)$^+$ \\
@@ -22,6 +23,7 @@
 % =======================================================================
 
 \section{Unit Expressions}
+\label{c_expr_unit}
 
 \begin{syntax}
   \verb+UnitExpr+ & $::=$ & \verb+LogicalExpr+\\
@@ -38,6 +40,7 @@
 % =======================================================================
 
 \section{Logical Expressions}
+\label{c_expr_logical}
 
 \begin{syntax}
   \verb+LogicalExpr+ & $::=$ & \verb+LogicalOrExpr+ \\
@@ -60,6 +63,7 @@
 % =======================================================================
 
 \section{Bitwise Expressions}
+\label{c_expr_bitwise}
 
 \begin{syntax}
   \verb+BitwiseExpr+ & $::=$ & \verb+BitwiseOrExpr+ \\
@@ -86,6 +90,7 @@
 % =======================================================================
 
 \section{Condition Expressions}
+\label{c_expr_condition}
 
 \begin{syntax}
   \verb+ConditionExpr+ & $::=$ &\\
@@ -102,6 +107,7 @@
 % =======================================================================
 
 \section{Quantifier Expressions}
+\label{c_expr_quantifier}
 
 \begin{syntax}
 \verb+QuantExpr+ & $::=$ & \big(\ \token{no} $|$ \token{some} $|$
@@ -122,6 +128,7 @@
 % =======================================================================
 
 \section{Append Expressions}
+\label{c_expr_append}
 
 \begin{syntax}
   \verb+AppendExpr+ & $::=$ & \verb+RangeExpr+\ \big(\ \token{++}\
@@ -140,6 +147,7 @@
 % =======================================================================
 
 \section{Range Expressions}
+\label{c_expr_range}
 
 \begin{syntax}
   \verb+RangeExpr+ & $::=$ & \verb+ShiftExpr+\ \big[\ \token{..}\ \verb+ShiftExpr+\ \big]\\
@@ -156,6 +164,7 @@
 % =======================================================================
 
 \section{Shift Expressions}
+\label{c_expr_shift}
 
 \begin{syntax}
   \verb+ShiftExpr+ & $::=$ & \verb+AdditiveExpr+\ \big[\ \big(\
@@ -173,6 +182,7 @@
 % =======================================================================
 
 \section{Additive/Multiplicative Expressions}
+\label{c_expr_addmul}
 
 \begin{syntax}
   \verb+AdditiveExpr+ & $::=$ &\\
@@ -190,6 +200,7 @@
 % =======================================================================
 
 \section{Access Expressions}
+\label{c_expr_access}
 
 \begin{syntax}
   \verb+AccessExpr+ & $::=$ &\\
@@ -206,6 +217,7 @@
 % =======================================================================
 
 \section{Term Expressions}
+\label{c_expr_term}
 
 \begin{syntax}
   \verb+TermExpr+ & $::=$ &\\
