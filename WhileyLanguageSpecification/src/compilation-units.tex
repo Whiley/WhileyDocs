@@ -62,9 +62,9 @@ When performing \gls{name_resolution}, a Whiley compiler first attempts to resol
 
 A declaration of the form ``\lstinline{import some.pkg.File}'' imports the \gls{compilation_unit} ``\lstinline{File}'' residing in package ``\lstinline{some.pkg}''.  Named entities (e.g. ``\lstinline{Entity}'') within that compilation unit can then be referenced using a {\em partially qualified} name which omits the package component (e.g. ``\lstinline{File.Entity}'').  A declaration of the form ``\lstinline{import Entity from some.pkg.File}'' imports the named entity ``\lstinline{Entity}'' from the \gls{compilation_unit} ``\lstinline{File}'' residing in package ``\lstinline{some.pkg}''.  Note, this does {\em not} import the compilation unit ``\lstinline{some.pkg.File}'' (and, hence, does not subsume the statement ``\lstinline{import some.pkg.File}'').
 
-A {\em wildcard} may be used in place of the compilation unit name (e.g. ``\lstinline{import some.pkg.*}'') to import {\em all} compilation units within the given package.  A {\em package match} may be used in place of some of all of the package component (e.g. ``\lstinline{import some..File}'') to import all compilation units same name and matching package {\em prefix} and/or {\em suffix}.  A {\em wildcard} may be used in place of the entity name (e.g. ``\lstinline{import * from some.pkg.File}'') to import {\em all} named entities within the given compilation unit.  
+A {\em wildcard} may be used in place of the compilation unit name (e.g. ``\lstinline{import some.pkg.*}'') to import {\em all} compilation units within the given package.  A {\em package match} may be used in place of some of all of the package component (e.g. ``\lstinline{import some..File}'') to import all compilation units with matching name and package {\em prefix} and/or {\em suffix}.  A {\em wildcard} may be used in place of the entity name (e.g. ``\lstinline{import * from some.pkg.File}'') to import {\em all} named entities within the given compilation unit.  
 
-\section{Declarations}
+\section{Named Declarations}
 
 Camel case
 
@@ -77,10 +77,7 @@ Camel case
 \subsection{Type Declarations}
 \label{c_source_files_type_decl}
 
-A {\em type declaration} declares a named type within a Whiley
-\gls{source_file}.  The declaration may refer to named types in this
-or other source filess and may also {\em recursively}
-refer to itself (either directly or indirectly).
+A {\em type declaration} declares a named type within a Whiley \gls{source_file}.  The declaration may refer to named types in this or other source files and may also {\em recursively} refer to itself (either directly or indirectly).
 
 \begin{syntax}
   \verb+TypeDecl+ & $::=$ & \token{type}\ \verb+Ident+\ \token{is}\
@@ -121,10 +118,7 @@ commonly used to describe objects in the domain.
 \subsection{Constant Declarations}
 \label{c_source_files_constant_decl}
 
-A {\em constant declaration} declares a named constant within a Whiley
-\gls{source_file}.  The declaration may refer to named constants in this
-or other source filess, although it may not refer to itself (either
-directly or indirectly).
+A {\em constant declaration} declares a named constant within a Whiley \gls{source_file}.  The declaration may refer to named constants in this or other source files, although it may not refer to itself (either directly or indirectly).
 
 \begin{syntax}
   \verb+ConstantDecl+ & $::=$ & \token{constant}\ \verb+Ident+\
@@ -136,8 +130,7 @@ and must produce a constant value.  This prohibits the use of function
 or method calls within the constant expression.  However, general
 operators (e.g. for arithmetic) are permitted.
 
-\paragraph{Examples.}  Some example to illustrate constant
-declarations are:
+\paragraph{Examples.}  Some simple examples to illustrate constant declarations are:
 
 \begin{lstlisting}
 // Define the well-known mathematical constant to 10 decimal places.
@@ -163,15 +156,7 @@ above).
 \subsection{Function Declarations}
 \label{c_source_files_function_decl}
 
-A {\em function declaration} defines a function within a Whiley
-\gls{source_file}.  Functions are {\em pure} and may not have
-side-effects.  This means they are guaranteed to always return the
-same result given the same arguments, and are permitted within
-specifications (i.e. in type invariants, \gls{loop_invariant}s, and
-function/method \gls{precondition}s or \gls{postcondition}s).
-Functions may call other functions, but may not call other methods.
-They also may not allocate memory on the heap and/or instigate
-concurrent computation.
+A {\em function declaration} defines a function within a Whiley \gls{source_file}.  Functions are {\em pure} and may not have side-effects.  This means they are guaranteed to return the same result given the same arguments, and are permitted within specifications (i.e. in type invariants, \gls{loop_invariant}s, and function/method \gls{precondition}s or \gls{postcondition}s).  Functions may call other functions, but may not call other methods.  Functions may not allocate memory on the heap and/or instigate concurrent computation.
 
 \begin{syntax}
   \verb+FunctionDecl+ & $::=$ & \token{function}\ \verb+Ident+\
@@ -181,32 +166,14 @@ concurrent computation.
   && \big)$^*$\ \token{:}\ \verb+Block+\\
 \end{syntax}
 
-The first type pattern (i.e. before "\lstinline{=>}") is referred to
-as the {\em parameter}, whilst the second is referred to as the {\em
-  return}.  There are three kinds of optional clause which follow:
+The first type pattern (i.e. before ``\lstinline{=>}'') is referred to as the {\em parameter}, whilst the second is referred to as the {\em return}.  There are three kinds of optional clause which follow:
 
 \begin{itemize}
-\item {\bf Throws clause}. This defines the exceptions which may be
-  thrown by this function. Multiple clauses may be given, and these
-  are taken together as a union. Furthermore, the convention is to
-  specify the throws clause before the others.
+\item {\bf Throws clause}. This defines the exceptions which may be thrown by this function. Multiple clauses may be given, and these are taken together as a union. Furthermore, the convention is to specify \lstinline{throws} clause(s) first.
 
-\item {\bf Requires clause(s)}. These define constraints on the
-  permissible values of the parameters on entry to the function or
-  method, and are often collectively referred to as the
-  \gls{precondition}. These expressions may refer to any variables
-  declared within the parameter type pattern. Multiple clauses may be
-  given, and these are taken together as a conjunction. Furthermore,
-  the convention is to specify the requires clause(s) before any
-  ensure(s) clauses.
+\item {\bf Requires clause(s)}. These define constraints on the permissible values of the parameters on entry to the function, and are often collectively referred to as the \gls{precondition}. These expressions may refer to any variables declared within the parameter type pattern. Multiple clauses may be given, and these are taken together as a conjunction. Furthermore, the convention is to specify the \lstinline{requires} clause(s) before any \lstinline{ensures} clause(s).
 
-\item {\bf Ensures clause(s)}. These define constraints on the
-  permissible values of the the function or method's return value, and
-  are often collectively referred to as the \gls{postcondition}. These
-  expressions may refer to any variables declared within either the
-  parameter or return type pattern.  Multiple clauses may be given,
-  and these are taken together as a conjunction. Furthermore, the
-  convention is to specify the requires clause(s) after the others.
+\item {\bf Ensures clause(s)}. These define constraints on the permissible values of the function's return value, and are often collectively referred to as the \gls{postcondition}. These expressions may refer to any variables declared within either the parameter or return type pattern.  Multiple clauses may be given, and these are taken together as a conjunction. Furthermore, the convention is to specify \lstinline{ensures} clause(s) last.
 \end{itemize}
 
 \paragraph{Examples.}
@@ -255,10 +222,7 @@ heap, and/or instigate concurrent computation.
   && \big)$^*$\ \token{:}\ \verb+Block+\\
 \end{syntax}
 
-The first type pattern (i.e. before "\lstinline{=>}") is referred to
-as the {\em parameter}, whilst the second is referred to as the {\em
-  return}.  The three optional clauses are defined identically as for
-functions above.
+The first type pattern (i.e. before ``\lstinline{=>}'') is referred to as the {\em parameter}, whilst the second is referred to as the {\em   return}.  The three optional clauses are defined identically as for function declarations~(\S\ref{c_source_files_function_decl}).
 
 \paragraph{Examples.}  The following method declaration provides a
 small example to illustrate:
