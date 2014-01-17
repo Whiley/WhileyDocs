@@ -313,7 +313,7 @@ In other words, the of values defined by the type \lstinline{char} is exactly th
 \subsection{Any}
 \label{c_types_any}
 
-The type \lstinline{any} represents the type whose variables may hold any possible value.  Thus, \lstinline{any} is the {\em top type} (i.e. $\top$) in the lattice of types and, hence, is the supertype of all other types.  Variables of \lstinline{any} type support only equality (\S\ref{c_expr_condition}) and inequality comparisons (\S\ref{c_expr_condition}) as well as {\em runtime type tests}.  Finally, unlike the majority of other types, there are no {\em values} of type \lstinline{any}.
+The type \lstinline{any} represents the type whose variables may hold any possible value.  Thus, \lstinline{any} is the {\em top type} (i.e. $\top$) in the lattice of types and, hence, is the supertype of all other types.  Variables of \lstinline{any} type support only equality (\S\ref{c_expr_condition}), inequality comparisons (\S\ref{c_expr_condition}) and {\em runtime type tests}.  Finally, unlike the majority of other types, there are no {\em values} of type \lstinline{any}.
 
 \begin{syntax}
   \verb+AnyType+ & $::=$ & \token{any} \\
@@ -586,18 +586,35 @@ A list type describes list values whose elements are subtypes of the element typ
 \section{Unions}
 \label{c_types_unions}
 
-A union type represents a type whose variables may hold values from any of its "bounds". For example, the union type \lstinline{null|int} indicates a variable can either hold an integer value, or \lstinline{null}. 
+A union type is constructed from two or more component types and contains any value held in any of its components.  For example, the type \lstinline{null|int} is a union which holds either an integer value or \lstinline{null}.  In general, variables of union type support only equality (\S\ref{c_expr_condition}), inequality comparisons (\S\ref{c_expr_condition}) and {\em runtime type tests} (see \S\ref{c_types_effective} for exceptions to this).
 
 \begin{syntax}
   \verb+UnionType+ & $::=$ & \verb+IntersectionType+\ \big(\ \token{|}\ \verb+IntersectionType+\
   \big)$^*$\\
 \end{syntax}
 
-\paragraph{Examples.}
+\paragraph{Examples.}  The following example illustrates a union type:
 
-\paragraph{Semantics.}
+\begin{lstlisting}
+// Return lowest index of matching item, or null if none
+function indexOf([int] items, int value) => int|null:
+    for i,v in items:
+        if v == value:
+            // match
+            return i
+    // item not found
+    return null
+\end{lstlisting}
 
-\paragraph{Notes.}  There must be at least two bounds for a union type to make sense.
+Here, a union type is used to construct a more expressive return value.  If no matching element is found, \lstinline{null} is returned (rather than e.g. \lstinline{-1}).
+
+\paragraph{Semantics.}  The set of values defined by a union type is given as follows:
+\begin{displaymath}
+\begin{array}{rcl}
+{\tt\llbracket T_1|\ldots|T_n\rrbracket} & = & {\tt \llbracket T_1\rrbracket\cup\ldots\cup \llbracket T_n\rrbracket}\\
+\end{array}
+\end{displaymath}
+In other words, the set of values defined by a union type ${\tt T_1|\ldots|T_n}$ is exactly the union of the sets defined by ${\tt T_1}$, \ldots, ${\tt T_n}$.
 
 % =======================================================================
 % Intersections
@@ -606,18 +623,35 @@ A union type represents a type whose variables may hold values from any of its "
 \section{Intersections}
 \label{c_types_intersections}
 
+An intersection type is constructed from two or more component types and contains any value held in all of its components.  For example, the type \lstinline{[int]&[bool]} is an intersection which hold any value which is both an instance of \lstinline{[int]} and \lstinline{[bool]} (in fact, only the empty list meets this criteria).  Intersections are used to type variables on the true branch of a runtime type test.  In general, variables of intersection type support only equality (\S\ref{c_expr_condition}), inequality comparisons (\S\ref{c_expr_condition}) and {\em runtime type tests} (see \S\ref{c_types_effective} for exceptions to this).
+
 \begin{syntax}
   \verb+IntersectionType+ & $::=$ & \verb+TermType+\ \big(\ \token{\&}\ \verb+TermType+\
   \big)$^*$\\
 \end{syntax}
 
-\paragraph{Description.}
+\paragraph{Examples.}  The following example illustrates an intersection type:
 
-\paragraph{Examples.}
+\begin{lstlisting}
+type Reader is { 
+   method read(int) => [byte],
+   ...
+}
+type Writer is { 
+   method write([byte]) => int,
+   ...
+}
+type ReaderWriter is Reader & Writer
+\end{lstlisting}
+Here, the type \lstinline{Reader} is defined as any record containing a \lstinline{read(int)} method, whilst the type \lstinline{Writer} is defined as any record containing a \lstinline{write([byte])} method.  Then, the intersection type \lstinline{ReaderWriter} is defined as any record containing {\em both} a \lstinline{read(int)} and \lstinline{write([byte])} method.
 
-\paragraph{Semantics.}
-
-\paragraph{Notes.}
+\paragraph{Semantics.}  The set of values defined by an intersection type is given as follows:
+\begin{displaymath}
+\begin{array}{rcl}
+{\tt\llbracket T_1\&\ldots\&T_n\rrbracket} & = & {\tt \llbracket T_1\rrbracket\cap\ldots\cap \llbracket T_n\rrbracket}\\
+\end{array}
+\end{displaymath}
+In other words, the set of values defined by a union type ${\tt T_1\&\ldots\&T_n}$ is exactly the intersection of the sets defined by ${\tt T_1}$, \ldots, ${\tt T_n}$.
 
 % =======================================================================
 % Negations
@@ -626,21 +660,27 @@ A union type represents a type whose variables may hold values from any of its "
 \section{Negations}
 \label{c_types_negations}
 
+A negation type is constructed a component type and contains any value {\em not} held in its component.  For example, the type \lstinline{!int} is a negation which holds any non-integer value.  Negations are used to type variables on the false branch of a runtime type test.  In general, variables of negation type support only equality (\S\ref{c_expr_condition}), inequality comparisons (\S\ref{c_expr_condition}) and {\em runtime type tests} (see \S\ref{c_types_effective} for exceptions to this).
+
 \begin{syntax}
   NegationType & $::=$ & \token{!}\ \ \verb+TermType+\\
 \end{syntax}
 
-\paragraph{Description.}  A negation type represents a type which
-accepts values {\em not} in a given type.
-
 \paragraph{Examples.}
 
-\paragraph{Semantics.}
+\paragraph{Semantics.}  The set of values defined by a negation type is given as follows:
+\begin{displaymath}
+\begin{array}{rcl}
+{\tt\llbracket!T_1\rrbracket} & = & {\tt \mathbb{D} - \llbracket T_1\rrbracket}\\
+\end{array}
+\end{displaymath}
+In other words, the set of values defined by a negation type ${\tt !T_1}$ is exactly the set of all values less those defined by ${\tt T_1}$.
 
-\paragraph{Notes.}
+\section{Recursive Types}
 
-\section{Abstract Types}
-\subsection{Recursive Types}
+\section{Effective Types}
+\label{c_types_effective}
+
 \subsection{Effective Tuples}
 \subsection{Effective Records}
 \subsection{Effective Collections}
