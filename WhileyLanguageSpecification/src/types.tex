@@ -663,10 +663,19 @@ In other words, the set of values defined by a union type ${\tt T_1\&\ldots\&T_n
 A negation type is constructed a component type and contains any value {\em not} held in its component.  For example, the type \lstinline{!int} is a negation which holds any non-integer value.  Negations are used to type variables on the false branch of a runtime type test.  In general, variables of negation type support only equality (\S\ref{c_expr_condition}), inequality comparisons (\S\ref{c_expr_condition}) and {\em runtime type tests} (see \S\ref{c_types_effective} for exceptions to this).
 
 \begin{syntax}
-  NegationType & $::=$ & \token{!}\ \ \verb+TermType+\\
+  \verb+NegationType+ & $::=$ & \token{!}\ \ \verb+TermType+\\
 \end{syntax}
 
-\paragraph{Examples.}
+\paragraph{Examples.}  The following example illustrates a negation type:
+
+\begin{lstlisting}
+function f(any item) => !null:
+    if item is null:
+        return 0
+    else:
+        return item
+\end{lstlisting}
+Here, the function \lstinline{f()} accepts a parameter of any type, and returns a value which is permitted to be anything except \lstinline{null}.  The above also illustrates how the type test operator (\S\ref{c_expr_type_test}) retypes variables on the false branch using negation types.
 
 \paragraph{Semantics.}  The set of values defined by a negation type is given as follows:
 \begin{displaymath}
