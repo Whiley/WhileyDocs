@@ -1,5 +1,5 @@
 \chapter{Types}
-The Whiley programming language is {\em statically typed}, meaning that every expression has a type determined at compile time, such that any evaluation of that expression yields a value of that type.  Whiley's {\em type system} governs how the type of any variable or expression is determined.  Whiley's type system is unusual in that it incorporates {\em union}, {\em intersection} and {\em negation types}, as well as employing {\em flow typing} and {\em structural typing}.
+The Whiley programming language is {\em statically typed}, meaning that every expression has a type determined at compile time.  Furthermore, evaluating an expression is guaranteed to yield a value of its type.  Whiley's {\em type system} governs how the type of any variable or expression is determined.  Whiley's type system is unusual in that it incorporates \gls{union_type}s~(\S\ref{c_types_unions}), \gls{intersection_type}s~(\S\ref{c_types_intersections}) and \gls{negation_type}s~(\S\ref{c_types_negations}), as well as employing {\em flow typing} and {\em structural typing}.
 
 \section{Overview}
 \label{c_types_type_overview}
@@ -14,7 +14,7 @@ In this function we see two distinct \gls{type_descriptor}s expressed in the pro
 \subsection{Type Semantics}
 \label{c_types_type_semantics}
 
-Although types are abstract entities we can (for the most part) imagine them as describing sets of {\em abstract values}.  For example, \lstinline{int|null} denotes the set of values containing exactly the (infinite) set of integers and \lstinline{null} (i.e. ${\tt\mathbb{Z}\cup\{null\}}$).  This is often referred to as set-theoretic interpretation of types~\cite{AW93,Damm94,CF05,FCB08}.  Under this interpretation, for example, one type {\em subtypes} another if the set of values it denotes is a {\em subset} of the other.  
+Although types are abstract entities we can (for the most part) imagine them as describing sets of {\em abstract values}.  For example, \lstinline{int|null} denotes the set of values containing exactly the (infinite) set of integers and \lstinline{null} (i.e. ${\tt\mathbb{Z}\cup\{null\}}$).  This is often referred to as a set-theoretic interpretation of types~\cite{AW93,Damm94,CF05,FCB08}.  Under this interpretation, for example, one type {\em subtypes} another if the set of values it denotes is a {\em subset} of the other.  
 
 We specify the meaning of types by formalising a set theoretic interpretation of them over the language of values given in Figure~\ref{c_types_abstract_values}.  To minimise confusion, care is taken in the figure to ensure that abstract values are represented canonically.  For example, ``${\tt 2\;/\;4}$'' is not a valid abstract value since ``${\tt 1\;/\;2}$'' is its canonical representation. Likewise, ``${\tt\{2,1\}}$'' is not a valid abstract value, with ``${\tt\{1,2\}}$'' being its canonical representation.   Figure~\ref{c_types_abstract_values} separates abstract values into distinct categories (e.g. integers, rationals, tuples, etc).  These distinctions are significant.  For example, ``${\tt 0}$'' is distinct \hl{How zero represented?}{from} ``${0\;/\;0}$''.  Similarly, byte values are not expressed using the digits ${\tt 0}$ and ${\tt 1}$ (as might be expected), but in terms of the characters ${\tt t}$ and ${\tt f}$.  This ensures binary values are distinct from integer values.
 
@@ -46,7 +46,7 @@ Finally, an evaluation function ${\tt\llbracket T\rrbracket}$ is defined which r
 
 \subsection{Type Descriptors}
 \label{c_types_type_descriptors}
-As discussed above, type descriptors provide syntax for describing types and, in the remaining sections of this chapter, we explore the range of types supported in Whiley.  The top-level grammar for type descriptors is:
+Type descriptors provide syntax for describing types and, in the remaining sections of this chapter, we explore the range of types supported in Whiley.  The top-level grammar for type descriptors is:
 
 \begin{syntax}
   \verb+Type+ & $::=$ & \verb+UnionType+ \\
@@ -68,7 +68,7 @@ As discussed above, type descriptors provide syntax for describing types and, in
 \subsection{Type Patterns}
 \label{c_types_type_patterns}
 
-In Whiley, \gls{type_pattern}s are used to associate variables with types and their subcomponents.  For example, they can be used to declare variables and/or {\em destructuring} types into variables.  Type patterns are a source-level entity which are similar to type descriptors.  The top-level grammar for type patterns is:
+\Gls{type_pattern}s associate variables with types and their subcomponents and can be used to declare variables and/or {\em destructuring} types into variables.  Type patterns are a source-level entity which are similar to type descriptors.  The top-level grammar for type patterns is:
 
 \begin{syntax}
   \verb+TypePattern+ & $::=$ & \verb+Type+ \big[\ \verb+Ident+\ \big]\\
@@ -80,6 +80,8 @@ Type patterns do not exist for all compound structures --- only those where a va
 
 \section{Primitive Types}
 \label{c_types_primitive_types}
+
+Primitive types are the atomic building blocks of all types in Whiley.  
 
 \begin{syntax}
   \verb+PrimitiveType+ & $::=$ & \\
@@ -100,7 +102,7 @@ Type patterns do not exist for all compound structures --- only those where a va
 \subsection{Null}
 \label{c_types_null}
 
-The null type is a special type which should be used to show the absence of something. It is distinct from void, since variables can hold the special \lstinline{null} value (where as there is no special ``\lstinline{void}'' value).  Variables of \lstinline{null} type support only equality (\lstinline{==}) and inequality comparisons (\lstinline{!=}).  The \lstinline{null} value is particularly useful for representing optional values and terminating recursive types.
+The null type is typically used to show the absence of something. It is distinct from void, since variables can hold the special \lstinline{null} value (where as there is no special ``\lstinline{void}'' value).  Variables of \lstinline{null} type support only equality (\S\ref{c_expr_condition}) and inequality comparisons (\S\ref{c_expr_condition}).  The \lstinline{null} value is particularly useful for representing optional values and terminating recursive types.
 
 \begin{syntax}
   \verb+NullType+ & $::=$ & \token{null} \\
@@ -139,7 +141,7 @@ In other words, the set of values defined by the \lstinline{null} type is the si
 \subsection{Booleans}
 \label{c_types_bool}
 
-The \lstinline{bool} type represents the set of boolean values (i.e. \lstinline{true} and \lstinline{false}).  Variables of \lstinline{bool} type support equality (\lstinline{==}), inequality (\lstinline{!=}), logical and (\lstinline{&&}), logical or (\lstinline{||}), logical xor (\lstinline{^}) and logical not (\lstinline{!}).
+The \lstinline{bool} type represents the set of boolean values (i.e. \lstinline{true} and \lstinline{false}).  Variables of \lstinline{bool} type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}), binary logical operators (\S\ref{c_expr_logical}) and logical not (\S\ref{c_expr_not}).
 
 \begin{syntax}
  \verb+BoolType+ & $::=$ & \token{bool} \\
@@ -174,7 +176,7 @@ In other words, the set of values defined by the \lstinline{bool} type is the se
 \subsection{Bytes}
 \label{c_types_byte}
 
-The type \lstinline{byte} represents the set of eight-bit sequences, whose values are expressed numerically using \lstinline{0} and \lstinline{1} followed by \lstinline{b} (e.g. 00101b).  Variables of \lstinline{byte} type support equality (\lstinline{==}), inequality (\lstinline{!=}), bitwise and (\lstinline{&}), bitwise or (\lstinline{|}), bitwise xor (\lstinline{^}), bitwise complement (\lstinline{~}), left shift (\lstinline{<<}) and right shift (\lstinline{>>}).
+The type \lstinline{byte} represents the set of eight-bit sequences, whose values are expressed numerically using \lstinline{0} and \lstinline{1} followed by \lstinline{b} (e.g. 00101b).  Variables of \lstinline{byte} type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}), bitwise operators (\S\ref{c_expr_bitwise}), bitwise complement (\S\ref{c_expr_complement}) and shift operators (\S\ref{c_expr_shift}).
 
 \begin{syntax}
  \verb+ByteType+ & $::=$ & \token{byte}\\
@@ -214,7 +216,7 @@ In other words, the set of values defined by the \lstinline{byte} type is the se
 \subsection{Integers}
 \label{c_types_int}
 
-The type \lstinline{int} represents the set of arbitrary-sized integers, whose values are expressed as a sequence of one or more numerical or hexadecimal digits (e.g. \lstinline{123456}, \lstinline{0xffaf}, etc).  Variables of \lstinline{int} type support equality (\lstinline{==}), inequality (\lstinline{!=}), comparators (\lstinline{<},\lstinline{<=},\lstinline{>=},\lstinline{>}), addition (\lstinline{+}), subtraction (\lstinline{-}), multiplication (\lstinline{*}), division (\lstinline{/}), remainder (\lstinline{%}) and negation (\lstinline{-}) operations.
+The type \lstinline{int} represents the set of arbitrary-sized integers, whose values are expressed as a sequence of one or more numerical or hexadecimal digits (e.g. \lstinline{123456}, \lstinline{0xffaf}, etc).  Variables of \lstinline{int} type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}), comparators (\S\ref{c_expr_condition}), addition (\S\ref{c_expr_addmul}), subtraction (\S\ref{c_expr_addmul}), multiplication (\S\ref{c_expr_addmul}), division (\S\ref{c_expr_addmul}), remainder (\S\ref{c_expr_addmul}) and negation (\S\ref{c_expr_negation}) operations.
 
 
 \begin{syntax}
@@ -248,7 +250,7 @@ In other words, the of values defined by the type \lstinline{int} is exactly the
 \subsection{Rationals}
 \label{c_types_real}
 
-The type \lstinline{real} represents the set of arbitrary-sized rationals, whose values are expressed as a sequence of one or more numerical digits separated by a period (e.g. \lstinline{1.0}, \lstinline{0.223}, \lstinline{12.55}, etc).  Variables of \lstinline{real} type support equality (\lstinline{==}), inequality (\lstinline{!=}), comparators (\lstinline{<},\lstinline{<=},\lstinline{>=},\lstinline{>}), addition (\lstinline{+}), subtraction (\lstinline{-}), multiplication (\lstinline{*}), division (\lstinline{/}), remainder (\lstinline{%}) and negation (\lstinline{-}) operations.  Variables of type \lstinline{real} also support the {\em rational destructuring assignment} to extract the numerator and denominator (illustrated below).
+The type \lstinline{real} represents the set of arbitrary-sized rationals, whose values are expressed as a sequence of one or more numerical digits separated by a period (e.g. \lstinline{1.0}, \lstinline{0.223}, \lstinline{12.55}, etc).  Variables of \lstinline{real} type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}), comparators (\S\ref{c_expr_condition}), addition (\S\ref{c_expr_addmul}), subtraction (\S\ref{c_expr_addmul}), multiplication (\S\ref{c_expr_addmul}), division (\S\ref{c_expr_addmul}), remainder (\S\ref{c_expr_addmul}) and negation (\S\ref{c_expr_negation}) operations.  Variables of type \lstinline{real} also support the {\em rational destructuring assignment} to extract the numerator and denominator (illustrated below).
 
 \begin{syntax}
   \verb+RealType+ & $::=$ & \token{real} \\
@@ -282,7 +284,7 @@ In other words, the of values defined by the type \lstinline{real} is the (infin
 \subsection{Characters}
 \label{c_types_char}
 
-The type \lstinline{char} represents the set of unicode characters, whose values are expressed as an arbitrary character between quotes (e.g. \lstinline{'c'}, \lstinline{'0'}, \lstinline{'%'}, etc).  Variables of \lstinline{char} type support equality (\lstinline{==}), inequality (\lstinline{!=}), comparators (\lstinline{<},\lstinline{<=},\lstinline{>=},\lstinline{>}), addition (\lstinline{+}), subtraction (\lstinline{-}), multiplication (\lstinline{*}), division (\lstinline{/}), remainder (\lstinline{%}) and negation (\lstinline{-}) operations.
+The type \lstinline{char} represents the set of unicode characters, whose values are expressed as an arbitrary character between quotes (e.g. \lstinline{'c'}, \lstinline{'0'}, \lstinline{'%'}, etc).  Variables of \lstinline{char} type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}), comparators (\S\ref{c_expr_condition}), addition (\S\ref{c_expr_addmul}), subtraction (\S\ref{c_expr_addmul}), multiplication (\S\ref{c_expr_addmul}), division (\S\ref{c_expr_addmul}), remainder (\S\ref{c_expr_addmul}) and negation (\S\ref{c_expr_negation}) operations. 
 
 \begin{syntax}
   \verb+CharType+ & $::=$ & \token{char} \\
@@ -311,7 +313,7 @@ In other words, the of values defined by the type \lstinline{char} is exactly th
 \subsection{Any}
 \label{c_types_any}
 
-The type \lstinline{any} represents the type whose variables may hold any possible value.  Thus, \lstinline{any} is the {\em top type} (i.e. $\top$) in the lattice of types and, hence, is the supertype of all other types.  Variables of \lstinline{any} type support only equality (\lstinline{==}) and inequality comparisons (\lstinline{!=}) as well as {\em runtime type tests}.  Finally, unlike the majority of other types, there are no {\em values} of type \lstinline{any}.
+The type \lstinline{any} represents the type whose variables may hold any possible value.  Thus, \lstinline{any} is the {\em top type} (i.e. $\top$) in the lattice of types and, hence, is the supertype of all other types.  Variables of \lstinline{any} type support only equality (\S\ref{c_expr_condition}), inequality comparisons (\S\ref{c_expr_condition}) and {\em runtime type tests}.  Finally, unlike the majority of other types, there are no {\em values} of type \lstinline{any}.
 
 \begin{syntax}
   \verb+AnyType+ & $::=$ & \token{any} \\
@@ -390,7 +392,7 @@ equals the empty set.
 \section{Tuples}
 \label{c_types_tuple}
 
-A tuple type describes a compound type made up of two or more elements in sequence, whose values are expressed as sequences of values separated by a comma (e.g. \lstinline{1,2}, \lstinline{2.0,3.32,3.45}, etc).  Tuples are similar to records, except that fields are effectively anonymous.  Variables of tuple type support equality (\lstinline{==}) and inequality (\lstinline{!=}) operations, as well the {\em tuple destructuring assignment} to extract elements (illustrated below).
+A tuple type describes a compound type made up of two or more elements in sequence, whose values are expressed as sequences of values separated by a comma (e.g. \lstinline{1,2}, \lstinline{2.0,3.32,3.45}, etc).  Tuples are similar to records, except that fields are effectively anonymous.  Variables of tuple type support equality (\S\ref{c_expr_condition}) and inequality (\S\ref{c_expr_condition}) operations, as well the {\em tuple destructuring assignment} to extract elements (illustrated below).
 
 \begin{syntax}
   \verb+TupleType+ & $::=$ & \token{(}\ \verb+Type+\ \big(\ \token{,}\
@@ -424,7 +426,7 @@ equals the empty set.
 \section{Records}
 \label{c_types_record}
 
-A record is made up of a number of fields, each of which has a unique name. Each field has a corresponding type. One can think of a record as a special kind of "fixed" map (i.e. where we know exactly which entries we have).
+A record type describes a compound made of from one or more {\em fields}, each of which has a unique name and a corresponding type.  Variables of record type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}) and field access (\S\ref{c_expr_access}) operations, as well as field assignment (\S\ref{c_stmts_field_lval}).
 
 \begin{syntax}
   \verb+RecordType+ & $::=$ & \token{\{}\ \verb+Type+\
@@ -432,17 +434,37 @@ A record is made up of a number of fields, each of which has a unique name. Each
   \big)$^*$ \big[\ \token{,}\ \token{...}\ \big]\ \token{\}}\\
 \end{syntax}
 
-\paragraph{Examples.}
+Records using the \token{...} notation are referred to as {\em open records} (e.g. \lstinline|{int x, ...}|), otherwise they are referred to as {\em closed records} (e.g. \lstinline|{int x, int y}|).  Open records represent all records containing {\em at least} the given fields, whilst closed records represent those containing {\em exactly} the given fields.
+
+\paragraph{Examples.}  The following example illustrates an open record type: 
+\begin{lstlisting}
+type Writer is { 
+   method write([byte]) => int,
+   ...
+}
+type PrintWriter is { 
+   method write([byte]) => int,
+   method println(string) => void,
+   ...
+}
+// Create print writer if not already one
+PrintWriter create(Writer writer):
+    if writer is PrintWriter:
+        return writer
+    else:
+        return new PrinterWriter(writer)
+\end{lstlisting}
+The above illustrates two open records \lstinline{Writer} and \lstinline{PrintWriter}.  The former has one field (\lstinline{write}), whilst the latter has two fields (\lstinline{write} and \lstinline{println}).
 
 \paragraph{Semantics.}
-
-\paragraph{Notes.}  Syntax for functions?  Open versus closed records?
 
 % =======================================================================
 % References
 % =======================================================================
 
 \section{References}
+
+Reference type
 
 Represents a reference to an object in Whiley.
 
@@ -582,60 +604,112 @@ A list type describes list values whose elements are subtypes of the element typ
 % =======================================================================
 
 \section{Unions}
+\label{c_types_unions}
 
-A union type represents a type whose variables may hold values from any of its "bounds". For example, the union type \lstinline{null|int} indicates a variable can either hold an integer value, or \lstinline{null}. 
+A union type is constructed from two or more component types and contains any value held in any of its components.  For example, the type \lstinline{null|int} is a union which holds either an integer value or \lstinline{null}.  In general, variables of union type support only equality (\S\ref{c_expr_condition}), inequality comparisons (\S\ref{c_expr_condition}) and {\em runtime type tests} (see \S\ref{c_types_effective} for exceptions to this).
 
 \begin{syntax}
   \verb+UnionType+ & $::=$ & \verb+IntersectionType+\ \big(\ \token{|}\ \verb+IntersectionType+\
   \big)$^*$\\
 \end{syntax}
 
-\paragraph{Examples.}
+\paragraph{Examples.}  The following example illustrates a union type:
 
-\paragraph{Semantics.}
+\begin{lstlisting}
+// Return lowest index of matching item, or null if none
+function indexOf([int] items, int value) => int|null:
+    for i,v in items:
+        if v == value:
+            // match
+            return i
+    // item not found
+    return null
+\end{lstlisting}
 
-\paragraph{Notes.}  There must be at least two bounds for a union type to make sense.
+Here, a union type is used to construct a more expressive return value.  If no matching element is found, \lstinline{null} is returned (rather than e.g. \lstinline{-1}).
+
+\paragraph{Semantics.}  The set of values defined by a union type is given as follows:
+\begin{displaymath}
+\begin{array}{rcl}
+{\tt\llbracket T_1|\ldots|T_n\rrbracket} & = & {\tt \llbracket T_1\rrbracket\cup\ldots\cup \llbracket T_n\rrbracket}\\
+\end{array}
+\end{displaymath}
+In other words, the set of values defined by a union type ${\tt T_1|\ldots|T_n}$ is exactly the union of the sets defined by ${\tt T_1}$, \ldots, ${\tt T_n}$.
 
 % =======================================================================
 % Intersections
 % =======================================================================
 
 \section{Intersections}
+\label{c_types_intersections}
+
+An intersection type is constructed from two or more component types and contains any value held in all of its components.  For example, the type \lstinline{[int]&[bool]} is an intersection which hold any value which is both an instance of \lstinline{[int]} and \lstinline{[bool]} (in fact, only the empty list meets this criteria).  Intersections are used to type variables on the true branch of a runtime type test.  In general, variables of intersection type support only equality (\S\ref{c_expr_condition}), inequality comparisons (\S\ref{c_expr_condition}) and {\em runtime type tests} (see \S\ref{c_types_effective} for exceptions to this).
 
 \begin{syntax}
   \verb+IntersectionType+ & $::=$ & \verb+TermType+\ \big(\ \token{\&}\ \verb+TermType+\
   \big)$^*$\\
 \end{syntax}
 
-\paragraph{Description.}
+\paragraph{Examples.}  The following example illustrates an intersection type:
 
-\paragraph{Examples.}
+\begin{lstlisting}
+type Reader is { 
+   method read(int) => [byte],
+   ...
+}
+type Writer is { 
+   method write([byte]) => int,
+   ...
+}
+type ReaderWriter is Reader & Writer
+\end{lstlisting}
+Here, the type \lstinline{Reader} is defined as any record containing a \lstinline{read(int)} method, whilst the type \lstinline{Writer} is defined as any record containing a \lstinline{write([byte])} method.  Then, the intersection type \lstinline{ReaderWriter} is defined as any record containing {\em both} a \lstinline{read(int)} and \lstinline{write([byte])} method.
 
-\paragraph{Semantics.}
-
-\paragraph{Notes.}
+\paragraph{Semantics.}  The set of values defined by an intersection type is given as follows:
+\begin{displaymath}
+\begin{array}{rcl}
+{\tt\llbracket T_1\&\ldots\&T_n\rrbracket} & = & {\tt \llbracket T_1\rrbracket\cap\ldots\cap \llbracket T_n\rrbracket}\\
+\end{array}
+\end{displaymath}
+In other words, the set of values defined by a union type ${\tt T_1\&\ldots\&T_n}$ is exactly the intersection of the sets defined by ${\tt T_1}$, \ldots, ${\tt T_n}$.
 
 % =======================================================================
 % Negations
 % =======================================================================
 
 \section{Negations}
+\label{c_types_negations}
+
+A negation type is constructed a component type and contains any value {\em not} held in its component.  For example, the type \lstinline{!int} is a negation which holds any non-integer value.  Negations are used to type variables on the false branch of a runtime type test.  In general, variables of negation type support only equality (\S\ref{c_expr_condition}), inequality comparisons (\S\ref{c_expr_condition}) and {\em runtime type tests} (see \S\ref{c_types_effective} for exceptions to this).
 
 \begin{syntax}
-  NegationType & $::=$ & \token{!}\ \ \verb+TermType+\\
+  \verb+NegationType+ & $::=$ & \token{!}\ \ \verb+TermType+\\
 \end{syntax}
 
-\paragraph{Description.}  A negation type represents a type which
-accepts values {\em not} in a given type.
+\paragraph{Examples.}  The following example illustrates a negation type:
 
-\paragraph{Examples.}
+\begin{lstlisting}
+function f(any item) => !null:
+    if item is null:
+        return 0
+    else:
+        return item
+\end{lstlisting}
+Here, the function \lstinline{f()} accepts a parameter of any type, and returns a value which is permitted to be anything except \lstinline{null}.  The above also illustrates how the type test operator (\S\ref{c_expr_type_test}) retypes variables on the false branch using negation types.
 
-\paragraph{Semantics.}
+\paragraph{Semantics.}  The set of values defined by a negation type is given as follows:
+\begin{displaymath}
+\begin{array}{rcl}
+{\tt\llbracket!T_1\rrbracket} & = & {\tt \mathbb{D} - \llbracket T_1\rrbracket}\\
+\end{array}
+\end{displaymath}
+In other words, the set of values defined by a negation type ${\tt !T_1}$ is exactly the set of all values less those defined by ${\tt T_1}$.
 
-\paragraph{Notes.}
+\section{Recursive Types}
 
-\section{Abstract Types}
-\subsection{Recursive Types}
+\section{Effective Types}
+\label{c_types_effective}
+
 \subsection{Effective Tuples}
 \subsection{Effective Records}
 \subsection{Effective Collections}
