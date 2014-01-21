@@ -429,12 +429,12 @@ equals the empty set.
 A record type describes a compound made of from one or more {\em fields}, each of which has a unique name and a corresponding type.  Variables of record type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}) and field access (\S\ref{c_expr_access}) operations, as well as field assignment (\S\ref{c_stmts_field_lval}).
 
 \begin{syntax}
-  \verb+RecordType+ & $::=$ & \token{\{}\ \verb+Type+\
-  \verb+Ident+\ \big(\ \token{,}\ \verb+Type+\ \verb+Ident+\
+  \verb+RecordType+ & $::=$ & \token{\{}\ \verb+MixedType+\
+  \big(\ \token{,}\ \verb+MixedType+\
   \big)$^*$ \big[\ \token{,}\ \token{...}\ \big]\ \token{\}}\\
 \end{syntax}
 
-Records using the \token{...} notation are referred to as {\em open records} (e.g. \lstinline|{int x, ...}|), otherwise they are referred to as {\em closed records} (e.g. \lstinline|{int x, int y}|).  Open records represent all records containing {\em at least} the given fields, whilst closed records represent those containing {\em exactly} the given fields.
+Records use {\em mixed types} for defining fields (see \S\ref{c_types_mixed}), meaning that field names may be mixed within their type.  This is primarily useful for fields of function or method type (see below).  Records using the \token{...} notation are referred to as {\em open records} (e.g. \lstinline|{int x, ...}|), otherwise they are referred to as {\em closed records} (e.g. \lstinline|{int x, int y}|).  Open records represent all records containing {\em at least} the given fields, whilst closed records represent those containing {\em exactly} the given fields.   
 
 \paragraph{Examples.}  The following example illustrates an open record type: 
 \begin{lstlisting}
@@ -454,7 +454,7 @@ PrintWriter create(Writer writer):
     else:
         return new PrinterWriter(writer)
 \end{lstlisting}
-The above illustrates two open records \lstinline{Writer} and \lstinline{PrintWriter}.  The former has one field (\lstinline{write}), whilst the latter has two fields (\lstinline{write} and \lstinline{println}).
+The above illustrates two open records \lstinline{Writer} and \lstinline{PrintWriter}.  The former has one field (\lstinline{write}), whilst the latter has two fields (\lstinline{write} and \lstinline{println}).  The above also illustrates use of mixed types.  For example, the field ``\lstinline{write}'' is declared as ``\lstinline{method write([byte]) => int}'' which mixes together the field name (i.e. ``\lstinline{write}'') with its type (i.e. ``\lstinline{method([byte]) => int}'').
 
 \paragraph{Semantics.}
 
