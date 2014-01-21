@@ -479,11 +479,9 @@ method swap(&int pX, &int pY):
     *pY = tmp
 \end{lstlisting} 
 
-The above illustrates a method which accepts two references to variables of type \lstinline{int} (note that these may reference the same variable).  The method simply swaps the contents of the variables to which they refer.
+The above illustrates a method which accepts two references to variables of type \lstinline{int} that may refer to the same variable.  The method simply swaps the contents of the variables to which they refer.
 
 \paragraph{Semantics.}
-
-\paragraph{Notes.}  The dereference operation ``\lstinline{e->f}'' (as in e.g. \lstinline{pX->field}) is a short-hand notation for ``\lstinline{(*e).f}'' and can be used when \lstinline{e} has effective record type (\S\ref{c_types_effective_records}).
 
 % =======================================================================
 % Nominal
@@ -492,13 +490,21 @@ The above illustrates a method which accepts two references to variables of type
 \section{Nominals}
 \label{c_types_nominal}
 
-The existential type represents the an unknown type, defined at a given position.
+Nominal types represent user-defined types declared within one or more Whiley \gls{source_file}s.  Nominal types provide a mechanism for enforcing {\em information hiding}, and also for constructing {\em recursive types} (\S\ref{c_types_recursive}).  All nominal types have an underlying --- or, {\em concrete} --- type which may or may not be visible within a given Whiley \gls{source_file}.  Nominal types with {\em visible} underlying types are indistinguishable from their underlying type, and support all operations therein.   Nominal types with {\em invisible} underlying types support only equality (\S\ref{c_expr_condition}) and inequality (\S\ref{c_expr_condition}) operations.  Furthermore, to enforce information hiding, nominal types cannot be destructured using runtime type tests.
 
 \begin{syntax}
   \verb+NominalType+ & $::=$ & \verb+Ident+\\
 \end{syntax}
 
-\paragraph{Examples.}
+\paragraph{Examples.}  The following example illustrates nominal types:
+\begin{lstlisting}
+// Using a nominal type to construct a recursive type
+public type LinkedList is null | { int data, LinkedList next }
+
+// Using a nominal type to enforce information hiding
+protected type Hidden is { int x, int y }
+\end{lstlisting}
+Three different uses for nominal types are illustrated here.  The type \lstinline{LinkedList} is declared \lstinline{public}, meaning that: firstly, it can be referred to by name from any other source file; secondly, its underlying type is visible to any other source file.  Within the declaration of \lstinline{LinkedList} a reference to itself is used to define a recursive type (\S\ref{c_types_recursive}).  Finally, the type \lstinline{hidden} has the concrete type ``\lstinline|{int x, int y}|'' and is declared \lstinline{protected}, meaning that: firstly, it can be referred to by name from any other source file; secondly,  that its underlying type is invisible to all other source files.
 
 \paragraph{Semantics.}
 
@@ -713,6 +719,7 @@ Here, the function \lstinline{f()} accepts a parameter of any type, and returns 
 In other words, the set of values defined by a negation type ${\tt !T_1}$ is exactly the set of all values less those defined by ${\tt T_1}$.
 
 \section{Recursive Types}
+\label{c_types_recursive}
 
 \section{Effective Types}
 \label{c_types_effective}
