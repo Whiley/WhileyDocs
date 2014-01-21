@@ -464,19 +464,26 @@ The above illustrates two open records \lstinline{Writer} and \lstinline{PrintWr
 
 \section{References}
 
-Reference type
-
-Represents a reference to an object in Whiley.
+Reference types in Whiley represent references to variables, such as those allocated in the heap.  They are similar to references or pointers found in many imperative and object-oriented languages (e.g. C/C++, Java, C\#, etc).  A type \lstinline{&T} represents a reference to a variable of type \lstinline{T}.  Variables of reference type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}) and dereference (\S\ref{c_expr_deref}) operations, as well as dereference assignment (\S\ref{c_stmts_deref_lval}).
 
 \begin{syntax}
   \verb+ReferenceType+ & $::=$ & \token{\&}\ \ \verb+Type+\\
 \end{syntax}
 
-\paragraph{Examples.}
+\paragraph{Examples.} The following example illustrates reference types:
+\begin{lstlisting}
+// Swap contents of heap-allocated int variables
+method swap(&int pX, &int pY):
+    int tmp = *pX
+    *pX = *pY
+    *pY = tmp
+\end{lstlisting} 
+
+The above illustrates a method which accepts two references to variables of type \lstinline{int} (note that these may reference the same variable).  The method simply swaps the contents of the variables to which they refer.
 
 \paragraph{Semantics.}
 
-\paragraph{Notes.}
+\paragraph{Notes.}  The dereference operation ``\lstinline{e->f}'' (as in e.g. \lstinline{pX->field}) is a short-hand notation for ``\lstinline{(*e).f}'' and can be used when \lstinline{e} has effective record type (\S\ref{c_types_effective_records}).
 
 % =======================================================================
 % Nominal
@@ -712,6 +719,7 @@ In other words, the set of values defined by a negation type ${\tt !T_1}$ is exa
 
 \subsection{Effective Tuples}
 \subsection{Effective Records}
+\label{c_types_effective_records}
 \subsection{Effective Collections}
 
 \section{Subtyping Algorithms}
