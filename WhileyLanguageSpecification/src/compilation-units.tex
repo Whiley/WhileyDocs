@@ -62,11 +62,7 @@ When performing \gls{name_resolution}, a Whiley compiler first attempts to resol
 
 A declaration of the form ``\lstinline{import some.pkg.File}'' imports the \gls{compilation_unit} ``\lstinline{File}'' residing in package ``\lstinline{some.pkg}''.  Named entities (e.g. ``\lstinline{Entity}'') within that compilation unit can then be referenced using a {\em partially qualified} name which omits the package component (e.g. ``\lstinline{File.Entity}'').  A declaration of the form ``\lstinline{import Entity from some.pkg.File}'' imports the named entity ``\lstinline{Entity}'' from the \gls{compilation_unit} ``\lstinline{File}'' residing in package ``\lstinline{some.pkg}''.  Note, this does {\em not} import the compilation unit ``\lstinline{some.pkg.File}'' (and, hence, does not subsume the statement ``\lstinline{import some.pkg.File}'').
 
-<<<<<<< HEAD
-A {\em wildcard} may be used in place of the compilation unit name (e.g. ``\lstinline{import some.pkg.*}'') to import {\em all} compilation units within the given package.  A {\em package match} may be used in place of some of all of the package component (e.g. ``\lstinline{import some..File}'') to import all compilation units same name and matching package {\em prefix} and/or {\em suffix}.  A {\em wildcard} may be used in place of the entity name (e.g. ``\lstinline{import * from some.pkg.File}'') to import {\em all} named entities from the given compilation unit.  
-=======
 A {\em wildcard} may be used in place of the compilation unit name (e.g. ``\lstinline{import some.pkg.*}'') to import {\em all} compilation units within the given package.  A {\em package match} may be used in place of some of all of the package component (e.g. ``\lstinline{import some..File}'') to import all compilation units with matching name and package {\em prefix} and/or {\em suffix}.  A {\em wildcard} may be used in place of the entity name (e.g. ``\lstinline{import * from some.pkg.File}'') to import {\em all} named entities within the given compilation unit.  
->>>>>>> e54cfb1c7637599323f18ecdc0c88218e2bc66f5
 
 \section{Named Declarations}
 
