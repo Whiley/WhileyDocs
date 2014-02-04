@@ -81,7 +81,7 @@ Like many modern programming languages, Whiley provides built-in types
 for representing collections.  The following illustrates a short
 function which multiplies a vector by a scalar:
 \begin{lstlisting}
-[real] vectorMultiply([real] vector, real scalar):
+function vectorMultiply([real] vector, real scalar) => [real]:
     for i in 0 .. |vector|:
         vector[i] = vector[i] * scalar
     return vector
