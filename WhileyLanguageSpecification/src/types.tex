@@ -548,7 +548,7 @@ function depthFirstSearch(uint v, Graph graph, {int} visited) => {int}
 requires v < |graph|:
     //
     visited = visited + {v}
-    // Travel along all edges not yet visited
+    // Traverse edges not yet visited
     for w in graph[v]:
         if !(w in visited):
             visited = depthFirstSearch(w,graph,visited)
