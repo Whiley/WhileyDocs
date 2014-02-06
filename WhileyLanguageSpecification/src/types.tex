@@ -14,7 +14,7 @@ In this function we see two distinct \gls{type_descriptor}s expressed in the pro
 \subsection{Type Semantics}
 \label{c_types_type_semantics}
 
-Although types are abstract entities we can (for the most part) imagine them as describing sets of {\em abstract values}.  For example, \lstinline{int|null} denotes the set of values containing exactly the (infinite) set of integers and \lstinline{null} (i.e. ${\tt\mathbb{Z}\cup\{null\}}$).  This is often referred to as a set-theoretic interpretation of types~\cite{AW93,Damm94,CF05,FCB08}.  Under this interpretation, for example, one type {\em subtypes} another if the set of values it denotes is a {\em subset} of the other.  
+Although types are abstract entities we can (for the most part) imagine them as describing sets of {\em abstract values}.  For example, \lstinline{int|null} denotes the set of values containing exactly the (infinite) set of integers and \lstinline{null} (i.e. ${\tt\mathbb{Z}\cup\{null\}}$).  This is often referred to as a set-theoretic interpretation of types~\cite{AW93,Damm94,CF05,FCB08}.  Under this interpretation, for example, one type {\em subtypes}  another if the set of values it denotes is a {\em subset} of the other (see \S~\ref{c_types_subtyping} for more).  
 
 We specify the meaning of types by formalising a set theoretic interpretation of them over the language of values given in Figure~\ref{c_types_abstract_values}.  To minimise confusion, care is taken in the figure to ensure that abstract values are represented canonically.  For example, ``${\tt 2\;/\;4}$'' is not a valid abstract value since ``${\tt 1\;/\;2}$'' is its canonical representation. Likewise, ``${\tt\{2,1\}}$'' is not a valid abstract value, with ``${\tt\{1,2\}}$'' being its canonical representation.   Figure~\ref{c_types_abstract_values} separates abstract values into distinct categories (e.g. integers, rationals, tuples, etc).  These distinctions are significant.  For example, ``${\tt 0}$'' is distinct \hl{How zero represented?}{from} ``${0\;/\;0}$''.  Similarly, byte values are not expressed using the digits ${\tt 0}$ and ${\tt 1}$ (as might be expected), but in terms of the characters ${\tt t}$ and ${\tt f}$.  This ensures binary values are distinct from integer values.
 
@@ -727,8 +727,19 @@ In other words, the set of values defined by a negation type ${\tt !T_1}$ is exa
 \label{c_types_effective_records}
 \subsection{Effective Collections}
 
-\section{Subtyping Algorithms}
-Discussion of soundness and completeness.
+\section{Subtyping}
+\label{c_types_subtyping}
+Types in Whiley support the notion of {\em subtyping}.  That is one type may be a {\em subtype} for another.  For example, the type \lstinline{int} is a subtype of \lstinline{any}.  Likewise, \lstinline{bool} is a subtype of \lstinline{bool|null}.  The {\em subtyping operator} is denoted by ``${\tt \le}$''; for example, ${\tt T_1\le T_2}$ indicates that type ${\tt T_1}$ is a subtype of ${\tt T_2}$.  The subtyping operator operates on the underlying types, rather than syntactic types, and is {\em reflexive}, {\em transitive} and {\em anti-symmetric}. 
 
-\section{Equivalences}
-Discuss some obvious equivalences between types.
+The subtyping operator is regarded as an algorithm for determining whether one type is a subtype of another.  Ultimately, any valid implementation of Whiley's subtyping operators must be both sound and complete (i.e. that ${\tt T_1\le T_2 \iff T_1 \subseteq T_2}$). 
+
+\section{Type Equivalences}
+Since types are defined in terms of the set of values they represent, it is perfectly possible for two distinct type descriptors to describe the same underlying type.  For example, \lstinline{int|null} is considered equivalent to \lstinline{null|int}.  Whilst this case is fairly easy to spot, there are some cases which are not so obvious.  Here, a number of such cases are given to illustrate:
+\begin{itemize}
+\item \lstinline{!any} is equivalent to \lstinline{void} and, conversely, \lstinline{any} is equivalent to \lstinline{!void}
+\item \lstinline{int&!int} is equivalent to \lstinline{void} and, conversely, \lstinline{int|!int} is equivalent to \lstinline{any}
+\item \lstinline|{int$\;|\;$null f}| is equivalent to \lstinline|{int f}$\;|\;${null f}|
+\item \lstinline|{int$\;|\;$null f}&{bool$\;|\;$null f}| is equivalent to \lstinline|{null f}|
+\end{itemize}
+
+In general, a large number of equivalences is implied by the semantics of types given previously and they cannot all be listed here.
