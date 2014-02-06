@@ -689,7 +689,14 @@ Under Definition~\ref{c_types_def_equiv}, an infinite number of equivalences exi
 
 \subsection{Subtyping}
 \label{c_types_subtyping}
-Types in Whiley support the notion of {\em subtyping} where one type may be a {\em subtype} for another.  For example, the type \lstinline{int} is a subtype of \lstinline{any}.  Likewise, \lstinline{bool} is a subtype of \lstinline{bool|null}.  The {\em subtyping operator} is denoted by ``${\tt \le}$''; for example, ${\tt T_1\le T_2}$ indicates that type ${\tt T_1}$ is a subtype of ${\tt T_2}$.  The subtyping operator operates on the underlying types, rather than syntactic types, and is {\em reflexive}, {\em transitive} and {\em anti-symmetric}. 
+Types in Whiley support the notion of {\em subtyping} where one type may be a {\em subtype} for another.  For example, the type \lstinline{int} is a subtype of \lstinline{any}.  Likewise, \lstinline{bool} is a subtype of \lstinline{bool|null}.  The {\em subtyping operator} is denoted by ``${\tt \le}$''; for example, ${\tt T_1\le T_2}$ indicates that type ${\tt T_1}$ is a subtype of ${\tt T_2}$.  The subtyping operator is {\em reflexive}, {\em transitive} and {\em anti-symmetric} with respect to the underlying types involved. 
 
-The subtyping operator is regarded as an algorithm for determining whether one type is a subtype of another.  Ultimately, any valid implementation of Whiley's subtyping operators must be both sound and complete (i.e. that ${\tt T_1\le T_2 \iff T_1 \subseteq T_2}$). 
+The subtyping operator is regarded as an algorithm for determining whether the type described by one type descriptor is a subtype of another.  The implementation of this algorithm is not straightforward and a full discussion of it is beyond the scope of this document.  Indeed, there are many possible implementations of this operator.  Nevertheless, there any valid implementation of this operator must exhibit two desirable properties:
 
+\begin{definition}[Subtype Soundness] A subtype operator, ${\tt\le}$, is {\em sound} if, for any types ${\tt T_1}$ and ${\tt T_2}$, it holds that ${\tt T_1\le T_2\Longrightarrow \llbracket T_1\rrbracket\subseteq \llbracket T_2\rrbracket}$.
+\end{definition}
+
+\begin{definition}[Subtype Completeness] A subtype operator, ${\tt\le}$, is {\em complete} if, for any types ${\tt T_1}$ and ${\tt T_2}$, it holds that ${\tt \llbracket T_1\rrbracket\subseteq\llbracket T_2\rrbracket\Longrightarrow T_1\le T_2}$.
+\end{definition}
+
+\noindent A subtype operator which exhibits both of these properties is said to be {\em sound} and {\em complete}.  
