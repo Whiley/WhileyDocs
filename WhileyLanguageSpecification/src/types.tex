@@ -515,6 +515,15 @@ Three different uses for nominal types are illustrated here.  The type \lstinlin
 \section{Collections}
 \label{c_types_collection}
 
+Collection types in Whiley describe compound values constructed from arbitrarily many values.
+
+\begin{syntax}
+  \verb+CollectionType+ & $::=$ & \verb+SetType+\\
+                        & $|$ & \verb+MapType+\\
+                        & $|$ & \verb+ListType+\\
+\end{syntax}
+
+
 % =======================================================================
 % Set
 % =======================================================================
@@ -522,17 +531,28 @@ Three different uses for nominal types are illustrated here.  The type \lstinlin
 \subsection{Sets}
 \label{c_types_set}
 
-A set type describes set values whose elements are subtypes of the element type. For example, \lstinline|{1,2,3}| is an instance of set type \lstinline|{int}|; however, \lstinline|{1.345}| is not.
+A set type describes set values whose elements are subtypes of the element type. For example, \lstinline|{1,2,3}| is an instance of set type \lstinline|{int}|; however, \lstinline|{1.345}| is not.  Variables of set type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}), union (\S\ref{c_expr_union}), intersection (\S\ref{c_expr_intersection}), difference (\S\ref{c_expr_difference}) and element-of (\S\ref{c_expr_element_of}) operations.
 
 \begin{syntax}
   \verb+SetType+ & $::=$ & \token{\{} \ \verb+Type+ \ \token{\}} \\
 \end{syntax}
 
-\paragraph{Examples.}
+\paragraph{Examples.}  The following example illustrates set types:
 
-\paragraph{Semantics.}
+\begin{lstlisting}
+type Graph is [{int}] // adjacency list representation
 
-\paragraph{Notes.} 
+function depthFirstSearch(int v, Graph graph, {int} visited) => {int}:
+    visited = visited + {v}
+    // Travel along all edges not yet visited
+    for w in graph[v]:
+        if !(w in visited):
+            visited = depthFirstSearch(w,graph,visited)
+    // Done
+    return visited
+\end{lstlisting}
+
+The above illustrates a simple implementation of the well-known {\em depth-first search} algorithm.  In the example, a \lstinline{Graph} is a list of sets of edge targets, where any \lstinline{w in g[v]} describes an edge from \lstinline{v} to \lstinline{w} in the graph.  The \lstinline{visited} set is used to maintain a list of previously seen vertices, in order to prevent the same vertex from being visited more than once.  
 
 % =======================================================================
 % Map
@@ -541,17 +561,27 @@ A set type describes set values whose elements are subtypes of the element type.
 \subsection{Maps}
 \label{c_types_map}
 
-A map represents a one-many mapping from variables of one type to variables of another type. For example, the map type \lstinline|{int=>real}| represents a map from integers to real values. A valid instance of this type might be \lstinline|{1=>1.2,2=>3.0}|.
+A map represents a one-many mapping from variables of one type to variables of another type. For example, the map type \lstinline|{int=>real}| represents a map from integers to real values. A valid instance of this type might be \lstinline|{1=>1.2,2=>3.0}|.  Variables of map type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}), access (\S\ref{c_expr_access}), union (\S\ref{c_expr_union}), intersection (\S\ref{c_expr_intersection}), difference (\S\ref{c_expr_difference}) and element-of (\S\ref{c_expr_element_of}) operations.
 
 \begin{syntax}
   \verb+MapType+ & $::=$ & \token{\{} \ \verb+Type+ \ \token{=>} \ \verb+Type+ \ \token{\}} \\
 \end{syntax}
 
-\paragraph{Examples.}
+\paragraph{Examples.}  The following example illustrates map types:
 
-\paragraph{Semantics.}
+\begin{lstlisting}
+type Expr is int | string // simple expression forms
 
-\paragraph{Notes.} 
+int evaluate(Expr e, {string=>int} environment)
+    if e is int:
+        // expression is constant, so return this directly
+        return e
+    else:
+        // expression is variable, so look up its value in environment
+        return environment[e]
+\end{lstlisting}
+
+The above illustrates a function for evaluating simple expressions which are either integer constants or variable names.  To evaluate an expression which is an integer constant, we simply return that constant.  To evaluate an expression which is a variable name, we look up the current value of that variable in an environment which maps variable names to integer constants.
 
 % =======================================================================
 % List
@@ -560,17 +590,16 @@ A map represents a one-many mapping from variables of one type to variables of a
 \subsection{Lists}
 \label{c_types_list}
 
-A list type describes list values whose elements are subtypes of the element type. For example, \lstinline{[1,2,3]} is an instance of list type \lstinline{[int]}; however, \lstinline{[1.345]} is not.
+A list type describes list values whose elements are subtypes of the element type. For example, \lstinline{[1,2,3]} is an instance of list type \lstinline{[int]}; however, \lstinline{[1.345]} is not.  Variables of list type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}), append (\S\ref{c_expr_append}), sublist (\S\ref{c_expr_sublist}) and element-of (\S\ref{c_expr_element_of}) operations.
 
 \begin{syntax}
   \verb+ListType+ & $::=$ & \token{[} \ \verb+Type+ \ \token{]}\\
 \end{syntax}
 
-\paragraph{Examples.}
+\paragraph{Examples.}  The following example illustrates map types:
 
-\paragraph{Semantics.}
-
-\paragraph{Notes.} 
+\begin{lstlisting}
+\end{lstlisting}
 
 % =======================================================================
 % Functions
@@ -733,7 +762,7 @@ Types in Whiley support the notion of {\em subtyping}.  That is one type may be 
 
 The subtyping operator is regarded as an algorithm for determining whether one type is a subtype of another.  Ultimately, any valid implementation of Whiley's subtyping operators must be both sound and complete (i.e. that ${\tt T_1\le T_2 \iff T_1 \subseteq T_2}$). 
 
-\section{Type Equivalences}
+\section{Equivalences}
 Since types are defined in terms of the set of values they represent, it is perfectly possible for two distinct type descriptors to describe the same underlying type.  For example, \lstinline{int|null} is considered equivalent to \lstinline{null|int}.  Whilst this case is fairly easy to spot, there are some cases which are not so obvious.  Here, a number of such cases are given to illustrate:
 \begin{itemize}
 \item \lstinline{!any} is equivalent to \lstinline{void} and, conversely, \lstinline{any} is equivalent to \lstinline{!void}
