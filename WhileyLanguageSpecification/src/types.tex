@@ -494,30 +494,33 @@ function add([int] v1, [int] v2) => ([int] v3)
 The above illustrates a simple function which adds two integer lists together.  The function's \gls{precondition} requires that both input list have the same length, whilst its \gls{postcondition}s ensures that this matches the length of the output.
 
 % =======================================================================
-% Functions
+% Functions & Methods
 % =======================================================================
 
-\section{Functions}
+\section{Functions and Methods}
+A function or method type describes the signature of a function or method.  These types enable functions or methods to be passed around as values in Whiley.  This enables a degree of polymorphism in the language, where the exact function or method to be called is unknown.   Variables of function or method type support equality (\S\ref{c_expr_condition}) and inequality (\S\ref{c_expr_condition}).
 
 \begin{syntax}
   \verb+FunctionType+ & $::=$ & \token{function}\ \token{(}\
   \big[\ \verb+Type+\ \big(\ \token{,}\ \verb+Type+\ \big)$^*$\ \big]\ \token{)}\ \token{=>}\ \verb+Type+\\
-\end{syntax}
-
-\paragraph{Notes.}
-
-% =======================================================================
-% Functions
-% =======================================================================
-
-\section{Methods}
-
-\begin{syntax}
+  &&\\
   \verb+MethodType+ & $::=$ & \token{method}\ \token{(}\
   \big[\ \verb+Type+\ \big(\ \token{,}\ \verb+Type+\ \big)$^*$\ \big]\ \token{)}\ \token{=>}\ \verb+Type+\\
 \end{syntax}
 
-\paragraph{Notes.}
+\noindent The following example illustrates function types:
+
+\begin{lstlisting}
+type Fun is function(int) => int
+
+function map([int] items, Fun fn) => [int]:
+    //
+    for i,v in items:
+        items[i] = fn(v)
+    //
+    return items
+\end{lstlisting}
+The above illustrates the well-known {\em map} function, which maps all elements of a list according to a given function.
 
 % =======================================================================
 % Unions
