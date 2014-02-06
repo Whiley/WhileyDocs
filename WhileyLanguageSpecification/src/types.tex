@@ -626,11 +626,18 @@ Here, the type \lstinline{Tree} is recursive because it is defined in terms of i
 
 \section{Effective Types}
 \label{c_types_effective}
+An effective type is a union of types which all contain some property (e.g. a union of lists).  This common property allows the effective type to support more operations than possible for an arbitrary union~(\S\ref{c_types_unions}).
 
 \subsection{Effective Tuples}
+
+An effective tuple is a union of tuple types.  For example, \lstinline{(int,int)|(real,real)} is an effective tuple.  An effective tuple type supports all operations valid for a tuple type~(\S\ref{c_types_tuple}).
+
 \subsection{Effective Records}
 \label{c_types_effective_records}
+An effective record is a union of record types.  For example, \lstinline|{int f, int g}$|${real f, int h}| is an effective record.  An effective record provides access to fields common to all records in the union.  For example, the type \lstinline|{int f, int g}$|${real f, int h}| can be viewed as having an effective type of \lstinline|{int$|$real f, ...}| and, hence, read access to field \lstinline{f} is given.
+
 \subsection{Effective Collections}
+An effective collection is a union of collection types.  For example, \lstinline{[int]|[real]} is an effective list.  An effective collection supports all operations valid for a collection type~(\S\ref{c_types_collection}).  For example, the type \lstinline|[int]$|$[real]| can be viewed as having an effective type of \lstinline|[int$|$real]| and, hence, read access to its length and elements is given.
 
 \section{Semantics}
 \label{c_types_type_semantics}
