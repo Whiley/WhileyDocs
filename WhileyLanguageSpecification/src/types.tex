@@ -607,6 +607,23 @@ Here, the function \lstinline{f()} accepts a parameter of any type, and returns 
 \section{Recursive Types}
 \label{c_types_recursive}
 
+Recursive types describe tree-like structures of arbitrary depth.  For example, linked lists, binary trees, quad trees, etc can all be described using recursive types.  Recursive types have no explicit syntax and, instead, are declared indirectly in terms of themselves using one or more nominal types~(\S\ref{c_types_nominal}).\\
+
+\noindent The following example illustrates a simple recursive type:
+
+\begin{lstlisting}
+type Node is { Tree left, Tree right, int data }
+type Tree is null | Node
+
+function sizeOf(Tree t) => int:
+    if t == null:
+        return 0
+    else:
+        return 1 + sizeOf(t.lhs) + sizeOf(t.rhs)
+\end{lstlisting}
+
+Here, the type \lstinline{Tree} is recursive because it is defined in terms of itself.  An instance of type \lstinline{Tree} is a sequence of nested records which is arbitrarily deep, and whose branches are terminated by \lstinline{null}.  The function \lstinline{sizeOf()} traverses an arbitrary instance of \lstinline{Tree} and returns the number of \lstinline{Node}s it contains.
+
 \section{Effective Types}
 \label{c_types_effective}
 
