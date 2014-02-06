@@ -540,9 +540,13 @@ A set type describes set values whose elements are subtypes of the element type.
 \paragraph{Examples.}  The following example illustrates set types:
 
 \begin{lstlisting}
-type Graph is [{int}] // adjacency list representation
+// Adjacency list representation
+type Graph is ([{uint}] es) where all { xs in es, x in xs | x < |graph| }
 
-function depthFirstSearch(int v, Graph graph, {int} visited) => {int}:
+function depthFirstSearch(uint v, Graph graph, {int} visited) => {int}
+// Vertex v must be valid index in graph
+requires v < |graph|:
+    //
     visited = visited + {v}
     // Travel along all edges not yet visited
     for w in graph[v]:
@@ -599,7 +603,21 @@ A list type describes list values whose elements are subtypes of the element typ
 \paragraph{Examples.}  The following example illustrates map types:
 
 \begin{lstlisting}
+function add([int] v1, [int] v2) => ([int] v3)
+// Input vectors must have same length
+requires |v1| == |v2|
+// Output vector must have same length as inputs
+ensures |v3| == |v1|:
+    //
+    int i=0
+    while i < |v1| where i >= 0 && |v1| == |v2|:
+        v1[i] = v1[i] + v2[i]
+        i = i + 1 
+    //
+    return v1
 \end{lstlisting}
+
+The above illustrates a simple function which adds two integer lists together.  The function's \gls{precondition} requires that both input list have the same length, whilst its \gls{postcondition}s ensures that this matches the length of the output.
 
 % =======================================================================
 % Functions
