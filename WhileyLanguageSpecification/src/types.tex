@@ -647,7 +647,7 @@ An evaluation function ${\tt\llbracket T\rrbracket}$ is defined which returns th
 
 \begin{definition}[Type Semantics]
 \label{def_acceptance}
-Every type ${\tt T}$ is characterized by the set of values it accepts,
+Every type descriptor ${\tt T}$ is characterized by the set of values it accepts,
 given by ${\tt \llbracket T\rrbracket}$ and defined as follows:
 \begin{displaymath}
 \begin{array}{rcl}
@@ -667,8 +667,17 @@ given by ${\tt \llbracket T\rrbracket}$ and defined as follows:
 \end{displaymath}
 \end{definition}
 
+\noindent Here, the {\em domain} of all possible values is given by ${\tt\mathbb{D}}$, whilst the set of all integers is given by ${\tt\mathbb{Z}}$.  Furthermore, if ${\tt T}$ is a \gls{type_descriptor}, then ${\tt\llbracket T\rrbracket}$ is its underlying \gls{type}.
+
 \subsection{Equivalences}
-Since types are defined in terms of the set of values they represent, it is perfectly possible for two distinct type descriptors to describe the same underlying type.  For example, \lstinline{int|null} is considered equivalent to \lstinline{null|int}.  Whilst this case is fairly easy to spot, there are some cases which are not so obvious.  Here, a number of such cases are given to illustrate:
+Since types are defined in terms of the set of values they represent, it is perfectly possible for two distinct type descriptors to describe the same underlying type.  For example, \lstinline{int|null} is considered equivalent to \lstinline{null|int}.  Whilst this case is fairly easy to spot, there are some cases which are not so obvious.  The definition of equivalence is given as follows:
+
+\begin{definition}[Type Equivalence]
+\label{c_types_def_equiv}
+Two type descriptors ${\tt T_1}$ and ${\tt T_2}$ are said to be {\em equivalent}, denoted by ${\tt T_1\equiv T_2}$, iff ${\tt \llbracket T_1\rrbracket = \llbracket T_2\rrbracket}$.
+\end{definition}
+
+\noindent Based on the above definition, we identify a number of such equivalences to illustrate:
 \begin{itemize}
 \item \lstinline{!any} is equivalent to \lstinline{void} and, conversely, \lstinline{any} is equivalent to \lstinline{!void}
 \item \lstinline{int&!int} is equivalent to \lstinline{void} and, conversely, \lstinline{int|!int} is equivalent to \lstinline{any}
@@ -676,11 +685,11 @@ Since types are defined in terms of the set of values they represent, it is perf
 \item \lstinline|{int$\;|\;$null f}&{bool$\;|\;$null f}| is equivalent to \lstinline|{null f}|
 \end{itemize}
 
-In general, a large number of equivalences is implied by the semantics of types given previously and they cannot all be listed here.
+Under Definition~\ref{c_types_def_equiv}, an infinite number of equivalences exist between the type descriptors of Whiley, and we cannot list them all here.
 
 \subsection{Subtyping}
 \label{c_types_subtyping}
-Types in Whiley support the notion of {\em subtyping}.  That is one type may be a {\em subtype} for another.  For example, the type \lstinline{int} is a subtype of \lstinline{any}.  Likewise, \lstinline{bool} is a subtype of \lstinline{bool|null}.  The {\em subtyping operator} is denoted by ``${\tt \le}$''; for example, ${\tt T_1\le T_2}$ indicates that type ${\tt T_1}$ is a subtype of ${\tt T_2}$.  The subtyping operator operates on the underlying types, rather than syntactic types, and is {\em reflexive}, {\em transitive} and {\em anti-symmetric}. 
+Types in Whiley support the notion of {\em subtyping} where one type may be a {\em subtype} for another.  For example, the type \lstinline{int} is a subtype of \lstinline{any}.  Likewise, \lstinline{bool} is a subtype of \lstinline{bool|null}.  The {\em subtyping operator} is denoted by ``${\tt \le}$''; for example, ${\tt T_1\le T_2}$ indicates that type ${\tt T_1}$ is a subtype of ${\tt T_2}$.  The subtyping operator operates on the underlying types, rather than syntactic types, and is {\em reflexive}, {\em transitive} and {\em anti-symmetric}. 
 
 The subtyping operator is regarded as an algorithm for determining whether one type is a subtype of another.  Ultimately, any valid implementation of Whiley's subtyping operators must be both sound and complete (i.e. that ${\tt T_1\le T_2 \iff T_1 \subseteq T_2}$). 
 
