@@ -29,7 +29,7 @@ The above example contains two statement blocks, one nested inside the other.  T
 
 \section{Assert Statement}
 
-Represents an {\em assert statement} of the form ``\lstinline{assert e}'', where \lstinline{e} is a \gls{boolean_expression}.  A \gls{fault} will be raised at runtime if the boolean expression of an \lstinline{assert} statement evaluates to \lstinline{false}; otherwise, execution will proceed normally.  At verification time, the verifier is forced to ensure that the asserted expression is true for all possible execution paths.  This allows to specify and check something he/she believes to be true at a given point in the program.
+Represents an {\em assert statement} of the form ``\lstinline{assert e}'', where \lstinline{e} is a \gls{boolean_expression}.  A \gls{fault} will be raised at runtime if the asserted expression evaluates to \lstinline{false}; otherwise, execution will proceed normally.  At verification time, the verifier is forced to ensure that the asserted expression is true for all possible execution paths.  This allows the programmer to specify and check something he/she believes to be true at a given point in the program.
 
 \begin{syntax}
   \verb+AssertStmt+ & $::=$ & \token{assert}\ \verb+Expr+\\
@@ -75,25 +75,23 @@ The last assignment here illustrates that the left-hand side of an assignment ca
 
 \section{Assume Statement}
 
-Represents an {\em assume statement} of the form ``\lstinline{assume e}'', where \lstinline{e} is a \gls{boolean_expression}.
+Represents an {\em assume statement} of the form ``\lstinline{assume e}'', where \lstinline{e} is a \gls{boolean_expression}.  A \gls{fault} will be raised at runtime if the assumed expression evaluates to \lstinline{false}; otherwise, execution will proceed normally.  At verification time, the verifier will automatically assume that the given expression holds.  Thus, \lstinline{assume} statements provide a way for the programmer to override the verifier.  This is particularly useful in cases where the verifier is unable to establish something that the programmer knows to be true.  However, care must be taken to ensure that the assumed expression really does hold.
 
 \begin{syntax}
   \verb+AssumeStmt+ & $::=$ & \token{assume}\ \verb+Expr+\\
 \end{syntax}
 
-
-\paragraph{Examples.}  The following illustrates a simple function
-which uses an \lstinline{assume} statement to meet its
-postcondition:
+The following illustrates a simple function which uses an \lstinline{assume} statement to meet its postcondition:
 
 \begin{lstlisting}
-function abs(int x) => int:
+function abs(int x) => (int y)
+ensures y >= 0:
+    //
     assume x >= 0
     return x
 \end{lstlisting}
 
-\paragraph{Notes.} Assumptions are {\em assumed} by the verifier and, since
-this may be unsound, are always turned into {\em runtime checks}.
+Here, the programmer has used an assumption to ensure this function passes verification.  This would not appear to be safe in this case, and may lead to a fault at runtime.
 
 % =======================================================================
 % ReturnStatement
