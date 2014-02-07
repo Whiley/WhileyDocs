@@ -1,17 +1,6 @@
 \chapter{Introduction}
 
-This document provides a specification of the {\em Whiley Programming
-  Language}.  Whiley is a hybrid imperative and functional programming
-language designed to produce programs with fewer errors that those
-developed by more convention means.  Whiley allows explicit
-specifications to be given for functions, methods and data structures,
-and employs a \gls{verifying_compiler} to check whether programs meet their specifications.  As such, Whiley is ideally suited
-for use in \gls{safety_critical_system}s.  However, there are many
-benefits to be gained from using Whiley in a general setting
-(e.g. improved documentation, maintainability, reliability, etc).
-Finally, this document is {\em not} intended as a general introduction
-to the language, and the reader is referred to alternative documents
-for learning the language~\cite{Pearce14a}.
+This document provides a specification of the {\em Whiley Programming Language}.  Whiley is a hybrid imperative and functional programming language designed to produce programs with as few errors as possible.  Whiley allows explicit specifications to be given for functions, methods and data structures, and employs a \gls{verifying_compiler} to check whether programs meet their specifications.  As such, Whiley is ideally suited for use in \gls{safety_critical_system}s.  However, there are many benefits to be gained from using Whiley in a general setting (e.g. improved documentation, maintainability, reliability, etc).  Finally, this document is {\em not} intended as a general introduction to the language, and the reader is referred to alternative documents for learning the language~\cite{Pearce14a}.
 
 
 \section{Background}
@@ -47,35 +36,15 @@ an estimated \$500 million~\cite{ARIAN5}.
 % abstraction is performed (hence, reducing the scope) or scalability is
 % sacrificed.
 
-Around 2003, Hoare proposed the creation of a {\em verifying compiler} as a grand challenge for computer science \cite{Hoare03}.  A verifying
-compiler ``{\em uses automated mathematical and logical reasoning to
-  check the correctness of the programs that it compiles.}''  There
-have been numerous attempts to construct a verifying compiler system,
-although none has yet made it into the mainstream.  Early examples
-include that of King~\cite{King69}, Deutsch~\cite{Deutsch73}, the
-Gypsy Verification Environment~\cite{Good85} and the Stanford Pascal
-Verifier~\cite{LGHKMOPS95}.  More recently, the Extended Static
-Checker for Modula-3~\cite{DLNS98} which became the Extended Static
-Checker for Java (ESC/Java) --- a widely acclaimed and influential
-work~\cite{FLLNSS02}.  Building on this success was JML and its
-associated tooling which provided a standard notation for specifying
-functions in Java~\cite{LCCRC05}.  Finally, Microsoft %,CR08,JC10
-developed the Spec\# system which is built on top of
-C\#~\cite{BLS04}.% ,BDFLS04,BCDJL06
+Around 2003, Hoare proposed the creation of a {\em verifying compiler} as a grand challenge for computer science \cite{Hoare03}.  A verifying compiler ``{\em uses automated mathematical and logical reasoning to check the correctness of the programs that it compiles.}''  There have been numerous attempts to construct a verifying compiler system, although none has yet made it into the mainstream.  Early examples include that of King~\cite{King69}, Deutsch~\cite{Deutsch73}, the Gypsy Verification Environment~\cite{Good85} and the Stanford Pascal Verifier~\cite{LGHKMOPS95}.  More recently, the Extended Static Checker for Modula-3~\cite{DLNS98} which became the Extended Static Checker for Java (ESC/Java) --- a widely acclaimed and influential work~\cite{FLLNSS02}.  Building on this success was JML and its associated tooling which provided a standard notation for specifying functions in Java~\cite{LCCRC05}.  Finally, Microsoft developed the Spec\# system which is built on top of C\#~\cite{BLS04}.% ,BDFLS04,BCDJL06
 
 \section{Goals}
 
-The Whiley Programming Language has been designed from scratch in
-conjunction with a verifying compiler.  The intention of this is to
-provide an open framework for research in automated software
-verification.  The initial goal is to automatically eliminate common
-errors, such as {\em null dereferences}, {\em array-out-of-bounds},
-{\em divide-by-zero} and more.  In the future, the intention is to
-consider more complex issues, such as termination, proof-carrying code and user-supplied proofs.
+The Whiley Programming Language has been designed from scratch in conjunction with a verifying compiler.  The intention is to provide an open framework for research in automated software verification.  The initial goal is to automatically eliminate common errors, such as {\em null dereferences}, {\em array-out-of-bounds}, {\em divide-by-zero} and more.  In the future, the intention is to consider more complex issues, such as termination, proof-carrying code and user-supplied proofs.
 
 \section{History}
 
-Development of the Whiley programming language was begun in 2009 by Dr. David J. Pearce, at the time a lecturer in Computer Science at Victoria University of Wellington.  The accompanying website \url{http://whiley.org} went live in 2010, making the first versions of Whiley available for download.  Since then, Whiley has been in constant development with the majority of contributions being made by the original author.  Several scientific papers have published on different aspects of the language, including:
+Development of the Whiley programming language begun in 2009 by Dr. David J. Pearce, at the time a lecturer in Computer Science at Victoria University of Wellington.  The accompanying website \url{http://whiley.org} went live in 2010, making the first versions of Whiley available for download.  Since then, Whiley has been in constant development with the majority of contributions being made by the original author.  Several scientific papers have published on different aspects of the language, including:
 
 \begin{itemize}
 \item {\bf Implementing a Language with Flow-Sensitive and Structural Typing on the JVM}.  David J. Pearce and James Noble. In {\em Proceedings of the Workshop on Bytecode Semantics, Verification, Analysis and Transformation (BYTECODE)}, 2011. 
