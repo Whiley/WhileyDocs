@@ -99,25 +99,24 @@ Here, the programmer has used an assumption to ensure this function passes verif
 
 \section{Return Statement}
 
-Represents a {\em return statement} with an optional expression is referred to as the {\em return value}.
+Represents a {\em return statement} with an optional expression referred to as the {\em return value}.  At runtime, this statement returns control to the caller of the enclosing function or method.  At verification time, the verifier will ensure the returned value meets the \gls{postcondition} of the enclosing function or method.
 
 \begin{syntax}
   \verb+ReturnStmt+ & $::=$ & \token{return}\ \big[\ \verb+Expr+\
   \big]\\
 \end{syntax}
 
-\noindent The following illustrates a simple function
-which returns the increment of its parameter \lstinline{x}:
+\noindent The following illustrates a \lstinline{return} statement:
 
 \begin{lstlisting}
 function f(int x) => int:
     return x + 1
 \end{lstlisting}
 
-Here, we see a simple \lstinline{return} statement which returns an \lstinline{int} value.
+Here, we see a simple simple function which returns the increment of its parameter \lstinline{x} using a \lstinline{return} statement.
 
-\paragraph{Notes.}  The returned expression (if there is one) must
-begin on the same line as the return statement itself.
+
+\paragraph{Notes.} The returned expression (if there is one) must begin on the same line as the statement itself.
 
 % =======================================================================
 % ThrowStatement
