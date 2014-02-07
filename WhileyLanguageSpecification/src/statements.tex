@@ -35,7 +35,7 @@ Represents an {\em assert statement} of the form ``\lstinline{assert e}'', where
   \verb+AssertStmt+ & $::=$ & \token{assert}\ \verb+Expr+\\
 \end{syntax}
 
-\paragraph{Examples.} The following illustrates an \lstinline{assert} statement:
+\noindent The following illustrates an \lstinline{assert} statement:
 \begin{lstlisting}
 function abs(int x) => int:
     if x < 0:
@@ -59,7 +59,7 @@ Represents an {\em assignment statement} of the form \lstinline{leftHandSide = r
 \end{syntax}
 
 
-\paragraph{Examples.} The following illustrates different possible assignment statements:
+\noindent The following illustrates different possible assignment statements:
 \begin{lstlisting}
 x = y       // variable assignment
 x.f = y     // field assignment
@@ -75,13 +75,13 @@ The last assignment here illustrates that the left-hand side of an assignment ca
 
 \section{Assume Statement}
 
-Represents an {\em assume statement} of the form ``\lstinline{assume e}'', where \lstinline{e} is a \gls{boolean_expression}.  A \gls{fault} will be raised at runtime if the assumed expression evaluates to \lstinline{false}; otherwise, execution will proceed normally.  At verification time, the verifier will automatically assume that the given expression holds.  Thus, \lstinline{assume} statements provide a way for the programmer to override the verifier.  This is particularly useful in cases where the verifier is unable to establish something that the programmer knows to be true.  However, care must be taken to ensure that the assumed expression really does hold.
+Represents an {\em assume statement} of the form ``\lstinline{assume e}'', where \lstinline{e} is a \gls{boolean_expression}.  A \gls{fault} will be raised at runtime if the assumed expression evaluates to \lstinline{false}; otherwise, execution will proceed normally.  At verification time, the verifier will automatically assume that the given expression holds.  Thus, \lstinline{assume} statements provide a way for the programmer to override the verifier.  This is useful where the verifier is unable to establish something that the programmer knows to be true.  Care must be taken to ensure that the assumed expression really does hold.
 
 \begin{syntax}
   \verb+AssumeStmt+ & $::=$ & \token{assume}\ \verb+Expr+\\
 \end{syntax}
 
-The following illustrates a simple function which uses an \lstinline{assume} statement to meet its postcondition:
+\noindent The following illustrates an \lstinline{assume} statement:
 
 \begin{lstlisting}
 function abs(int x) => (int y)
@@ -106,7 +106,7 @@ Represents a {\em return statement} with an optional expression is referred to a
   \big]\\
 \end{syntax}
 
-\paragraph{Examples.} The following illustrates a simple function
+\noindent The following illustrates a simple function
 which returns the increment of its parameter \lstinline{x}:
 
 \begin{lstlisting}
@@ -131,7 +131,7 @@ begin on the same line as the return statement itself.
 
 \paragraph{Description.}
 
-\paragraph{Examples.}
+\noindent
 
 \paragraph{Notes.} 
 
@@ -148,7 +148,7 @@ Represents a \gls{variable_declaration} which has an optional expression assignm
   \token{=}\ \verb+Expr+\ \big]\\
 \end{syntax}
 
-\paragraph{Examples.} Some example variable declarations are:
+\noindent Some example variable declarations are:
 \begin{lstlisting}
 int x
 int y = 1
@@ -180,7 +180,7 @@ are referred to as {\em conditions} and must be
   \omega_i$ and $\ell < \phi$)}\\
 \end{syntax}
 
-\paragraph{Examples.} The following illustrates:
+\noindent The following illustrates:
 
 \begin{lstlisting}
 function max(int x, int y) => int:
@@ -209,7 +209,7 @@ Represents a while statement with optional \lstinline{where} clause(s) commonly 
 \multicolumn{3}{r}{(where $\ell < \gamma$)}\\
 \end{syntax}
 
-\paragraph{Examples.} As an example:
+\noindent As an example:
 
 \begin{lstlisting}
 function sum([int] xs) => int:
@@ -241,7 +241,7 @@ defines a condition which must be true on every iteration of the loop.
 
 \paragraph{Description.}
 
-\paragraph{Examples.}
+\noindent
 
 \paragraph{Notes.} 
 
@@ -261,7 +261,7 @@ defines a condition which must be true on every iteration of the loop.
 
 \paragraph{Description.}
 
-\paragraph{Examples.}
+\noindent
 
 \paragraph{Notes.} 
 
@@ -277,7 +277,7 @@ defines a condition which must be true on every iteration of the loop.
 
 \paragraph{Description.}
 
-\paragraph{Examples.}
+\noindent
 
 \paragraph{Notes.} 
 
@@ -293,6 +293,6 @@ defines a condition which must be true on every iteration of the loop.
 
 \paragraph{Description.}
 
-\paragraph{Examples.}
+\noindent
 
 \paragraph{Notes.} 
