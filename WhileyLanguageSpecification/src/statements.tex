@@ -1,7 +1,27 @@
 \chapter{Statements}
 
-\section{Statement Blocks}
+The execution of a Whiley program is controlled by \gls{statement}s, which cause effects on the environment.  However, statements in Whiley do not produce values.  \Gls{compound_statement} statements may contain other statements.
+
+\section{Blocks}
 \label{c_stmts_blocks}
+
+A \gls{statement_block} is a sequence of zero or more consecutive statements which have the same indentation.  Statement blocks are used to group statements together when constructing \gls{compound_statement}s.  For example:
+\begin{lstlisting}
+function sum([int] items) => int:
+    // outer block begins
+    int r = 0
+    int i = 0
+    while i < |items|:
+        // inner block begins
+        r = r + items[i]
+        i = i + 1
+        // inner block ends
+    //
+    return r
+    // outer block ends
+\end{lstlisting}
+
+The above example contains two statement blocks, one nested inside the other.  The outer block demarcates the body of the \lstinline{sum()} function, whilst the inner block demarcates the body of the \lstinline{while} statement.
 
 % =======================================================================
 % AssertStatement
@@ -9,13 +29,13 @@
 
 \section{Assert Statement}
 
-Represents an {\em assert statement} of the form ``\lstinline{assert e}'', where \lstinline{e} is a \gls{boolean_expression}. 
+Represents an {\em assert statement} of the form ``\lstinline{assert e}'', where \lstinline{e} is a \gls{boolean_expression}.  A \gls{fault} will be raised at runtime if the boolean expression of an \lstinline{assert} statement evaluates to \lstinline{false}; otherwise, execution will proceed normally.  At verification time, the verifier is forced to ensure that the asserted expression is true for all possible execution paths.  This allows to specify and check something he/she believes to be true at a given point in the program.
 
 \begin{syntax}
   \verb+AssertStmt+ & $::=$ & \token{assert}\ \verb+Expr+\\
 \end{syntax}
 
-\paragraph{Examples.} The following illustrates:
+\paragraph{Examples.} The following illustrates an \lstinline{assert} statement:
 \begin{lstlisting}
 function abs(int x) => int:
     if x < 0:
@@ -24,8 +44,9 @@ function abs(int x) => int:
     return x
 \end{lstlisting}
 
-\paragraph{Notes.}  Assertions are either {\em statically checked} by the
-verifier, or turned into {\em runtime checks}.
+Here, an assertion is used to check that the value being returned by the \lstinline{abs()} is non-negative.  Since this is a true statement of the function, this statement will never raise a fault.
+
+\paragraph{Notes.}  Assertions are either {\em statically checked} by the verifier, or turned into {\em runtime checks}.
 
 
 % =======================================================================
@@ -52,10 +73,6 @@ x[i].f = y  // compound assignment
 The last assignment here illustrates that the left-hand side of an
 assignment can be arbitrarily complex, involving nested assignments
 into lists and records.
-
-\paragraph{Semantics.}
-
-\paragraph{Notes.} 
 
 % =======================================================================
 % Assume Statement

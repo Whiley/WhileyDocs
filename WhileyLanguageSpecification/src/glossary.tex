@@ -66,6 +66,11 @@
 % F
 % ===============================================
 
+\newglossaryentry{fault}{
+  name={fault},
+  description={A fault is raised when an unrecoverable error in the program occurs.  For a verified program, no faults are possible except to indicate an out-of-memory failure.}
+}
+
 \newglossaryentry{function_declaration}{
   name={function declaration},
   description={A source-level declaration which defines a named function.  The full name of the declared entity is determined from the package and name of the enclosing \gls{source_file}.}
@@ -198,9 +203,20 @@
     binary form before they can be executed.}
 }
 
+\newglossaryentry{statement}{
+  name={statement},
+  description={An program instruction which has an effect on the
+    environment when executed, but does not produce a value}
+}
+
+\newglossaryentry{compound_statement}{
+  name={compound statement},
+  description={A statement (e.g. \lstinline{if}, \lstinline{while}, etc) which may contain blocks of other statements}
+}
+
 \newglossaryentry{statement_block}{
   name={statement block},
-  description={A sequence of zero or more consecutive statements with the same indentation}
+  description={A sequence of zero or more consecutive \gls{statement}s with the same indentation}
 }
 
 % ===============================================
