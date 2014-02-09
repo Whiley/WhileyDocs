@@ -20,7 +20,6 @@ function sum([int] items) => int:
     return r
     // outer block ends
 \end{lstlisting}
-
 The above example contains two statement blocks, one nested inside the other.  The outer block demarcates the body of the \lstinline{sum()} function, whilst the inner block demarcates the body of the \lstinline{while} statement.
 
 % =======================================================================
@@ -43,7 +42,6 @@ function abs(int x) => int:
     assert x >= 0
     return x
 \end{lstlisting}
-
 Here, an assertion is used to check that the value being returned by the \lstinline{abs()} is non-negative.  Since this is a true statement of the function, this statement will never raise a fault.
 
 % =======================================================================
@@ -66,7 +64,6 @@ x.f = y     // field assignment
 x[i] = y    // list assignment
 x[i].f = y  // compound assignment
 \end{lstlisting}
-
 The last assignment here illustrates that the left-hand side of an assignment can be arbitrarily complex, involving nested assignments into lists and records.
 
 % =======================================================================
@@ -90,7 +87,6 @@ ensures y >= 0:
     assume x >= 0
     return x
 \end{lstlisting}
-
 Here, the programmer has used an assumption to ensure this function passes verification.  This would not appear to be safe in this case, and may lead to a fault at runtime.
 
 % =======================================================================
