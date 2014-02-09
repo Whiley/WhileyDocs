@@ -112,7 +112,6 @@ A {\em return statement} has an optional expression referred to as the {\em retu
 function f(int x) => int:
     return x + 1
 \end{lstlisting}
-
 Here, we see a simple simple function which returns the increment of its parameter \lstinline{x} using a \lstinline{return} statement.
 
 
@@ -170,7 +169,6 @@ int x
 int y = 1
 int z = x + y
 \end{lstlisting}
-
 Here we see three variable declarations.  The first has no initialiser, whilst the second and third have initialisers.
 
 % =======================================================================
@@ -179,11 +177,7 @@ Here we see three variable declarations.  The first has no initialiser, whilst t
 
 \section{If Statement}
 
-Represents a classical \lstinline{if} statement which supports
-chaining and an optional \lstinline{else} branch.  The expression(s)
-are referred to as {\em conditions} and must be
-\gls{boolean_expression}s.  The first block is referred to as the {\em
-  true branch}, whilst the optional \lstinline{else} block is referred to as the {\em false branch}.
+An \lstinline{if} statement conditionally executes a \gls{statement_block} based on the outcome of one or more expressions.  Chaining of \lstinline{if} statements is permitted, and an optional \lstinline{else} branch may be given.  The expression(s) are referred to as {\em conditions} and must be \gls{boolean_expression}s.  The first block is referred to as the {\em true branch}, whilst the optional \lstinline{else} block is referred to as the {\em false branch}.
 
 \begin{syntax}
   \verb+IfStmt+$^\ell$ & $::=$ & \token{if}\ \verb+Expr+\ \token{:}
@@ -195,7 +189,7 @@ are referred to as {\em conditions} and must be
   \omega_i$ and $\ell < \phi$)}\\
 \end{syntax}
 
-\noindent The following illustrates:
+\noindent The following illustrates an \lstinline{if} statement:
 
 \begin{lstlisting}
 function max(int x, int y) => int:
@@ -206,8 +200,8 @@ function max(int x, int y) => int:
     else:
         return y
 \end{lstlisting}
-
-\paragraph{Notes.} 
+Here, we see an \lstinline{if} statement with two conditional outcomes
+and one default outcome.
 
 % =======================================================================
 % While Statement
