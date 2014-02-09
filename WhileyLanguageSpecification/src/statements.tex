@@ -157,7 +157,7 @@ Here, we see a simple function which parses a string into an integer.  The funct
 
 \section{Variable Declarations}
 
-Represents a \gls{variable_declaration} which has an optional expression assignment referred to as an \gls{variable_initialiser}.  If an initialiser is given, then this will be evaluated and assigned to the variable when the declaration is executed.
+A \gls{variable_declaration} statement has an optional expression assignment referred to as a \gls{variable_initialiser}.  If an initialiser is given, this will be evaluated and assigned to the variable when the declaration is executed.  
 
 \begin{syntax}
   \verb+VarDecl+ & $::=$ & \verb+Type+\ \verb+Ident+\ \big[\
@@ -171,8 +171,7 @@ int y = 1
 int z = x + y
 \end{lstlisting}
 
-\paragraph{Notes.} 
-
+Here we see three variable declarations.  The first has no initialiser, whilst the second and third have initialisers.
 
 % =======================================================================
 % If Statement
