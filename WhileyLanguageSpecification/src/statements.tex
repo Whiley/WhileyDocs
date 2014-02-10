@@ -90,89 +90,70 @@ ensures y >= 0:
 Here, the programmer has used an assumption to ensure this function passes verification.  This would not appear to be safe in this case, and may lead to a fault at runtime.
 
 % =======================================================================
-% ReturnStatement
+% Break Statement
 % =======================================================================
 
-\section{Return Statement}
+\section{Break Statement}
+\label{c_stmts_break}
 
-A {\em return statement} has an optional expression referred to as the {\em return value}.  At runtime, this statement returns control to the caller of the enclosing function or method.  At verification time, the verifier will ensure the returned value meets the \gls{postcondition} of the enclosing function or method.
+% =======================================================================
+% Continue Statement
+% =======================================================================
 
+\section{Continue Statement}
+\label{c_stmts_continue}
+
+% =======================================================================
+% Debug Statement
+% =======================================================================
+
+\section{Debug Statement}
+
+% =======================================================================
+% Do/While Statement
+% =======================================================================
+
+\section{Do/While Statement}
+\label{c_stmts_do_while}
 \begin{syntax}
-  \verb+ReturnStmt+ & $::=$ & \token{return}\ \big[\ \verb+Expr+\
-  \big]\\
+  \verb+DoWhileStmt+$^\ell$ & $::=$ & \token{do}\ \token{:}
+  \verb+Block+$^\gamma$\ \token{while}\ \verb+Expr+\ \big(\
+  \token{where}\ \verb+Expr+\ \big)$^*$\\
+&&\\
+\multicolumn{3}{r}{(where $\ell < \gamma$)}\\
 \end{syntax}
 
-\noindent The following illustrates a \lstinline{return} statement:
+\paragraph{Description.}
 
-\begin{lstlisting}
-function f(int x) => int:
-    return x + 1
-\end{lstlisting}
-Here, we see a simple simple function which returns the increment of its parameter \lstinline{x} using a \lstinline{return} statement.
+\noindent
 
-
-\paragraph{Notes.} The returned expression (if there is one) must begin on the same line as the statement itself.
-
+\paragraph{Notes.} 
 % =======================================================================
-% ThrowStatement
+% For Statement
 % =======================================================================
 
-\section{Throw Statement}
-A {\em throw statement} causes an exception to thrown which, if not caught locally, causes an \gls{abrupt_termination} of the current function or method.  Functions or methods which may terminate abruptly must declare appropriate an throws clause (\S\ref{c_source_files_function_decl},\S\ref{c_source_files_method_decl}) which contains al potentially thrown exceptions.
-
+\section{For Statement}
+\label{c_stmts_for}
 \begin{syntax}
-  \verb+ThrowStmt+ & $::=$ & \token{throw}\ \verb+Expr+\\
+  \verb+ForStmt+$^\ell$ & $::=$ & \token{for}\ \verb+VarPattern+\
+  \token{in}\ \verb+Expr+\ \big(\ \token{where}\ \verb+Expr+\
+  \big)$^*$\ \token{:} \verb+Block+$^\gamma$\\
+&&\\
+\multicolumn{3}{r}{(where $\ell < \gamma$)}\\
 \end{syntax}
 
-\noindent The following illustrates a \lstinline{throw} statement:
+\paragraph{Description.}
 
-\begin{lstlisting}
-function parseInt(int pos, string input) => (int,int)
-// Throws a syntax error if the string is malformed
-throws SyntaxError:
-    //
-    int start = pos
-    // check for negative input
-    if pos < |input| && input[pos] == '-':
-        pos = pos + 1
-    // match remainder
-    while pos < |input| && Char.isDigit(input[pos]):
-        pos = pos + 1
-    // check for error
-    if pos == start:
-        throw SyntaxError("Missing number",start,pos)
-    // done
-    return Int.parse(input[start..pos]),pos
-\end{lstlisting}
-Here, we see a simple function which parses a string into an integer.  The function declares that a \lstinline{SyntaxError} may be thrown.  This is required for two reasons:  firstly, the input contains no digits then an \lstinline{SyntaxError} is thrown by this function.  Additionally, the function \lstinline{Int.parse()} is declared to throw a \lstinline{SyntaxError} and, since it is not caught, this declaration must be propagated.
+\noindent
 
-% =======================================================================
-% Variable Declarations
-% =======================================================================
-
-\section{Variable Declarations}
-
-A \gls{variable_declaration} statement has an optional expression assignment referred to as a \gls{variable_initialiser}.  If an initialiser is given, this will be evaluated and assigned to the variable when the declaration is executed.  
-
-\begin{syntax}
-  \verb+VarDecl+ & $::=$ & \verb+Type+\ \verb+Ident+\ \big[\
-  \token{=}\ \verb+Expr+\ \big]\\
-\end{syntax}
-
-\noindent Some example variable declarations are:
-\begin{lstlisting}
-int x
-int y = 1
-int z = x + y
-\end{lstlisting}
-Here we see three variable declarations.  The first has no initialiser, whilst the second and third have initialisers.
+\paragraph{Notes.} 
 
 % =======================================================================
 % If Statement
 % =======================================================================
 
 \section{If Statement}
-
+\label{c_stmts_if}
 An \lstinline{if} statement conditionally executes a \gls{statement_block} based on the outcome of one or more expressions.  Chaining of \lstinline{if} statements is permitted, and an optional \lstinline{else} branch may be given.  The expression(s) are referred to as {\em conditions} and must be \gls{boolean_expression}s.  The first block is referred to as the {\em true branch}, whilst the optional \lstinline{else} block is referred to as the {\em false branch}.
 
 \begin{syntax}
@@ -204,8 +185,8 @@ and one default outcome.
 % =======================================================================
 
 \section{While Statement}
-
-Represents a while statement with optional \lstinline{where} clause(s) commonly referred to as \gls{loop_invariant}s.
+\label{c_stmts_while}
+A while statement repeatedly executes a statement block until an expression (the condition) evaluates to \lstinline{false}.  Optional \lstinline{where} clause(s) are permitted which, together, are commonly referred to as the \gls{loop_invariant}.  
 
 \begin{syntax}
   \verb+WhileStmt+$^\ell$ & $::=$ & \token{while}\ \verb+Expr+\ \big(\
@@ -214,7 +195,7 @@ Represents a while statement with optional \lstinline{where} clause(s) commonly 
 \multicolumn{3}{r}{(where $\ell < \gamma$)}\\
 \end{syntax}
 
-\noindent As an example:
+\noindent The following illustrates an \lstinline{while} statement:
 
 \begin{lstlisting}
 function sum([int] xs) => int:
@@ -225,57 +206,46 @@ function sum([int] xs) => int:
     i = i + 1
   return r
 \end{lstlisting}
+Here, we see a simple \lstinline{while} statement which sums the elements of variable \lstinline{xs}, storing the result in variable \lstinline{r}.  A loop invariant is given which establishes that variable \lstinline{i} is non-negative.
 
-\paragraph{Notes.}   When multiple \lstinline{where} clauses are
-given, these are combined using a conjunction. The combined invariant
-defines a condition which must be true on every iteration of the loop.
+\paragraph{Notes.}   When multiple \lstinline{where} clauses are given, these are combined using a conjunction to form the loop invariant.  The combined invariant must hold on entry to the loop and after each iteration.  Thus, when the condition evaluates to \lstinline{false}, the loop invariant is guaranteed to hold.  However, the loop invariant need not hold when the loop is exited using a \lstinline{break} (\S\ref{c_stmts_break}) statement.
 
 % =======================================================================
-% Do/While Statement
+% ReturnStatement
 % =======================================================================
 
-\section{Do/While Statement}
+\section{Return Statement}
+\label{c_stmts_return}
+A {\em return statement} has an optional expression referred to as the {\em return value}.  At runtime, this statement returns control to the caller of the enclosing function or method.  At verification time, the verifier will ensure the returned value meets the \gls{postcondition} of the enclosing function or method.
 
 \begin{syntax}
-  \verb+DoWhileStmt+$^\ell$ & $::=$ & \token{do}\ \token{:}
-  \verb+Block+$^\gamma$\ \token{while}\ \verb+Expr+\ \big(\
-  \token{where}\ \verb+Expr+\ \big)$^*$\\
-&&\\
-\multicolumn{3}{r}{(where $\ell < \gamma$)}\\
+  \verb+ReturnStmt+ & $::=$ & \token{return}\ \big[\ \verb+Expr+\
+  \big]\\
 \end{syntax}
 
-\paragraph{Description.}
+\noindent The following illustrates a \lstinline{return} statement:
 
-\noindent
+\begin{lstlisting}
+function f(int x) => int:
+    return x + 1
+\end{lstlisting}
+Here, we see a simple simple function which returns the increment of its parameter \lstinline{x} using a \lstinline{return} statement.
 
-\paragraph{Notes.} 
+
+\paragraph{Notes.} The returned expression (if there is one) must begin on the same line as the statement itself.
 
 % =======================================================================
-% For Statement
+% Skip Statement
 % =======================================================================
 
-\section{For Statement}
-
-\begin{syntax}
-  \verb+ForStmt+$^\ell$ & $::=$ & \token{for}\ \verb+VarPattern+\
-  \token{in}\ \verb+Expr+\ \big(\ \token{where}\ \verb+Expr+\
-  \big)$^*$\ \token{:} \verb+Block+$^\gamma$\\
-&&\\
-\multicolumn{3}{r}{(where $\ell < \gamma$)}\\
-\end{syntax}
-
-\paragraph{Description.}
-
-\noindent
-
-\paragraph{Notes.} 
+\section{Skip Statement}
 
 % =======================================================================
 % Switch Statement
 % =======================================================================
 
 \section{Switch Statement}
-
+\label{c_stmts_switch}
 \begin{syntax}
   \verb+SwitchStmt+ & $::=$ &\\
 \end{syntax}
@@ -287,11 +257,45 @@ defines a condition which must be true on every iteration of the loop.
 \paragraph{Notes.} 
 
 % =======================================================================
+% ThrowStatement
+% =======================================================================
+
+\section{Throw Statement}
+\label{c_stmts_throw}
+A {\em throw statement} causes an exception to thrown which, if not caught locally, causes an \gls{abrupt_termination} of the current function or method.  Functions or methods which may terminate abruptly must declare appropriate an throws clause (\S\ref{c_source_files_function_decl},\S\ref{c_source_files_method_decl}) which contains al potentially thrown exceptions.
+
+\begin{syntax}
+  \verb+ThrowStmt+ & $::=$ & \token{throw}\ \verb+Expr+\\
+\end{syntax}
+
+\noindent The following illustrates a \lstinline{throw} statement:
+
+\begin{lstlisting}
+function parseInt(int pos, string input) => (int,int)
+// Throws a syntax error if the string is malformed
+throws SyntaxError:
+    //
+    int start = pos
+    // check for negative input
+    if pos < |input| && input[pos] == '-':
+        pos = pos + 1
+    // match remainder
+    while pos < |input| && Char.isDigit(input[pos]):
+        pos = pos + 1
+    // check for error
+    if pos == start:
+        throw SyntaxError("Missing number",start,pos)
+    // done
+    return Int.parse(input[start..pos]),pos
+\end{lstlisting}
+Here, we see a simple function which parses a string into an integer.  The function declares that a \lstinline{SyntaxError} may be thrown.  This is required for two reasons:  firstly, the input contains no digits then an \lstinline{SyntaxError} is thrown by this function.  Additionally, the function \lstinline{Int.parse()} is declared to throw a \lstinline{SyntaxError} and, since it is not caught, this declaration must be propagated.
+
+% =======================================================================
 % Try/Catch Block
 % =======================================================================
 
 \section{Try/Catch Statement}
-
+\label{c_stmts_try_catch}
 \begin{syntax}
   \verb+TryCatchStmt+ & $::=$ &\\
 \end{syntax}
@@ -301,3 +305,24 @@ defines a condition which must be true on every iteration of the loop.
 \noindent
 
 \paragraph{Notes.} 
+
+% =======================================================================
+% Variable Declarations
+% =======================================================================
+
+\section{Variable Declaration Statement}
+\label{c_stmts_var_decl}
+A \gls{variable_declaration} statement has an optional expression assignment referred to as a \gls{variable_initialiser}.  If an initialiser is given, this will be evaluated and assigned to the variable when the declaration is executed.  
+
+\begin{syntax}
+  \verb+VarDecl+ & $::=$ & \verb+Type+\ \verb+Ident+\ \big[\
+  \token{=}\ \verb+Expr+\ \big]\\
+\end{syntax}
+
+\noindent Some example variable declarations are:
+\begin{lstlisting}
+int x
+int y = 1
+int z = x + y
+\end{lstlisting}
+Here we see three variable declarations.  The first has no initialiser, whilst the second and third have initialisers.
