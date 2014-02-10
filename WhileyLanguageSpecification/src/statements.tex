@@ -260,6 +260,7 @@ An \lstinline{if} statement conditionally executes a \gls{statement_block} based
 \multicolumn{3}{r}{(where $\ell < \gamma$ and $\forall i.\ell <
   \omega_i$ and $\ell < \phi$)}\\
 \end{syntax}
+\pagebreak
 
 \noindent The following illustrates an \lstinline{if} statement:
 
@@ -317,7 +318,7 @@ A {\em return statement} has an optional expression referred to as the {\em retu
   \verb+ReturnStmt+ & $::=$ & \token{return}\ \big[\ \verb+Expr+\
   \big]\\
 \end{syntax}
-
+\pagebreak
 \noindent The following illustrates a \lstinline{return} statement:
 
 \begin{lstlisting}
@@ -363,15 +364,44 @@ Here, we see a \lstinline{skip} statement being used to represent an empty state
 
 \section{Switch Statement}
 \label{c_stmts_switch}
+A {\em switch statement} transfers control to one of several statement blocks, referred to as {\em switch cases}, depending on the value obtained from evaluating a given expresion.  Each case is associated with one or more values which are used to match against.  If no match is made, control either falls through to the next statement following the \lstinline{switch} or is transferred to a \lstinline{default} block if one is given.
+
 \begin{syntax}
-  \verb+SwitchStmt+ & $::=$ &\\
+  \verb+SwitchStmt+$^\ell$ & $::=$ & \token{switch}\ \verb+Expr+\ \token{:}\ \big(\ \verb+CaseBlock+$^\gamma$\ $|$\ \verb+DefaultBlock+$^\gamma$\ \big)\ $^+$\\
+  &&\\
+  \verb+CaseBlock+$^\ell$ & $::=$ & \token{case} \verb+ConstantExpr+\ \big(\ \token{,}\ \verb+ConstantExpr+\ \big)$^*$\ \token{:}\ \verb+Block+$^\gamma$\\
+  &&\\
+  \verb+DefaultBlock+$^\ell$ & $::=$ & \token{default}\ \token{:}\ \verb+Block+$^\gamma$\\
+&&\\
+\multicolumn{3}{r}{(where $\ell < \gamma$)}\\
 \end{syntax}
 
-\paragraph{Description.}
+\pagebreak
+\noindent The following illustrates a \lstinline{switch} statement:
 
-\noindent
-
-\paragraph{Notes.} 
+\begin{lstlisting}
+function toDescriptorString(JvmType.Primitive t) => string:
+    switch t:
+        case JvmType.Void:
+            return "D"
+        case JvmType.Boolean:
+            return "Z"
+        case JvmType.Byte:
+            return "B"
+        case JvmType.Char:
+            return "C"
+        case JvmType.Short:
+            return "S"
+        case JvmType.Int:
+            return "I"
+        case JvmType.Long:
+            return "J"
+        case JvmType.Float:
+            return "F"
+        default:
+            return "D"
+\end{lstlisting}
+Here, we see a simple \lstinline{switch} statement which choose between a number of possible values of type \lstinline{JvmType.Primitive}.  A \lstinline{default} case is given which catches the only remaining case (i.e. representing the value \lstinline{JvmType.Double}).
 
 % =======================================================================
 % ThrowStatement
