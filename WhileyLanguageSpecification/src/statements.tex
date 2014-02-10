@@ -189,7 +189,7 @@ A do-while statement repeatedly executes a statement block until an expression (
 \multicolumn{3}{r}{(where $\ell < \gamma$)}\\
 \end{syntax}
 
-\noindent The following illustrates an \lstinline{while} statement:
+\noindent The following illustrates an do-while statement:
 
 \begin{lstlisting}
 function sum([int] xs) => int
@@ -215,6 +215,8 @@ Here, we see a simple do-while statement which sums the elements of variable \ls
 
 \section{For Statement}
 \label{c_stmts_for}
+A {\em for statement} iterates over all elements in a collection obtained from evaluating the {\em source expression}.  Optional \lstinline{where} clause(s) are permitted which, together, are commonly referred to as the \gls{loop_invariant}.  
+
 \begin{syntax}
   \verb+ForStmt+$^\ell$ & $::=$ & \token{for}\ \verb+VarPattern+\
   \token{in}\ \verb+Expr+\ \big(\ \token{where}\ \verb+Expr+\
@@ -223,11 +225,23 @@ Here, we see a simple do-while statement which sums the elements of variable \ls
 \multicolumn{3}{r}{(where $\ell < \gamma$)}\\
 \end{syntax}
 
-\paragraph{Description.}
+\noindent The following illustrates a \lstinline{for} statement:
 
-\noindent
+\begin{lstlisting}
+function max([int] items) => int
+// Input list cannot be empty
+requires |items| > 0:
+   //
+   int r = items[0]
+   
+   for i,v in items:
+        r = Math.max(r,v)
+   
+   return v
+\end{lstlisting}
+Here, we see a simple \lstinline{for} loop which iterates over all elements of the list \lstinline{items}.  At each iteration, variable \lstinline{i} holds the index whilst \lstinline{v} contains the element at that index (i.e. \lstinline{v == items[i]}).
 
-\paragraph{Notes.} 
+\paragraph{Notes.}   When multiple \lstinline{where} clauses are given, these are combined using a conjunction to form the loop invariant.  The combined invariant must hold on entry to the loop and after each iteration.  Thus, when the condition evaluates to \lstinline{false}, the loop invariant is guaranteed to hold.  However, the loop invariant need not hold when the loop is exited using a \lstinline{break} (\S\ref{c_stmts_break}) statement.
 
 % =======================================================================
 % If Statement
