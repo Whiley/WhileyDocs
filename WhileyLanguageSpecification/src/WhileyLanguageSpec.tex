@@ -1,6 +1,8 @@
 \documentclass[10pt]{book}
 
 \usepackage{times}
+%\usepackage{lmodern}
+%\usepackage{helvet}
 \usepackage{graphicx}
 \usepackage{url} % for typesetting urls
 \usepackage{color}
@@ -16,16 +18,15 @@
 
 \input{listings}
 
-\title{\Huge The Whiley Language Specification}
+\title{\Huge {\bf The Whiley Language Specification}}
 
-\author{David J. Pearce\\School of Engineering
-  and Computer Science\\Victoria University of Wellington, New
-  Zealand\\djp@ecs.vuw.ac.nz}
+\author{David J. Pearce}
 
 % ======================================================
 %\newcommand{\token}[1]{\;\texttt{"#1"}\;}
 \definecolor{lightgray}{RGB}{215,215,215}
 \definecolor{verylightgray}{RGB}{245,245,245}
+\definecolor{whileybrown}{RGB}{213,195,151}
 \newcommand{\token}[1]{\fcolorbox{black}{lightgray}{\strut\texttt{#1}}}
 
 % --- tokens ---
@@ -77,7 +78,7 @@
 % ======================================================
 
 \begin{document}
-\maketitle
+\input{title}
 \tableofcontents
 
 \input{introduction}
