@@ -11,7 +11,7 @@ int|null id(null|int x):
 \end{lstlisting}
 In this function we see two distinct \gls{type_descriptor}s expressed in the program text, namely ``\lstinline{int|null}'' and ``\lstinline{null|int}''.  Type descriptors occur at the source-level and describe \gls{type}s which occur at the abstract (or underlying) level.  In this particular case, we have two distinct type descriptors which describe the {\em same} underlying type.  We will often refer to types as providing the semantic (i.e. meaning) of type descriptors.  
 
-\subsection{Type Descriptors}
+\section{Type Descriptors}
 \label{c_types_type_descriptors}
 Type descriptors provide syntax for describing types and, in the remaining sections of this chapter, we explore the range of types supported in Whiley.  The top-level grammar for type descriptors is:
 
@@ -32,7 +32,7 @@ Type descriptors provide syntax for describing types and, in the remaining secti
   & $|$ & \verb+MethodType+ \\
 \end{syntax}
 
-\subsection{Type Patterns}
+\section{Type Patterns}
 \label{c_types_type_patterns}
 
 \Gls{type_pattern}s associate variables with types and their subcomponents and can be used to declare variables and/or {\em destructuring} types into variables.  Type patterns are a source-level entity which are similar to type descriptors.  The top-level grammar for type patterns is:
@@ -41,6 +41,7 @@ Type descriptors provide syntax for describing types and, in the remaining secti
   \verb+TypePattern+ & $::=$ & \verb+Type+ \big[\ \verb+Ident+\ \big]\\
               & $|$ & \verb+TuplePattern+ \\
               & $|$ & \verb+RecordPattern+ \\
+              & $|$ & \verb+RationalPattern+ \\
 \end{syntax}
 
 Type patterns do not exist for all compound structures --- only those where a value is guaranteed to exist which could be associated with a variable.
