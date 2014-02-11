@@ -470,10 +470,10 @@ Here, we see a function which parses a string as an integer (if it begins with a
 
 \section{Variable Declaration Statement}
 \label{c_stmts_var_decl}
-A \gls{variable_declaration} statement has an optional expression assignment referred to as a \gls{variable_initialiser}.  If an initialiser is given, this will be evaluated and assigned to the variable when the declaration is executed.  
+A \gls{variable_declaration} statement has an optional expression assignment referred to as a \gls{variable_initialiser}.  If an initialiser is given, this will be evaluated and assigned to the declared variables when the declaration is executed.  
 
 \begin{syntax}
-  \verb+VarDecl+ & $::=$ & \verb+Type+\ \verb+Ident+\ \big[\
+  \verb+VarDecl+ & $::=$ & \verb+TypePattern+\ \big[\
   \token{=}\ \verb+Expr+\ \big]\\
 \end{syntax}
 
@@ -482,5 +482,6 @@ A \gls{variable_declaration} statement has an optional expression assignment ref
 int x
 int y = 1
 int z = x + y
+int a, int b = x,y
 \end{lstlisting}
-Here we see three variable declarations.  The first has no initialiser, whilst the second and third have initialisers.
+Here we see four variable declarations.  The first has no initialiser, whilst the remainder have initialisers.  The final declaration illustrates a more complex use of type patterns where two variables of type \lstinline{int} are initialised from a tuple expression
