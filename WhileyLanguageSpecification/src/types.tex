@@ -16,13 +16,14 @@ In this function we see two distinct \gls{type_descriptor}s expressed in the pro
 Type descriptors provide syntax for describing types and, in the remaining sections of this chapter, we explore the range of types supported in Whiley.  The top-level grammar for type descriptors is:
 
 \begin{syntax}
-  \verb+Type+ & $::=$ & \verb+UnionType+ \\
+  \verb+Type+ & $::=$ & \verb+UnitType+\ \big(\ \token{,}\ \verb+UnitType+\ \big)$^*$\\
+  &&\\
+  \verb+UnitType+ & $::=$ & \verb+UnionType+ \\
               & $|$ & \verb+IntersectionType+ \\
               & $|$ & \verb+TermType+ \\
               &&\\
   \verb+TermType+ & $::=$ & \\
   & $|$ & \verb+PrimitiveType+ \\
-  & $|$ & \verb+TupleType+ \\
   & $|$ & \verb+RecordType+ \\
   & $|$ & \verb+ReferenceType+ \\
   & $|$ & \verb+NominalType+ \\
@@ -30,6 +31,7 @@ Type descriptors provide syntax for describing types and, in the remaining secti
   & $|$ & \verb+NegationType+ \\
   & $|$ & \verb+FunctionType+ \\
   & $|$ & \verb+MethodType+ \\
+  & $|$ & \token{(}\ \verb+Type+\ \token{)}\\
 \end{syntax}
 
 \section{Type Patterns}
@@ -503,10 +505,10 @@ A function or method type describes the signature of a function or method.  Thes
 
 \begin{syntax}
   \verb+FunctionType+ & $::=$ & \token{function}\ \token{(}\
-  \big[\ \verb+Type+\ \big(\ \token{,}\ \verb+Type+\ \big)$^*$\ \big]\ \token{)}\ \token{=>}\ \verb+Type+\\
+  \big[\ \verb+Type+\ \big(\ \token{,}\ \verb+Type+\ \big)$^*$\ \big]\ \token{)}\ \token{=>}\ \verb+UnitType+\\
   &&\\
   \verb+MethodType+ & $::=$ & \token{method}\ \token{(}\
-  \big[\ \verb+Type+\ \big(\ \token{,}\ \verb+Type+\ \big)$^*$\ \big]\ \token{)}\ \token{=>}\ \verb+Type+\\
+  \big[\ \verb+Type+\ \big(\ \token{,}\ \verb+Type+\ \big)$^*$\ \big]\ \token{)}\ \token{=>}\ \verb+UnitType+\\
 \end{syntax}
 
 \paragraph{Example.} The following example illustrates function types:
