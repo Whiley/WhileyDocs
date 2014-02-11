@@ -34,7 +34,7 @@ Represents an {\em assert statement} of the form ``\lstinline{assert e}'', where
   \verb+AssertStmt+ & $::=$ & \token{assert}\ \verb+Expr+\\
 \end{syntax}
 
-\noindent The following illustrates an \lstinline{assert} statement:
+\paragraph{Example.} The following illustrates an \lstinline{assert} statement:
 \begin{lstlisting}
 function abs(int x) => int:
     if x < 0:
@@ -57,7 +57,7 @@ As {\em assignment statement} is of the form \lstinline{leftHandSide = rightHand
 \end{syntax}
 
 
-\noindent The following illustrates different possible assignment statements:
+\paragraph{Example.} The following illustrates different possible assignment statements:
 \begin{lstlisting}
 x = y       // variable assignment
 x.f = y     // field assignment
@@ -78,7 +78,7 @@ An {\em assume statement} is of the form ``\lstinline{assume e}'', where \lstinl
   \verb+AssumeStmt+ & $::=$ & \token{assume}\ \verb+Expr+\\
 \end{syntax}
 
-\noindent The following illustrates an \lstinline{assume} statement:
+\paragraph{Example.} The following illustrates an \lstinline{assume} statement:
 
 \begin{lstlisting}
 function abs(int x) => (int y)
@@ -101,7 +101,7 @@ A {\em break statement} transfers control out of the enclosing loop (i.e. \lstin
   \verb+BreakStmt+ & $::=$ & \token{break}\\
 \end{syntax}
 
-\noindent The following illustrates a \lstinline{break} statement:
+\paragraph{Example.} The following illustrates a \lstinline{break} statement:
 
 \begin{lstlisting}
 // Remove lowest element holding x from xs
@@ -131,7 +131,7 @@ A {\em continue statement} can be used either to transfer control to the next it
   \verb+ContinueStmt+ & $::=$ & \token{continue}\\
 \end{syntax}
 
-\noindent The following illustrates a \lstinline{continue} statement:
+\paragraph{Example.} The following illustrates a \lstinline{continue} statement:
 
 \begin{lstlisting}
 function sumNonNegative([int] xs) => int:
@@ -159,7 +159,7 @@ A {\em debug statement} outputs the result of evaluating its expression to the {
   \verb+DebugStmt+ & $::=$ & \token{debug}\ \verb+Expr+\\
 \end{syntax}
 
-\noindent The following illustrates a \lstinline{debug} statement:
+\paragraph{Example.} The following illustrates a \lstinline{debug} statement:
 
 \begin{lstlisting}
 function f(int x) => int:
@@ -189,7 +189,7 @@ A do-while statement repeatedly executes a statement block until an expression (
 \multicolumn{3}{r}{(where $\ell < \gamma$)}\\
 \end{syntax}
 
-\noindent The following illustrates an do-while statement:
+\paragraph{Example.} The following illustrates an do-while statement:
 
 \begin{lstlisting}
 function sum([int] xs) => int
@@ -225,7 +225,7 @@ A {\em for statement} iterates over all elements in a collection obtained from e
 \multicolumn{3}{r}{(where $\ell < \gamma$)}\\
 \end{syntax}
 
-\noindent The following illustrates a \lstinline{for} statement:
+\paragraph{Example.} The following illustrates a \lstinline{for} statement:
 
 \begin{lstlisting}
 function max([int] items) => int
@@ -260,9 +260,8 @@ An \lstinline{if} statement conditionally executes a \gls{statement_block} based
 \multicolumn{3}{r}{(where $\ell < \gamma$ and $\forall i.\ell <
   \omega_i$ and $\ell < \phi$)}\\
 \end{syntax}
-\pagebreak
 
-\noindent The following illustrates an \lstinline{if} statement:
+\paragraph{Example.} The following illustrates an \lstinline{if} statement:
 
 \begin{lstlisting}
 function max(int x, int y) => int:
@@ -291,7 +290,7 @@ A while statement repeatedly executes a statement block until an expression (the
 \multicolumn{3}{r}{(where $\ell < \gamma$)}\\
 \end{syntax}
 
-\noindent The following illustrates an \lstinline{while} statement:
+\paragraph{Example.} The following illustrates an \lstinline{while} statement:
 
 \begin{lstlisting}
 function sum([int] xs) => int:
@@ -318,8 +317,8 @@ A {\em return statement} has an optional expression referred to as the {\em retu
   \verb+ReturnStmt+ & $::=$ & \token{return}\ \big[\ \verb+Expr+\
   \big]\\
 \end{syntax}
-\pagebreak
-\noindent The following illustrates a \lstinline{return} statement:
+
+\paragraph{Example.} The following illustrates a \lstinline{return} statement:
 
 \begin{lstlisting}
 function f(int x) => int:
@@ -342,7 +341,7 @@ A {\em skip statement} is a no-operation and has no effect on the environment.  
   \verb+SkipStmt+ & $::=$ & \token{skip}\\
 \end{syntax}
 
-\noindent The following illustrates a \lstinline{skip} statement:
+\paragraph{Example.} The following illustrates a \lstinline{skip} statement:
 
 \begin{lstlisting}
 function abs(int x) => (int y)
@@ -376,8 +375,7 @@ A {\em switch statement} transfers control to one of several statement blocks, r
 \multicolumn{3}{r}{(where $\ell < \gamma$)}\\
 \end{syntax}
 
-\pagebreak
-\noindent The following illustrates a \lstinline{switch} statement:
+\paragraph{Example.} The following illustrates a \lstinline{switch} statement:
 
 \begin{lstlisting}
 function toDescriptorString(JvmType.Primitive t) => string:
@@ -415,7 +413,7 @@ A {\em throw statement} causes an exception to thrown which, if not caught local
   \verb+ThrowStmt+ & $::=$ & \token{throw}\ \verb+Expr+\\
 \end{syntax}
 
-\noindent The following illustrates a \lstinline{throw} statement:
+\paragraph{Example.} The following illustrates a \lstinline{throw} statement:
 
 \begin{lstlisting}
 function parseInt(int pos, string input) => (int,int)
@@ -443,13 +441,13 @@ Here, we see a simple function which parses a string into an integer.  The funct
 
 \section{Try/Catch Statement}
 \label{c_stmts_try_catch}
+A {\em try-catch} statement demarcates a \gls{statement_block} to be executed in the context of one or more {\em exception handlers}.  If an uncaught exception is raised within the block which matches one (or more) of the exception handlers, then control is transferred directly to that handler.  Exception handlers are matched against raised exceptions in the order of declaration.
+
 \begin{syntax}
   \verb+TryCatchStmt+ & $::=$ &\\
 \end{syntax}
 
-\paragraph{Description.}
-
-\noindent
+\paragraph{Example.}
 
 \paragraph{Notes.} 
 
@@ -466,7 +464,7 @@ A \gls{variable_declaration} statement has an optional expression assignment ref
   \token{=}\ \verb+Expr+\ \big]\\
 \end{syntax}
 
-\noindent Some example variable declarations are:
+\paragraph{Example.} Some example variable declarations are:
 \begin{lstlisting}
 int x
 int y = 1

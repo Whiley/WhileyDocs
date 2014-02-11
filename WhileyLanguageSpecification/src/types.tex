@@ -75,7 +75,7 @@ The null type is typically used to show the absence of something. It is distinct
   \verb+NullType+ & $::=$ & \token{null} \\
 \end{syntax}
 
-\noindent The following illustrates a simple example of the \lstinline{null} type:
+\paragraph{Example.} The following illustrates a simple example of the \lstinline{null} type:
 
 \begin{lstlisting}
 type Tree is null | { int data, Tree left, Tree right }
@@ -105,7 +105,7 @@ The \lstinline{bool} type represents the set of boolean values (i.e. \lstinline{
  \verb+BoolType+ & $::=$ & \token{bool} \\
 \end{syntax}
 
-\noindent The following illustrates a simple example of the \lstinline{bool} type:
+\paragraph{Example.} The following illustrates a simple example of the \lstinline{bool} type:
 
 \begin{lstlisting}
 // Determine whether item is contained in list or not
@@ -132,7 +132,7 @@ The type \lstinline{byte} represents the set of eight-bit sequences, whose value
  \verb+ByteType+ & $::=$ & \token{byte}\\
 \end{syntax}
 
-\noindent The following illustrates a simple example of the \lstinline{byte} type:
+\paragraph{Example.} The following illustrates a simple example of the \lstinline{byte} type:
 
 \begin{lstlisting}
 // convert a byte into a string
@@ -165,7 +165,7 @@ The type \lstinline{int} represents the set of arbitrary-sized integers, whose v
   \verb+IntType+ & $::=$ & \token{int} \\
 \end{syntax}
 
-\noindent The following illustrates a simple example of the \lstinline{int} type:
+\paragraph{Example.} The following illustrates a simple example of the \lstinline{int} type:
 
 \begin{lstlisting}
 function fib(int x) => int:
@@ -190,7 +190,7 @@ The type \lstinline{real} represents the set of arbitrary-sized rationals, whose
   \verb+RealType+ & $::=$ & \token{real} \\
 \end{syntax}
 
-\noindent The following illustrates a simple example of the \lstinline{real} type:
+\paragraph{Example.} The following illustrates a simple example of the \lstinline{real} type:
 
 \begin{lstlisting}
 function floor(real x) => int:
@@ -216,7 +216,7 @@ The type \lstinline{char} represents the set of unicode characters, whose values
   \verb+CharType+ & $::=$ & \token{char} \\
 \end{syntax}
 
-\noindent The following illustrates a simple example of the \lstinline{char} type:
+\paragraph{Example.} The following illustrates a simple example of the \lstinline{char} type:
 
 \begin{lstlisting}
 function isUpperCase(char c) => bool:
@@ -237,7 +237,7 @@ The type \lstinline{any} represents the type whose variables may hold any possib
   \verb+AnyType+ & $::=$ & \token{any} \\
 \end{syntax}
 
-\noindent The following illustrates a simple example of the \lstinline{any} type:
+\paragraph{Example.} The following illustrates a simple example of the \lstinline{any} type:
 
 \begin{lstlisting}
 function toInt(any val) => int:
@@ -266,7 +266,7 @@ The \lstinline{void} type represents the type whose variables cannot exist (i.e.
    \verb+VoidType+ & $::=$ & \token{void} \\
 \end{syntax}
 
-\noindent The following example illustrates several uses of the \lstinline{void} type:
+\paragraph{Example.} The following example illustrates several uses of the \lstinline{void} type:
 
 \begin{lstlisting}
 // Attempt to update first element
@@ -297,7 +297,7 @@ A tuple type describes a compound type made up of two or more elements in sequen
   \verb+TypePattern+\ \big)$^+$\ \token{)}\ \big[\ \verb+Ident+\ \big]\\
 \end{syntax}
 
-\noindent The following example illustrates several uses of tuples:
+\paragraph{Example.} The following example illustrates several uses of tuples:
 
 \begin{lstlisting}
 function swap(int x, int y) => (int,int):
@@ -322,7 +322,7 @@ A record type describes a compound made of from one or more {\em fields}, each o
 
 Records use {\em mixed types} for defining fields (see \S\ref{c_types_mixed}), meaning that field names may be mixed within their type.  This is primarily useful for fields of function or method type (see below).  Records using the \token{...} notation are referred to as {\em open records} (e.g. \lstinline|{int x, ...}|), otherwise they are referred to as {\em closed records} (e.g. \lstinline|{int x, int y}|).  Open records represent all records containing {\em at least} the given fields, whilst closed records represent those containing {\em exactly} the given fields.   
 
-\noindent The following example illustrates an open record type: 
+\paragraph{Example.} The following example illustrates an open record type: 
 \begin{lstlisting}
 type Writer is { 
    method write([byte]) => int,
@@ -354,7 +354,7 @@ Reference types in Whiley represent references to variables, such as those alloc
   \verb+ReferenceType+ & $::=$ & \token{\&}\ \ \verb+Type+\\
 \end{syntax}
 
-\noindent The following example illustrates reference types:
+\paragraph{Example.} The following example illustrates reference types:
 \begin{lstlisting}
 // Swap contents of heap-allocated int variables
 method swap(&int pX, &int pY):
@@ -378,7 +378,7 @@ Nominal types represent user-defined types declared within one or more Whiley \g
   \verb+NominalType+ & $::=$ & \verb+Ident+\\
 \end{syntax}
 
-\noindent The following example illustrates nominal types:
+\paragraph{Example.} The following example illustrates nominal types:
 \begin{lstlisting}
 // Using a nominal type to construct a recursive type
 public type LinkedList is null | { int data, LinkedList next }
@@ -417,7 +417,7 @@ A set type describes set values whose elements are subtypes of the element type.
   \verb+SetType+ & $::=$ & \token{\{} \ \verb+Type+ \ \token{\}} \\
 \end{syntax}
 
-\noindent The following example illustrates set types:
+\paragraph{Example.} The following example illustrates set types:
 
 \begin{lstlisting}
 // Adjacency list representation
@@ -449,7 +449,7 @@ A map represents a one-many mapping from variables of one type to variables of a
   \verb+MapType+ & $::=$ & \token{\{} \ \verb+Type+ \ \token{=>} \ \verb+Type+ \ \token{\}} \\
 \end{syntax}
 
-\noindent The following example illustrates map types:
+\paragraph{Example.} The following example illustrates map types:
 
 \begin{lstlisting}
 type Expr is int | string // simple expression forms
@@ -478,7 +478,7 @@ A list type describes list values whose elements are subtypes of the element typ
   \verb+ListType+ & $::=$ & \token{[} \ \verb+Type+ \ \token{]}\\
 \end{syntax}
 
-\noindent The following example illustrates map types:
+\paragraph{Example.} The following example illustrates map types:
 
 \begin{lstlisting}
 function add([int] v1, [int] v2) => ([int] v3)
@@ -508,7 +508,7 @@ A function or method type describes the signature of a function or method.  Thes
   \big[\ \verb+Type+\ \big(\ \token{,}\ \verb+Type+\ \big)$^*$\ \big]\ \token{)}\ \token{=>}\ \verb+Type+\\
 \end{syntax}
 
-\noindent The following example illustrates function types:
+\paragraph{Example.} The following example illustrates function types:
 
 \begin{lstlisting}
 type Fun is function(int) => int
@@ -536,7 +536,7 @@ A union type is constructed from two or more component types and contains any va
   \big)$^*$\\
 \end{syntax}
 
-\noindent The following example illustrates a union type:
+\paragraph{Example.} The following example illustrates a union type:
 
 \begin{lstlisting}
 // Return lowest index of matching item, or null if none
@@ -565,7 +565,7 @@ An intersection type is constructed from two or more component types and contain
   \big)$^*$\\
 \end{syntax}
 
-\noindent The following example illustrates an intersection type:
+\paragraph{Example.} The following example illustrates an intersection type:
 
 \begin{lstlisting}
 type Reader is { 
@@ -593,7 +593,7 @@ A negation type is constructed a component type and contains any value {\em not}
   \verb+NegationType+ & $::=$ & \token{!}\ \ \verb+TermType+\\
 \end{syntax}
 
-\noindent The following example illustrates a negation type:
+\paragraph{Example.} The following example illustrates a negation type:
 
 \begin{lstlisting}
 function f(any item) => !null:
@@ -609,7 +609,7 @@ Here, the function \lstinline{f()} accepts a parameter of any type, and returns 
 
 Recursive types describe tree-like structures of arbitrary depth.  For example, linked lists, binary trees, quad trees, etc can all be described using recursive types.  Recursive types have no explicit syntax and, instead, are declared indirectly in terms of themselves using one or more nominal types~(\S\ref{c_types_nominal}).\\
 
-\noindent The following example illustrates a simple recursive type:
+\paragraph{Example.} The following example illustrates a simple recursive type:
 
 \begin{lstlisting}
 type Node is { Tree left, Tree right, int data }
