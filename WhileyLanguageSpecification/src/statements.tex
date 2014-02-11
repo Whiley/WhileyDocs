@@ -81,8 +81,7 @@ An {\em assume statement} is of the form ``\lstinline{assume e}'', where \lstinl
 \paragraph{Example.} The following illustrates an \lstinline{assume} statement:
 
 \begin{lstlisting}
-function abs(int x) => (int y)
-ensures y >= 0:
+function abs(int x) => (int y) ensures y >= 0:
     //
     assume x >= 0
     return x
@@ -112,7 +111,6 @@ function remove([int] xs, int x) => [int]:
            break
         else:
            i = i + 1
-    //
     return xs[0..i] ++ xs[i..]
 \end{lstlisting}
 Here, we see a \lstinline{break} statement being used to exit a \lstinline{while} loop when the first element matching parameter \lstinline{x} is found.  
@@ -136,12 +134,11 @@ A {\em continue statement} can be used either to transfer control to the next it
 \begin{lstlisting}
 function sumNonNegative([int] xs) => int:
     int i = 0
-    int r  = 0
+    int r = 0
     for i in 0 .. |xs|:
         if xs[i] < 0:
             continue
         r = r + xs[i]
-    //
     return r
 \end{lstlisting}
 Here, a \lstinline{continue} statement is used to ensure the negative numbers are not included in the result of the function.
@@ -164,10 +161,8 @@ A {\em debug statement} outputs the result of evaluating its expression to the {
 \begin{lstlisting}
 function f(int x) => int:
     debug "f(" ++ x ++ ") called"
-    if x == 1:
-       return 1
-    else if x == 0:
-       return 0
+    if x == 1 || x == 0:
+       return x
     else:
        return f(x-1) + f(x-2)
 \end{lstlisting}
@@ -380,8 +375,6 @@ A {\em switch statement} transfers control to one of several statement blocks, r
 \begin{lstlisting}
 function toDescriptorString(JvmType.Primitive t) => string:
     switch t:
-        case JvmType.Void:
-            return "D"
         case JvmType.Boolean:
             return "Z"
         case JvmType.Byte:
@@ -433,23 +426,43 @@ throws SyntaxError:
     // done
     return Int.parse(input[start..pos]),pos
 \end{lstlisting}
-Here, we see a simple function which parses a string into an integer.  The function declares that a \lstinline{SyntaxError} may be thrown.  This is required for two reasons:  firstly, the input contains no digits then an \lstinline{SyntaxError} is thrown by this function.  Additionally, the function \lstinline{Int.parse()} is declared to throw a \lstinline{SyntaxError} and, since it is not caught, this declaration must be propagated.
+Here, we see a function which parses a string into an integer.  The function declares that a \lstinline{SyntaxError} may be thrown.  This is required for two reasons:  firstly, the input contains no digits then an \lstinline{SyntaxError} is thrown by this function.  Additionally, the function \lstinline{Int.parse()} is declared to throw a \lstinline{SyntaxError} and, since it is not caught, this declaration must be propagated.
 
 % =======================================================================
 % Try/Catch Block
 % =======================================================================
 
-\section{Try/Catch Statement}
+\section{Try Statement}
 \label{c_stmts_try_catch}
-A {\em try-catch} statement demarcates a \gls{statement_block} to be executed in the context of one or more {\em exception handlers}.  If an uncaught exception is raised within the block which matches one (or more) of the exception handlers, then control is transferred directly to that handler.  Exception handlers are matched against raised exceptions in the order of declaration.
+A {\em try} statement demarcates a \gls{statement_block} to be executed in the context of one or more {\em exception handlers}.  If an uncaught exception is raised within the block which matches one (or more) of the exception handlers, then control is transferred directly to that handler.  Exception handlers are matched against raised exceptions in the order of declaration.
 
 \begin{syntax}
-  \verb+TryCatchStmt+ & $::=$ &\\
+  \verb+TryStmt+$^\ell$ & $::=$  & \token{try}\ \token{:}\ \verb+Block+$^\gamma$\ \big(\ \token{catch} \token{(}\ \verb+Type+\ \verb+Ident+\ \token{)} \token{:}\ \verb+Block+$^{\omega_i}$\ \big)$^+$\\
+&&\\
+\multicolumn{3}{r}{(where $\ell < \gamma$ and $\forall i.\ell < \omega_i$ and $\ell < \phi$)}\\
 \end{syntax}
 
-\paragraph{Example.}
+\paragraph{Example.}  The following illustrates a \lstinline{try} statement:
 
-\paragraph{Notes.} 
+\begin{lstlisting}
+function parse(string input) => int|string|null
+// Input cannot be empty
+requires |input| > 0:
+    //
+    try:
+        if Char.isDigit(input[0]):
+            // must be integer
+            return Int.parse(input)
+        else:
+            // must be string
+            return input
+    catch(SyntaxError ex):
+        // We can get here from Int.parse()
+        return null
+\end{lstlisting}
+Here, we see a function which parses a string as an integer (if it begins with a digit) or returns the input string (otherwise).  The function \lstinline{Int.parse(string)} throws a \lstinline{SyntaxError} in the case that its parameter is not well-formed.  A \lstinline{try} statement is used to catch this and return \lstinline{null} in such case.
+
+\paragraph{Notes.} Exceptions in Whiley differ from those found in other languages (e.g. Java) as they do not include runtime errors (e.g. divide-by-zero, out-of-bounds access, out-of-memory, stack-overflow, etc),  Instead, all exceptions are explicitly thrown using a \lstinline{throw} statement.  In contrast, runtime errors correspond to \gls{fault}s in Whiley, and are thrown implicitly when an unrecoverable error occurs.
 
 % =======================================================================
 % Variable Declarations
