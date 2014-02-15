@@ -6,7 +6,7 @@ The Whiley programming language is {\em statically typed}, meaning that every ex
 
 Types in Whiley are unusual (in part) because there is a large gap between their {\em syntactic} description and their underlying {\em semantic} meaning.  In most programming languages (e.g. Java), this gap is either small or non-existent and, hence, there is little to worry about.  However, in Whiley, we must tread carefully to avoid confusion.  The following example attempts to illustrate this gap between the syntax and semantics of types:
 \begin{lstlisting}
-int|null id(null|int x):
+function id(null|int x) => int|null:
     return x
 \end{lstlisting}
 In this function we see two distinct \gls{type_descriptor}s expressed in the program text, namely ``\lstinline{int|null}'' and ``\lstinline{null|int}''.  Type descriptors occur at the source-level and describe \gls{type}s which occur at the abstract (or underlying) level.  In this particular case, we have two distinct type descriptors which describe the {\em same} underlying type.  We will often refer to types as providing the semantic (i.e. meaning) of type descriptors.  
