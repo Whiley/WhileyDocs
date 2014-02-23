@@ -43,7 +43,7 @@
 \label{c_expr_logical}
 
 \begin{syntax}
-  \verb+LogicalExpr+ & $::=$ & \verb+LogicalOrExpr+ \token{==>} \verb+LogicalExpr+\\
+  \verb+LogicalExpr+ & $::=$ & \verb+LogicalOrExpr+ \big[ \token{==>} \verb+LogicalExpr+\ \big]\\
   &&\\
   \verb+LogicalOrExpr+ & $::=$ & \verb+LogicalAndExpr+ \\
                            & $|$ & \verb+LogicalOrExpr+ \token{||} \verb+LogicalAndExpr+\\

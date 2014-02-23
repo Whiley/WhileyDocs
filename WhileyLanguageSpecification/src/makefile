@@ -1,5 +1,5 @@
 TARGET = WhileyLanguageSpec
-DEPS = title.tex introduction.tex lexical.tex compilation-units.tex types.tex expressions.tex statements.tex typing.tex verification.tex regions.tex finiteness.tex ffi.tex glossary.tex references.bib
+DEPS = title.tex introduction.tex lexical.tex compilation-units.tex types.tex expressions.tex statements.tex typing.tex verification.tex glossary.tex references.bib
 
 all: $(TARGET).pdf
 
