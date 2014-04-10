@@ -77,7 +77,7 @@ values which cannot be represented using \lstinline{float}
 
 \newpage
 \subsection{Sets, Lists and Maps}
-
+\label{walkthrough_collections}
 Like many modern programming languages, Whiley provides built-in types
 for representing collections.  The following illustrates a short
 function which multiplies a vector by a scalar:
@@ -189,36 +189,17 @@ Here, we see that variables \lstinline{x} and \lstinline{y} are assigned their r
 
 \subsection{Strings and Characters}
 
-\subsection{Value Semantics}
-\label{value_semantics}
-In Whiley, all compound structures (e.g. lists, sets, and records)
-have {\em value semantics}.  This means they are passed and returned
-by-value (as in Pascal, MATLAB or most functional languages).  But, unlike
-functional languages (and like Pascal), values of compound types can
-be updated in place.
+\marginpar{Encodings?}Like most programming languages, Whiley provides explicit support for dealing with strings and characters.  This is achieved through the \lstinline{char} and \lstinline{string} data types.  Here, \lstinline{char} represents unicode characters, whilst \lstinline{string} is a list of \lstinline{char}s and supports all list operations (recall~\S\ref{walkthrough_collections}).  Here's a simple example illustrating the well-known \lstinline{replace()} function:
 
-Value semantics implies that updates to a variable only affects that
-variable, and that information can only flow out of a function through
-its return value.  Whiley has no general, mutable heap comparable to
-those found in object-oriented languages.  Consider:
 \begin{lstlisting}
- int f([int] xs):
-     ys = xs
-     xs[0] = 1
-     ...
+function replace(string str, char old, char n) => string:
+    //
+    int i = 0
+    while i < |str|:
+        if str[i] == old:
+            str[i] = n
+        i = i + 1
+    return str    
 \end{lstlisting}
-The semantics of Whiley dictate that, having assigned \lstinline{xs}
-to \lstinline{ys} as above, the subsequent update to \lstinline{xs}
-does not affect \lstinline{ys}.  Arguments are also passed by value,
-hence \lstinline{xs} is updated inside \lstinline{f()} and this does
-not affect \lstinline{f}'s caller.  That is, \lstinline{xs} is not a
-{\em reference} to a list of \lstinline{int}; rather, it {\em is} a
-list of \lstinline{int}s and assignments to it do not affect state
-visible outside of \lstinline{f()}. 
 
-Whilst this approach may seem inefficient, a variety of techniques
-exist (e.g. reference counting) to ensure efficiency (see
-e.g.~\cite{LH11,Shank01,Ode91}).  Indeed, the underlying
-implementation does pass compound structures by reference and copies
-them only when absolutely necessary.
-
+This function simply iterates through the elements of a string replacing every occurrence of the character \lstinline{old} with the character \lstinline{n}.

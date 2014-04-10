@@ -72,10 +72,10 @@ as required in many languages).
   are generally less useful than unions.
 \end{insight}
 
-\begin{insight}{Untagged Unions}.  Often confusion surrounding untagged
-    versus tagged unions.  The latter are more common, and sometimes
-    known as {\em sum types}.
-\end{insight}
+% \begin{insight}{Untagged Unions}.  Often confusion surrounding untagged
+%     versus tagged unions.  The latter are more common, and sometimes
+%     known as {\em sum types}.
+% \end{insight}
 
 \subsection{Recursive Types}
 To represent tree-like structures, Whiley provides {\em recursive
@@ -126,44 +126,6 @@ are required as would be needed for a conventional imperative language
 Whiley dictates that recursive data types are passed by value (or, at
 least, appear to be from the programmer's perspective).
 
-%\subsection{Polymorphism \& Encapsulation}
-%Two important hallmarks of the object-oriented paradigm are
-%polymorphism and encapsulation.  The former is typically achieved
-%through inheritance and/or interfaces, whilst the latter typically
-%exploits \lstinline{public} / \lstinline{private} modifiers.  Whiley
-%does not permit \lstinline{public} or \lstinline{private} modifiers in
-%records.  Instead, Whiley employs a simple form of {\em existential
-%type}~\cite{}, illustrated as follows:
-%
-%\begin{lstlisting}
-% define Shape as { 
-%   bool contains(int x, int y, Shape this), 
-%   ... 
-% }
-%\end{lstlisting}
-%This declares what is, essentially, an interface.  The
-%``\lstinline{...}''  notation is significant here, as it denotes
-%unknown --- or {\em existential} --- state~\cite{Cook09}.  We can then
-%``implement'' this interface as follows:
-%
-%\begin{lstlisting}
-% define Square as {
-%   int x, int y, int width, int height,   
-%   bool contains(int x, int y, Square this)
-% }
-%
-% bool defSqContains(int x, int y, Square sq):
-%     if x >= sq.x && x < (sq.x + sq.width):
-%         return y >= sq.y && 
-%                y < (sq.y + sq.height)
-%     return false
-%
-% Square defSquare(int x, int y, int w, int h):
-%     return {x: x, y: y, width: w, height: h,
-%             contains: &defSqContains}
-%\end{lstlisting}
-%{\bf THIS NEEDS WORK --- IT'S BROKEN}
-
 \subsection{Structural vs Nominal Types}
 Statically typed languages, such as Java, employ {\em nominal typing}
 for recursive data types.  This means that two otherwise identical
@@ -186,10 +148,6 @@ In this example, the types \lstinline{Rectangle} and \lstinline{BoundingBox} are
 % \subsubsection{Nominal Types}
 
 % It is possible to simulate nominal types in Whiley.
-
-\subsection{Subtyping}
-
-An important concept in many modern programming languages is that of {\em subtyping}.  This defines a relationship between otherwise different types (i.e. which do not have identical structure).  
 
 \subsection{Coercions}
 
@@ -231,3 +189,37 @@ Here, we have used an explicit coercion (i.e. a cast) from \lstinline{OrderedLis
 Whiley (unlike Java) supports lossless coercion from \lstinline{int} values to \lstinline{real} values.  This is because arithmetic in Whiley is unbounded and, hence, every value of \lstinline{int} type has a corresponding value of \lstinline{real} type (though not vice-versa).
 \end{insight}
 
+\subsection{Subtyping}
+
+An important concept in many modern programming languages is that of {\em subtyping}.  This defines a relationship between otherwise different types (i.e. which do not have identical structure).  Subtyping allows data from a variable of one type to flow into a variable of another.  However, unlike a coercion, subtyping does not physically change the value itself.  
+
+The most common form of subtyping in Whiley is through the use of union types.  Indeed, we have encountered this already.  The following illustrates a very simple example:
+
+\begin{lstlisting}
+// A circle is defined by its position and radius
+type Circle is { int x, int y, int radius }
+
+// A rectangle is defined by its position and dimensions
+type Rectangle is { int x, int y, int width, int height }
+
+// A shape is either a circle or a rectangle
+type Shape is Circle | Rectangle
+
+// Determine the area of a shape
+function area(Shape s) => real:
+   //
+   if s is Rectangle:
+      // case for rectangle
+      return s.width * s.height
+   else:
+      // case for circle
+      return Math.PI * s.radius * s.radius   
+\end{lstlisting}
+
+Here, we see that a \lstinline{Shape} is either a \lstinline{Rectangle} or \lstinline{Circle}.  We say that \lstinline{Rectangle} and \lstinline{Circle} are subtypes of \lstinline{Shape}.  The Whiley compiler knows that there are only two possibilities and, hence, automatically retypes variable \lstinline{s} to \lstinline{Circle} on the false branch.
+
+\begin{insight}
+A useful analogy to help understanding the concept of a subtype is that of a {\em subset}.  In this way, we think of types as representing the set of values that their variables may hold.  Then, one type is a subtype of another if its set of values is a subset of the other's.  Conversely, one type is a {\em supertype} of another if its set of values is a {\em superset} of the other's.  Furthermore, a union type ``\lstinline{T1 | T2}'' corresponds to a set union of those values represented by ``\lstinline{T1}'' and ``\lstinline{T2}''.
+\end{insight}
+
+Another situation where subtyping occurs in Whiley is with the types \lstinline{any} and \lstinline{void}.  Specifically, every type is a subtype of \lstinline{any}, whilst every type is a {\em supertype} of \lstinline{void}.  

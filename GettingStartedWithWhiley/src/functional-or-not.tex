@@ -12,6 +12,79 @@ many things more tractable, including: {\em automatic
  systems}~\cite{LHS97,WPN08}, {\em compiler
  optimisations}~\cite{Cla97,LLH05,ZRKW08} and more.
 
+\subsection{Value Semantics}
+\label{value_semantics}
+In Whiley, all compound structures (e.g. lists, sets, and records)
+have {\em value semantics}.  This means they are passed and returned
+by-value (as in Pascal, MATLAB or most functional languages).  But, unlike
+functional languages (and like Pascal), values of compound types can
+be updated in place.
+
+Value semantics implies that updates to a variable only affects that
+variable, and that information can only flow out of a function through
+its return value.  Whiley has no general, mutable heap comparable to
+those found in object-oriented languages.  Consider:
+\begin{lstlisting}
+ int f([int] xs):
+     ys = xs
+     xs[0] = 1
+     ...
+\end{lstlisting}
+The semantics of Whiley dictate that, having assigned \lstinline{xs}
+to \lstinline{ys} as above, the subsequent update to \lstinline{xs}
+does not affect \lstinline{ys}.  Arguments are also passed by value,
+hence \lstinline{xs} is updated inside \lstinline{f()} and this does
+not affect \lstinline{f}'s caller.  That is, \lstinline{xs} is not a
+{\em reference} to a list of \lstinline{int}; rather, it {\em is} a
+list of \lstinline{int}s and assignments to it do not affect state
+visible outside of \lstinline{f()}. 
+
+Whilst this approach may seem inefficient, a variety of techniques
+exist (e.g. reference counting) to ensure efficiency (see
+e.g.~\cite{LH11,Shank01,Ode91}).  Indeed, the underlying
+implementation does pass compound structures by reference and copies
+them only when absolutely necessary.
+
 \subsection{Objects and References}
+
+
+%\subsection{Polymorphism \& Encapsulation}
+%Two important hallmarks of the object-oriented paradigm are
+%polymorphism and encapsulation.  The former is typically achieved
+%through inheritance and/or interfaces, whilst the latter typically
+%exploits \lstinline{public} / \lstinline{private} modifiers.  Whiley
+%does not permit \lstinline{public} or \lstinline{private} modifiers in
+%records.  Instead, Whiley employs a simple form of {\em existential
+%type}~\cite{}, illustrated as follows:
+%
+%\begin{lstlisting}
+% define Shape as { 
+%   bool contains(int x, int y, Shape this), 
+%   ... 
+% }
+%\end{lstlisting}
+%This declares what is, essentially, an interface.  The
+%``\lstinline{...}''  notation is significant here, as it denotes
+%unknown --- or {\em existential} --- state~\cite{Cook09}.  We can then
+%``implement'' this interface as follows:
+%
+%\begin{lstlisting}
+% define Square as {
+%   int x, int y, int width, int height,   
+%   bool contains(int x, int y, Square this)
+% }
+%
+% bool defSqContains(int x, int y, Square sq):
+%     if x >= sq.x && x < (sq.x + sq.width):
+%         return y >= sq.y && 
+%                y < (sq.y + sq.height)
+%     return false
+%
+% Square defSquare(int x, int y, int w, int h):
+%     return {x: x, y: y, width: w, height: h,
+%             contains: &defSqContains}
+%\end{lstlisting}
+%{\bf THIS NEEDS WORK --- IT'S BROKEN}
+
 \subsection{Simulating Interfaces}
 \subsection{Concurrency}
