@@ -222,4 +222,20 @@ Here, we see that a \lstinline{Shape} is either a \lstinline{Rectangle} or \lsti
 A useful analogy to help understanding the concept of a subtype is that of a {\em subset}.  In this way, we think of types as representing the set of values that their variables may hold.  Then, one type is a subtype of another if its set of values is a subset of the other's.  Conversely, one type is a {\em supertype} of another if its set of values is a {\em superset} of the other's.  Furthermore, a union type ``\lstinline{T1 | T2}'' corresponds to a set union of those values represented by ``\lstinline{T1}'' and ``\lstinline{T2}''.
 \end{insight}
 
-Another situation where subtyping occurs in Whiley is with the types \lstinline{any} and \lstinline{void}.  Specifically, every type is a subtype of \lstinline{any}, whilst every type is a {\em supertype} of \lstinline{void}.  
+Another situation where subtyping occurs in Whiley is with the types \lstinline{any} and \lstinline{void}.  Specifically, every type is a subtype of \lstinline{any}, whilst every type is a {\em supertype} of \lstinline{void}.  To understand this, consider the following:
+
+\begin{lstlisting}
+function toInteger(Any x) => int:
+    if x is int:
+        return x
+    else if x is real:
+        return Math.round(x)
+    else if x is [any]:
+        return |x|
+    else:
+        return 0 // default value
+\end{lstlisting}
+
+In this function, parameter \lstinline{x} can hold {\em any possible value on entry}.  It could be an integer, a real, a list, a set, a record, etc.  In this case, we have picked a few examples which we can easily convert into \lstinline{int} values.  Note that the type \lstinline{[any]} describes all possible lists, including e.g. instances of \lstinline{[int]}, \lstinline{[[int]]}, \lstinline{[char]}, etc.
+
+% could talk about subtyping between collections here
