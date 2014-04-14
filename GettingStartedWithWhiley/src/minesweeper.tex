@@ -16,3 +16,43 @@ In our discussion, we'll use $(x,y)$ to indicate a position on the board where $
 
 The player plays the game by repeatedly selecting a square to expose.  When all squares are exposed, except for those containing bombs, the game is over and the player wins.  However, if a square holding a bomb is exposed, then the game is over immediately and the player loses.  A {\em blank} square is one with no adjacent bombs.  When a blank square is exposed, every adjacent blank square is recursively exposed.
 
+\subsection{Implementing the Game Board}
+We're now going to begin implementing the game of Minesweeper in Whiley.  To start with, we'll implement the game board in Whiley and provide functions for manipulating it; then, we'll implement the gameplay itself.  
+
+The first aspect of the game board we'll implement is the concept of a {\em square}.  There are essentially two broad categories of square in the game: {\em exposed squares} and {\em hidden squares}.  Therefore, our implementation will reflect this.  Exposed squares either have a {\em rank} or are {\em blank} (i.e. have a rank of zero).  Furthermore, they may or may not hold a bomb.  We can implement this in Whiley like so:
+\begin{lstlisting}
+type ExposedSquare is { 
+  int rank,  // Number of bombs in adjacent squares
+  bool holdsBomb // true if the square holds a bomb
+}
+\end{lstlisting}
+Here, we can see that an integer field called \lstinline{rank} is used to store the rank of the square.  Likewise, a boolean field called \lstinline{holdsBomb} is used to indicate whether or not the square holds a bomb.  
+
+Hidden squares may or may not hold a bomb, and may or may not have been flagged.  We can implement this in Whiley as follows:
+
+\begin{lstlisting}
+type HiddenSquare is { 
+  bool holdsBomb, // true if the square holds a bomb
+  bool flagged    // true if the square is flagged
+}
+\end{lstlisting}
+
+As before, a boolean field called \lstinline{holdsBomb} is used to signal whether or not the square holds a bomb.  Likewise, a boolean field called \lstinline{flagged} signals whether or not the square is flagged.  
+
+We can now define the concept of a square in our Whiley implementation by combining the notions of exposed and hidden squares together as follows:
+
+\begin{lstlisting}
+type Square is ExposedSquare | HiddenSquare
+\end{lstlisting}
+
+Here, the type \lstinline{Square} is a union of the types \lstinline{ExposedSquare} and \lstinline{HiddenSquare}.  In otherwords, it is either an \lstinline{ExposedSquare} or a \lstinline{HiddenSquare}.
+
+\begin{lstlisting}
+type Board is {
+   [Square] squares,  // List of squares making up the board
+   int width,         // Width of the game board (in squares)
+   int height,        // Height of the game board (in squares)
+   int numberFlagged, // Number of Squares which are flagged
+   int numberOfBombs  // Number of Bombs on the board
+}
+\end{lstlisting}
