@@ -22,8 +22,8 @@ We're now going to begin implementing the game of Minesweeper in Whiley.  To sta
 The first aspect of the game board we'll implement is the concept of a {\em square}.  There are essentially two broad categories of square in the game: {\em exposed squares} and {\em hidden squares}.  Therefore, our implementation will reflect this.  Exposed squares either have a {\em rank} or are {\em blank} (i.e. have a rank of zero).  Furthermore, they may or may not hold a bomb.  We can implement this in Whiley like so:
 \begin{lstlisting}
 type ExposedSquare is { 
-  int rank,  // Number of bombs in adjacent squares
-  bool holdsBomb // true if the square holds a bomb
+  int rank,       // Number of bombs in adjacent squares
+  bool holdsBomb  // true if the square holds a bomb
 }
 \end{lstlisting}
 Here, we can see that an integer field called \lstinline{rank} is used to store the rank of the square.  Likewise, a boolean field called \lstinline{holdsBomb} is used to indicate whether or not the square holds a bomb.  
@@ -32,8 +32,8 @@ Hidden squares may or may not hold a bomb, and may or may not have been flagged.
 
 \begin{lstlisting}
 type HiddenSquare is { 
-  bool holdsBomb, // true if the square holds a bomb
-  bool flagged    // true if the square is flagged
+  bool holdsBomb,  // true if the square holds a bomb
+  bool flagged     // true if the square is flagged
 }
 \end{lstlisting}
 
@@ -45,7 +45,7 @@ We can now define the concept of a square in our Whiley implementation by combin
 type Square is ExposedSquare | HiddenSquare
 \end{lstlisting}
 
-Here, the type \lstinline{Square} is a union of the types \lstinline{ExposedSquare} and \lstinline{HiddenSquare}.  In otherwords, it is either an \lstinline{ExposedSquare} or a \lstinline{HiddenSquare}.
+Here, the type \lstinline{Square} is a union of the types \lstinline{ExposedSquare} and \lstinline{HiddenSquare}.  In otherwords, it is either an \lstinline{ExposedSquare} or a \lstinline{HiddenSquare}.  
 
 \begin{lstlisting}
 type Board is {
