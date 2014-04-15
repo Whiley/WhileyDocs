@@ -26,7 +26,14 @@ type ExposedSquare is {
   bool holdsBomb  // true if the square holds a bomb
 }
 \end{lstlisting}
-Here, we can see that an integer field called \lstinline{rank} is used to store the rank of the square.  Likewise, a boolean field called \lstinline{holdsBomb} is used to indicate whether or not the square holds a bomb.  
+Here, we can see that an integer field called \lstinline{rank} is used to store the rank of the square.  Likewise, a boolean field called \lstinline{holdsBomb} is used to indicate whether or not the square holds a bomb.  To simply creating values of type \lstinline{ExposedSquare}, it is common to additionally provide one or more {\em constructors}.  These are functions of the same name which create values of the given type.  Here is our \lstinline{ExposedSquare} constructor:
+
+\begin{lstlisting}
+// ExposedSquare constructor
+function ExposedSquare(int rank, bool bomb) => ExposedSquare:
+    return { rank: rank, holdsBomb: bomb }
+\end{lstlisting}
+
 
 Hidden squares may or may not hold a bomb, and may or may not have been flagged.  We can implement this in Whiley as follows:
 
@@ -35,6 +42,9 @@ type HiddenSquare is {
   bool holdsBomb,  // true if the square holds a bomb
   bool flagged     // true if the square is flagged
 }
+
+function HiddenSquare(bool bomb, bool flag) => HiddenSquare:
+    return { holdsBomb: bomb, flagged: flag }
 \end{lstlisting}
 
 As before, a boolean field called \lstinline{holdsBomb} is used to signal whether or not the square holds a bomb.  Likewise, a boolean field called \lstinline{flagged} signals whether or not the square is flagged.  
@@ -45,7 +55,7 @@ We can now define the concept of a square in our Whiley implementation by combin
 type Square is ExposedSquare | HiddenSquare
 \end{lstlisting}
 
-Here, the type \lstinline{Square} is a union of the types \lstinline{ExposedSquare} and \lstinline{HiddenSquare}.  In otherwords, it is either an \lstinline{ExposedSquare} or a \lstinline{HiddenSquare}.  
+Here, the type \lstinline{Square} is a union of the types \lstinline{ExposedSquare} and \lstinline{HiddenSquare}.  In otherwords, it is either an \lstinline{ExposedSquare} or a \lstinline{HiddenSquare}.  Notice that we don't provide a constructor for \lstinline{Square}.  This is because a \lstinline{Square} is merely the composition of two existing types with their own constructors.
 
 \subsection{Board}
 
@@ -55,13 +65,40 @@ Using our above \lstinline{Square} data type, we can now define the game board i
 type Board is {
    [Square] squares,  // List of squares making up the board
    int width,         // Width of the game board (in squares)
-   int height,        // Height of the game board (in squares)
-   int numberFlagged, // Number of Squares which are flagged
-   int numberOfBombs  // Number of Bombs on the board
+   int height        // Height of the game board (in squares)
 }
 \end{lstlisting}
 
-The main component of \lstinline{Board} is the \lstinline{squares} list.  Although this is a one-dimensional list, we'll see shortly that it is treated a two dimensional way.  The remaining fields provide additional information, such as the width and height of board.  Also, the number of flagged squares and the number of bombs on the board.  Technically speaking, the latter two can be calculated directly from the \lstinline{squares} list; however, for simplicity, we provide them as fields here.
+The main component of \lstinline{Board} is the \lstinline{squares} list.  Although this is a one-dimensional list, we'll see shortly that it is treated a two dimensional way.  The remaining fields record the width and height of the board, which is needed in order to safely manipulate the board.
+
+We will return to define a constructor for \lstinline{Board} shortly, as this is a little more involved.  Instead, we will provide some simpler helper functions for updating the board.  First, we provide a function to read the \lstinline{Square} at a given position on a \lstinline{Board}:
+
+\begin{lstlisting}
+// Return the square on a given board at a given position
+function getSquare(Board b, int col, int row) => Square:
+    int rowOffset = b.width * row // calculate start of row
+    return b.squares[rowOffset + col]
+\end{lstlisting}
+
+This function performs a simple calculation to determine the start of the row in the \lstinline{Board.squares} list.  To understand this calculation, we need to view the board in a 1-Dimensional manner, as follows:
+
+\begin{center}
+\includegraphics[width=0.95\textwidth]{../images/kmines_flat.png}
+\end{center}
+
+Here, we can see how each row is laid out in the 1-Dimensional list \lstinline{Board.squares}.  To calculate the start of a given row, we multiple the row number by the width of the board.  Then, to calculate a given column within that row, we simply add the column number.  For example, the position $(3,2)$ represents column 2, row 3; therefore, the position in the example board above would be: $(2 * 9) + 3 = 21$.
+
+The corresponding function to the above provides a way to change the square at a given position on the board:
+
+\begin{lstlisting}
+// Set the square on a given board at a given position
+function setSquare(Board b, int col, int row, Square sq) => Board:
+    int rowOffset = b.width * row // calculate start of row
+    b.squares[rowOffset + col] = sq
+    return b
+\end{lstlisting}
+
+Here, the same calculation is performed as before to determine the actual position within the \lstinline{Board.squares} list.  This time, the \lstinline{Board.squares} array is updated with the new \lstinline{Square}.  Note that we must return the updated board in order for this change to be visible (see~\ref{value_semantics} for more on this).  Notice also that we are not attempting to control how the \lstinline{Board.squares} list may be updated.  That is, any \lstinline{Square} can be passed into this function, even it doesn't make sense in the wider context of the game.  This is because, at this stage, we are simply providing general-purpose mechanisms for manipulating a \lstinline{Board}.
 
 \begin{lstlisting}
 
