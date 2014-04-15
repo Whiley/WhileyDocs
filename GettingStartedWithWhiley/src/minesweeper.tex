@@ -62,3 +62,22 @@ type Board is {
 \end{lstlisting}
 
 The main component of \lstinline{Board} is the \lstinline{squares} list.  Although this is a one-dimensional list, we'll see shortly that it is treated a two dimensional way.  The remaining fields provide additional information, such as the width and height of board.  Also, the number of flagged squares and the number of bombs on the board.  Technically speaking, the latter two can be calculated directly from the \lstinline{squares} list; however, for simplicity, we provide them as fields here.
+
+\begin{lstlisting}
+
+// Create a board of given dimensions which contains no bombs, and
+// where all squares are hidden.
+Board createEmptyBoard(int width, int height):
+    [Square] squares = []
+    //
+    for i in 0 .. width * height:
+      squares = squares ++ [HiddenSquare(false,false)]
+    //
+    return {
+        squares: rows,
+        width: width,
+        height: height,
+        numberFlagged: 0,
+        numberOfBombs: 0
+    }
+\end{lstlisting}
