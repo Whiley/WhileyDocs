@@ -1,22 +1,22 @@
 \newpage
 \section{Example: Minesweeper}
-In this section, we will develop a simple implementation of the well-known {\em Minesweeper} game.  Typically the minesweeper game is played through a graphical user interface, as illustrated by the following:
+In this section, we will develop a simple implementation of the well-known {\em Minesweeper} game.  Typically the minesweeper game is played through a graphical user interface, illustrated as follows:
 \begin{center}
-\includegraphics[width=0.4\textwidth]{../images/kmines.png}
+\includegraphics[width=0.35\textwidth]{../images/kmines.png}
 \end{center}
 Here, we can see the main aspects of the game.  The {\em game board} is a two-dimensional grid of {\em squares}.  Each square holds {\em nothing} or a {\em bomb} and is in one of the three states: {\em hidden}, {\em exposed} or {\em flagged} (with a flag).  An exposed square shows either the total number of bombs in the nine adjacent squares, referred to as its {\em rank}.  If an exposed square contains a bomb, then the game is over and the player has lost.  Flagged squares are protected and cannot be exposed unless they are {\em unflagged}.  The intuition here, is that the player marks those squares believed to contain a bomb.  
 
 Let's analyse the above board.  In the following diagram of the above minesweeper game, gray squares represent hidden squares in the game.  For our benefit here, we've split them into two categories: those which contain a bomb (dark gray); and, those which don't: 
 
 \begin{center}
-\includegraphics[width=0.4\textwidth]{../images/kmines_analysis.png}
+\includegraphics[width=0.35\textwidth]{../images/kmines_analysis.png}
 \end{center}
 
 In our discussion, we'll use $(x,y)$ to indicate a position on the board where $x$ gives the horizontal component, and $y$ the vertical component.  So, for example, the squares $(2,4)$, $(4,3)$ and $(6,4)$ are all marked with a flag.  Indeed, we can see that the above player has correctly flagged the three bombs in these squares, and that there are seven remaining to be identified and flagged.  Of course, unlike us, the player cannot see exactly where the bombs are.  However, he/she can easily determine that the square $(2,6)$ must contain a bomb.  This is because the exposed square at $(1,4)$ has a rank of $1$, and a bomb is flagged at $(2,4)$.  Therefore, there can be no bomb in square $(2,5)$ as this mean the rank of square $(1,4)$ was incorrect.  Finally, the rank of the square at $(1,5)$ is $2$ with only three unexposed squares, of which one is known already to contain a bomb and the other is known {\em not} to contain a bomb.  Therefore, the $(2,6)$ must contain a bomb.
 
 The player plays the game by repeatedly selecting a square to expose.  When all squares are exposed, except for those containing bombs, the game is over and the player wins.  However, if a square holding a bomb is exposed, then the game is over immediately and the player loses.  A {\em blank} square is one with no adjacent bombs.  When a blank square is exposed, every adjacent blank square is recursively exposed.
 
-\subsection{Implementing the Game Board}
+\subsection{Squares}
 We're now going to begin implementing the game of Minesweeper in Whiley.  To start with, we'll implement the game board in Whiley and provide functions for manipulating it; then, we'll implement the gameplay itself.  
 
 The first aspect of the game board we'll implement is the concept of a {\em square}.  There are essentially two broad categories of square in the game: {\em exposed squares} and {\em hidden squares}.  Therefore, our implementation will reflect this.  Exposed squares either have a {\em rank} or are {\em blank} (i.e. have a rank of zero).  Furthermore, they may or may not hold a bomb.  We can implement this in Whiley like so:
@@ -47,6 +47,10 @@ type Square is ExposedSquare | HiddenSquare
 
 Here, the type \lstinline{Square} is a union of the types \lstinline{ExposedSquare} and \lstinline{HiddenSquare}.  In otherwords, it is either an \lstinline{ExposedSquare} or a \lstinline{HiddenSquare}.  
 
+\subsection{Board}
+
+Using our above \lstinline{Square} data type, we can now define the game board in our Whiley implementation as follows:
+
 \begin{lstlisting}
 type Board is {
    [Square] squares,  // List of squares making up the board
@@ -56,3 +60,5 @@ type Board is {
    int numberOfBombs  // Number of Bombs on the board
 }
 \end{lstlisting}
+
+The main component of \lstinline{Board} is the \lstinline{squares} list.  Although this is a one-dimensional list, we'll see shortly that it is treated a two dimensional way.  The remaining fields provide additional information, such as the width and height of board.  Also, the number of flagged squares and the number of bombs on the board.  Technically speaking, the latter two can be calculated directly from the \lstinline{squares} list; however, for simplicity, we provide them as fields here.
