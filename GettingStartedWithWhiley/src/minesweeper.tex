@@ -130,9 +130,55 @@ function flagSquare(Board b, int col, int row) => Board:
       // yes, is permitted so reverse flag status
       sq.flagged = !sq.flagged
       // and Update board
-      setSquare(b,col,row,sq)
+      b = setSquare(b,col,row,sq)
    //
    return b
 \end{lstlisting}
 
 This function simply checks whether the square at the given position in the board is hidden or not.  If not, then nothing is changed.  Otherwise, the flagged status of that square is flipped (i.e. if it was not flagged then it is now, etc).  As before,  we must return the updated board in order for any change to be visible (see~\ref{value_semantics} for more on this).
+
+The next function we'll implement is that for exposing a square.  This requires that the square to be exposed is not already exposed.  Furthermore, in the case of a blank square, then the expose method is recursively applied to blank squares.  Here is our implementation:
+
+\begin{lstlisting}
+function exposeSquare(Board b, int col, int row) => Board:
+   Square sq = getSquare(b,col,row)
+   // check whether blank square or hidden square
+   int rank = determineRank(b,col,row)
+   if rank == 0:
+      // is blank square so attempt to recursively expose
+      b = recursivelyExposeFrom(b,col,row)
+   else if sq is HiddenSquare:
+      // is hidden square so expose
+      sq = ExposedSquare(rank,sq.holdsBomb)
+      b = setSquare(b,col,row,sq)
+   //
+   return b         
+\end{lstlisting}
+
+
+
+\begin{lstlisting}
+// Attempt to recursively expose blank hidden square, starting from a given position.
+function recursivelyExposeFrom(Board b, int col, int row) => Board:
+   // first, ensure square to expose is valid
+   if col < 0 || row < 0 || col >= b.width || row >= b.height:
+       return
+   // second, check whether is blank hidden square
+   Square sq = getSquare(b,col,row)
+   int rank = determineRank(b,col,row)
+   if sq is HiddenSquare && rank == 0:       
+      // yes, so expose square
+      sq = ExposedSquare(0,0)
+      b = setSquare(b,col,row,sq)
+      // now expose neighbours
+      b = recursivelyExposeFrom(b,col-1,row-1)
+      b = recursivelyExposeFrom(b,col,row-1)
+      b = recursivelyExposeFrom(b,col+1,row-1)
+      b = recursivelyExposeFrom(b,col-1,row)
+      b = recursivelyExposeFrom(b,col+1,row)
+      b = recursivelyExposeFrom(b,col-1,row+1)
+      b = recursivelyExposeFrom(b,col,row+1)
+      b = recursivelyExposeFrom(b,col+1,row+1)
+   //
+   return b
+\end{lstlisting}
