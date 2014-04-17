@@ -69,9 +69,25 @@ type Board is {
 }
 \end{lstlisting}
 
-The main component of \lstinline{Board} is the \lstinline{squares} list.  Although this is a one-dimensional list, we'll see shortly that it is treated a two dimensional way.  The remaining fields record the width and height of the board, which is needed in order to safely manipulate the board.
+The main component of \lstinline{Board} is the \lstinline{squares} list.  Although this is a one-dimensional list, we'll see shortly that it is treated a two dimensional way.  The remaining fields record the width and height of the board, which is needed in order to safely manipulate the board.  To accompany this data type, we define a simple constructor as follows:
+\begin{lstlisting}
+// Create a board of given dimensions which contains no bombs, and
+// where all squares are hidden.
+Board Board(int width, int height):
+    [Square] squares = []
+    //
+    for i in 0 .. width * height:
+      squares = squares ++ [HiddenSquare(false,false)]
+    //
+    return {
+        squares: squares,
+        width: width,
+        height: height
+    }
+\end{lstlisting}
+This constructor creates a \lstinline{Board} of given width and height containing only hidden squares and no bombs.  Later, we will return to consider how to randomly place bombs on the board..
 
-We will return to define a constructor for \lstinline{Board} shortly, as this is a little more involved.  Instead, we will provide some simpler helper functions for updating the board.  First, we provide a function to read the \lstinline{Square} at a given position on a \lstinline{Board}:
+We will return to define a constructor for \lstinline{Board} shortly, but first we will provide some simpler helper functions for updating the board.  First, we provide a function to read the \lstinline{Square} at a given position on a \lstinline{Board}:
 
 \begin{lstlisting}
 // Return the square on a given board at a given position
@@ -100,21 +116,23 @@ function setSquare(Board b, int col, int row, Square sq) => Board:
 
 Here, the same calculation is performed as before to determine the actual position within the \lstinline{Board.squares} list.  This time, the \lstinline{Board.squares} array is updated with the new \lstinline{Square}.  Note that we must return the updated board in order for this change to be visible (see~\ref{value_semantics} for more on this).  Notice also that we are not attempting to control how the \lstinline{Board.squares} list may be updated.  That is, any \lstinline{Square} can be passed into this function, even it doesn't make sense in the wider context of the game.  This is because, at this stage, we are simply providing general-purpose mechanisms for manipulating a \lstinline{Board}.
 
-\begin{lstlisting}
+\subsection{Game Play}
 
-// Create a board of given dimensions which contains no bombs, and
-// where all squares are hidden.
-Board createEmptyBoard(int width, int height):
-    [Square] squares = []
-    //
-    for i in 0 .. width * height:
-      squares = squares ++ [HiddenSquare(false,false)]
-    //
-    return {
-        squares: rows,
-        width: width,
-        height: height,
-        numberFlagged: 0,
-        numberOfBombs: 0
-    }
+Having defined the basic data types for the Minesweeper game above, we'll now put this altogether to implement the main actions of the game.  In particular, the user can {\em flag squares} and {\em expose squares}.  We also need to know when its {\em game over} and the player has either {\em won} or {\em lost}.  The easiest of these is that for flagging squares:
+
+\begin{lstlisting}
+// Flag (or unflag) a given square on the board.  If this operation is not permitted, then do nothing
+// and return the board; otherwise, update the board accordingly.
+function flagSquare(Board b, int col, int row) => Board:
+   Square sq = getSquare(b,col,row)
+   // check whether permitted to flag
+   if sq is HiddenSquare:
+      // yes, is permitted so reverse flag status
+      sq.flagged = !sq.flagged
+      // and Update board
+      setSquare(b,col,row,sq)
+   //
+   return b
 \end{lstlisting}
+
+This function simply checks whether the square at the given position in the board is hidden or not.  If not, then nothing is changed.  Otherwise, the flagged status of that square is flipped (i.e. if it was not flagged then it is now, etc).  As before,  we must return the updated board in order for any change to be visible (see~\ref{value_semantics} for more on this).
