@@ -114,11 +114,11 @@ function setSquare(Board b, int col, int row, Square sq) => Board:
     return b
 \end{lstlisting}
 
-Here, the same calculation is performed as before to determine the actual position within the \lstinline{Board.squares} list.  This time, the \lstinline{Board.squares} array is updated with the new \lstinline{Square}.  Note that we must return the updated board in order for this change to be visible (see~\ref{value_semantics} for more on this).  Notice also that we are not attempting to control how the \lstinline{Board.squares} list may be updated.  That is, any \lstinline{Square} can be passed into this function, even it doesn't make sense in the wider context of the game.  This is because, at this stage, we are simply providing general-purpose mechanisms for manipulating a \lstinline{Board}.
+Here, the same calculation is performed as before to determine the actual position within the \lstinline{Board.squares} list.  This time, the \lstinline{Board.squares} array is updated with the new \lstinline{Square}.  Note that we must return the updated board in order for this change to be visible (see~\ref{value_semantics} for more on this).  Notice also that we are not attempting to control how the \lstinline{Board.squares} list may be updated.  That is, any \lstinline{Square} can be passed into this function, even it doesn't make sense in the wider context of the game.  These provide some general-purpose mechanisms for manipulating a \lstinline{Board}.
 
 \subsection{Game Play}
 
-Having defined the basic data types for the Minesweeper game above, we'll now put this altogether to implement the main actions of the game.  In particular, the user can {\em flag squares} and {\em expose squares}.  We also need to know when its {\em game over} and the player has either {\em won} or {\em lost}.  The easiest of these is that for flagging squares:
+Having defined the data types for the Minesweeper game, we can use these to implement the actions of the game.  In particular, the user can {\em flag squares} and {\em expose squares}.  We also need to know when its {\em game over} and the player has either {\em won} or {\em lost}.  The easiest of these is that for flagging squares:
 
 \begin{lstlisting}
 // Flag (or unflag) a given square on the board.  If this operation is not permitted, then do nothing
@@ -127,58 +127,53 @@ function flagSquare(Board b, int col, int row) => Board:
    Square sq = getSquare(b,col,row)
    // check whether permitted to flag
    if sq is HiddenSquare:
-      // yes, is permitted so reverse flag status
+      // yes, is permitted so reverse flag status and update board
       sq.flagged = !sq.flagged
-      // and Update board
       b = setSquare(b,col,row,sq)
    //
    return b
 \end{lstlisting}
 
-This function simply checks whether the square at the given position in the board is hidden or not.  If not, then nothing is changed.  Otherwise, the flagged status of that square is flipped (i.e. if it was not flagged then it is now, etc).  As before,  we must return the updated board in order for any change to be visible (see~\ref{value_semantics} for more on this).
+This function checks whether the square on the board is hidden or not.  If so, the flagged status of that square is flipped (i.e. if it was not flagged then it is now, etc).  As before,  we must return the updated board in order for any change to be visible (see~\ref{value_semantics} for more on this).
 
-The next function we'll implement is that for exposing a square.  This requires that the square to be exposed is not already exposed.  Furthermore, in the case of a blank square, then the expose method is recursively applied to blank squares.  Here is our implementation:
+The next function we'll implement is that for exposing a square.  This requires that the square to be exposed is not already exposed.  Furthermore, in the case of a blank square, then the expose method is recursively applied to blank squares.  An important sub-computation to this process is that of determining the rank of a given square.  That is the number of bombs contained in adjacent squares.  Here is our implementation of this sub-function:
 
 \begin{lstlisting}
-function exposeSquare(Board b, int col, int row) => Board:
-   Square sq = getSquare(b,col,row)
-   // check whether blank square or hidden square
-   int rank = determineRank(b,col,row)
-   if rank == 0:
-      // is blank square so attempt to recursively expose
-      b = recursivelyExposeFrom(b,col,row)
-   else if sq is HiddenSquare:
-      // is hidden square so expose
-      sq = ExposedSquare(rank,sq.holdsBomb)
-      b = setSquare(b,col,row,sq)
-   //
-   return b         
+int determineRank(Board b, int col, int row):
+    int rank = 0
+    for r in (row-1) .. (row+2):
+        for c in (col-1) .. (col+2):
+            Square sq = getSquare(b,c,r)
+            if sq.holdsBomb:
+                rank = rank + 1
+    //
+    return rank
 \end{lstlisting}
 
+This function iterates through the nine squares which directly surrounding that specified by \lstinline{col} and \lstinline{row}.  Note that the range \lstinline{col-1 .. col+2} returns the three values \lstinline{col-1}, \lstinline{col} and \lstinline{col+1} (i.e. up to but not including \lstinline{col+2}).  Also, note that we can access the field \lstinline{holdsBomb} without determining whether \lstinline{sq} is hidden or not.  This is because \lstinline{holdsBomb} is contained in both \lstinline{ExposedSquare} and \lstinline{HiddenSquare} and, hence, is guaranteed to be present for any \lstinline{Square}.
 
+Using the \lstinline{determineRank()} function above, we can now specify the following function for exposing a given square on the board:
 
 \begin{lstlisting}
 // Attempt to recursively expose blank hidden square, starting from a given position.
-function recursivelyExposeFrom(Board b, int col, int row) => Board:
+function exposeSquare(Board b, int col, int row) => Board:
    // first, ensure square to expose is valid
    if col < 0 || row < 0 || col >= b.width || row >= b.height:
        return
    // second, check whether is blank hidden square
    Square sq = getSquare(b,col,row)
    int rank = determineRank(b,col,row)
-   if sq is HiddenSquare && rank == 0:       
+   if sq is HiddenSquare:       
       // yes, so expose square
-      sq = ExposedSquare(0,0)
+      sq = ExposedSquare(rank,sq.holdsBomb)
       b = setSquare(b,col,row,sq)
-      // now expose neighbours
-      b = recursivelyExposeFrom(b,col-1,row-1)
-      b = recursivelyExposeFrom(b,col,row-1)
-      b = recursivelyExposeFrom(b,col+1,row-1)
-      b = recursivelyExposeFrom(b,col-1,row)
-      b = recursivelyExposeFrom(b,col+1,row)
-      b = recursivelyExposeFrom(b,col-1,row+1)
-      b = recursivelyExposeFrom(b,col,row+1)
-      b = recursivelyExposeFrom(b,col+1,row+1)
+      if rank == 0:
+          // now expose neighbours
+          for r in (row-1) .. (row+2):
+              for c in (col-1) .. (col+2):
+                  b = exposeSquare(b,c,r)
    //
    return b
 \end{lstlisting}
+
+This function does one of two things depending on the square being exposed.  First, the square is exposed by by creating an \lstinline{ExposedSquare} and updating the board.  Then, if that square is blank (i.e. has a rank of zero), then it and its neighbours are recursively exposed by calling \lstinline{exposeSquare()} again.
