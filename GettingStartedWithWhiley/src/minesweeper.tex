@@ -177,3 +177,24 @@ function exposeSquare(Board b, int col, int row) => Board:
 \end{lstlisting}
 
 This function does one of two things depending on the square being exposed.  First, the square is exposed by by creating an \lstinline{ExposedSquare} and updating the board.  Then, if that square is blank (i.e. has a rank of zero), then it and its neighbours are recursively exposed by calling \lstinline{exposeSquare()} again.
+
+The final function we need to implement the game is that for determining when the game is actually over and, furthermore, whether the player has won or not.  This examines the board to see whether there are any exposed squares (in which case, the game is over and the player lost).  Furthermore, it checks whether or not every hidden squares contains a bomb (in which case, the game is over and the player won).  This function is implemented as follows:
+
+\begin{lstlisting}
+function isGameOver(Board b) => (bool,bool):
+    bool isOver = true
+    bool hasWon = true
+    for i in 0 .. |b.squares|:
+        Square sq = b.squares[i]
+        if sq is HiddenSquare && !sq.holdsBomb:
+            // Hidden square which doesn't hold a bomb so game may not be over
+            isOver = false
+        else if sq is ExposedSquare && sq.holdsBomb:
+            // Exposed square which holds a bomb so game definitely over
+            isOver = true
+            hasWon = false
+            break
+    //
+    return isOver, hasWon
+\end{lstlisting}
+This function iterates through every square on the board, and checks for two cases: firstly, whether a hidden square exists which does not contain a bomb; secondly, whether there is an exposed bomb.  Note that, if an exposed bomb is found the loop exits immediately; however, if a hidden square is found which doesn't hold a bomb we must continue to examine the remaining squares to see whether an exposed bomb exists or not.
