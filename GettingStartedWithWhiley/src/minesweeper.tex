@@ -73,7 +73,7 @@ The main component of \lstinline{Board} is the \lstinline{squares} list.  Althou
 \begin{lstlisting}
 // Create a board of given dimensions which contains no bombs, and
 // where all squares are hidden.
-Board Board(int width, int height):
+function Board(int width, int height) => Board:
     [Square] squares = []
     //
     for i in 0 .. width * height:
@@ -139,7 +139,7 @@ This function checks whether the square on the board is hidden or not.  If so, t
 The next function we'll implement is that for exposing a square.  This requires that the square to be exposed is not already exposed.  Furthermore, in the case of a blank square, then the expose method is recursively applied to blank squares.  An important sub-computation to this process is that of determining the rank of a given square.  That is the number of bombs contained in adjacent squares.  Here is our implementation of this sub-function:
 
 \begin{lstlisting}
-int determineRank(Board b, int col, int row):
+function determineRank(Board b, int col, int row) => int:
     int rank = 0
     for r in (row-1) .. (row+2):
         for c in (col-1) .. (col+2):
