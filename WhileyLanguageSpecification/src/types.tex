@@ -461,7 +461,7 @@ A map represents a one-many mapping from variables of one type to variables of a
 \begin{lstlisting}
 type Expr is int | string // simple expression forms
 
-int evaluate(Expr e, {string=>int} environment)
+function evaluate(Expr e, {string=>int} environment) => int:
     if e is int:
         // expression is constant, so return this directly
         return e
@@ -485,7 +485,7 @@ A list type describes list values whose elements are subtypes of the element typ
   \verb+ListType+ & $::=$ & \token{[} \ \verb+Type+ \ \token{]}\\
 \end{syntax}
 
-\paragraph{Example.} The following example illustrates map types:
+\paragraph{Example.} The following example illustrates list types:
 
 \begin{lstlisting}
 function add([int] v1, [int] v2) => ([int] v3)
