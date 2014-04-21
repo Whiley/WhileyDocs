@@ -424,10 +424,14 @@ A set type describes set values whose elements are subtypes of the element type.
 
 \begin{lstlisting}
 // Adjacency list representation
-type Graph is ([{uint}] es)
+type Graph is ([{int}])
 
-function depthFirstSearch(uint v, Graph graph, {int} visited) => {int}
-    //
+method main(System.Console console):
+    Graph graph = [{0, 2, 3}, {0, 4}, {0, 2}, {1}, {}]
+    {int} visited = depthFirstSearch(3, graph, {-1})
+    console.out.println("returns => " ++ visited)
+
+function depthFirstSearch(int v, Graph graph, {int} visited) => {int}:
     visited = visited + {v}
     // Traverse edges not yet visited
     for w in graph[v]:
@@ -457,7 +461,7 @@ A map represents a one-many mapping from variables of one type to variables of a
 \begin{lstlisting}
 type Expr is int | string // simple expression forms
 
-int evaluate(Expr e, {string=>int} environment)
+function evaluate(Expr e, {string=>int} environment) => int:
     if e is int:
         // expression is constant, so return this directly
         return e
@@ -481,7 +485,7 @@ A list type describes list values whose elements are subtypes of the element typ
   \verb+ListType+ & $::=$ & \token{[} \ \verb+Type+ \ \token{]}\\
 \end{syntax}
 
-\paragraph{Example.} The following example illustrates map types:
+\paragraph{Example.} The following example illustrates list types:
 
 \begin{lstlisting}
 function add([int] v1, [int] v2) => ([int] v3)
