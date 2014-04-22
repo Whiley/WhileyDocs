@@ -1,0 +1,20 @@
+Another interesting example illustrating depth-first search and implementation of graphs in Whiley.
+
+\begin{lstlisting}
+// Adjacency list representation
+type Graph is ([{int}])
+
+method main(System.Console console):
+    Graph graph = [{0, 2, 3}, {0, 4}, {0, 2}, {1}, {}]
+    {int} visited = depthFirstSearch(3, graph, {-1})
+    console.out.println("returns => " ++ visited)
+
+function depthFirstSearch(int v, Graph graph, {int} visited) => {int}:
+    visited = visited + {v}
+    // Traverse edges not yet visited
+    for w in graph[v]:
+        if !(w in visited):
+            visited = depthFirstSearch(w,graph,visited)
+    // Done
+    return visited
+\end{lstlisting}
