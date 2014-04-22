@@ -426,11 +426,6 @@ A set type describes set values whose elements are subtypes of the element type.
 // Adjacency list representation
 type Graph is ([{int}])
 
-method main(System.Console console):
-    Graph graph = [{0, 2, 3}, {0, 4}, {0, 2}, {1}, {}]
-    {int} visited = depthFirstSearch(3, graph, {-1})
-    console.out.println("returns => " ++ visited)
-
 function depthFirstSearch(int v, Graph graph, {int} visited) => {int}:
     visited = visited + {v}
     // Traverse edges not yet visited
