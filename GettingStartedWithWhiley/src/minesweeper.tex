@@ -6,7 +6,7 @@ In this section, we will develop a simple implementation of the well-known {\em 
 \end{center}
 Here, we can see the main aspects of the game.  The {\em game board} is a two-dimensional grid of {\em squares}.  Each square holds {\em nothing} or a {\em bomb} and is in one of the three states: {\em hidden}, {\em exposed} or {\em flagged} (with a flag).  An exposed square shows either the total number of bombs in the nine adjacent squares, referred to as its {\em rank}.  If an exposed square contains a bomb, then the game is over and the player has lost.  Flagged squares are protected and cannot be exposed unless they are {\em unflagged}.  The intuition here, is that the player marks those squares believed to contain a bomb.  
 
-Let's analyse the above board.  In the following diagram of the above minesweeper game, gray squares represent hidden squares in the game.  For our benefit here, we've split them into two categories: those which contain a bomb (dark gray); and, those which don't: 
+Let's analyse the above board.  In the following diagram of the above minesweeper game, gray squares represent hidden squares in the game.  For our benefit here, we've split them into two categories: those which contain a bomb (dark gray); and, those which don't (light gray): 
 
 \begin{center}
 \includegraphics[width=0.35\textwidth]{../images/kmines_analysis.png}
