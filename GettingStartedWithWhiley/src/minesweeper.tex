@@ -198,3 +198,45 @@ function isGameOver(Board b) => (bool,bool):
     return isOver, hasWon
 \end{lstlisting}
 This function iterates through every square on the board, and checks for two cases: firstly, whether a hidden square exists which does not contain a bomb; secondly, whether there is an exposed bomb.  Note that, if an exposed bomb is found the loop exits immediately; however, if a hidden square is found which doesn't hold a bomb we must continue to examine the remaining squares to see whether an exposed bomb exists or not.
+
+\subsection{Simple Text Interface}
+At this point, we can now put the game together and do some preliminary testing to check everything is as expected.  To do this, we run the code through some simple scenarios from the command-line.  Later, we'll provide a Graphical User Interface for our game using the Java Swing library. 
+
+The first and most important aspect of our simple text interface is a method for drawing the board onto the screen.  The following method does this using the \lstinline{System.Console}:
+\begin{lstlisting}
+method printBoard(Board board, System.Console console):
+    for row in 0 .. board.height:
+        // Print Side Wall
+        console.out.print("|")
+        for col in 0 .. board.width:
+            Square sq = getSquare(board,col,row)
+            if sq is HiddenSquare:
+                if sq.flagged:
+                    console.out.print("P")
+                else:
+                    console.out.print("O")
+            else if sq.holdsBomb:
+                console.out.print("*")
+            else if sq.rank == 0:
+                console.out.print(" ")
+            else:
+                console.out.print(sq.rank)
+        // Print Side Wall
+        console.out.println("|")
+\end{lstlisting} 
+
+This method prints the board using a single character to represent each square, where \verb+X+ represents hidden squares, numbers represent exposed squares with a given rank and space represents an exposed blank square.  For example, here is a simple board drawn using this function:
+\begin{lstlisting}
+|11        |
+|X1 111    |
+|1212X1 111|
+| 1X211 1XX|
+| 111   2XX|
+|    1222XX|
+|    1XXXXX|
+|    122111|
+|          |
+|          |
+\end{lstlisting}
+
+\subsection{Graphical User Interface}
