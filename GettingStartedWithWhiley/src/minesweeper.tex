@@ -1,23 +1,23 @@
 \newpage
 \section{Example: Minesweeper}
-In this section, we will develop a simple implementation of the well-known {\em Minesweeper} game.  Typically the minesweeper game is played through a graphical user interface, illustrated as follows:
+In this section, we will develop a simple implementation of the well-known {\em Minesweeper} game.  Typically the game is played through a graphical user interface, illustrated as follows:
 \begin{center}
 \includegraphics[width=0.35\textwidth]{../images/kmines.png}
 \end{center}
-Here, we can see the main aspects of the game.  The {\em game board} is a two-dimensional grid of {\em squares}.  Each square holds {\em nothing} or a {\em bomb} and is in one of the three states: {\em hidden}, {\em exposed} or {\em flagged} (with a flag).  An exposed square shows either the total number of bombs in the nine adjacent squares, referred to as its {\em rank}.  If an exposed square contains a bomb, then the game is over and the player has lost.  Flagged squares are protected and cannot be exposed unless they are {\em unflagged}.  The intuition here, is that the player marks those squares believed to contain a bomb.  
+Here, we can see the main aspects of the game.  The {\em game board} is a two-dimensional grid of {\em squares}.  Each square holds {\em nothing} or a {\em bomb} and is in one of the three states: {\em hidden}, {\em exposed} or {\em flagged}.  An exposed square shows either the total number of bombs in the nine adjacent squares, referred to as its {\em rank}.  If an exposed square contains a bomb, then the game is over and the player has lost.  Flagged squares are protected and cannot be exposed unless they are {\em unflagged}.  The intuition here is that the player marks those squares believed to contain a bomb.  
 
-Let's analyse the above board.  In the following diagram of the above minesweeper game, gray squares represent hidden squares in the game.  For our benefit here, we've split them into two categories: those which contain a bomb (dark gray); and, those which don't (light gray): 
+Let's analyse the above board.  In the following diagram of the above minesweeper game, gray squares represent hidden squares in the game.  For our benefit we've split them into two categories: those which contain a bomb (dark gray); and, those which don't (light gray): 
 
 \begin{center}
 \includegraphics[width=0.35\textwidth]{../images/kmines_analysis.png}
 \end{center}
 
-In our discussion, we'll use $(x,y)$ to indicate a position on the board where $x$ gives the horizontal component, and $y$ the vertical component.  So, for example, the squares $(2,4)$, $(4,3)$ and $(6,4)$ are all marked with a flag.  Indeed, we can see that the above player has correctly flagged the three bombs in these squares, and that there are seven remaining to be identified and flagged.  Of course, unlike us, the player cannot see exactly where the bombs are.  However, he/she can easily determine that the square $(2,6)$ must contain a bomb.  This is because the exposed square at $(1,4)$ has a rank of $1$, and a bomb is flagged at $(2,4)$.  Therefore, there can be no bomb in square $(2,5)$ as this mean the rank of square $(1,4)$ was incorrect.  Finally, the rank of the square at $(1,5)$ is $2$ with only three unexposed squares, of which one is known already to contain a bomb and the other is known {\em not} to contain a bomb.  Therefore, the $(2,6)$ must contain a bomb.
+In our discussion, we'll use $(x,y)$ to indicate a position on the board where $x$ gives the horizontal column, and $y$ the vertical row.  So, for example, the squares $(2,4)$, $(4,3)$ and $(6,4)$ are all marked with a flag.  Indeed, we can see that the player has correctly flagged the three bombs in these squares, and that there are seven remaining to be identified and flagged.  Of course, unlike us, the player cannot see exactly where the bombs are.  However, he/she can easily determine that the square $(2,6)$ must contain a bomb.  This is because the exposed square at $(1,4)$ has a rank of $1$, and a bomb is already flagged at $(2,4)$.  Therefore, there can be no bomb in square $(2,5)$ as otherwise the rank of square $(1,4)$ would be incorrect.  Finally, the rank of the square at $(1,5)$ is $2$ with only three unexposed squares, of which one is known already to contain a bomb and the other is known {\em not} to contain a bomb.  Therefore, the $(2,6)$ must contain a bomb.
 
-The player plays the game by repeatedly selecting a square to expose.  When all squares are exposed, except for those containing bombs, the game is over and the player wins.  However, if a square holding a bomb is exposed, then the game is over immediately and the player loses.  A {\em blank} square is one with no adjacent bombs.  When a blank square is exposed, every adjacent blank square is recursively exposed.
+The player plays the game by repeatedly selecting a square to expose.  When all squares are exposed, except for those containing bombs, the game is over and the player wins.  However, if a square holding a bomb is exposed, then the game is over and the player loses.  A {\em blank} square is one with no adjacent bombs.  When a blank square is exposed, every adjacent blank square is recursively exposed.
 
 \subsection{Squares}
-We're now going to begin implementing the game of Minesweeper in Whiley.  To start with, we'll implement the game board in Whiley and provide functions for manipulating it; then, we'll implement the gameplay itself.  
+We're now going to begin implementing the game of Minesweeper in Whiley.  To start with, we'll implement the game board in Whiley and provide functions for manipulating it; then, we'll implement the game-play itself.  
 
 The first aspect of the game board we'll implement is the concept of a {\em square}.  There are essentially two broad categories of square in the game: {\em exposed squares} and {\em hidden squares}.  Therefore, our implementation will reflect this.  Exposed squares either have a {\em rank} or are {\em blank} (i.e. have a rank of zero).  Furthermore, they may or may not hold a bomb.  We can implement this in Whiley like so:
 \begin{lstlisting}
@@ -26,7 +26,7 @@ type ExposedSquare is {
   bool holdsBomb  // true if the square holds a bomb
 }
 \end{lstlisting}
-Here, we can see that an integer field called \lstinline{rank} is used to store the rank of the square.  Likewise, a boolean field called \lstinline{holdsBomb} is used to indicate whether or not the square holds a bomb.  To simply creating values of type \lstinline{ExposedSquare}, it is common to additionally provide one or more {\em constructors}.  These are functions of the same name which create values of the given type.  Here is our \lstinline{ExposedSquare} constructor:
+Here, we can see that an integer field called \lstinline{rank} is used to store the rank of the square.  Likewise, a boolean field called \lstinline{holdsBomb} is used to indicate whether or not the square holds a bomb.  To simplify creating values of type \lstinline{ExposedSquare}, it is common to additionally provide one or more {\em constructors}.  These are functions of the same name which create values of the given type.  Here is our \lstinline{ExposedSquare} constructor:
 
 \begin{lstlisting}
 // ExposedSquare constructor
@@ -55,7 +55,7 @@ We can now define the concept of a square in our Whiley implementation by combin
 type Square is ExposedSquare | HiddenSquare
 \end{lstlisting}
 
-Here, the type \lstinline{Square} is a union of the types \lstinline{ExposedSquare} and \lstinline{HiddenSquare}.  In otherwords, it is either an \lstinline{ExposedSquare} or a \lstinline{HiddenSquare}.  Notice that we don't provide a constructor for \lstinline{Square}.  This is because a \lstinline{Square} is merely the composition of two existing types with their own constructors.
+Here, the type \lstinline{Square} is a union of the types \lstinline{ExposedSquare} and \lstinline{HiddenSquare}.  In otherwords, it is either an \lstinline{ExposedSquare} or a \lstinline{HiddenSquare}.  Notice that we don't provide a constructor for \lstinline{Square}.  This is because a \lstinline{Square} is an abstract concept formed from the composition of two existing types with their own constructors.
 
 \subsection{Board}
 
@@ -69,7 +69,7 @@ type Board is {
 }
 \end{lstlisting}
 
-The main component of \lstinline{Board} is the \lstinline{squares} list.  Although this is a one-dimensional list, we'll see shortly that it is treated a two dimensional way.  The remaining fields record the width and height of the board, which is needed in order to safely manipulate the board.  To accompany this data type, we define a simple constructor as follows:
+The main component of \lstinline{Board} is the \lstinline{squares} list.  Although this is a one-dimensional list, we'll see shortly that it is treated in a two dimensional way.  The remaining fields record the width and height of the board, which is needed in order to safely manipulate the board.  To accompany this data type, we define a simple constructor as follows:
 \begin{lstlisting}
 // Create a board of given dimensions which contains no bombs, and
 // where all squares are hidden.
@@ -85,9 +85,9 @@ function Board(int width, int height) => Board:
         height: height
     }
 \end{lstlisting}
-This constructor creates a \lstinline{Board} of given width and height containing only hidden squares and no bombs.  Later, we will return to consider how to randomly place bombs on the board..
+This constructor creates a \lstinline{Board} of given width and height containing only hidden squares and no bombs.  Later, we will return to consider how to randomly place bombs on the board.
 
-We will return to define a constructor for \lstinline{Board} shortly, but first we will provide some simpler helper functions for updating the board.  First, we provide a function to read the \lstinline{Square} at a given position on a \lstinline{Board}:
+We'll now provide some simple helper functions for updating the board.  First, we provide a function to read the \lstinline{Square} at a given position on a \lstinline{Board}:
 
 \begin{lstlisting}
 // Return the square on a given board at a given position
@@ -102,9 +102,9 @@ This function performs a simple calculation to determine the start of the row in
 \includegraphics[width=0.95\textwidth]{../images/kmines_flat.png}
 \end{center}
 
-Here, we can see how each row is laid out in the 1-Dimensional list \lstinline{Board.squares}.  To calculate the start of a given row, we multiple the row number by the width of the board.  Then, to calculate a given column within that row, we simply add the column number.  For example, the position $(3,2)$ represents column 2, row 3; therefore, the position in the example board above would be: $(2 * 9) + 3 = 21$.
+Here, we can see how each row is laid out in the 1-Dimensional \lstinline{Board.squares} list.  To calculate the start of a given row, we multiply the row number by the width of the board.  Then, to calculate a given column within that row, we simply add the column number.  For example, the position $(3,2)$ represents column 3, row 2; therefore, the position in the example board above would be: $(2 * 9) + 3 = 21$.
 
-The corresponding function to the above provides a way to change the square at a given position on the board:
+The corresponding function to \lstinline{getSquare()} provides a way to change the square at a given position on the board:
 
 \begin{lstlisting}
 // Set the square on a given board at a given position
@@ -114,7 +114,7 @@ function setSquare(Board b, int col, int row, Square sq) => Board:
     return b
 \end{lstlisting}
 
-Here, the same calculation is performed as before to determine the actual position within the \lstinline{Board.squares} list.  This time, the \lstinline{Board.squares} array is updated with the new \lstinline{Square}.  Note that we must return the updated board in order for this change to be visible (see~\ref{value_semantics} for more on this).  Notice also that we are not attempting to control how the \lstinline{Board.squares} list may be updated.  That is, any \lstinline{Square} can be passed into this function, even it doesn't make sense in the wider context of the game.  These provide some general-purpose mechanisms for manipulating a \lstinline{Board}.
+Here, the same calculation is performed as before to determine the actual position within the \lstinline{Board.squares} list.  This time, the \lstinline{Board.squares} array is updated with the new \lstinline{Square}.  Note that we must return the updated board in order for this change to be visible (see~\ref{value_semantics} for more on this).  Notice also that we are not attempting to control how the \lstinline{Board.squares} list may be updated.  That is, any \lstinline{Square} can be passed into this function, even it doesn't make sense in the wider context of the game.  This is because these simple provide a general-purpose mechanism for manipulating a \lstinline{Board}.
 
 \subsection{Game Play}
 
@@ -134,7 +134,7 @@ function flagSquare(Board b, int col, int row) => Board:
    return b
 \end{lstlisting}
 
-This function checks whether the square on the board is hidden or not.  If so, the flagged status of that square is flipped (i.e. if it was not flagged then it is now, etc).  As before,  we must return the updated board in order for any change to be visible (see~\ref{value_semantics} for more on this).
+This function checks whether the square on the board is hidden or not.  If so, the flagged status of that square is flipped (i.e. if it was not flagged then it is now, etc).  As before,  we must return the updated board in order for any change to be visible.
 
 The next function we'll implement is that for exposing a square.  This requires that the square to be exposed is not already exposed.  Furthermore, in the case of a blank square, then the expose method is recursively applied to blank squares.  An important sub-computation to this process is that of determining the rank of a given square.  That is the number of bombs contained in adjacent squares.  Here is our implementation of this sub-function:
 
@@ -151,7 +151,7 @@ function determineRank(Board b, int col, int row) => int:
     return rank
 \end{lstlisting}
 
-This function iterates through the nine squares which directly surrounding that specified by \lstinline{col} and \lstinline{row}, whilst excluding those which are off the board.  The functions \lstinline{Math.min()} and \lstinline{Math.max()} are imported from the standard library and determine the maximum (resp. minimum) of their arguments.  Also, note that we can access the field \lstinline{holdsBomb} without determining whether \lstinline{sq} is hidden or not.  This is because \lstinline{holdsBomb} is contained in both \lstinline{ExposedSquare} and \lstinline{HiddenSquare} and, hence, is guaranteed to be present for any \lstinline{Square}.
+This function iterates through the nine squares which directly surround that specified by \lstinline{col} and \lstinline{row}, whilst excluding those which are off the board.  The functions \lstinline{Math.min()} and \lstinline{Math.max()} are imported from the standard library and determine the maximum (resp. minimum) of their arguments.  Also, note that we can access the field \lstinline{holdsBomb} without determining whether \lstinline{sq} is hidden or not.  This is because \lstinline{holdsBomb} is contained in both \lstinline{ExposedSquare} and \lstinline{HiddenSquare} and, hence, is guaranteed to be present for any \lstinline{Square}.
 
 Using the \lstinline{determineRank()} function above, we can now specify the following function for exposing a given square on the board:
 
@@ -167,16 +167,24 @@ function exposeSquare(Board b, int col, int row) => Board:
       b = setSquare(b,col,row,sq)
       if rank == 0:
           // now expose neighbours
-          for r in Math.max(0,row-1) .. Math.min(b.height,row+2):
-              for c in Math.max(0,col-1) .. Math.min(b.width,col+2):
-                  b = exposeSquare(b,c,r)
+          return exposeNeighbours(b,col,row)
    //
    return b
 \end{lstlisting}
 
-This function does one of two things depending on the square being exposed.  First, the square is exposed by by creating an \lstinline{ExposedSquare} and updating the board.  Then, if that square is blank (i.e. has a rank of zero), then it and its neighbours are recursively exposed by calling \lstinline{exposeSquare()} again.
+This function does one of two things depending on the square being exposed.  First, the square is exposed by by creating an \lstinline{ExposedSquare} and updating the board.  Then, if that square is blank (i.e. has a rank of zero), then it and its neighbours are recursively exposed by calling \lstinline{exposeSquare()} again:
 
-The final function we need to implement the game is that for determining when the game is actually over and, furthermore, whether the player has won or not.  This examines the board to see whether there are any exposed squares (in which case, the game is over and the player lost).  Furthermore, it checks whether or not every hidden squares contains a bomb (in which case, the game is over and the player won).  This function is implemented as follows:
+\begin{lstlisting}
+// Recursively expose all valid neighbouring squares on the board
+function exposeNeighbours(Board b, int col, int row) => Board:
+    for r in Math.max(0,row-1) .. Math.min(b.height,row+2):
+       for c in Math.max(0,col-1) .. Math.min(b.width,col+2):
+           b = exposeSquare(b,c,r)
+    //
+    return b
+\end{lstlisting}
+
+The final function we need for our implementation of minesweeper is that for determining when the game is actually over and, furthermore, whether the player has won or not.  This examines the board to see whether there are any exposed squares (in which case, the game is over and the player lost).  Furthermore, it checks whether or not every hidden square contains a bomb (in which case, the game is over and the player won).  This function is implemented as follows:
 
 \begin{lstlisting}
 function isGameOver(Board b) => (bool,bool):
@@ -198,7 +206,7 @@ function isGameOver(Board b) => (bool,bool):
 This function iterates through every square on the board, and checks for two cases: firstly, whether a hidden square exists which does not contain a bomb; secondly, whether there is an exposed bomb.  Note that, if an exposed bomb is found the loop exits immediately; however, if a hidden square is found which doesn't hold a bomb we must continue to examine the remaining squares to see whether an exposed bomb exists or not.
 
 \subsection{Simple Text Interface}
-At this point, we can now put the game together and do some preliminary testing to check everything is as expected.  To do this, we run the code through some simple scenarios from the command-line.  Later, we'll provide a Graphical User Interface for our game using the Java Swing library. 
+At this point, we can now put the game together and do some preliminary testing to check everything is working as expected.  To do this, we can run the code through some simple scenarios from the console.  Later, we can extend it with a Graphical User Interface for our game using the Java Swing library. 
 
 The first and most important aspect of our simple text interface is a method for drawing the board onto the screen.  The following method does this using the \lstinline{System.Console}:
 \begin{lstlisting}
@@ -231,7 +239,7 @@ This method prints the board using a single character to represent each square, 
 | 1X211 1XX|
 | 111   2XX|
 \end{lstlisting}
-Here we can see, for example, that there must be a bomb at square $(0,1)$.  Using this textual representation of a board, we can begin to see the game working.  To do this, we'll provide a mechanical notion of a player's move (rather than, say, allowing the player to select his/her move).  This is done with the following type:
+Here we can see, for example, that there must be a bomb at square $(0,1)$.  Using this textual representation of a board, we can begin to see the game working.  To do this, we'll provide a mechanical notion of a player's move (rather than, say, allowing the player to actually select his/her move).  This is done with the following type:
 \begin{lstlisting}
 // expose signals the player exposes a square (true) or flags it (false)
 type Move is { bool expose, int col, int row }
@@ -256,7 +264,7 @@ public method main(System.Console console):
     ...
 \end{lstlisting}
 
-This method creates a new \lstinline{Board} and places six bombs on to it.  The position of each bomb is given using a tuple who first element is the column, and second element the row.  The remainder of the function then iterates through each \lstinline{Move}, applies it to the \lstinline{Board} and prints out the updated board at each step:
+This method creates a new \lstinline{Board} and places six bombs on to it.  The position of each bomb is given using a tuple whose first element is the column, and second element the row.  The remainder of the function then iterates through each \lstinline{Move}, applies it to the \lstinline{Board} and prints out the updated board at each step:
 
 \begin{lstlisting}
 public method main(System.Console console):
@@ -297,14 +305,14 @@ Player exposes square at 2,0
 |XXXXX311  |
 |XXXXXXX1  |
 \end{lstlisting}
-From this, it certainly seems that the program is working correctly.  Note, however, that this is only one test and not enough to be certain.  Furthermore, we would want to extend our loop above to check whether the game is and the player has won or lost.
+From this, it certainly seems that the program is working correctly.  Note, however, that this is only one test and not enough to be completely certain.  Furthermore, we would want to extend our loop above to check whether the game is over and the player has won or lost.
 \subsection{Graphical User Interface}
-At this point, we're now going to outline how one can go about turning this code into a real game of minesweeper using a Graphical User Interface (GUI).  Since, at the time of writing, the Whiley language has no support for graphical interfaces we instead recommend implementing the GUI in Java using Swing, and then connect that to our Whiley code above.  Here is how our implementation of the minesweeper game using a Java GUI looks:
+At this point, we're now going to outline how one can go about turning this code into a real game of minesweeper using a Graphical User Interface (GUI).  Since, at the time of writing, the Whiley language has no support for graphical interfaces we instead recommend implementing the GUI in Java using Swing, and then connect that to our Whiley minesweeper code.  Here is how our final implementation of the minesweeper game using a Java GUI looks:
 \begin{center}
 \includegraphics[width=0.3\textwidth]{../images/minesweeper.png}
 \end{center}
 
-In order to connect the Java GUI with our Whiley program, we need to use the {\em Foreign Function Interface} (see Appendix~\ref{s_ffi} for more on this).  The essential idea is that, by marking our functions with the modifier \lstinline{export}, they are visible to Java Code.  
+In order to connect the Java GUI with our Whiley program, we need to use the {\em Foreign Function Interface} (see Appendix~\ref{s_ffi} for more on this).  The essential idea is that, by marking our functions with the modifier \lstinline{export}, they are visible to Java and can be called directly from Java Code.  In addition to providing a Graphical User Interface the Java code also provides a mechanism to generate random numbers, allowing us to randomly place bombs on the board.
 
 Finally, complete code for minesweeper game can be downloaded from GitHub here: 
 \begin{center}
