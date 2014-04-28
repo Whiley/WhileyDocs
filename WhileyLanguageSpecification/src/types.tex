@@ -303,8 +303,10 @@ A tuple type describes a compound type made up of two or more elements in sequen
 \paragraph{Example.} The following example illustrates several uses of tuples:
 
 \begin{lstlisting}
-function swap(int x, int y) => (int,int):
-    return y,x
+(int, int) x = (4, 5)
+function swap((int,int) x) => (int,int):
+    int a, int b = x      // tuple destructuring assignment
+    return b, a
 \end{lstlisting}
 This function accepts two integer parameters, and returns a tuple type containing two integers.  The function simple reverses the order that the values occur in the tuple passed as a parameter.
  
