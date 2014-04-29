@@ -161,7 +161,7 @@ Sometimes, using a record type is a little more than necessary because the data 
 
 \begin{lstlisting}
 // A point has two integer components; the first represents x, the second represents y.
-type Point is (int,int)
+type Point is (int x, int y)
 
 // Translate a given point by an x and y delta
 function translate(Point p, int dx, int dy) => Point:
@@ -171,17 +171,16 @@ function translate(Point p, int dx, int dy) => Point:
 Since there is a widely used notation for describing 2D points --- namely $(x,y)$ --- it makes sense in this case to use a tuple over a record.  Tuples are also useful for describing functions which return multiple values.  For example, the following illustrates a simple function which swaps the order of its parameters:
 
 \begin{lstlisting}
-function swap(int x, int y) => (int, int):
-    return y, x
+function swap(Point p) => (int, int):
+    return p.y, p.x
 \end{lstlisting}
 
 Here, we see that the return type is a tuple and this provides a convenient and lightweight mechanism for returning multiple values.  Following on from this, Tuple types in Whiley also supports {\em destructuring syntax} (e.g. as found in Python).  The following example illustrates this:
 
 \begin{lstlisting}
-    int x
-    int y
+    Point p = (3, 4)
     ...
-    x, y = swap(x,y) // destructuring assignment
+    int x, int y = p // destructuring assignment
     ...        
 \end{lstlisting}
 
