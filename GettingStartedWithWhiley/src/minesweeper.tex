@@ -177,8 +177,8 @@ This function does one of two things depending on the square being exposed.  Fir
 \begin{lstlisting}
 // Recursively expose all valid neighbouring squares on the board
 function exposeNeighbours(Board b, int col, int row) => Board:
-    for r in Math.max(0,row-1) .. Math.min(b.height,row+2):
-       for c in Math.max(0,col-1) .. Math.min(b.width,col+2):
+    for r in Math.max(0,row-1) .. Math.min(b.height,row+1):
+       for c in Math.max(0,col-1) .. Math.min(b.width,col+1):
            b = exposeSquare(b,c,r)
     //
     return b
