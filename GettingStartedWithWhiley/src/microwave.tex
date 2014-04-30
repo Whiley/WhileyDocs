@@ -11,7 +11,10 @@
 For the next case study, we examine the classic and well-known {\em microwave oven} problem.  In essence, we have a microwave oven with a door and a heating element.  An important safety condition is that the heating element cannot be on when the door is open, to protect against burns.  This example is interesting, because it demonstrates that Whiley can operate effectively as a modelling language, as well as a general-purpose programming language.
 
 \subsection{Overview}
-Figure~\ref{fig_microwave} provides a state-machine diagram of the microwave oven.  The microwave state has three components: a heating element, which is set either {\em on} or {\em off}; a door which (via a sensor) is reported either {\em open} or {\em closed}; and, finally, a timer value indicating how for many seconds heating should occur.
+Figure~\ref{fig_microwave} provides a state-machine diagram of the
+microwave oven.  The microwave state has three components: a heating
+element, which is set either {\em on} or {\em off}; a door which (via
+a sensor) is recorded as either {\em open} or {\em closed}; and, finally, a timer value indicating how for many seconds heating should occur.
 
 In addition to the microwave state, a number of external events are permitted.  First, a start button is used to signal the microwave should begin heating; second, the door may be opened or closed; finally, an internal clock is used to signal time passing (in one second intervals) to the state machine.
 
@@ -33,7 +36,7 @@ Here, boolean values are used to represent the state of the heating element, and
 
 \subsection{Events}
 
-Events are represented in Whiley using functions which map one microwave state to another.  Here are the two functions representing the {\em open} and {\em close} events:
+Events can be modelled in Whiley using functions which map one microwave state to another.  Here are the two functions representing the {\em open} and {\em close} events:
 \begin{lstlisting}
 // A door closed event is triggered when the sensor detects that the door is closed.
 function doorClosed(Microwave m) => Microwave
