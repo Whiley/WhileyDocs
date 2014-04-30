@@ -44,7 +44,7 @@ specifying that in Whiley.  At the same time, we'll also give an
 initial implementation which satisfies this partial specification:
 
 \begin{lstlisting}
-function indexOf([int] items, int item) => (int|null r)
+function indexOf([int] items, int item) => (int|null i)
 // If return value is an int i, then items[i] == item
 ensures i is int ==> items[i] == item:
     //
