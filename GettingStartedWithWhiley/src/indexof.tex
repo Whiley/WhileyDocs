@@ -113,6 +113,20 @@ also not the most direct translation of the original property, it is a
 rather convenient translation which achieves the same thing.
 
 \subsection{Specifying Property 3 --- Return Least Index}
+
+Property (3) from our list above is similar to property (2), except
+that we not considering all elements of \lstinline{items}:
+
+\begin{lstlisting}
+...
+// If return is an int i, then no index j where j $<$ i and items[j] == item
+ensures i is int ==> no { j in 0 .. i | items[j] == item }:
+\end{lstlisting}
+
+As before, an \lstinline{all} quantifier could be used.  However,
+we cannot avoid talking about indices this time as not all elements of
+\lstinline{items} are being considered.
+
 \subsection{Working Implementation}
 
 At this point, we can now give the complete specification for the
