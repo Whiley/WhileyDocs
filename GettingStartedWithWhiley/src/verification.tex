@@ -272,8 +272,6 @@ resolve this by using an {\em overriding loop invariant} as follows:
 In this case, \lstinline{i >= count && i <= count && |r| == i} holds
 after the loop and, hence, it follows that \lstinline{|r| == count}.
 
-\subsection{Explicit Assumptions}
-
 \subsection{Function Invocation}
 
 To keep verification tractable, the Whiley compiler verifies each
@@ -307,3 +305,43 @@ This program will not verify because the implementation of
 However, the Whiley compiler will verify that the implementation of
 \lstinline{g()} meets its specification as, when doing this, it
 assumes that \lstinline{f()} meets it specification.
+
+\subsection{Explicit Assumptions}
+
+In many cases it is possible to sufficiently encode a function's meaning within its specification to allow a program to verify.  However, occasionally, what we need is to difficult for the Whiley compiler to handle.  A good example is the \lstinline{sum()} function, which we can try to specify as follows:
+
+\begin{lstlisting}
+function sum([int] xs) => (int r)
+requires |xs| > 0
+// Base case: list of size 1
+ensures |xs| == 1 ==> r == xs[0] 
+// General case: list of size greater than 1
+ensures |xs| > 1 ==> r == xs[0] + sum(xs[1..]):
+   ...
+\end{lstlisting}
+
+Here, we have carefully encoded the meaning of \lstinline{sum()} within its specification.  Unfortunately, at the time of writing, the Whiley compiler reason accurately about this specification, and this makes exploiting known mathematical properties in subsequent specifications impossible.  For example, the following illustrates a simple function for reversing a list:
+
+\begin{lstlisting}
+// Rotate head item to back of list
+function reverse([int] xs) => ([int] ys)
+// Permutation does not change sum
+ensures |xs| > 0 ==> sum(xs) == sum(ys):
+   //
+   int i = 0
+   [int] zs = xs
+   //
+   while i < |xs| where i >= 0 && |xs| == |zs|:
+       int j = |xs| - (i+1)
+       xs[i] = zs[j]
+   return xs
+\end{lstlisting}
+
+Unfortunately, there is no hope to automatically verify the seemingly straightforward property that the sum is preserved by this function.  Instead, one can use an \lstinline{assume} statement in Whiley to override the verifier.  Such a statement provides a way to instruct the verifier to blindly assume something holds.  For this example, we have:
+\begin{lstlisting}
+   ..
+   assume |xs| == 0 || sum(xs) == sum(zs)
+   return xs
+\end{lstlisting}
+
+Placing this before the \lstinline{return} statement allows the verifier to pass \lstinline{reverse()}.  Of course, the use of \lstinline{assume} statements is potentially unsafe and relies on correct judgement.  
