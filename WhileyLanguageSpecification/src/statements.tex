@@ -111,7 +111,7 @@ function remove([int] xs, int x) => [int]:
            break
         else:
            i = i + 1
-    return xs[0..i] ++ xs[i..]
+    return xs[0..i] ++ xs[i+1..]
 \end{lstlisting}
 Here, we see a \lstinline{break} statement being used to exit a \lstinline{while} loop when the first element matching parameter \lstinline{x} is found.  
 
