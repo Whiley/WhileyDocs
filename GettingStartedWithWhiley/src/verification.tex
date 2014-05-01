@@ -116,6 +116,34 @@ The Whiley compiler is able to reason that these types are equivalent
 and statically verifies that this function is correct.
 
 \subsection{Quantification}
+The pre/post-conditions and invariants we have seen above were for constraining primitive types.  But, what if we want to say constrain all elements in collection?  In that case, we need to use a {\em quantifier}, as this allows us to iterate all elements in a collection.  Suppose we wanted to define the type of all integer lists whose elements are non-negative.  We can do this use the {\em universal} \lstinline{all} quantifier in Whiley like so:
+
+\begin{lstlisting}
+type ListOfNats is ([int] items)
+// every x in items must be greater-or-equal-to zero
+where all { x in items | x >= 0 }
+\end{lstlisting}
+
+The invariant given in the \lstinline{where} clause simply states that every element in the list must greater-or-equal-to zero.  The \lstinline{all} quantifier is normally read as ``for all''.
+
+In Whiley, there are a range of different quantifiers one can use.  For example, the above could be rewritten using the \lstinline{no} quantifier, like so:
+
+\begin{lstlisting}
+type ListOfNats is ([int] items)
+// no x in items is less-than zero
+where no { x in items | x < 0 }
+\end{lstlisting}
+
+Similarly, we could rewrite the above using an {\em existential} quantifier.  Unlike a universal quantifier (which applies to all elements) an existential quantifier applies to just one element.  We can rewrite our \lstinline{ListOfNats} data type using the \lstinline{some} quantifier in Whiley, like so:
+
+\begin{lstlisting}
+type ListOfNats is ([int] items)
+// does not exist an x in items where is less-than zero
+where !some { x in items | x < 0 }
+\end{lstlisting}
+
+The \lstinline{some} requires that there is one (or more) elements which meet the criteria, and is normally read as ``there exists''.  Thus, a literal reading of the above invariant would be: {\em it is not the case that there exists an element \lstinline{x} in items where \lstinline{x < 0}}.  Essentially, however, this has the same effect as for the \lstinline{no} quantifier.  
+
 \subsection{Loop Invariants}
 \label{loop_invariants}
 
