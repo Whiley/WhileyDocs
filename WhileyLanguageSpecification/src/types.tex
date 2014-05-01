@@ -337,7 +337,7 @@ type PrintWriter is {
    ...
 }
 // Create print writer if not already one
-PrintWriter create(Writer writer):
+function create(Writer writer) => PrintWriter:
     if writer is PrintWriter:
         return writer
     else:
@@ -483,13 +483,11 @@ A list type describes list values whose elements are subtypes of the element typ
 \paragraph{Example.} The following example illustrates list types:
 
 \begin{lstlisting}
-function add([int] v1, [int] v2) => ([int] v3)
-    //
+function add([int] v1, [int] v2) => ([int] v3):
     int i=0
     while i < |v1|:
         v1[i] = v1[i] + v2[i]
-        i = i + 1 
-    //
+        i = i + 1
     return v1
 \end{lstlisting}
 
@@ -621,7 +619,7 @@ function sizeOf(Tree t) => int:
     if t == null:
         return 0
     else:
-        return 1 + sizeOf(t.lhs) + sizeOf(t.rhs)
+        return 1 + sizeOf(t.left) + sizeOf(t.right)
 \end{lstlisting}
 
 Here, the type \lstinline{Tree} is recursive because it is defined in terms of itself.  An instance of type \lstinline{Tree} is a sequence of nested records which is arbitrarily deep, and whose branches are terminated by \lstinline{null}.  The function \lstinline{sizeOf()} traverses an arbitrary instance of \lstinline{Tree} and returns the number of \lstinline{Node}s it contains.
