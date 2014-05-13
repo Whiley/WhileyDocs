@@ -1,5 +1,6 @@
 \newpage
 \section{Example: Minesweeper}
+\label{s_minesweeper}
 In this section, we will develop a simple implementation of the well-known {\em Minesweeper} game.  Typically the game is played through a graphical user interface, illustrated as follows:
 \begin{center}
 \includegraphics[width=0.35\textwidth]{../images/kmines.png}
@@ -58,6 +59,7 @@ type Square is ExposedSquare | HiddenSquare
 Here, the type \lstinline{Square} is a union of the types \lstinline{ExposedSquare} and \lstinline{HiddenSquare}.  In otherwords, it is either an \lstinline{ExposedSquare} or a \lstinline{HiddenSquare}.  Notice that we don't provide a constructor for \lstinline{Square}.  This is because a \lstinline{Square} is an abstract concept formed from the composition of two existing types with their own constructors.
 
 \subsection{Board}
+\label{s_minesweeper_board}
 
 Using our above \lstinline{Square} data type, we can now define the game board in our Whiley implementation as follows:
 

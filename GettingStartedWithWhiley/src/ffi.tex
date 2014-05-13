@@ -1,2 +1,37 @@
 \section{Foreign Function Interface}
 \label{s_ffi}
+The {\em Foreign Function Interface (FFI)} provides a mechanism to enable code written in Whiley to interact with code written in another programming language.  In this section, we will discuss those mechanisms provided in Whiley for this purpose.  Of course, the Whiley system cannot make any guarantees about such external code and care must be taken to ensure it treats types and specifications correctly.  
+
+\subsection{Overview}
+
+The foreign function interface represents a boundary between internal (i.e. Whiley) code and external code written in other (i.e. {\em foreign}) languages.  Whiley provides two modifiers for functions and methods which allow information to flow across this boundary.  These are:
+
+\begin{itemize}
+\item The \lstinline{native} modifier, which declares a function or method which is {\em implemented} in a foreign language.  That is, a function or method whose implementation is written in another language.  Code written in Whiley can call this function, and the compiler is responsible for correctly routing this to the actual function body.
+
+\item The \lstinline{export} modifier, which declares a function or method that is {\em visible} to foreign code.  That is, a function or method which may be called from foreign code.  This provides a way for foreign code to invoke Whiley function and methods.
+\end{itemize}
+
+These modifiers provide two different mechanisms for allowing information to flow between code written in Whiley and code written in a foreign language.  As an example, recall the Minesweeper example from \S\ref{s_minesweeper}.  Suppose we wanted to implement a Graphical User Interface for our minesweeper game in Java.  There are two ways we could approach this:
+
+\begin{itemize}
+\item {\bf Whiley as ``Master''}.  In this case, the Whiley code is considered the primary implementation and provides the entry point to the application.  In contrast, the Java code is consider subservient and is always called from Whiley.
+\item {\bf Whiley as ``Slave''}.  In this case, things are the other way around.  The Java code is considered the primary implementation and provides the application's entry point.  The Whiley code, on the other hand, simply provides supporting functions and methods for this.
+\end{itemize}
+
+For this particular situation, it probably makes most sense to follow the ``Whiley as Slave'' approach.  This makes sense if we view our completed Minesweeper game as an instance of the {\em Model-View-Controller (MVC)} pattern.  According to this, the Whiley implementation of Minesweeper illustrated in \S\ref{s_minesweeper} corresponds to the {\em model}.  The Graphical User Interface would then correspond to the {\em view}.
+
+\subsection{Example: Whiley as Master}
+
+\subsection{Example: Whiley as Slave}
+
+call this function from code written in the Java programming language.  To do this, we need to declare this function using the \lstinline{export} modifier:
+
+\begin{lstlisting}
+// Return the square on a given board at a given position
+export function getSquare(Board b, int col, int row) => Square:
+    ...
+\end{lstlisting}
+
+Here, the \lstinline{export} modifier declares that \lstinline{getSquare()} may be called from foreign code.  Furthermore, suppose we have declared \lstinline{getSquare()} in the file \lstinline{Minesweeper}.  Then, the following Java code can be used to call this function:
+
