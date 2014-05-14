@@ -21,17 +21,17 @@ These modifiers provide two different mechanisms for allowing information to flo
 
 For this particular situation, it probably makes most sense to follow the ``Whiley as Slave'' approach.  This makes sense if we view our completed Minesweeper game as an instance of the {\em Model-View-Controller (MVC)} pattern.  According to this, the Whiley implementation of Minesweeper illustrated in \S\ref{s_minesweeper} corresponds to the {\em model}.  The Graphical User Interface would then correspond to the {\em view}.
 
-\subsection{Example: Whiley as Master}
+% \subsection{Example: Whiley as Master}
 
-\subsection{Example: Whiley as Slave}
+% \subsection{Example: Whiley as Slave}
 
-call this function from code written in the Java programming language.  To do this, we need to declare this function using the \lstinline{export} modifier:
+% call this function from code written in the Java programming language.  To do this, we need to declare this function using the \lstinline{export} modifier:
 
-\begin{lstlisting}
-// Return the square on a given board at a given position
-export function getSquare(Board b, int col, int row) => Square:
-    ...
-\end{lstlisting}
+% \begin{lstlisting}
+% // Return the square on a given board at a given position
+% export function getSquare(Board b, int col, int row) => Square:
+%     ...
+% \end{lstlisting}
 
-Here, the \lstinline{export} modifier declares that \lstinline{getSquare()} may be called from foreign code.  Furthermore, suppose we have declared \lstinline{getSquare()} in the file \lstinline{Minesweeper}.  Then, the following Java code can be used to call this function:
+% Here, the \lstinline{export} modifier declares that \lstinline{getSquare()} may be called from foreign code.  Furthermore, suppose we have declared \lstinline{getSquare()} in the file \lstinline{Minesweeper}.  Then, the following Java code can be used to call this function:
 
