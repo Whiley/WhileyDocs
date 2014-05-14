@@ -1,0 +1,53 @@
+\documentclass{article}
+
+%\usepackage[T1]{fontenc}
+%\usepackage[lighttt]{lmodern}
+\usepackage{times}
+
+\usepackage{graphicx}
+\usepackage{url} % for typesetting urls
+\usepackage{color}
+\usepackage{fancybox}
+\usepackage{framed}
+\usepackage{hyperref}
+\usepackage[super,square]{natbib}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{stmaryrd}
+\usepackage[a4paper,lmargin=35mm,tmargin=35mm,bmargin=35mm,rmargin=35mm,twoside=false,marginpar=30mm]{geometry}
+
+% ------------------------------------------------------------------------
+\definecolor{lightgray}{RGB}{225,225,225}
+
+\newenvironment{eg}{\par\noindent{\bf Example.}}{\hfill$\blacksquare$}
+\newenvironment{insight}[1]{
+\begin{framed}
+\noindent\begin{minipage}[t]{0.05\textwidth}
+{\Huge ?}
+\end{minipage}%
+\begin{minipage}[m]{0.95\textwidth}
+{\bf #1}
+}{\end{minipage}\end{framed}}
+
+% ------------------------------------------------------------------------
+
+\input{listings}
+
+\title{\Huge Verifying Software with Whiley}
+
+\author{David J. Pearce}
+
+\begin{document}
+\maketitle
+\input{abstract}
+\tableofcontents
+\clearpage
+\input{introduction}
+\appendix
+\newpage
+\section*{Appendix}
+
+\bibliographystyle{unsrt}
+\bibliography{abbrevs,references}
+
+\end{document}

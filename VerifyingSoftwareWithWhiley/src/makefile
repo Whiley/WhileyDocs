@@ -1,0 +1,12 @@
+TARGET = VerifyingSoftwareWithWhiley
+DEPS = listings.tex abstract.tex introduction.tex
+
+all: $(TARGET).pdf
+
+%.pdf : %.tex $(DEPS)
+	@for X in 1 2 3 ; do \
+        ( echo "---------------- Latex ($$X) ----------------" && pdflatex $< && bibtex $*) \
+	done
+
+clean:
+	rm *.bbl *.aux *.dvi *.log *.ps *.pdf *~ *.blg *.bak
