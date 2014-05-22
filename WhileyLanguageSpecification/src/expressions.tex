@@ -1,22 +1,30 @@
 \chapter{Expressions}
-\Gls{expression} blah blah.
+The majority of work performed by a Whiley program is through the execution of \glspl{expression}.  Every expression produces a \gls{value} and may have additional side effects.
+
+\section{Normal and Abrupt Execution}
+
+\section{Evaluation Order}
 
 % =======================================================================
-% Tuple Expression
+% Multi Expression
 % =======================================================================
 
-\section{Tuple Expressions}
+\section{Multi Expressions}
 \label{c_expr_tuple}
+A multi-expression is an expression composed of two or more unit expressions and which returns a tuple value (\S\ref{c_types_tuple}).  The operands of a multi-expression are evaluated in a strict left-to-right order.
 
 \begin{syntax}
   \verb+TupleExpr+ & $::=$ & \verb+UnitExpr+ \big(\ \token{,}\ \verb+UnitExpr+\ \big)$^+$ \\
 \end{syntax}
 
-\paragraph{Description.}
+\paragraph{Example.}  The following example illustrates the use of a multi-expression:
 
-\paragraph{Examples.}
+\begin{lstlisting}
+function scale(real x, real y, real p) => (real,real):
+    return (x*p), (y*p)
+\end{lstlisting}
 
-\paragraph{Notes.} 
+This function accepts three \lstinline{real} values and returns two.  In the body, the \lstinline{return} statement contains a multi-expression which produces a tuple composed of two \lstinline{real} values.
 
 % =======================================================================
 % Unit Expression
@@ -25,15 +33,22 @@
 \section{Unit Expressions}
 \label{c_expr_unit}
 
+A unit expression is an expression which returns exactly one value.  There is a large range of possible unit expressions, including comparators, arithmetic operators, logical operators, etc.
+
 \begin{syntax}
   \verb+UnitExpr+ & $::=$ & \verb+LogicalExpr+\\
+                  &  $|$  & \verb+BitwiseExpr+\\
+                  &  $|$  & \verb+ConditionExpr+\\
+                  &  $|$  & \verb+QuantifierExpr+\\
+                  &  $|$  & \verb+AppendExpr+\\
+                  &  $|$  & \verb+RangeExpr+\\
+                  &  $|$  & \verb+ShiftExpr+\\
+                  &  $|$  & \verb+AdditiveExpr+\\
+                  &  $|$  & \verb+MultiplicativeExpr+\\
+                  &  $|$  & \verb+AccessExpr+\\
+                  &  $|$  & \verb+TermExpr+\\
+                
 \end{syntax}
-
-\paragraph{Description.}
-
-\paragraph{Examples.}
-
-\paragraph{Notes.} 
 
 % =======================================================================
 % Logical Expressions
@@ -42,8 +57,11 @@
 \section{Logical Expressions}
 \label{c_expr_logical}
 
+A logical expression operates on values of \lstinline{bool} type (\S\ref{c_types_bool}) to produce another \lstinline{bool} value.  The {\em if-and-only-if (iff)} operator, \lstinline{<==>}, returns \lstinline{true} if either both operands are \lstinline{true} or both are \lstinline{false}.  The {\em implication} operator, \lstinline{==>}, returns \lstinline{true} if either the left operand is \lstinline{false}, or both operands are \lstinline{true}.  The {\em logical OR} operator returns \lstinline{true} if either operand is \lstinline{true}, whilst the {\em logical AND} operator returns \lstinline{true} if both operands are \lstinline{true}.
+
 \begin{syntax}
-  \verb+LogicalExpr+ & $::=$ & \verb+LogicalOrExpr+ \big[ \token{==>} \verb+LogicalExpr+\ \big]\\
+  \verb+LogicalExpr+ & $::=$ & \verb+LogicalOrExpr+ \big[ \token{<==>} \verb+LogicalExpr+\ \big]\\
+                     &  $|$  & \verb+LogicalOrExpr+ \big[ \token{==>} \verb+LogicalExpr+\ \big]\\
   &&\\
   \verb+LogicalOrExpr+ & $::=$ & \verb+LogicalAndExpr+ \\
                            & $|$ & \verb+LogicalOrExpr+ \token{||} \verb+LogicalAndExpr+\\
@@ -52,11 +70,17 @@
                             & $|$ & \verb+LogicalAndExpr+ \token{\&\&} \verb+BitwiseExpr+\\
 \end{syntax}
 
-\paragraph{Description.}
+\paragraph{Example.}  The following examples illustrate some of the logical operators:
 
-\paragraph{Examples.}
+\begin{lstlisting}
+function implies(bool x, bool y) => bool:
+    return !x || y
 
-\paragraph{Notes.} 
+function iff(bool x, bool y) => bool:
+    return implies(x,y) && implies(y,x)
+\end{lstlisting}
+
+The function \lstinline{implies} implements the well-known equivalence between implication and logical OR.  The function \lstinline{iff} implements the well-known equivalence between implication and iff.
 
 % =======================================================================
 % Bitwise Expressions
