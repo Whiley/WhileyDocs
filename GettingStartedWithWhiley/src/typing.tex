@@ -24,8 +24,8 @@ following example illustrates how this works (where the body of
     // idx has type null$|$int
     if idx is int:
         // idx now has type int
-        int below = str[0..idx]
-        int above = str[idx..]
+        string below = str[0..idx]
+        string above = str[idx..]
         return [below,above]
     else:
         // idx now has type null
