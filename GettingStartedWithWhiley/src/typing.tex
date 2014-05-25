@@ -24,8 +24,8 @@ following example illustrates how this works (where the body of
     // idx has type null$|$int
     if idx is int:
         // idx now has type int
-        int below = str[0..idx]
-        int above = str[idx..]
+        string below = str[0..idx]
+        string above = str[idx..]
         return [below,above]
     else:
         // idx now has type null
@@ -176,7 +176,7 @@ function sum(LinkedList l) => int:
         return l.data + sum(l.next)
 \end{lstlisting}
 
-This defines a simple recursive function for computing the length of a \lstinline{LinkedList}.  Instances of \lstinline{OrderedList} can be passed into this function by {\em coercing} them to instances of \lstinline{LinkedList}:
+This defines a simple recursive function for computing the sum of the elements of a \lstinline{LinkedList}.  Instances of \lstinline{OrderedList} can be passed into this function by {\em coercing} them to instances of \lstinline{LinkedList}:
 
 \begin{lstlisting}
 function sum(OrderedList l) => int:
