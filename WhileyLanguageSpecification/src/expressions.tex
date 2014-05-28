@@ -88,7 +88,7 @@ The function \lstinline{implies()} implements the well-known equivalence between
 
 \section{Bitwise Expressions}
 \label{c_expr_bitwise}
-A bitwise expression operators on values of \lstinline{byte} type (\S\ref{c_types_byte}).  The {\em bitwise OR} operator, \lstinline{&}
+A bitwise expression operates on values of \lstinline{byte} type (\S\ref{c_types_byte}).  The {\em bitwise OR} operator, \lstinline{|}, performs a logical OR between the respective bits of each operand, and produces a \lstinline{byte}.  The {\em bitwise AND} operator, \lstinline{&}, performs a logical AND between the respective bits of each operand, and produces a \lstinline{byte}.   The {\em bitwise exclusive-OR} operator, \lstinline{^}, performs a logical exclusive-OR between the respective bits of each operand, and produces a \lstinline{byte}.
 
 \begin{syntax}
   \verb+BitwiseExpr+ & $::=$ & \verb+BitwiseOrExpr+ \\
@@ -104,11 +104,22 @@ A bitwise expression operators on values of \lstinline{byte} type (\S\ref{c_type
 
 \end{syntax}
 
-\paragraph{Description.}
+\paragraph{Example.}  The following example illustrates the bitwise OR operator:
 
-\paragraph{Examples.}
+\begin{lstlisting}
+function toUnsignedByte(u8 v) => byte:
+    //
+    byte mask = 00000001b
+    byte r = 0b
+    for i in 0..8:
+        if (v % 2) == 1:
+            r = r | mask
+        v = v / 2
+        mask = mask << 1
+    return r  
+\end{lstlisting}
 
-\paragraph{Notes.} 
+This function converts an unsigned integer in the range \lstinline{0} ... \lstinline{255} to a \lstinline{byte}.  The bitwise OR operator is used to construct the resulting \lstinline{byte} by setting individual bits via the \lstinline{mask}.  This example also illustrates the left-shift operator (\S\ref{c_expr_shift}).
 
 % =======================================================================
 % Condition Expressions
