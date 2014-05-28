@@ -1,7 +1,7 @@
 \chapter{Expressions}
 The majority of work performed by a Whiley program is through the execution of \glspl{expression}.  Every expression produces a \gls{value} and may have additional side effects.
 
-\section{Normal and Abrupt Execution}
+\section{Abrupt Execution}
 
 \section{Evaluation Order}
 
@@ -88,6 +88,7 @@ The function \lstinline{implies()} implements the well-known equivalence between
 
 \section{Bitwise Expressions}
 \label{c_expr_bitwise}
+A bitwise expression operators on values of \lstinline{byte} type (\S\ref{c_types_byte}).  The {\em bitwise OR} operator, \lstinline{&}
 
 \begin{syntax}
   \verb+BitwiseExpr+ & $::=$ & \verb+BitwiseOrExpr+ \\
