@@ -83,6 +83,27 @@ function iff(bool x, bool y) => bool:
 The function \lstinline{implies()} implements the well-known equivalence between implication and logical OR.  The function \lstinline{iff()} implements the well-known equivalence between implication and iff.
 
 % =======================================================================
+% Quantifier Expressions
+% =======================================================================
+
+\section{Quantifier Expressions}
+\label{c_expr_quantifier}
+
+\begin{syntax}
+\verb+QuantExpr+ & $::=$ & \big(\ \token{no} $|$ \token{some} $|$
+\token{all}\ \big)\ \token{\{}\\
+&&\ \verb+Ident+ \token{in} \verb+Expr+ \big( \token{,}\ \verb+Ident+\
+\token{in}\ \verb+Expr+\ \big)$^+$\ \token{|}\ \verb+LogicalExpr+\\
+&& \token{\}}\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
 % Bitwise Expressions
 % =======================================================================
 
@@ -125,39 +146,51 @@ This function converts an unsigned integer in the range \lstinline{0} ... \lstin
 % Condition Expressions
 % =======================================================================
 
-\section{Condition Expressions}
-\label{c_expr_condition}
+\section{Equality Expressions}
+\label{c_expr_equality}
+An equality expression compares two (or more) values together producing a value of \lstinline{bool} type.  The equality comparator, \lstinline{==}, tests whether two values are equal.  Likewise, the inequality comparator, \lstinline{==}, tests whether two values are {\em not} equal.
 
 \begin{syntax}
   \verb+ConditionExpr+ & $::=$ &\\
+  & $|$ & \verb+AppendExpr+ \token{==} \verb+AppendExpr+\\
+  & $|$ & \verb+AppendExpr+ \token{!=} \verb+AppendExpr+\\
 \end{syntax}
 
-\paragraph{Description.}
+\paragraph{Example.}
 
-\paragraph{Examples.}
-
-\paragraph{Notes.} 
-
-% =======================================================================
-% Quantifier Expressions
-% =======================================================================
-
-\section{Quantifier Expressions}
-\label{c_expr_quantifier}
+\section{Relational Expressions}
+\label{c_expr_relational}
+A relational expression compares two (or more) values together producing a value of \lstinline{bool} type.  
 
 \begin{syntax}
-\verb+QuantExpr+ & $::=$ & \big(\ \token{no} $|$ \token{some} $|$
-\token{all}\ \big)\ \token{\{}\\
-&&\ \verb+Ident+ \token{in} \verb+Expr+ \big( \token{,}\ \verb+Ident+\
-\token{in}\ \verb+Expr+\ \big)$^+$\ \token{|}\ \verb+LogicalExpr+\\
-&& \token{\}}\\
+  \verb+ConditionExpr+ & $::=$ &\\
+  & $|$ & \verb+AppendExpr+ \token{<} \verb+AppendExpr+\\
+  & $|$ & \verb+AppendExpr+ \token{<=} \verb+AppendExpr+\\
+  & $|$ & \verb+AppendExpr+ \token{=>} \verb+AppendExpr+\\
+  & $|$ & \verb+AppendExpr+ \token{>} \verb+AppendExpr+\\
 \end{syntax}
 
-\paragraph{Description.}
+\paragraph{Example.}
 
-\paragraph{Examples.}
+\section{Subset Expressions}
+\label{c_expr_relational}
+A subset expression compares two (or more) values of set type (\S\ref{c_types_set}) together producing a value of \lstinline{bool} type.  
 
-\paragraph{Notes.} 
+\begin{syntax}
+  \verb+ConditionExpr+ & $::=$ &\\
+  & $|$ & \verb+AppendExpr+ \token{$\subset$} \verb+AppendExpr+\\
+  & $|$ & \verb+AppendExpr+ \token{$\subseteq$} \verb+AppendExpr+\\
+\end{syntax}
+
+\section{Element-Of Expression}
+\label{c_expr_relational}
+An element-of expression determines whether one value is contained within another values of collection type (\S\ref{c_types_collection}) and produces a value of \lstinline{bool} type.  
+
+\begin{syntax}
+  \verb+ConditionExpr+ & $::=$ &\\
+  & $|$ & \verb+AppendExpr+ \token{in} \verb+AppendExpr+\\
+  & $|$ & \verb+AppendExpr+ \token{$\in$} \verb+AppendExpr+\\
+\end{syntax}
 
 % =======================================================================
 % Append Expressions
