@@ -1,0 +1,7 @@
+\chapter{Introduction}
+
+This document provides a specification of the {\em Whiley Intermediate Language (WyIL)}.  This is a binary file format for describing compiled Whiley programs which is similar, in many ways, to the JVM class file format.  Whiley \glspl{source_file} are first compiled into WyIL files before being compiled for a specific machine architecture or platform.  Program instructions are represented in WyIL files using register-based bytecodes which are organised with semi-structured control flow.  WyIL bytecodes are flow- and structurally-typed, and include a range of interesting type combinators (e.g. \glspl{union_type} and \glspl{intersection_type}).  The available bytecodes and the types on which they operate closely resemble the Whiley language.  However, the WyIL format is sufficiently flexible that different programming languages could target it.  
+
+Representing a program in the WyIL form has several advantages over the Whiley source representation.  In particular, all types and names are fully resolved in WyIL files.  Furthermore, every bytecode instruction is associated with a single type which characterises the data it operates on.  The Whiley language allows explicit specifications to be given for functions, methods and data structures, and employs a \gls{verifying_compiler} to check whether programs meet their specifications.  Of relevance here is that verification is performed on WyIL files, rather than directly on Whiley \gls{source_file}.
+
+

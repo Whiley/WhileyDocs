@@ -1,0 +1,92 @@
+\documentclass[10pt]{book}
+
+\usepackage[T1]{fontenc}
+\usepackage[lighttt]{lmodern}
+
+\usepackage{graphicx}
+\usepackage{url} % for typesetting urls
+\usepackage{color}
+\usepackage{fancybox}
+\usepackage{framed}
+\usepackage{hyperref}
+\usepackage[super,square]{natbib}
+\usepackage{amssymb}
+\usepackage{stmaryrd}
+\usepackage[a4paper,lmargin=35mm,tmargin=35mm,bmargin=35mm,rmargin=35mm,twoside=false,marginpar=30mm]{geometry}
+\usepackage{wallpaper}
+
+\input{glossary}
+
+\input{listings}
+
+\title{\Huge {\bf The Whiley Intermediate Language}}
+
+\author{David J. Pearce}
+
+% ======================================================
+%\newcommand{\token}[1]{\;\texttt{"#1"}\;}
+\definecolor{lightgray}{RGB}{215,215,215}
+\definecolor{verylightgray}{RGB}{245,245,245}
+\definecolor{whileybrown}{RGB}{213,195,151}
+\newcommand{\token}[1]{\fcolorbox{black}{lightgray}{\strut\texttt{#1}}}
+
+% --- tokens ---
+
+\newcommand{\nullc}{\token{null}}
+\newcommand{\comma}{\token{,}}
+\newcommand{\colont}{\token{:}}
+\newcommand{\dott}{\token{.}}
+\newcommand{\lb}{\token{(}\;}
+\newcommand{\rb}{\;\token{)}}
+\newcommand{\ra}{\token{=>}}
+\newcommand{\lsb}{\token{[}\;}
+\newcommand{\rsb}{\;\token{]}}
+\newcommand{\lcb}{\token{\{}\;}
+\newcommand{\rcb}{\;\token{\}}}
+\newcommand{\vbar}{\token{|}}
+% ======================================================
+
+% SETUP THE MARGINPAR
+\setlength{\marginparwidth}{1cm}
+\let\oldmarginpar\marginpar
+\renewcommand\marginpar[1]{\-\oldmarginpar[\raggedright\footnotesize #1]%
+{\raggedleft\footnotesize #1}}
+\newcommand{\hl}[2]{\marginpar{\tiny #1}\colorbox{yellow}{#2}}
+%\newcommand{\hl}[2]{#2}
+
+% ======================================================
+
+% \newenvironment{syntax}[1]{
+%   \begin{center}
+%     \begin{minipage}{0.8\textwidth}
+%       \centering
+% }{\end{minipage}\end{center}}
+\newenvironment{syntax}{
+  \def\FrameCommand{\fboxsep=\FrameSep \fcolorbox {black}{verylightgray}}
+    \begin{framed}
+      \noindent\begin{minipage}{0.9\textwidth}
+        \begin{tabular}{rcl}
+        }{\end{tabular}\end{minipage}\end{framed}}
+
+% ======================================================
+
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proof}{Proof}
+
+% ======================================================
+
+\begin{document}
+\input{title}
+\tableofcontents
+
+\input{introduction}
+
+\printglossaries
+
+\bibliographystyle{unsrt}
+\bibliography{abbrevs,references}
+
+\end{document}
