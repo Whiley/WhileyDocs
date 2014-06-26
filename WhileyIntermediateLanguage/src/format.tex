@@ -1,6 +1,8 @@
 \chapter{File Format}
 Discuss the high-level file format.  In particular, the magic number, the constant pools, the organisation into modules (files?) and blocks, etc.
 
+\section{The {\tt WyilFile} Structure}
+
 \begin{lstlisting}
 type WyilFile is {
 
@@ -17,6 +19,18 @@ type WyilFile is {
 
   ~~ u8 ~~
 
-  ModuleBlock modules[module_count]
+  FileBlock files[file_count]
 }
 \end{lstlisting}
+
+\section{The String Pool}
+
+\section{The Path Pool}
+
+\section{The Name Pool}
+
+\section{The Type Pool}
+
+\section{The Constant Pool}
+
+\section{The {\tt FileBlock} Structure}
