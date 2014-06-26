@@ -24,7 +24,7 @@ Here, we see our first piece of Whiley code.  This declares a function
 called \lstinline{max} which accepts two integers \lstinline{x} and
 \lstinline{y}, and returns an integer \lstinline{z}.  The body of the
 function simply compares the two parameters and returns the largest.
-The two \lstinline{requires} clauses form the function's {\em
+The two \lstinline{ensures} clauses form the function's {\em
   post-condition}, which is a guarantee made to any caller of this
 function.  In this case, the \lstinline{max} function guarantees to
 return one of the two parameters, and that the return will be as large
