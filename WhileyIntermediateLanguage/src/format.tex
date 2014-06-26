@@ -1,2 +1,22 @@
 \chapter{File Format}
 Discuss the high-level file format.  In particular, the magic number, the constant pools, the organisation into modules (files?) and blocks, etc.
+
+\begin{lstlisting}
+type WyilFile is {
+
+  u64 magic,
+  uv  kind,
+  uv  size,
+  uv  major_version,
+  uv  minor_version,
+  uv  string_pool_count,
+  uv  path_pool_count,
+  uv  name_pool_count,
+  uv  type_pool_count,
+  uv  constant_pool_count,
+
+  ~~ u8 ~~
+
+  ModuleBlock modules[module_count]
+}
+\end{lstlisting}

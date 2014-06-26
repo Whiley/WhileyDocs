@@ -1,5 +1,5 @@
 TARGET = WhileyIntermediateLanguage
-DEPS = title.tex introduction.tex glossary.tex references.bib
+DEPS = title.tex introduction.tex format.tex constants_types.tex functions_methods.tex bytecodes.tex glossary.tex references.bib
 
 all: $(TARGET).pdf
 
