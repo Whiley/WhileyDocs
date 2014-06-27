@@ -16,21 +16,67 @@ type WyilFile is {
   uv  name_pool_count,
   uv  type_pool_count,
   uv  constant_pool_count,
+  uv  numBlocks, // unused
+
+  StringItem string_pool[string_pool_count]
+  PathItem path_pool[path_pool_count]
+  NameItem name_pool[name_pool_count]
+  TypeItem type_pool[type_pool_count]
+  ConstantItem constant_pool[constant_pool_count]
 
   ~~ u8 ~~
 
-  FileBlock files[file_count]
+  FileItem file // to be files?
 }
 \end{lstlisting}
 
-\section{The String Pool}
+\section{The {\tt StringItem} Structure}
 
-\section{The Path Pool}
+\begin{lstlisting}
+type StringItem is {
 
-\section{The Name Pool}
+}
+\end{lstlisting}
 
-\section{The Type Pool}
 
-\section{The Constant Pool}
+\section{The {\tt PathItem} Structure}
 
-\section{The {\tt FileBlock} Structure}
+\begin{lstlisting}
+type PathItem is {
+
+}
+\end{lstlisting}
+
+
+\section{The {\tt NameItem} Structure}
+
+\begin{lstlisting}
+type NameItem is {
+
+}
+\end{lstlisting}
+
+
+\section{The {\tt TypeItem} Structure}
+
+\begin{lstlisting}
+type TypeItem is {
+
+}
+\end{lstlisting}
+
+\section{The {\tt ConstantItem} Structure}
+
+\begin{lstlisting}
+type ConstantItem is {
+
+}
+\end{lstlisting}
+
+\section{The {\tt FileItem} Structure}
+
+\begin{lstlisting}
+type FileItem is {
+
+}
+\end{lstlisting}
