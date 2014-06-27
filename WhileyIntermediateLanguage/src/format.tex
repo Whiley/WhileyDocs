@@ -34,7 +34,8 @@ type WyilFile is {
 
 \begin{lstlisting}
 type StringItem is {
-
+  uv length,
+  u8 data[length]
 }
 \end{lstlisting}
 
@@ -43,7 +44,8 @@ type StringItem is {
 
 \begin{lstlisting}
 type PathItem is {
-
+   uv parent,
+   uv string_index
 }
 \end{lstlisting}
 
@@ -52,7 +54,8 @@ type PathItem is {
 
 \begin{lstlisting}
 type NameItem is {
-
+  uv path_index,
+  uv name_index
 }
 \end{lstlisting}
 
