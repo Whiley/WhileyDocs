@@ -1,0 +1,696 @@
+\chapter{Types \& Values}
+The Whiley programming language is {\em statically typed}, meaning that every expression has a type determined at compile time.  Furthermore, evaluating an expression is guaranteed to yield a value of its type.  Whiley's {\em type system} governs how the type of any variable or expression is determined.  Whiley's type system is unusual in that it incorporates \gls{union_type}s~(\S\ref{c_types_unions}), \gls{intersection_type}s~(\S\ref{c_types_intersections}) and \gls{negation_type}s~(\S\ref{c_types_negations}), as well as employing {\em flow typing} and {\em structural typing}.
+
+\section{Overview}
+\label{c_types_type_overview}
+
+Types in Whiley are unusual (in part) because there is a large gap between their {\em syntactic} description and their underlying {\em semantic} meaning.  In most programming languages (e.g. Java), this gap is either small or non-existent and, hence, there is little to worry about.  However, in Whiley, we must tread carefully to avoid confusion.  The following example attempts to illustrate this gap between the syntax and semantics of types:
+\begin{lstlisting}
+function id(null|int x) => int|null:
+    return x
+\end{lstlisting}
+In this function we see two distinct \gls{type_descriptor}s expressed in the program text, namely ``\lstinline{int|null}'' and ``\lstinline{null|int}''.  Type descriptors occur at the source-level and describe \gls{type}s which occur at the abstract (or underlying) level.  In this particular case, we have two distinct type descriptors which describe the {\em same} underlying type.  We will often refer to types as providing the semantic (i.e. meaning) of type descriptors.  
+
+\section{Type Descriptors}
+\label{c_types_type_descriptors}
+Type descriptors provide syntax for describing types and, in the remaining sections of this chapter, we explore the range of types supported in Whiley.  The top-level grammar for type descriptors is:
+
+\begin{syntax}
+  \verb+Type+ & $::=$ & \verb+UnitType+\ \big(\ \token{,}\ \verb+UnitType+\ \big)$^*$\\
+  &&\\
+  \verb+UnitType+ & $::=$ & \verb+UnionType+ \\
+              & $|$ & \verb+IntersectionType+ \\
+              & $|$ & \verb+TermType+ \\
+              &&\\
+  \verb+TermType+ & $::=$ & \\
+  & $|$ & \verb+PrimitiveType+ \\
+  & $|$ & \verb+RecordType+ \\
+  & $|$ & \verb+ReferenceType+ \\
+  & $|$ & \verb+NominalType+ \\
+  & $|$ & \verb+CollectionType+ \\
+  & $|$ & \verb+NegationType+ \\
+  & $|$ & \verb+FunctionType+ \\
+  & $|$ & \verb+MethodType+ \\
+  & $|$ & \token{(}\ \verb+Type+\ \token{)}\\
+\end{syntax}
+
+\section{Type Patterns}
+\label{c_types_type_patterns}
+
+\Gls{type_pattern}s associate variables with types and their subcomponents and can be used to declare variables and/or {\em destructuring} types into variables.  Type patterns are a source-level entity which are similar to type descriptors.  The top-level grammar for type patterns is:
+
+\begin{syntax}
+  \verb+TypePattern+ & $::=$ & \verb+Type+ \big[\ \verb+Ident+\ \big]\\
+              & $|$ & \verb+TuplePattern+ \\
+              & $|$ & \verb+RecordPattern+ \\
+              & $|$ & \verb+RationalPattern+ \\
+\end{syntax}
+
+Type patterns do not exist for all compound structures --- only those where a value is guaranteed to exist which could be associated with a variable.
+
+\section{Primitive Types}
+\label{c_types_primitive_types}
+
+Primitive types are the atomic building blocks of all types in Whiley.  
+
+\begin{syntax}
+  \verb+PrimitiveType+ & $::=$ & \\
+  & $|$ & \verb+AnyType+ \\
+  & $|$ & \verb+VoidType+ \\
+  & $|$ & \verb+NullType+ \\
+  & $|$ & \verb+BoolType+ \\
+  & $|$ & \verb+CharType+ \\
+  & $|$ & \verb+IntType+ \\
+  & $|$ & \verb+RealType+ \\
+\end{syntax}
+
+% =======================================================================
+% Null
+% =======================================================================
+
+\subsection{Null}
+\label{c_types_null}
+
+The null type is typically used to show the absence of something. It is distinct from void, since variables can hold the special \lstinline{null} value (where as there is no special ``\lstinline{void}'' value).  The set of values defined by the type \lstinline{null} is the singleton set containing exactly the \lstinline{null} value.  Variables of \lstinline{null} type support only equality (\S\ref{c_expr_condition}) and inequality comparisons (\S\ref{c_expr_condition}).  The \lstinline{null} value is particularly useful for representing optional values and terminating recursive types.
+
+\begin{syntax}
+  \verb+NullType+ & $::=$ & \token{null} \\
+\end{syntax}
+
+\paragraph{Example.} The following illustrates a simple example of the \lstinline{null} type:
+
+\begin{lstlisting}
+type Tree is null | { int data, Tree left, Tree right }
+
+function height(Tree t) => int:
+    if t is null:
+        // height of empty tree is zero
+        return 0
+    else:
+        // height is this node plus maximum height of subtrees
+        return 1 + Math.max(height(t.left), height(t.right))
+\end{lstlisting}
+This defines \lstinline{Tree} --- a {\em recursive type} --- which is either empty (i.e. \lstinline{null}) or consists of a field \lstinline{data} and two subtrees, \lstinline{left} and \lstinline{right}.  The \lstinline{height} function calculates the height of a \lstinline{Tree} as the longest path from the root through the tree.
+
+\paragraph{Notes.}  With all of the problems surrounding \lstinline{null} and \lstinline{NullPointerException}s in languages like Java and C, it may seem that this type should be avoided. However, it remains a very useful abstraction around (e.g. for terminating recursive types) and, in Whiley, is treated in a completely safe manner (unlike e.g. Java).
+
+% =======================================================================
+% Bool 
+% =======================================================================
+
+\subsection{Booleans}
+\label{c_types_bool}
+
+The \lstinline{bool} type represents the set of boolean values (i.e. \lstinline{true} and \lstinline{false}).  Variables of \lstinline{bool} type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}), binary logical operators (\S\ref{c_expr_logical}) and logical not (\S\ref{c_expr_not}).
+
+\begin{syntax}
+ \verb+BoolType+ & $::=$ & \token{bool} \\
+\end{syntax}
+
+\paragraph{Example.} The following illustrates a simple example of the \lstinline{bool} type:
+
+\begin{lstlisting}
+// Determine whether item is contained in list or not
+function contains([int] list, int item) => bool:
+    // examine every element of list
+    for l in list:
+        if l == item:
+            return true
+    // done
+    return false
+\end{lstlisting}
+This function determines whether or not a given integer value is contained within a list of integers.  If so, it returns \lstinline{true}, otherwise it returns \lstinline{false}.
+
+% =======================================================================
+% Int
+% =======================================================================
+
+\subsection{Integers}
+\label{c_types_int}
+
+The type \lstinline{int} represents the set of arbitrary-sized integers, whose values are expressed as a sequence of one or more numerical or hexadecimal digits (e.g. \lstinline{123456}, \lstinline{0xffaf}, etc).  Variables of \lstinline{int} type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}), comparators (\S\ref{c_expr_condition}), addition (\S\ref{c_expr_addmul}), subtraction (\S\ref{c_expr_addmul}), multiplication (\S\ref{c_expr_addmul}), division (\S\ref{c_expr_addmul}), remainder (\S\ref{c_expr_addmul}) and negation (\S\ref{c_expr_negation}) operations.
+
+
+\begin{syntax}
+  \verb+IntType+ & $::=$ & \token{int} \\
+\end{syntax}
+
+\paragraph{Example.} The following illustrates a simple example of the \lstinline{int} type:
+
+\begin{lstlisting}
+function fib(int x) => int:
+    if x <= 1:
+        return x
+    else:
+        return fib(x-1) + fib(x-2)
+\end{lstlisting}
+This illustrates the well-known recursive method for computing numbers in the {\em fibonacci} sequence.
+
+\paragraph{Notes.}  Since integers in Whiley are of arbitrary size, {\em integer overflow} is not possible.  This contrasts with other languages (e.g. Java) that used {\em fixed-width} number representations (e.g. 32bit two's complement).  Furthermore, there is nothing equivalent to the constants found in such languages for representing the uppermost and least integers expressible (e.g. \lstinline{Integer.MIN_VALUE} and \lstinline{Integer.MAX_VALUE}, as found in Java).
+% =======================================================================
+% Real
+% =======================================================================
+
+\subsection{Rationals}
+\label{c_types_real}
+
+The type \lstinline{real} represents the set of arbitrary-sized rationals, whose values are expressed as a sequence of one or more numerical digits separated by a period (e.g. \lstinline{1.0}, \lstinline{0.223}, \lstinline{12.55}, etc).  The set of values defined by the type \lstinline{real} is the (infinite) set of all integer pairs, where the first element is designated the numerator, and the second designated the denominator.  Variables of \lstinline{real} type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}), comparators (\S\ref{c_expr_condition}), addition (\S\ref{c_expr_addmul}), subtraction (\S\ref{c_expr_addmul}), multiplication (\S\ref{c_expr_addmul}), division (\S\ref{c_expr_addmul}), remainder (\S\ref{c_expr_addmul}) and negation (\S\ref{c_expr_negation}) operations.  Variables of type \lstinline{real} also support the {\em rational destructuring assignment} to extract the numerator and denominator (illustrated below).
+
+\begin{syntax}
+  \verb+RealType+ & $::=$ & \token{real} \\
+\end{syntax}
+
+\paragraph{Example.} The following illustrates a simple example of the \lstinline{real} type:
+
+\begin{lstlisting}
+function floor(real x) => int:
+    int num / int den = x    // extract numerator and denominator
+    int r = num / den        // integer division
+    if x < 0.0 && den != 1: 	 
+        return r - 1 
+    else:
+        return r 
+\end{lstlisting}
+This illustrates the well-known function for computing the {\em floor} of a \lstinline{real} variable \lstinline{x} (i.e. the greatest integer not larger than \lstinline{x}).  The rational destructuring assignment is used to extract the numerator and denominator of the parameter \lstinline{x}.
+
+% =======================================================================
+% Char
+% =======================================================================
+
+\subsection{Characters}
+\label{c_types_char}
+
+The type \lstinline{char} represents the set of unicode characters, whose values are expressed as an arbitrary character between quotes (e.g. \lstinline{'c'}, \lstinline{'0'}, \lstinline{'%'}, etc).  Variables of \lstinline{char} type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}), comparators (\S\ref{c_expr_condition}), addition (\S\ref{c_expr_addmul}), subtraction (\S\ref{c_expr_addmul}), multiplication (\S\ref{c_expr_addmul}), division (\S\ref{c_expr_addmul}), remainder (\S\ref{c_expr_addmul}) and negation (\S\ref{c_expr_negation}) operations. 
+
+\begin{syntax}
+  \verb+CharType+ & $::=$ & \token{char} \\
+\end{syntax}
+
+\paragraph{Example.} The following illustrates a simple example of the \lstinline{char} type:
+
+\begin{lstlisting}
+function isUpperCase(char c) => bool:
+    return 'A' <= c && c <= 'Z'
+\end{lstlisting}
+This illustrates a very simple function for determining whether an ASCII character is uppercase or not.
+
+% =======================================================================
+% Any
+% =======================================================================
+
+\subsection{Any}
+\label{c_types_any}
+
+The type \lstinline{any} represents the type whose variables may hold any possible value.  Thus, \lstinline{any} is the {\em top type} (i.e. $\top$) in the lattice of types and, hence, is the supertype of all other types.  Variables of \lstinline{any} type support only equality (\S\ref{c_expr_condition}), inequality comparisons (\S\ref{c_expr_condition}) and {\em runtime type tests}.  Finally, unlike the majority of other types, there are no {\em values} of type \lstinline{any}.
+
+\begin{syntax}
+  \verb+AnyType+ & $::=$ & \token{any} \\
+\end{syntax}
+
+\paragraph{Example.} The following illustrates a simple example of the \lstinline{any} type:
+
+\begin{lstlisting}
+function toInt(any val) => int:
+    if val is int:
+        return val
+    else if val is real:
+        return Math.floor(val)
+    else:
+        return 0 // default value        
+\end{lstlisting}
+
+Here, the function \lstinline{toInt} accepts {\em any valid Whiley value}, which includes all values of type \lstinline{int}, \lstinline{real}, collections, records, etc.  The function then inspects the value that it has been passed and, in the case of values of type \lstinline{int} and \lstinline{real}, returns an integer approximation; for all other values, it returns \lstinline{0}.
+
+\paragraph{Notes.}  The any type is roughly comparable to the \lstinline{Object} type found in pure object-oriented languages.  However, in impure object-oriented languages which support primitive types, such as Java, this comparison often falls short because \lstinline{Object} is not a supertype of primitives such as \lstinline{int} or \lstinline{long}.
+
+% =======================================================================
+% Void 
+% =======================================================================
+
+\subsection{Void}
+\label{c_types_void}
+
+The \lstinline{void} type represents the type whose variables cannot exist (i.e. because they cannot hold any possible value).  Thus, \lstinline{void} is the {\em bottom type} (i.e. $\bot$) in the lattice of types and, hence, is the {\em subtype} of all other types.  Void is used to represent the return type of a method which does not return anything.  Furthermore, it is also used to represent the element type of an empty list of set.  Finally, unlike the majority of other types, there are no {\em values} of type \lstinline{void}.
+
+\begin{syntax}
+   \verb+VoidType+ & $::=$ & \token{void} \\
+\end{syntax}
+
+\paragraph{Example.} The following example illustrates several uses of the \lstinline{void} type:
+
+\begin{lstlisting}
+// Attempt to update first element
+method update1st(&[int] list, int value) => void:
+    // First, check whether list is empty or not
+    if *list != [void]:
+       // Then, update 1st element
+       (*list)[0] = x
+    // done
+\end{lstlisting}
+
+Here, the method \lstinline{update1st} is declared to return \lstinline{void} --- meaning it does not return a value.  Instead, this method updates some existing state accessible through the reference \lstinline{list}.  Within the method body, the value accessible via this reference is compared against the \lstinline{[void]} (i.e. the {\em empty list}).
+
+% =======================================================================
+% Tuples
+% =======================================================================
+
+\section{Tuples}
+\label{c_types_tuple}
+
+A tuple type describes a compound type made up of two or more elements in sequence, whose values are expressed as sequences of values separated by a comma (e.g. \lstinline{1,2}, \lstinline{2.0,3.32,3.45}, etc).  Tuples are similar to records, except that fields are effectively anonymous.  Variables of tuple type support equality (\S\ref{c_expr_condition}) and inequality (\S\ref{c_expr_condition}) operations, as well the {\em tuple destructuring assignment} to extract elements (illustrated below).
+
+\begin{syntax}
+  \verb+TupleType+ & $::=$ & \token{(}\ \verb+Type+\ \big(\ \token{,}\
+  \verb+Type+\ \big)$^+$\ \token{)}\\
+  &&\\
+  \verb+TuplePattern+ & $::=$ & \token{(}\ \verb+TypePattern+\ \big(\ \token{,}\
+  \verb+TypePattern+\ \big)$^+$\ \token{)}\ \big[\ \verb+Ident+\ \big]\\
+\end{syntax}
+
+\paragraph{Example.} The following example illustrates several uses of tuples:
+
+\begin{lstlisting}
+function swap(int x, int y) => (int,int):
+    return y,x
+\end{lstlisting}
+This function accepts two integer parameters, and returns a tuple type containing two integers.  The function simple reverses the order that the values occur in the tuple passed as a parameter.
+ 
+% =======================================================================
+% Records
+% =======================================================================
+
+\section{Records}
+\label{c_types_record}
+
+A record type describes a compound made of from one or more {\em fields}, each of which has a unique name and a corresponding type.  Variables of record type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}) and field access (\S\ref{c_expr_access}) operations, as well as field assignment (\S\ref{c_stmts_field_lval}).
+
+\begin{syntax}
+  \verb+RecordType+ & $::=$ & \token{\{}\ \verb+MixedType+\
+  \big(\ \token{,}\ \verb+MixedType+\
+  \big)$^*$ \big[\ \token{,}\ \token{...}\ \big]\ \token{\}}\\
+\end{syntax}
+
+Records use {\em mixed types} for defining fields (see \S\ref{c_types_mixed}), meaning that field names may be mixed within their type.  This is primarily useful for fields of function or method type (see below).  Records using the \token{...} notation are referred to as {\em open records} (e.g. \lstinline|{int x, ...}|), otherwise they are referred to as {\em closed records} (e.g. \lstinline|{int x, int y}|).  Open records represent all records containing {\em at least} the given fields, whilst closed records represent those containing {\em exactly} the given fields.   
+
+\paragraph{Example.} The following example illustrates an open record type: 
+\begin{lstlisting}
+type Writer is { 
+   method write([byte]) => int,
+   ...
+}
+type PrintWriter is { 
+   method write([byte]) => int,
+   method println(string) => void,
+   ...
+}
+// Create print writer if not already one
+function create(Writer writer) => PrintWriter:
+    if writer is PrintWriter:
+        return writer
+    else:
+        return new PrinterWriter(writer)
+\end{lstlisting}
+The above illustrates two open records \lstinline{Writer} and \lstinline{PrintWriter}.  The former has one field (\lstinline{write}), whilst the latter has two fields (\lstinline{write} and \lstinline{println}).  The above also illustrates use of mixed types.  For example, the field ``\lstinline{write}'' is declared as ``\lstinline{method write([byte]) => int}'' which mixes together the field name (i.e. ``\lstinline{write}'') with its type (i.e. ``\lstinline{method([byte]) => int}'').
+
+% =======================================================================
+% References
+% =======================================================================
+
+\section{References}
+
+Reference types in Whiley represent references to variables, such as those allocated in the heap.  They are similar to references or pointers found in many imperative and object-oriented languages (e.g. C/C++, Java, C\#, etc).  A type \lstinline{&T} represents a reference to a variable of type \lstinline{T}.  Variables of reference type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}) and dereference (\S\ref{c_expr_deref}) operations, as well as dereference assignment (\S\ref{c_stmts_deref_lval}).
+
+\begin{syntax}
+  \verb+ReferenceType+ & $::=$ & \token{\&}\ \ \verb+Type+\\
+\end{syntax}
+
+\paragraph{Example.} The following example illustrates reference types:
+\begin{lstlisting}
+// Swap contents of heap-allocated int variables
+method swap(&int pX, &int pY):
+    int tmp = *pX
+    *pX = *pY
+    *pY = tmp
+\end{lstlisting} 
+
+The above illustrates a method which accepts two references to variables of type \lstinline{int} that may refer to the same variable.  The method simply swaps the contents of the variables to which they refer.
+
+% =======================================================================
+% Nominal
+% =======================================================================
+
+\section{Nominals}
+\label{c_types_nominal}
+
+Nominal types represent user-defined types declared within one or more Whiley \gls{source_file}s.  Nominal types provide a mechanism for enforcing {\em information hiding}, and also for constructing {\em recursive types} (\S\ref{c_types_recursive}).  All nominal types have an underlying --- or, {\em concrete} --- type which may or may not be visible within a given Whiley \gls{source_file}.  Nominal types with {\em visible} underlying types are indistinguishable from their underlying type, and support all operations therein.   Nominal types with {\em invisible} underlying types support only equality (\S\ref{c_expr_condition}) and inequality (\S\ref{c_expr_condition}) operations.  Furthermore, to enforce information hiding, nominal types cannot be destructured using runtime type tests.
+
+\begin{syntax}
+  \verb+NominalType+ & $::=$ & \verb+Ident+\\
+\end{syntax}
+
+\paragraph{Example.} The following example illustrates nominal types:
+\begin{lstlisting}
+// Using a nominal type to construct a recursive type
+public type LinkedList is null | { int data, LinkedList next }
+
+// Using a nominal type to enforce information hiding
+protected type Hidden is { int x, int y }
+\end{lstlisting}
+Three different uses for nominal types are illustrated here.  The type \lstinline{LinkedList} is declared \lstinline{public}, meaning that: firstly, it can be referred to by name from any other source file; secondly, its underlying type is visible to any other source file.  Within the declaration of \lstinline{LinkedList} a reference to itself is used to define a recursive type (\S\ref{c_types_recursive}).  Finally, the type \lstinline{hidden} has the concrete type ``\lstinline|{int x, int y}|'' and is declared \lstinline{protected}, meaning that: firstly, it can be referred to by name from any other source file; secondly,  that its underlying type is invisible to all other source files.
+
+% =======================================================================
+% Collections
+% =======================================================================
+
+\section{Collections}
+\label{c_types_collection}
+
+Collection types in Whiley describe compound values constructed from arbitrarily many values.
+
+\begin{syntax}
+  \verb+CollectionType+ & $::=$ & \verb+SetType+\\
+                        & $|$ & \verb+MapType+\\
+                        & $|$ & \verb+ListType+\\
+\end{syntax}
+
+
+% =======================================================================
+% Set
+% =======================================================================
+
+\subsection{Sets}
+\label{c_types_set}
+
+A set type describes set values whose elements are subtypes of the element type. For example, \lstinline|{1,2,3}| is an instance of set type \lstinline|{int}|; however, \lstinline|{1.345}| is not.  Variables of set type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}), union (\S\ref{c_expr_union}), intersection (\S\ref{c_expr_intersection}), difference (\S\ref{c_expr_difference}) and element-of (\S\ref{c_expr_element_of}) operations.
+
+\begin{syntax}
+  \verb+SetType+ & $::=$ & \token{\{} \ \verb+Type+ \ \token{\}} \\
+\end{syntax}
+
+\paragraph{Example.} The following example illustrates set types:
+
+\begin{lstlisting}
+// Adjacency list representation
+type Graph is ([{int}])
+
+function depthFirstSearch(int v, Graph graph, {int} visited) => {int}:
+    visited = visited + {v}
+    // Traverse edges not yet visited
+    for w in graph[v]:
+        if !(w in visited):
+            visited = depthFirstSearch(w,graph,visited)
+    // Done
+    return visited
+\end{lstlisting}
+
+The above illustrates a simple implementation of the well-known {\em depth-first search} algorithm.  In the example, a \lstinline{Graph} is a list of sets of edge targets, where any \lstinline{w in g[v]} describes an edge from \lstinline{v} to \lstinline{w} in the graph.  The \lstinline{visited} set is used to maintain a list of previously seen vertices, in order to prevent the same vertex from being visited more than once.  
+
+% =======================================================================
+% Map
+% =======================================================================
+
+\subsection{Maps}
+\label{c_types_map}
+
+A map represents a one-many mapping from variables of one type to variables of another type. For example, the map type \lstinline|{int=>real}| represents a map from integers to real values. A valid instance of this type might be \lstinline|{1=>1.2,2=>3.0}|.  Variables of map type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}), access (\S\ref{c_expr_access}), union (\S\ref{c_expr_union}), intersection (\S\ref{c_expr_intersection}), difference (\S\ref{c_expr_difference}) and element-of (\S\ref{c_expr_element_of}) operations.
+
+\begin{syntax}
+  \verb+MapType+ & $::=$ & \token{\{} \ \verb+Type+ \ \token{=>} \ \verb+Type+ \ \token{\}} \\
+\end{syntax}
+
+\paragraph{Example.} The following example illustrates map types:
+
+\begin{lstlisting}
+type Expr is int | string // simple expression forms
+
+function evaluate(Expr e, {string=>int} environment) => int:
+    if e is int:
+        // expression is constant, so return this directly
+        return e
+    else:
+        // expression is variable, so look up its value in environment
+        return environment[e]
+\end{lstlisting}
+
+The above illustrates a function for evaluating simple expressions which are either integer constants or variable names.  To evaluate an expression which is an integer constant, we simply return that constant.  To evaluate an expression which is a variable name, we look up the current value of that variable in an environment which maps variable names to integer constants.
+
+% =======================================================================
+% List
+% =======================================================================
+
+\subsection{Lists}
+\label{c_types_list}
+
+A list type describes list values whose elements are subtypes of the element type. For example, \lstinline{[1,2,3]} is an instance of list type \lstinline{[int]}; however, \lstinline{[1.345]} is not.  Variables of list type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}), append (\S\ref{c_expr_append}), sublist (\S\ref{c_expr_sublist}) and element-of (\S\ref{c_expr_element_of}) operations.
+
+\begin{syntax}
+  \verb+ListType+ & $::=$ & \token{[} \ \verb+Type+ \ \token{]}\\
+\end{syntax}
+
+\paragraph{Example.} The following example illustrates list types:
+
+\begin{lstlisting}
+function add([int] v1, [int] v2) => ([int] v3):
+    int i=0
+    while i < |v1|:
+        v1[i] = v1[i] + v2[i]
+        i = i + 1
+    return v1
+\end{lstlisting}
+
+The above illustrates a simple function which adds two integer lists together.  The function's \gls{precondition} requires that both input list have the same length, whilst its \gls{postcondition}s ensures that this matches the length of the output.
+
+% =======================================================================
+% Functions & Methods
+% =======================================================================
+
+\section{Functions and Methods}
+A function or method type describes the signature of a function or method.  These types enable functions or methods to be passed around as values in Whiley and are often referred to as {\em functors}.  This enables a degree of polymorphism in the language, where the exact function or method to be called is unknown.   Variables of function or method type support equality~(\S\ref{c_expr_condition}) and inequality~(\S\ref{c_expr_condition}).
+
+\begin{syntax}
+  \verb+FunctionType+ & $::=$ & \token{function}\ \token{(}\
+  \big[\ \verb+Type+\ \big(\ \token{,}\ \verb+Type+\ \big)$^*$\ \big]\ \token{)}\ \token{=>}\ \verb+UnitType+\\
+  &&\\
+  \verb+MethodType+ & $::=$ & \token{method}\ \token{(}\
+  \big[\ \verb+Type+\ \big(\ \token{,}\ \verb+Type+\ \big)$^*$\ \big]\ \token{)}\ \token{=>}\ \verb+UnitType+\\
+\end{syntax}
+
+\paragraph{Example.} The following example illustrates function types:
+
+\begin{lstlisting}
+type Fun is function(int) => int
+
+function map([int] items, Fun fn) => [int]:
+    //
+    for i,v in items:
+        items[i] = fn(v)
+    //
+    return items
+\end{lstlisting}
+The above illustrates the well-known {\em map} function, which maps all elements of a list according to a given function.
+
+% =======================================================================
+% Unions
+% =======================================================================
+
+\section{Unions}
+\label{c_types_unions}
+
+A union type is constructed from two or more component types and contains any value held in any of its components.  For example, the type \lstinline{null|int} is a union which holds either an integer value or \lstinline{null}.  The set of values defined by a union type \lstinline{T1|T2} is exactly the union of the sets defined by \lstinline{T1} and \lstinline{T2}.  In general, variables of union type support only equality (\S\ref{c_expr_condition}), inequality comparisons (\S\ref{c_expr_condition}) and {\em runtime type tests} (see \S\ref{c_types_effective} for exceptions to this).
+
+\begin{syntax}
+  \verb+UnionType+ & $::=$ & \verb+IntersectionType+\ \big(\ \token{|}\ \verb+IntersectionType+\
+  \big)$^*$\\
+\end{syntax}
+
+\paragraph{Example.} The following example illustrates a union type:
+
+\begin{lstlisting}
+// Return lowest index of matching item, or null if none
+function indexOf([int] items, int value) => int|null:
+    for i,v in items:
+        if v == value:
+            // match
+            return i
+    // item not found
+    return null
+\end{lstlisting}
+
+Here, a union type is used to construct a more expressive return value.  If no matching element is found, \lstinline{null} is returned (rather than e.g. \lstinline{-1}).
+
+% =======================================================================
+% Intersections
+% =======================================================================
+
+\section{Intersections}
+\label{c_types_intersections}
+
+An intersection type is constructed from two or more component types and contains any value held in all of its components.  For example, the type \lstinline{[int]&[bool]} is an intersection which hold any value which is both an instance of \lstinline{[int]} and \lstinline{[bool]} (in fact, only the empty list meets this criteria).  Intersections are used to type variables on the true branch of a runtime type test.  The set of values defined by an intersection type \lstinline{T1&T2} is exactly the intersection of the sets defined by \lstinline{T1} and \lstinline{T2}.  In general, variables of intersection type support only equality (\S\ref{c_expr_condition}), inequality comparisons (\S\ref{c_expr_condition}) and {\em runtime type tests} (see \S\ref{c_types_effective} for exceptions to this).
+
+\begin{syntax}
+  \verb+IntersectionType+ & $::=$ & \verb+TermType+\ \big(\ \token{\&}\ \verb+TermType+\
+  \big)$^*$\\
+\end{syntax}
+
+\paragraph{Example.} The following example illustrates an intersection type:
+
+\begin{lstlisting}
+type Reader is { 
+   method read(int) => [byte],
+   ...
+}
+type Writer is { 
+   method write([byte]) => int,
+   ...
+}
+type ReaderWriter is Reader & Writer
+\end{lstlisting}
+Here, the type \lstinline{Reader} is defined as any record containing a \lstinline{read(int)} method, whilst the type \lstinline{Writer} is defined as any record containing a \lstinline{write([byte])} method.  Then, the intersection type \lstinline{ReaderWriter} is defined as any record containing {\em both} a \lstinline{read(int)} and \lstinline{write([byte])} method.
+
+% =======================================================================
+% Negations
+% =======================================================================
+
+\section{Negations}
+\label{c_types_negations}
+
+A negation type is constructed a component type and contains any value {\em not} held in its component.  For example, the type \lstinline{!int} is a negation which holds any non-integer value.  Negations are used to type variables on the false branch of a runtime type test.  The set of values defined by a negation type ${\tt !T_1}$ is exactly the set of all values less those defined by ${\tt T_1}$.  In general, variables of negation type support only equality (\S\ref{c_expr_condition}), inequality comparisons (\S\ref{c_expr_condition}) and {\em runtime type tests} (see \S\ref{c_types_effective} for exceptions to this).
+
+\begin{syntax}
+  \verb+NegationType+ & $::=$ & \token{!}\ \ \verb+TermType+\\
+\end{syntax}
+
+\paragraph{Example.} The following example illustrates a negation type:
+
+\begin{lstlisting}
+function f(any item) => !null:
+    if item is null:
+        return 0
+    else:
+        return item
+\end{lstlisting}
+Here, the function \lstinline{f()} accepts a parameter of any type, and returns a value which is permitted to be anything except \lstinline{null}.  The above also illustrates how the type test operator (\S\ref{c_expr_type_test}) retypes variables on the false branch using negation types.
+
+\section{Recursive Types}
+\label{c_types_recursive}
+
+Recursive types describe tree-like structures of arbitrary depth.  For example, linked lists, binary trees, quad trees, etc can all be described using recursive types.  Recursive types have no explicit syntax and, instead, are declared indirectly in terms of themselves using one or more nominal types~(\S\ref{c_types_nominal}).\\
+
+\paragraph{Example.} The following example illustrates a simple recursive type:
+
+\begin{lstlisting}
+type Node is { Tree left, Tree right, int data }
+type Tree is null | Node
+
+function sizeOf(Tree t) => int:
+    if t == null:
+        return 0
+    else:
+        return 1 + sizeOf(t.left) + sizeOf(t.right)
+\end{lstlisting}
+
+Here, the type \lstinline{Tree} is recursive because it is defined in terms of itself.  An instance of type \lstinline{Tree} is a sequence of nested records which is arbitrarily deep, and whose branches are terminated by \lstinline{null}.  The function \lstinline{sizeOf()} traverses an arbitrary instance of \lstinline{Tree} and returns the number of \lstinline{Node}s it contains.
+
+\section{Effective Types}
+\label{c_types_effective}
+An effective type is a union of types which all contain some property (e.g. a union of lists).  This common property allows the effective type to support more operations than possible for an arbitrary union~(\S\ref{c_types_unions}).
+
+\subsection{Effective Tuples}
+
+An effective tuple is a union of tuple types.  For example, \lstinline{(int,int)|(real,real)} is an effective tuple.  An effective tuple type supports all operations valid for a tuple type~(\S\ref{c_types_tuple}).
+
+\subsection{Effective Records}
+\label{c_types_effective_records}
+An effective record is a union of record types.  For example, \lstinline|{int f, int g}$|${real f, int h}| is an effective record.  An effective record provides access to fields common to all records in the union.  For example, the type \lstinline|{int f, int g}$|${real f, int h}| can be viewed as having an effective type of \lstinline|{int$|$real f, ...}| and, hence, read access to field \lstinline{f} is given.
+
+\subsection{Effective Collections}
+An effective collection is a union of collection types.  For example, \lstinline{[int]|[real]} is an effective list.  An effective collection supports all operations valid for a collection type~(\S\ref{c_types_collection}).  For example, the type \lstinline|[int]$|$[real]| can be viewed as having an effective type of \lstinline|[int$|$real]| and, hence, read access to its length and elements is given.
+
+\section{Semantics}
+\label{c_types_type_semantics}
+
+Although types are abstract entities we can (for the most part) imagine them as describing sets of {\em abstract values}.  For example, \lstinline{int|null} denotes the set of values containing exactly the (infinite) set of integers and \lstinline{null} (i.e. ${\tt\mathbb{Z}\cup\{null\}}$).  This is often referred to as a set-theoretic interpretation of types~\cite{AW93,Damm94,CF05,FCB08}.  Under this interpretation, for example, one type {\em subtypes}  another if the set of values it denotes is a {\em subset} of the other (see \S~\ref{c_types_subtyping} for more).  
+
+We specify the meaning of types by formalising a set theoretic interpretation of them over the language of values given in Figure~\ref{c_types_abstract_values}.  To minimise confusion, care is taken in the figure to ensure that abstract values are represented canonically.  For example, ``${\tt 2\;/\;4}$'' is not a valid abstract value since ``${\tt 1\;/\;2}$'' is its canonical representation. Likewise, ``${\tt\{2,1\}}$'' is not a valid abstract value, with ``${\tt\{1,2\}}$'' being its canonical representation.   Figure~\ref{c_types_abstract_values} separates abstract values into distinct categories (e.g. integers, rationals, tuples, etc).  These distinctions are significant.  For example, ``${\tt 0}$'' is distinct \hl{How zero represented?}{from} ``${0\;/\;0}$''.  Similarly, byte values are not expressed using the digits ${\tt 0}$ and ${\tt 1}$ (as might be expected), but in terms of the characters ${\tt t}$ and ${\tt f}$.  This ensures binary values are distinct from integer values.
+
+An evaluation function ${\tt\llbracket T\rrbracket}$ is defined which returns the set of values associated with a type ${\tt T}$.  For example, ${\tt\llbracket bool\rrbracket=\{true,false\}}$, ${\tt\llbracket int\rrbracket=\mathbb{Z}}$, etc.  This function is defined as follows:
+
+\begin{figure}[!t]
+\fbox{
+\begin{minipage}{0.975\textwidth}
+\begin{displaymath}
+\begin{array}{rcllr}
+{\tt v} & ::= & {\tt null} && \textrm{(null value)}\\
+    & | & {\tt true}\;|\;{\tt false} & & \textrm{(boolean values)}\\
+    & | & {\tt b} & {\tt\textrm{if}\;b\in\{t,f\}^8} & \textrm{(byte values)}\\
+    & | & {\tt i} & {\tt \textrm{if}\;i\in\mathbb{Z}}& \textrm{(integer values)}\\
+    & | & {\tt i\ /\ n} & {\tt \textrm{if}\;i\in\mathbb{Z}, n\in\mathbb{N}\;\textrm{and}\;\textrm{gcd}(i_1,i_2)=1} & \textrm{(rational values)}\\
+    & | & \textrm{`}{\tt n}\textrm{'} & {\tt \textrm{if}\;n\in\mathbb{N}}& \textrm{(character values)}\\
+    & | & {\tt (v_1,\ldots,v_n)} & & \textrm{(tuple values)}\\
+    & | & {\tt \{v_1,\ldots,v_n\}} & {\tt \textrm{if}\;\forall i.v_i<v_{i+1}}& \textrm{(set values)}\\
+    & | & {\tt \{v_1\Rightarrow v'_1,\ldots,v_n\Rightarrow v'_n\}} & {\tt \textrm{if}\;\forall i.v_i<v_{i+1}}& \textrm{(map values)}\\
+    & | & {\tt [v_1,\ldots,v_n]} & & \textrm{(list values)}\\
+    & | & {\tt \ell} & & \textrm{(locations)}\\
+    &&\\
+\end{array}
+\end{displaymath}
+\end{minipage}}
+\caption{The language of abstract values used to formalise the meaning of types in Whiley, where $\mathbb{Z}$ is the (infinite) set of integers, $\mathbb{N}$ the (infinite) set of naturals and $\textrm{gcd()}$ returns the Greatest Common Divisor of two values (e.g. using Euclid's well-known algorithm).}
+\label{c_types_abstract_values}
+\end{figure}
+
+\begin{definition}[Type Semantics]
+\label{def_acceptance}
+Every type descriptor ${\tt T}$ is characterized by the set of values it accepts,
+given by ${\tt \llbracket T\rrbracket}$ and defined as follows:
+\begin{displaymath}
+\begin{array}{rcl}
+{\tt\llbracket any\rrbracket} & = & \mathbb{D}\\
+{\tt\llbracket void\rrbracket} & = & \emptyset\\
+{\tt \llbracket null\rrbracket} & = & {\tt\{null\}}\\
+{\tt\llbracket bool\rrbracket} & = & {\tt\{ true, false\}}\\
+{\tt\llbracket byte\rrbracket} & = & {\tt\{\;b\;|\;b\in\{t,f\}^8\;\}}\\
+{\tt\llbracket int\rrbracket} & = & {\tt\mathbb{Z}}\\
+{\tt \llbracket real\rrbracket} & = & {\tt\{ v_n / v_d \;|\;v_n\in\mathbb{Z},v_d\in\mathbb{Z}\}}\\
+{\tt\llbracket char\rrbracket} & = & {\tt\mathbb{Z}}\\
+{\tt \llbracket(T_1, \ldots, T_n)\rrbracket} & = & {\tt\{ v_1,\ldots,v_n\;|\;v_1\in\llbracket T_1\rrbracket, \ldots, v_n\in\llbracket T_n\rrbracket\}}\\
+{\tt\llbracket T_1|\ldots|T_n\rrbracket} & = & {\tt \llbracket T_1\rrbracket\cup\ldots\cup \llbracket T_n\rrbracket}\\
+{\tt\llbracket T_1\&\ldots\&T_n\rrbracket} & = & {\tt \llbracket T_1\rrbracket\cap\ldots\cap \llbracket T_n\rrbracket}\\
+{\tt\llbracket!T_1\rrbracket} & = & {\tt \mathbb{D} - \llbracket T_1\rrbracket}\\
+\end{array}
+\end{displaymath}
+\end{definition}
+
+\noindent Here, the {\em domain} of all possible values is given by ${\tt\mathbb{D}}$, whilst the set of all integers is given by ${\tt\mathbb{Z}}$.  Furthermore, if ${\tt T}$ is a \gls{type_descriptor}, then ${\tt\llbracket T\rrbracket}$ is its underlying \gls{type}.
+
+\subsection{Equivalences}
+Since types are defined in terms of the set of values they represent, it is perfectly possible for two distinct type descriptors to describe the same underlying type.  For example, \lstinline{int|null} is considered equivalent to \lstinline{null|int}.  Whilst this case is fairly easy to spot, there are some cases which are not so obvious.  The definition of equivalence is given as follows:
+
+\begin{definition}[Type Equivalence]
+\label{c_types_def_equiv}
+Two type descriptors ${\tt T_1}$ and ${\tt T_2}$ are said to be {\em equivalent}, denoted by ${\tt T_1\equiv T_2}$, iff ${\tt \llbracket T_1\rrbracket = \llbracket T_2\rrbracket}$.
+\end{definition}
+
+\noindent Based on the above definition, we identify a number of such equivalences to illustrate:
+\begin{itemize}
+\item \lstinline{!any} is equivalent to \lstinline{void} and, conversely, \lstinline{any} is equivalent to \lstinline{!void}
+\item \lstinline{int&!int} is equivalent to \lstinline{void} and, conversely, \lstinline{int|!int} is equivalent to \lstinline{any}
+\item \lstinline|{int$\;|\;$null f}| is equivalent to \lstinline|{int f}$\;|\;${null f}|
+\item \lstinline|{int$\;|\;$null f}&{bool$\;|\;$null f}| is equivalent to \lstinline|{null f}|
+\end{itemize}
+
+Under Definition~\ref{c_types_def_equiv}, an infinite number of equivalences exist between the type descriptors of Whiley, and we cannot list them all here.
+
+\subsection{Subtyping}
+\label{c_types_subtyping}
+Types in Whiley support the notion of {\em subtyping} where one type may be a {\em subtype} for another.  For example, the type \lstinline{int} is a subtype of \lstinline{any}.  Likewise, \lstinline{bool} is a subtype of \lstinline{bool|null}.  The {\em subtyping operator} is denoted by ``${\tt \le}$''; for example, ${\tt T_1\le T_2}$ indicates that type ${\tt T_1}$ is a subtype of ${\tt T_2}$.  The subtyping operator is {\em reflexive}, {\em transitive} and {\em anti-symmetric} with respect to the underlying types involved. 
+
+The subtyping operator is regarded as an algorithm for determining whether the type described by one type descriptor is a subtype of another.  The implementation of this algorithm is not straightforward and a full discussion of it is beyond the scope of this document.  Indeed, there are many possible implementations of this operator.  Nevertheless, there any valid implementation of this operator must exhibit two desirable properties:
+
+\begin{definition}[Subtype Soundness] A subtype operator, ${\tt\le}$, is {\em sound} if, for any types ${\tt T_1}$ and ${\tt T_2}$, it holds that ${\tt T_1\le T_2\Longrightarrow \llbracket T_1\rrbracket\subseteq \llbracket T_2\rrbracket}$.
+\end{definition}
+
+\begin{definition}[Subtype Completeness] A subtype operator, ${\tt\le}$, is {\em complete} if, for any types ${\tt T_1}$ and ${\tt T_2}$, it holds that ${\tt \llbracket T_1\rrbracket\subseteq\llbracket T_2\rrbracket\Longrightarrow T_1\le T_2}$.
+\end{definition}
+
+\noindent A subtype operator which exhibits both of these properties is said to be {\em sound} and {\em complete}.  

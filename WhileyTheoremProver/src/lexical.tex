@@ -1,0 +1,148 @@
+\chapter{Lexical Structure}
+
+This chapter specifies the lexical structure of the Whiley programming language.  Programs in Whiley are organised into one or more \gls{source_file}s written in Unicode.  The Whiley language uses \gls{indentation_syntax} to delimit blocks and statements, rather than curly-braces (or similar) as found in many other languages.  
+
+\section{Line Terminators}
+A Whiley compiler splits the sequence of (Unicode) input characters into lines by identifying {\em line terminators}:
+
+\begin{syntax}
+\verb+LineTerminator+ & $::=$ & \token{\textbackslash n} $|$ \token{\textbackslash r} $|$ \token{\textbackslash r}\ \token{\textbackslash n}\\
+\end{syntax}
+
+Here, \token{\textbackslash n} represents the ASCII character \verb+LF+ (\verb+0xA+), whilst \token{\textbackslash r} represents the ASCII character \verb+CR+ (\verb+0xD+).  The two characters \token{\textbackslash r} \token{\textbackslash n} taken together form one line terminator.
+
+\section{Indentation}
+After splitting the input characters into lines, a Whiley compiler then identifies the {\em indentation} of each line.  This is necessary because Whiley employs \gls{indentation_syntax} meaning that indentation is significant in the meaning of Whiley programs.  
+
+\begin{syntax}
+\verb+Indentation+ & $::=$ & \^\ \big( \token{\textbackslash t} $|$ \token{ }\ \big)$^*$\\
+\end{syntax}
+
+Here, \^\ demarcates the start of a line and, hence, indentation may only occur at the beginning of a line.  Indentation may be compared using the $\le$ comparator, such that $i\le ir$ always holds (where $i$ is some indentation and $r$ is either empty or represents additional indentation).  In other words, some indentation $i$ is considered less-than-or-equal to another piece of indentation $ir$ which includes the first as a prefix.  This comparator is important for delimiting \gls{statement_block}s (\S\ref{c_stmts_blocks}).
+
+\pagebreak
+\section{Comments}
+There are two kinds of comments in Whiley: \gls{line_comment}s and \gls{block_comment}s:
+\begin{lstlisting}
+/* This is a block comment */
+\end{lstlisting}
+The above illustrates a block comment, which is all of the text between \token{/*} and \token{*/} inclusive.
+\begin{lstlisting}
+// This is a line comment
+\end{lstlisting}
+The above illustrates a line comment, which is all of the text from \token{//} up to the end-of-line.
+
+\section{Identifiers}
+An identifier is a sequence of one or more {\em letters} or {\em digits} which starts with a letter.
+\begin{syntax}
+\verb+Ident+ & $::=$ & \verb+Letter+\ \big(\ \verb+Letter+\ $|$\ \verb+Digit+\ \big)*\\
+&&\\
+\verb+Letter+ & $::=$ & \token{\_} $|$ \token{a} $|$ \ldots $|$ \token{z} $|$ \token{A} $|$ \ldots $|$ \token{Z}\\
+&&\\
+\verb+Digit+ & $::=$ & \token{0} $|$ \token{1} $|$ \token{2} $|$ \token{3} $|$ \token{4} $|$ \token{5} $|$ \token{6} $|$ \token{7} $|$ \token{8} $|$ \token{9}\\
+\end{syntax}
+
+Letters include lowercase and uppercase alphabetic characters (i.e. \lstinline+a-z+ and \lstinline+A-Z+) and the underscore (\lstinline+_+).
+
+\section{Keywords}
+The following strings are reserved for use as {\em keywords} and may not be used as identifiers:
+
+\begin{syntax}
+\verb+Keyword+ & $::=$ & \token{any} $|$
+\token{assert} $|$ \token{bool} $|$ \token{case} $|$ \token{char} $|$
+\token{define} $|$ \token{exists}\\
+{\huge\strut} & $|$ & \token{false} $|$ \token{forall} $|$ \token{function} $|$ \token{if} $|$ \token{import} $|$ \token{in} $|$ \token{int} $|$ \token{is}\\
+{\huge\strut} & $|$ & \token{no} $|$ \token{null} $|$ \token{package} $|$ \token{private} $|$ \token{protected} $|$ \token{public}\\
+{\huge\strut} & $|$ & \token{real} $|$ \token{some} $|$ \token{string}
+$|$ \token{then} $|$ \token{true} $|$ \token{void}\\
+\end{syntax}
+
+\pagebreak
+
+The following strings are reserved for use as {\em keywords}, but may additionally be used as identifiers in certain contexts:
+\begin{syntax}
+\verb+KeywordIdentifier+ & $::=$ & \token{constant} $|$ \token{from} $|$ \token{type}\\
+\end{syntax}
+
+
+%\pagebreak
+
+\section{Literals}
+
+A \gls{literal} is a source-level entity which describes a value of primitive type (\S\ref{c_types_primitive_types}).
+
+\begin{syntax}
+\verb+Literal+ & $::=$ &  \verb+NullLiteral+ \\
+  & $|$ & \verb+BoolLiteral+ \\
+  & $|$ & \verb+IntLiteral+ \\
+  & $|$ & \verb+DecimalLiteral+ \\
+  & $|$ & \verb+CharLiteral+ \\
+  & $|$ & \verb+StringLiteral+ \\
+\\
+\end{syntax}
+
+\subsection{Null Literal}
+
+The \lstinline{null} type (\S\ref{c_types_null}) has a single value expressed as the \lstinline{null} literal.
+
+\begin{syntax}
+  \verb+NullLiteral+ & $::=$ & \token{null} \\
+\end{syntax}
+
+
+\subsection{Boolean Literals}
+
+The \lstinline{bool} type (\S\ref{c_types_bool}) has two values expressed as the \lstinline{true} and \lstinline{false} literals.
+
+\begin{syntax}
+  \verb+BoolLiteral+ & $::=$ & \token{true} $|$ \token{false} \\
+\end{syntax}
+
+
+\subsection{Byte Literals}
+
+The \lstinline{byte} type (\S\ref{c_types_byte}) has 256 values which are expressed as sequences of binary digits, followed by the suffix ``\lstinline{b}'' (e.g. \lstinline{0101b}).
+
+
+\begin{syntax}
+ \verb+ByteLiteral+ & $::=$ & \big(\ \token{0}\ $|$\ \token{1}\ \big)$^+$\ \token{b}\\
+\end{syntax}
+
+
+Byte literals do not need to contain exactly eight digits and, when fewer digits are given, are padded out to eight digits by appending zero's from the left (e.g. \lstinline{00101b} becomes \lstinline{00000101b}).
+
+
+\subsection{Integer Literals}
+
+The \lstinline{int} type (\S\ref{c_types_int}) represents the infinite set of integer values which are expressed as sequences of numeric or hexadecimal digits (e.g. \lstinline{123456}, \lstinline{0xffaf}, etc).
+
+\begin{syntax}
+  \verb+IntLiteral+ & $::=$ & \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ \big)$^+$ \\
+  & $|$ & \token{0} \token{x}\ \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ $|$\ \token{a}\ $|$\ \ldots\ $|$\ \token{f}\ $|$\ \token{A}\ $|$\ \ldots\ $|$\ \token{F}\ \big)$^+$\\
+\end{syntax}
+
+Since integer values in Whiley are of arbitrary size (\S\ref{c_types_int}), there is no limit on the size of an integer literal.
+
+\subsection{Decimal Literals}
+
+The \lstinline{real} type (\S\ref{c_types_real}) represents the infinite set of rational values which are expressed as sequences of numeric digits separated by a period (e.g. \lstinline{1.0}, \lstinline{0.223}, \lstinline{12.55}, etc).
+
+\begin{syntax}
+  \verb+DecimalLiteral+ & $::=$ & \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ \big)$^+$\ \token{.}\ \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ \big)$^+$ \\
+\end{syntax}
+
+\subsection{Character Literals}
+
+A {\em character literal} is expressed as a single character or an escape sequence enclosed in single quotes (e.g. \lstinline{'c'}).
+
+\begin{syntax}
+  \verb+CharLiteral+ & $::=$ & \token{'}\ \big(\ \verb+Character+\ $|$ \verb+Escape+\ \big)\ \token{'} \\
+\end{syntax}
+
+\subsection{String Literals}
+
+A {\em string literal} is expressed as a sequence of zero or more characters or escape sequences enclosed in double quotes (e.g. \lstinline{"Hello World"}).
+
+\begin{syntax}
+  \verb+StringLiteral+ & $::=$ & \token{"}\ \big(\ \verb+Character+\ $|$ \verb+Escape+\ \big)$^*$\ \token{"} \\
+\end{syntax}
