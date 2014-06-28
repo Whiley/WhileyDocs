@@ -48,13 +48,14 @@ Letters include lowercase and uppercase alphabetic characters (i.e. \lstinline+a
 The following strings are reserved for use as {\em keywords} and may not be used as identifiers:
 
 \begin{syntax}
-\verb+Keyword+ & $::=$ & \token{any} $|$
+\verb+Keyword+ & $::=$ & \token{any} $|$ \token{axiom} $|$
 \token{assert} $|$ \token{bool} $|$ \token{case} $|$ \token{char} $|$
-\token{define} $|$ \token{exists}\\
-{\huge\strut} & $|$ & \token{false} $|$ \token{forall} $|$ \token{function} $|$ \token{if} $|$ \token{import} $|$ \token{in} $|$ \token{int} $|$ \token{is}\\
-{\huge\strut} & $|$ & \token{no} $|$ \token{null} $|$ \token{package} $|$ \token{private} $|$ \token{protected} $|$ \token{public}\\
-{\huge\strut} & $|$ & \token{real} $|$ \token{some} $|$ \token{string}
-$|$ \token{then} $|$ \token{true} $|$ \token{void}\\
+\token{define}\\
+{\huge\strut} & $|$ & \token{ensures} $|$ \token{exists} $|$ \token{false} $|$ \token{forall} $|$ \token{function} $|$ \token{if}\\
+{\huge\strut} & $|$ & \token{import} $|$ \token{in} $|$ \token{int} $|$ \token{is} $|$ \token{no} $|$ \token{null} $|$ \token{package} $|$ \token{private}\\
+{\huge\strut} & $|$ & \token{protected} $|$ \token{public} $|$ \token{real} $|$ \token{requires} $|$ \token{some} $|$ \token{string}\\
+{\huge\strut} & $|$ & \token{then} $|$ \token{true} $|$ \token{void} $|$ \token{where}\\
+
 \end{syntax}
 
 \pagebreak
