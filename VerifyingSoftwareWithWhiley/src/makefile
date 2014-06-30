@@ -1,5 +1,5 @@
 TARGET = VerifyingSoftwareWithWhiley
-DEPS = listings.tex abstract.tex introduction.tex specifications.tex loopinvariants.tex hoarelogic.tex
+DEPS = listings.tex abstract.tex introduction.tex specifications.tex loopinvariants.tex vcg.tex hoarelogic.tex
 
 all: $(TARGET).pdf
 
