@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[10pt]{book}
 
 %\usepackage[T1]{fontenc}
 %\usepackage[lighttt]{lmodern}
@@ -39,14 +39,16 @@
 
 \begin{document}
 \maketitle
-\input{abstract}
+%\input{abstract}
 \tableofcontents
 \clearpage
 \input{introduction}
+\part{Verifying Software}
 \input{specifications}
 \input{reasoning}
 \input{loopinvariants}
 \input{recursion}
+\part{Understanding the Verification Process}
 \input{vcg}
 \input{hoarelogic}
 \appendix
