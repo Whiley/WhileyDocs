@@ -16,5 +16,10 @@
       <param name="verification" value="true"/>
     </antcall>
 
+    <antcall target="compile">
+      <param name="name" value="indexof_2.whiley"/>
+      <param name="verification" value="true"/>
+    </antcall>
+
   </target>
 </project>
