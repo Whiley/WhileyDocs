@@ -43,16 +43,7 @@ The first of the above properties is the easiest, so lets start by
 specifying that in Whiley.  At the same time, we'll also give an
 initial implementation which satisfies this partial specification:
 
-\begin{lstlisting}
-function indexOf([int] items, int item) => (int|null i)
-// If return value is an int i, then items[i] == item
-ensures i is int ==> items[i] == item:
-    //
-    if |items| > 0 && items[0] == item:
-        return 0
-    else:
-        return null
-\end{lstlisting}
+\lstinputlisting{../examples/indexof_1.whiley}
 
 Here, we can see property (1) above written as an \lstinline{ensures}
 clause in Whiley.  In particular, the phrase ``the return value is an
@@ -132,23 +123,7 @@ we cannot avoid talking about indices this time as not all elements of
 At this point, we can now give the complete specification for the
 \lstinline{indexOf()} function, along with an initial implementation:
 
-\begin{lstlisting}
-function indexOf([int] items, int item) => (int|null i)
-// If return is an int r, then items[r] == item
-ensures i is int ==> items[i] == item
-// If return is null, then no element x in items where x == item
-ensures i is null ==> no { x in items | x == item }
-// If return is an int i, then no index j where j $<$ i and items[j] == item
-ensures i is int ==> no { j in 0 .. i | items[j] == item }:
-    //
-    i = 0
-    while i < |items|:
-       if items[i] == item:
-           return i 
-       i = i + 1
-    //
-    return null
-\end{lstlisting}
+\lstinputlisting{../examples/indexof_2.whiley}
 
 The implementation of \lstinline{indexOf()} given above meets the
 function's specification.  Unfortunately, whilst this is true, the

@@ -1,0 +1,20 @@
+<project name="wybench" default="compileAll">  
+  <import file="config.xml"/> 
+
+  <target name="compile">
+    <echo message="COMPILING: ${name}"/>
+    <echo message="==================================="/>
+    <wyjc verification="${verification}" verbose="false" whileydir="." whileypath="${wyrt.jar}" includes="**/*.whiley"/>
+  </target>
+
+  <target name="compileAll">
+
+    <!-- ======================================== -->
+
+    <antcall target="compile">
+      <param name="name" value="indexof_1.whiley"/>
+      <param name="verification" value="true"/>
+    </antcall>
+
+  </target>
+</project>
