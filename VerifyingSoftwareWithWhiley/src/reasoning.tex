@@ -26,3 +26,34 @@ Examine problem with our simplistic way of thinking about assignments.
 \section{Forwards versus Backward Reasoning}
 Discuss the so-called weakest precondition transformer.
 
+\section{Exercises}
+
+\begin{ex}
+The function \lstinline{neg()} returns the arithmetic negation of a value.
+For example, \lstinline{neg(1) = -1}.  An implementation of
+this function is given as follows:
+\begin{lstlisting}
+function neg(int x) => (int r):
+    return -x
+\end{lstlisting}
+Provide an appropriate {\em post-condition} for this function.
+\end{ex}
+
+\begin{ex}
+  The following function computes the absolute difference between two values:
+
+\begin{lstlisting}
+function diff(int x, int y) => (int r):
+    //
+    if x > y:
+        return x - y
+    else:
+        return y - x
+\end{lstlisting}
+
+A {\em pre-condition} of this function is that parameter \lstinline{x}
+is between \lstinline{0} and \lstinline{255} (inclusive) and,
+likewise, that variable \lstinline{y} is between \lstinline{-128} and
+\lstinline{127} (inclusive).  Provide an appropriate specification for
+this function, such that the post-condition is as tight as possible.
+\end{ex}
