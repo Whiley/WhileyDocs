@@ -53,61 +53,71 @@ The majority of work performed by a Whiley program is through the execution of {
 \end{tabular}
 
 \section*{Statements}
-The execution of a Whiley program is controlled by {\em statements}, which cause effects on the environment.  Statements in Whiley do not produce values.  Compound statements may contain other statements.\\\\
-\begin{tabular}{l}
-\multicolumn{1}{r}{\em Variable Declarations}\\
+The execution of a Whiley program is controlled by {\em statements}, which cause effects on the environment.  Statements in Whiley do not produce values.  Compound statements may contain other statements.
+
+Variables are declared and initialised through {\em variable declarations}.  Variables must be declared before being used.
+
+\noindent \begin{tabular*}{\columnwidth}{c @{\extracolsep{\fill}} c @{\extracolsep{\fill}} c}
 \begin{minipage}[t]{2.25cm}
 \begin{lstlisting}
 int x
 \end{lstlisting}
 \end{minipage}
-\hspace*{0.25cm}
+&
 \begin{minipage}[t]{2.25cm}
 \begin{lstlisting}
 int x = 1
 \end{lstlisting}
 \end{minipage}
-\hspace*{0.25cm}
+&
 \begin{minipage}[t]{2.75cm}
 \begin{lstlisting}
 int x, int y
 \end{lstlisting}
 \end{minipage}
 \\
-\multicolumn{1}{r}{\em Variable Assignments}\\
+\end{tabular*}
+
+Variables, fields and map or list elements can be {\em assigned}.  Variables must be defined before being used.
+
+\noindent \begin{tabular*}{\columnwidth}{c @{\extracolsep{\fill}} c @{\extracolsep{\fill}} c @{\extracolsep{\fill}} c}
 \begin{minipage}[t]{2.25cm}
 \begin{lstlisting}
 x = x + y
 \end{lstlisting}
 \end{minipage}
-\hspace*{0.2cm}
+&
 \begin{minipage}[t]{2cm}
 \begin{lstlisting}
 x[0] = 1
 \end{lstlisting}
 \end{minipage}
-\hspace*{0.2cm}
+&
 \begin{minipage}[t]{1.75cm}
 \begin{lstlisting}
 r.f = 3
 \end{lstlisting}
 \end{minipage}
-\hspace*{0.2cm}
+&
 \begin{minipage}[t]{1.75cm}
 \begin{lstlisting}
 x,y = t
 \end{lstlisting}
 \end{minipage}
 \\
-\multicolumn{1}{r}{\em Conditionals}\\
-\begin{minipage}[t]{2.7cm}
+\end{tabular*}
+
+{\em Conditional} statements control the flow of execution based on the result of a boolean expression.
+
+\noindent \begin{tabular*}{\columnwidth}{c @{\extracolsep{\fill}} c @{\extracolsep{\fill}} c}
+\begin{minipage}[t]{2.25cm}
 \begin{lstlisting}
 if x < 0:
    ...
 ...
 \end{lstlisting}
 \end{minipage} 
-\hspace*{0.25cm}
+&
 \begin{minipage}[t]{2.25cm}
 \begin{lstlisting}
 if x < 0:
@@ -116,35 +126,37 @@ else:
    ...
 \end{lstlisting}
 \end{minipage}
-\hspace*{0.25cm}
+&
 \begin{minipage}[t]{3cm}
 \begin{lstlisting}
 if x < 0:
    ...
 else if x > 0:
    ...
-else:
-   ...
 \end{lstlisting}
 \end{minipage}\\
-\multicolumn{1}{r}{\em Loops}\\
-\begin{minipage}[t]{2.75cm}
+\end{tabular*}
+
+{\em Looping statements} control the flow of execution by repeating some sequence of statements zero or more times.
+
+\noindent\begin{tabular*}{\columnwidth}{c @{\extracolsep{\fill}} c @{\extracolsep{\fill}} c}
+\begin{minipage}[t]{2.5cm}
 \begin{lstlisting}
-while x < 0:
+while x<0:
    ...
 ...
 \end{lstlisting}
 \end{minipage}
-\hspace*{0.2cm}
-\begin{minipage}[t]{2.5cm}
+&
+\begin{minipage}[t]{2.25cm}
 \begin{lstlisting}
 do:
    ...
-while x < 0
+while x<0
 ...
 \end{lstlisting}
 \end{minipage}
-\hspace*{0.2cm}
+&
 \begin{minipage}[t]{2.75cm}
 \begin{lstlisting}
 for x in xs:
@@ -152,74 +164,127 @@ for x in xs:
 ...
 \end{lstlisting}
 \end{minipage}\\
+\end{tabular*}
 
-\multicolumn{1}{r}{\em Other}\\
-\begin{minipage}[t]{3cm}
-\begin{lstlisting}
-return x + 3
-\end{lstlisting}
-\begin{lstlisting}
-assert x >= 0
-\end{lstlisting}
-\begin{lstlisting}
-assume x >= 0
-\end{lstlisting}
-\end{minipage}
-\hspace*{0.25cm}
+{\em Switch statements} control execution flow by matching the result of an expression.
+
+\noindent\begin{tabular*}{\columnwidth}{c @{\extracolsep{\fill}} c}
+
 \begin{minipage}[t]{3.75cm}
 \begin{lstlisting}
 switch x:
    case 1:
        x = x + 1
-   case 2,3
-       x = x - 1
+   case 1,2:
+       x = 0
+...
+\end{lstlisting}
+\end{minipage}
+&
+\begin{minipage}[t]{3.75cm}
+\begin{lstlisting}
+switch x:
+   case 1:
+       x = x + 1
    default:
        x = 0
 ...
 \end{lstlisting}
+\end{minipage}
+\\
+\end{tabular*}
+
+{\em Return statements} terminate the execution of a function or method and may return the result of an expression.  
+
+\noindent\begin{tabular*}{\columnwidth}{c @{\extracolsep{\fill}} c @{\extracolsep{\fill}} c}
+\begin{minipage}[t]{1.75cm}
+\begin{lstlisting}
+return
+\end{lstlisting}
+\end{minipage}
+&
+\begin{minipage}[t]{3cm}
+\begin{lstlisting}
+return x + 3
+\end{lstlisting}
+\end{minipage}
+&
+\begin{minipage}[t]{2.75cm}
+\begin{lstlisting}
+return x,y
+\end{lstlisting}
+\end{minipage}
+\\
+\end{tabular*}
+
+{\em Assertion} and {\em assumption} statements enable the programmer to express knowledge at a given point.
+
+\noindent\begin{tabular*}{\columnwidth}{c @{\extracolsep{\fill}} c}
+\begin{minipage}[t]{3cm}
+\begin{lstlisting}
+assert x > 0
+\end{lstlisting}
+\end{minipage}
+&
+\begin{minipage}[t]{4.75cm}
+\begin{lstlisting}
+assume x > 0 ==> y < 3
+\end{lstlisting}
 \end{minipage}\\
+\end{tabular*}
+
+{\em Break statements} terminate loops early; {\em debug} statements enable output from functions; {\em skip} statements are a no-op.
+
+\noindent\begin{tabular*}{\columnwidth}{c @{\extracolsep{\fill}} c @{\extracolsep{\fill}} c}
 \begin{minipage}[t]{1.5cm}
 \begin{lstlisting}
 break
 \end{lstlisting}
 \end{minipage}
-\hspace*{0.25cm}
+&
 \begin{minipage}[t]{3.5cm}
 \begin{lstlisting}
 debug "got here"
 \end{lstlisting}
 \end{minipage}
-\hspace*{0.25cm}
+&
 \begin{minipage}[t]{1.5cm}
 \begin{lstlisting}
 skip
 \end{lstlisting}
-\end{minipage}
-\\
-\multicolumn{1}{r}{\em Exceptions}\\
-\begin{minipage}[t]{4.25cm}
-\begin{lstlisting}
-try:
-  ...
-catch(Exception e):
-  ...
-\end{lstlisting}
-\end{minipage}
-\hspace*{0.25cm}
-\begin{minipage}[t]{4cm}
-\begin{lstlisting}
-throw {msg: "err"}
-\end{lstlisting}
-\end{minipage}
+\end{minipage}\\
+\end{tabular*}
 
-\end{tabular}
-\newpage
+% {\em Exception statements} give exceptional termination from function and methods to support error handling.
+
+% \noindent\begin{tabular*}{\columnwidth}{c @{\extracolsep{\fill}} c @{\extracolsep{\fill}} c}
+% \begin{minipage}[t]{3.5cm}
+% \begin{lstlisting}
+% try:
+%   ...
+% catch(Ex e):
+%   ...
+% \end{lstlisting}
+% \end{minipage}
+% &
+% \begin{minipage}[t]{4cm}
+% \begin{lstlisting}
+% throw {msg: "err"}
+% \end{lstlisting}
+% \end{minipage}\\
+% \end{tabular*}
+
 \section*{Declarations}
 A {\em declaration} declares a named entity within a source file and may refer to named entities in this or other source files and (in some cases) may {\em recursively} refer to itself.
 
+{\em Constant declarations} define constants with known values at compile-time (they cannot be recursively defined).
+
 \begin{lstlisting}
 constant PI is 3.1459265359
+constant TWO_PI is 2*3.1459265359
 \end{lstlisting}
+
+{\em Type declarations} define named types composed from other types (they may be recursively defined).
 
 \begin{lstlisting}
 type Point is { int x, int y }
@@ -230,10 +295,15 @@ type Link is { LinkedList next, int data }
 type LinkedList is null | Link
 \end{lstlisting}
 
+{\em Function declarations} define functions which are {\em pure} and may not have side-effects.  They are guaranteed to return the same result given the same arguments, and are permitted within specifications. 
+
 \begin{lstlisting}
 function find([int] xs, int x) => int:
    ...
 \end{lstlisting}
+
+{\em Method declarations} define methods which are {\em impure} and
+may have side-effects.  They cannot be used within specifications.
 
 \begin{lstlisting}
 method main(System.Console console):
@@ -243,7 +313,7 @@ method main(System.Console console):
 \section*{Specifications}
 
 A {\em precondition} is a condition over the parameters of a function
-that is required to be true when the function is called.  A {\em
+that must hold when the function is called.  A {\em
   postcondition} is a condition over the return values of a function
 which is required to be true after the function is called.
 
