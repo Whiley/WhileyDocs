@@ -54,50 +54,52 @@ The majority of work performed by a Whiley program is through the execution of {
 
 \section*{Statements}
 The execution of a Whiley program is controlled by {\em statements}, which cause effects on the environment.  Statements in Whiley do not produce values.  Compound statements may contain other statements.\\\\
-\begin{tabular}{lr}
+\begin{tabular}{l}
+\multicolumn{1}{r}{\em Variable Declarations}\\
+\begin{minipage}[t]{2.25cm}
+\begin{lstlisting}
+int x
+\end{lstlisting}
+\end{minipage}
+\hspace*{0.25cm}
+\begin{minipage}[t]{2.25cm}
+\begin{lstlisting}
+int x = 1
+\end{lstlisting}
+\end{minipage}
+\hspace*{0.25cm}
+\begin{minipage}[t]{2.75cm}
+\begin{lstlisting}
+int x, int y
+\end{lstlisting}
+\end{minipage}
+\\
+\multicolumn{1}{r}{\em Variable Assignments}\\
 \begin{minipage}[t]{2.25cm}
 \begin{lstlisting}
 x = x + y
 \end{lstlisting}
 \end{minipage}
-\hspace*{0.25cm}
-\begin{minipage}[t]{2.25cm}
+\hspace*{0.2cm}
+\begin{minipage}[t]{2cm}
 \begin{lstlisting}
-xs[0] = 1
+x[0] = 1
 \end{lstlisting}
 \end{minipage}
-\hspace*{0.25cm}
-\begin{minipage}[t]{2cm}
+\hspace*{0.2cm}
+\begin{minipage}[t]{1.75cm}
 \begin{lstlisting}
 r.f = 3
 \end{lstlisting}
-\end{minipage}\\
-
-
-\begin{minipage}[t]{3cm}
-\begin{lstlisting}
-return x + 3
-\end{lstlisting}
 \end{minipage}
-\hspace*{0.25cm}
+\hspace*{0.2cm}
 \begin{minipage}[t]{1.75cm}
 \begin{lstlisting}
-break
-\end{lstlisting}
-\end{minipage}\\
-
-\begin{minipage}[t]{3cm}
-\begin{lstlisting}
-assert x >= 0
-\end{lstlisting}
-\end{minipage}
-\hspace*{0.25cm}
-\begin{minipage}[t]{3cm}
-\begin{lstlisting}
-assume x >= 0
+x,y = t
 \end{lstlisting}
 \end{minipage}
 \\
+\multicolumn{1}{r}{\em Conditionals}\\
 \begin{minipage}[t]{2.7cm}
 \begin{lstlisting}
 if x < 0:
@@ -125,6 +127,7 @@ else:
    ...
 \end{lstlisting}
 \end{minipage}\\
+\multicolumn{1}{r}{\em Loops}\\
 \begin{minipage}[t]{2.75cm}
 \begin{lstlisting}
 while x < 0:
@@ -150,6 +153,19 @@ for x in xs:
 \end{lstlisting}
 \end{minipage}\\
 
+\multicolumn{1}{r}{\em Other}\\
+\begin{minipage}[t]{3cm}
+\begin{lstlisting}
+return x + 3
+\end{lstlisting}
+\begin{lstlisting}
+assert x >= 0
+\end{lstlisting}
+\begin{lstlisting}
+assume x >= 0
+\end{lstlisting}
+\end{minipage}
+\hspace*{0.25cm}
 \begin{minipage}[t]{3.75cm}
 \begin{lstlisting}
 switch x:
@@ -157,15 +173,49 @@ switch x:
        x = x + 1
    case 2,3
        x = x - 1
+   default:
+       x = 0
 ...
 \end{lstlisting}
 \end{minipage}\\
-
+\begin{minipage}[t]{1.5cm}
+\begin{lstlisting}
+break
+\end{lstlisting}
+\end{minipage}
+\hspace*{0.25cm}
+\begin{minipage}[t]{3.5cm}
+\begin{lstlisting}
+debug "got here"
+\end{lstlisting}
+\end{minipage}
+\hspace*{0.25cm}
+\begin{minipage}[t]{1.5cm}
+\begin{lstlisting}
+skip
+\end{lstlisting}
+\end{minipage}
+\\
+\multicolumn{1}{r}{\em Exceptions}\\
+\begin{minipage}[t]{4.25cm}
+\begin{lstlisting}
+try:
+  ...
+catch(Exception e):
+  ...
+\end{lstlisting}
+\end{minipage}
+\hspace*{0.25cm}
+\begin{minipage}[t]{4cm}
+\begin{lstlisting}
+throw {msg: "err"}
+\end{lstlisting}
+\end{minipage}
 
 \end{tabular}
 \newpage
 \section*{Declarations}
-A {\em declaration} declares a named entity within a Whiley source file.  The declaration may refer to named entities in this or other source files and (in some cases) may {\em recursively} refer to itself.
+A {\em declaration} declares a named entity within a source file and may refer to named entities in this or other source files and (in some cases) may {\em recursively} refer to itself.
 
 \begin{lstlisting}
 constant PI is 3.1459265359
