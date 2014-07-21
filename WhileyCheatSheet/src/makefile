@@ -1,4 +1,4 @@
-TARGET = sheet
+TARGET = WhileyCheatSheet
 DEPS = 
 
 all: $(TARGET).pdf
