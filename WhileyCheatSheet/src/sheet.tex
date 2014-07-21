@@ -1,5 +1,6 @@
 \documentclass[a4paper,10pt,twcolumn]{article} 
-\usepackage[a4paper,twocolumn,includeheadfoot,width=170mm,height=267mm,lmargin=20mm,tmargin=10mm,twoside=true,marginpar=16.5mm]{geometry}
+\usepackage[a4paper,twocolumn,noheadfoot,width=170mm,height=267mm,lmargin=20mm,tmargin=15mm,twoside=true,marginpar=16.5mm]{geometry}
+
 \usepackage{times}
 \usepackage{graphicx}
 \usepackage{url}
@@ -10,7 +11,7 @@
 
 \input{listings}
 \newcommand{\token}[1]{\Large\strut\scriptsize\fcolorbox{black}{lightgray}{\strut#1}}
-
+\pagestyle{empty}
 \date{}
 \begin{document}
 \twocolumn[\noindent {\Large{\bf Whiley Cheat Sheet for SWEN224 (Formal Foundations of Programming)}}\\\noindent\rule{\textwidth}{1pt}\begin{flushright}{\em By David J. Pearce, 2014}\end{flushright}]
@@ -51,7 +52,7 @@ The majority of work performed by a Whiley program is through the execution of {
 \token{\lstinline+some \{ x in xs | x >= 0 \}+}&\\
 \token{\lstinline+x is null+} \token{\lstinline+x is int+} & {\em Type Tests}
 \end{tabular}
-
+\newpage
 \section*{Statements}
 The execution of a Whiley program is controlled by {\em statements}, which cause effects on the environment.  Statements in Whiley do not produce values.  Compound statements may contain other statements.
 
@@ -242,7 +243,7 @@ break
 \end{lstlisting}
 \end{minipage}
 &
-\begin{minipage}[t]{3.5cm}
+\begin{minipage}[t]{4cm}
 \begin{lstlisting}
 debug "got here"
 \end{lstlisting}
@@ -346,13 +347,26 @@ to hold immediately after the loop.
 \begin{lstlisting}
  ...
  int i = 0
- while i < x where i > 0:
+ while i < x where i >= 0:
      i = i + 1 
  ...
 \end{lstlisting}
 
 
 \section*{Examples}
+
+The following function uses a \lstinline{break} to exit a \lstinline{while} loop when the first element matching parameter \lstinline{x} is found.  
+\begin{lstlisting}
+// Remove lowest element holding x from xs
+function remove([int] xs, int x) => [int]:
+    int i = 0
+    while i < |xs|:
+        if xs[i] == x:
+           break
+        else:
+           i = i + 1
+    return xs[0..i] ++ xs[i+1..]
+\end{lstlisting}
 
 \end{document}
 
