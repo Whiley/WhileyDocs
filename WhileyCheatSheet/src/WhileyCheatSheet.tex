@@ -6,18 +6,23 @@
 \usepackage{url}
 \usepackage{color}
 \usepackage{enumerate}
+\usepackage{tabularx}
 
 \definecolor{lightgray}{RGB}{225,225,225}
 
 \input{listings}
 \newcommand{\token}[1]{\Large\strut\scriptsize\fcolorbox{black}{lightgray}{\strut#1}}
+
 \pagestyle{empty}
 \date{}
+
 \begin{document}
 \twocolumn[\noindent {\Large{\bf Whiley Cheat Sheet for SWEN224 (Formal Foundations of Programming)}}\\\noindent\rule{\textwidth}{1pt}\begin{flushright}{\em By David J. Pearce, 2014}\end{flushright}]
 
 \section*{Values}
-\begin{tabular}{l r}
+Values are the fundamental units of execution in Whiley and have value semantics, rather than reference semantics (as in many object-oriented languages).
+
+\noindent \begin{tabular}{l r}
 \token{\lstinline+null+} & {\em Null value}\\
 \token{\lstinline+true+} \token{\lstinline+false+} & {\em Boolean values}\\
 \token{\lstinline+123+} \token{\lstinline+-99+} \token{\lstinline+0xFF+} & {\em Integer values}\\
@@ -39,12 +44,12 @@ The Whiley programming language is {\em statically typed}, meaning that every ex
 
 \section*{Expressions}
 The majority of work performed by a Whiley program is through the execution of {\em expressions}.  Every expression produces a value and may have additional side effects.\\\\
-\begin{tabular}{l r}
+\begin{tabular}{l@{\hspace*{-0.9cm}}r}
 \token{\lstinline|x + 1|} \token{\lstinline|2 * y|} \token{\lstinline|z - 1|} \token{\lstinline|(x + y)/2|}& {\em Arithmetic}\\
 \token{\lstinline|x < y|} \token{\lstinline|0 >= z|} \token{\lstinline|x == y|} \token{\lstinline|x != y|}& {\em Comparisons}\\
 \token{\lstinline+!x+} \token{\lstinline+x&&y+} \token{\lstinline+x||y+} \token{\lstinline+x==>y+} \token{\lstinline+x<==>y+} & {\em Boolean}\\
 \token{\lstinline+0..2+}, \token{\lstinline+x..y+}  & {\em Ranges}\\
-\token{\lstinline+|ls|+} \token{\lstinline+ls[0]+} \token{\lstinline|xs++ys|} \token{\lstinline|xs++[1]|} & {\em Lists}\\
+\token{\lstinline+|ls|+} \token{\lstinline+ls[0]+} \token{\lstinline|xs++ys|} \token{\lstinline|xs++[1]|} \token{\lstinline|xs[0..2]|}& {\em Lists}\\
 \token{\lstinline|[1,x+y]|} \token{\lstinline+x in xs+} & \\
 \token{\lstinline|\{x: 1+y\}|} \token{\lstinline+xr.f+} \token{\lstinline+xr.f.g+} & {\em Records}\\
 \token{\lstinline+all \{ x in xs | x >= 0 \}+}& {\em Quantifiers}\\
