@@ -1,0 +1,204 @@
+\documentclass[a4paper,10pt,twcolumn]{article} 
+\usepackage[a4paper,twocolumn,includeheadfoot,width=170mm,height=267mm,lmargin=20mm,tmargin=10mm,twoside=true,marginpar=16.5mm]{geometry}
+\usepackage{times}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{color}
+\usepackage{enumerate}
+
+\definecolor{lightgray}{RGB}{225,225,225}
+
+\input{listings}
+\newcommand{\token}[1]{\Large\strut\scriptsize\fcolorbox{black}{lightgray}{\strut#1}}
+
+\date{}
+\begin{document}
+\twocolumn[\noindent {\Large{\bf Whiley Cheat Sheet for SWEN224 (Formal Foundations of Programming)}}\\\noindent\rule{\textwidth}{1pt}\begin{flushright}{\em By David J. Pearce, 2014}\end{flushright}]
+
+\section*{Values}
+\begin{tabular}{l r}
+\token{\lstinline+null+} & {\em Null value}\\
+\token{\lstinline+true+} \token{\lstinline+false+} & {\em Boolean values}\\
+\token{\lstinline+123+} \token{\lstinline+-99+} \token{\lstinline+0xFF+} & {\em Integer values}\\
+\token{\lstinline+1.23+} \token{\lstinline+-0.02+} & {\em Real values}\\
+\token{\lstinline+"Hello"+} \token{\lstinline+"new\n line"+} & {\em String values}\\
+\token{\lstinline+(1,2,3)+} \token{\lstinline+(true,null)+} & {\em Tuple values}\\
+\token{\lstinline+[]+} \token{\lstinline+[1,2,3]+} \token{\lstinline+[1,"hello",2.0]+} & {\em List values}\\
+\token{\lstinline+\{name: "dave"\}+}, \token{\lstinline+\{x: 1, y: 0\}+} & {\em Record values}\\
+\end{tabular}
+\section*{Types}
+The Whiley programming language is {\em statically typed}, meaning that every expression has a type determined at compile time.  Furthermore, evaluating an expression is guaranteed to yield a value of its type.\\\\ 
+\begin{tabular}{l r}
+\token{\lstinline+null+} \token{\lstinline+bool+} \token{\lstinline+int+} \token{\lstinline+real+} \token{\lstinline+string+} & {\em Primitive types}\\
+\token{\lstinline+(int,int)+} \token{\lstinline+(int,null,bool)+} & {\em Tuple types}\\
+\token{\lstinline+[int]+} \token{\lstinline+[[bool]]+} \token{\lstinline+[int|null]+} & {\em List types}\\
+\token{\lstinline+\{bool f\}+} \token{\lstinline+\{int len, [int] is\}+} & {\em Record types}\\
+\end{tabular}
+
+\section*{Expressions}
+The majority of work performed by a Whiley program is through the execution of {\em expressions}.  Every expression produces a value and may have additional side effects.\\\\
+\begin{tabular}{l r}
+\token{\lstinline|x + 1|} \token{\lstinline|2 * y|} \token{\lstinline|z - 1|} \token{\lstinline|(x + y)/2|}& {\em Arithmetic}\\
+\token{\lstinline|x < y|} \token{\lstinline|0 >= z|} \token{\lstinline|x == y|} \token{\lstinline|x != y|}& {\em Comparisons}\\
+\token{\lstinline+!x+} \token{\lstinline+x&&y+} \token{\lstinline+x||y+} \token{\lstinline+x==>y+} \token{\lstinline+x<==>y+} & {\em Boolean}\\
+\token{\lstinline+|ls|+} \token{\lstinline+ls[0]+} \token{\lstinline|xs++ys|} \token{\lstinline|xs++[1]|} & {\em Lists}\\
+\token{\lstinline|[1,x+y]|} \token{\lstinline+x in xs+} & \\
+\token{\lstinline|\{x: 1+y\}|} \token{\lstinline+xr.f+} \token{\lstinline+xr.f.g+} & {\em Records}\\
+\token{\lstinline+all \{ x in xs | x >= 0 \}+}& {\em Quantifiers}\\
+\token{\lstinline+no \{ x in xs | x < 0 \}+}& \\
+\token{\lstinline+some \{ x in xs | x >= 0 \}+}&\\
+\token{\lstinline+x is null+} \token{\lstinline+x is int+} & {\em Type Tests}
+\end{tabular}
+
+\section*{Statements}
+The execution of a Whiley program is controlled by {\em statements}, which cause effects on the environment.  Statements in Whiley do not produce values.  Compound statements may contain other statements.\\\\
+\begin{tabular}{lr}
+\begin{minipage}[t]{2cm}
+\begin{lstlisting}
+if x < 0:
+   ...
+...
+\end{lstlisting}
+\end{minipage} 
+\hspace*{0.25cm}
+\begin{minipage}[t]{2.25cm}
+\begin{lstlisting}
+if x < 0:
+   ...
+else:
+   ...
+\end{lstlisting}
+\end{minipage}
+\hspace*{0.25cm}
+\begin{minipage}[t]{3cm}
+\begin{lstlisting}
+if x < 0:
+   ...
+else if x > 0:
+   ...
+else:
+   ...
+\end{lstlisting}
+\end{minipage}\\
+\begin{minipage}[t]{2.75cm}
+\begin{lstlisting}
+while x < 0:
+   ...
+...
+\end{lstlisting}
+\end{minipage}
+\hspace*{0.2cm}
+\begin{minipage}[t]{2.5cm}
+\begin{lstlisting}
+do:
+   ...
+while x < 0
+...
+\end{lstlisting}
+\end{minipage}
+\hspace*{0.2cm}
+\begin{minipage}[t]{2.75cm}
+\begin{lstlisting}
+for x in xs:
+   ...
+...
+\end{lstlisting}
+\end{minipage}\\
+
+\begin{minipage}[t]{3cm}
+\begin{lstlisting}
+assert x >= 0
+\end{lstlisting}
+\end{minipage}
+\hspace*{0.25cm}
+\begin{minipage}[t]{3cm}
+\begin{lstlisting}
+assume x >= 0
+\end{lstlisting}
+\end{minipage}
+\\
+
+\begin{minipage}[t]{3.75cm}
+\begin{lstlisting}
+switch x:
+   case 1:
+       x = x + 1
+   case 2,3
+       x = x - 1
+...
+\end{lstlisting}
+\end{minipage}\\
+
+
+\end{tabular}
+\newpage
+\section*{Declarations}
+A {\em declaration} declares a named entity within a Whiley source file.  The declaration may refer to named entities in this or other source files and (in some cases) may {\em recursively} refer to itself.
+
+\begin{lstlisting}
+constant PI is 3.1459265359
+\end{lstlisting}
+
+\begin{lstlisting}
+type Point is { int x, int y }
+\end{lstlisting}
+
+\begin{lstlisting}
+type Link is { LinkedList next, int data }
+type LinkedList is null | Link
+\end{lstlisting}
+
+\begin{lstlisting}
+function find([int] xs, int x) => int:
+   ...
+\end{lstlisting}
+
+\begin{lstlisting}
+method main(System.Console console):
+   console.out.println("Hello World")
+\end{lstlisting}
+
+\section*{Specifications}
+
+A {\em precondition} is a condition over the parameters of a function
+that is required to be true when the function is called.  A {\em
+  postcondition} is a condition over the return values of a function
+which is required to be true after the function is called.
+
+\begin{lstlisting}
+function decrement(int x) => (int y) 
+// Parameter x must be greater than zero
+requires x > 0
+// Return must be greater or equal to zero
+ensures y >= 0:
+    //
+    return x - 1
+\end{lstlisting}
+
+A {\em data-type invariant} is a constraint on the values of a
+declared type which must be true for any instance of it.
+
+\begin{lstlisting}
+type nat is (int n) where n >= 0
+type pos is (int p) where p > 0
+\end{lstlisting}
+
+A {\em loop invariant} is a property which holds before and after each
+iteration of the loop, such that: {\bf (1)} the loop invariant must hold on
+entry to the loop; {\bf (2)} assuming the loop invariant holds at the start of
+the loop body (along with the condition), it must hold at the end; {\bf (3)}
+the loop invariant (along with the negated condition) can be assumed
+to hold immediately after the loop.
+\begin{lstlisting}
+ ...
+ int i = 0
+ while i < x where i > 0:
+     i = i + 1 
+ ...
+\end{lstlisting}
+
+
+\section*{Examples}
+
+\end{document}
+
