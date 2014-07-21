@@ -344,6 +344,7 @@ entry to the loop; {\bf (2)} assuming the loop invariant holds at the start of
 the loop body (along with the condition), it must hold at the end; {\bf (3)}
 the loop invariant (along with the negated condition) can be assumed
 to hold immediately after the loop.
+\newline
 \begin{lstlisting}
  ...
  int i = 0
@@ -355,18 +356,23 @@ to hold immediately after the loop.
 
 \section*{Examples}
 
+The following function computes the maximum value of two integer parameters.
+
+\lstinputlisting{../examples/max.whiley}
+
 The following function uses a \lstinline{break} to exit a \lstinline{while} loop when the first element matching parameter \lstinline{x} is found.  
-\begin{lstlisting}
-// Remove lowest element holding x from xs
-function remove([int] xs, int x) => [int]:
-    int i = 0
-    while i < |xs|:
-        if xs[i] == x:
-           break
-        else:
-           i = i + 1
-    return xs[0..i] ++ xs[i+1..]
-\end{lstlisting}
+
+\lstinputlisting{../examples/remove.whiley}
+
+The following function computes the length of a linked list.  
+
+\lstinputlisting{../examples/list.whiley}
+
+The following function reverses the values in a list of integers.
+
+\lstinputlisting{../examples/reverse.whiley}
+
+
 
 \end{document}
 
