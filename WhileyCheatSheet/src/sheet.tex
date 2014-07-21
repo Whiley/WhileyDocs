@@ -30,6 +30,7 @@
 The Whiley programming language is {\em statically typed}, meaning that every expression has a type determined at compile time.  Furthermore, evaluating an expression is guaranteed to yield a value of its type.\\\\ 
 \begin{tabular}{l r}
 \token{\lstinline+null+} \token{\lstinline+bool+} \token{\lstinline+int+} \token{\lstinline+real+} \token{\lstinline+string+} & {\em Primitive types}\\
+\token{\lstinline+int|null+} \token{\lstinline+bool|int|real+} & {\em Union types}\\
 \token{\lstinline+(int,int)+} \token{\lstinline+(int,null,bool)+} & {\em Tuple types}\\
 \token{\lstinline+[int]+} \token{\lstinline+[[bool]]+} \token{\lstinline+[int|null]+} & {\em List types}\\
 \token{\lstinline+\{bool f\}+} \token{\lstinline+\{int len, [int] is\}+} & {\em Record types}\\
@@ -41,6 +42,7 @@ The majority of work performed by a Whiley program is through the execution of {
 \token{\lstinline|x + 1|} \token{\lstinline|2 * y|} \token{\lstinline|z - 1|} \token{\lstinline|(x + y)/2|}& {\em Arithmetic}\\
 \token{\lstinline|x < y|} \token{\lstinline|0 >= z|} \token{\lstinline|x == y|} \token{\lstinline|x != y|}& {\em Comparisons}\\
 \token{\lstinline+!x+} \token{\lstinline+x&&y+} \token{\lstinline+x||y+} \token{\lstinline+x==>y+} \token{\lstinline+x<==>y+} & {\em Boolean}\\
+\token{\lstinline+0..2+}, \token{\lstinline+x..y+}  & {\em Ranges}\\
 \token{\lstinline+|ls|+} \token{\lstinline+ls[0]+} \token{\lstinline|xs++ys|} \token{\lstinline|xs++[1]|} & {\em Lists}\\
 \token{\lstinline|[1,x+y]|} \token{\lstinline+x in xs+} & \\
 \token{\lstinline|\{x: 1+y\}|} \token{\lstinline+xr.f+} \token{\lstinline+xr.f.g+} & {\em Records}\\
@@ -53,7 +55,50 @@ The majority of work performed by a Whiley program is through the execution of {
 \section*{Statements}
 The execution of a Whiley program is controlled by {\em statements}, which cause effects on the environment.  Statements in Whiley do not produce values.  Compound statements may contain other statements.\\\\
 \begin{tabular}{lr}
+\begin{minipage}[t]{2.25cm}
+\begin{lstlisting}
+x = x + y
+\end{lstlisting}
+\end{minipage}
+\hspace*{0.25cm}
+\begin{minipage}[t]{2.25cm}
+\begin{lstlisting}
+xs[0] = 1
+\end{lstlisting}
+\end{minipage}
+\hspace*{0.25cm}
 \begin{minipage}[t]{2cm}
+\begin{lstlisting}
+r.f = 3
+\end{lstlisting}
+\end{minipage}\\
+
+
+\begin{minipage}[t]{3cm}
+\begin{lstlisting}
+return x + 3
+\end{lstlisting}
+\end{minipage}
+\hspace*{0.25cm}
+\begin{minipage}[t]{1.75cm}
+\begin{lstlisting}
+break
+\end{lstlisting}
+\end{minipage}\\
+
+\begin{minipage}[t]{3cm}
+\begin{lstlisting}
+assert x >= 0
+\end{lstlisting}
+\end{minipage}
+\hspace*{0.25cm}
+\begin{minipage}[t]{3cm}
+\begin{lstlisting}
+assume x >= 0
+\end{lstlisting}
+\end{minipage}
+\\
+\begin{minipage}[t]{2.7cm}
 \begin{lstlisting}
 if x < 0:
    ...
@@ -104,19 +149,6 @@ for x in xs:
 ...
 \end{lstlisting}
 \end{minipage}\\
-
-\begin{minipage}[t]{3cm}
-\begin{lstlisting}
-assert x >= 0
-\end{lstlisting}
-\end{minipage}
-\hspace*{0.25cm}
-\begin{minipage}[t]{3cm}
-\begin{lstlisting}
-assume x >= 0
-\end{lstlisting}
-\end{minipage}
-\\
 
 \begin{minipage}[t]{3.75cm}
 \begin{lstlisting}
@@ -170,7 +202,9 @@ function decrement(int x) => (int y)
 // Parameter x must be greater than zero
 requires x > 0
 // Return must be greater or equal to zero
-ensures y >= 0:
+ensures y >= 0
+// Return must be less than input
+ensures y > x:
     //
     return x - 1
 \end{lstlisting}
