@@ -1,43 +1,102 @@
 \chapter{Error Messages}
 
-\section{Cyclic Constant Declaration}
-\section{INVALID_CONSTANT_AS_TYPE}
-\section{INVALID_FUNCTION_OR_METHOD_AS_TYPE}
-\section{INVALID_CONSTANT_EXPRESSION}
-\section{INVALID_BOOLEAN_EXPRESSION}
-\section{INVALID_NUMERIC_EXPRESSION}
-\section{INVALID_UNARY_EXPRESSION}
-\section{INVALID_BINARY_EXPRESSION}
-\section{INVALID_LIST_EXPRESSION}
-\section{INVALID_SET_EXPRESSION}
-\section{INVALID_SET_OR_LIST_EXPRESSION}
-\section{INVALID_MAP_EXPRESSION}
-\section{INVALID_LVAL_EXPRESSION}
-\section{INVALID_DESTRUCTURE_EXPRESSION}
-\section{INVALID_TUPLE_LVAL}
-\section{INVALID_MODULE_ACCESS}
-\section{INVALID_PACKAGE_ACCESS}
-\section{BREAK_OUTSIDE_LOOP}
-\section{RESOLUTION_ERROR}
-\section{AMBIGUOUS_VARIABLE}
-\section{UNKNOWN_VARIABLE}
-\section{UNKNOWN_FUNCTION_OR_METHOD}
-\section{VARIABLE_POSSIBLY_UNITIALISED}
-\section{VARIABLE_ALREADY_DEFINED}
-\section{DUPLICATE_DEFAULT_LABEL}
-\section{DUPLICATE_CASE_LABEL}
-\section{DEAD_CODE}
-\section{UNREACHABLE_CODE}
-\section{REFERENCE_NOT_PERMITTED_IN_FUNCTION}
-\section{METHODCALL_NOT_PERMITTED_IN_FUNCTION}
-\section{REFERENCE_ACCESS_NOT_PERMITTED_IN_FUNCTION}
-\section{SUBTYPE_ERROR}
-\section{INCOMPARABLE_OPERANDS}
-\section{RECORD_TYPE_REQUIRED}
-\section{RECORD_MISSING_FIELD}
-\section{RETURN_FROM_VOID}
-\section{MISSING_RETURN_VALUE}
-\section{BRANCH_ALWAYS_TAKEN}
-\section{AMBIGUOUS_COERCION}
-\section{MUST_DECLARE_THROWN_EXCEPTION}
+\section{Parse Errors}
+
+\section{Declarations}
+
+\subsection{``Cyclic Constant Declaration'' (301)}
+
+A {\em cyclic constant declaration} occurs when a \gls{constant_declaration} refers to itself, either {\em directly} or {\em indirectly}.  This is an error because constants must be evaluated at \gls{compile_time}.
+
+\paragraph{Example.}  The following illustrates several cyclic constant declarations:
+
+\begin{lstlisting}
+constant const1 is 1 + const1
+
+constant const2 is 1 + const3
+constant const3 is 1 + const2
+\end{lstlisting}
+Here, all three constant declarations are cyclic.  The declaration for \lstinline{const1} has a {\em direct} cycle, because its definition refers to itself.  The declaration for \lstinline{const2} has an indirect cycle, because its definition refers to \lstinline{const3} which, in turn, refers back to \lstinline{const2}.
+
+\subsection{``Invalid Constant As Type'' (302)}
+
+\subsection{``Invalid Function or Method as Type'' (303)}
+
+\section{Expressions}
+\subsection{``Invalid Constant Expression'' (000)}
+
+\subsection{``Invalid Boolean Expression'' (000)}
+
+\subsection{``Invalid Numeric Expression'' (000)}
+
+\subsection{``Invalid Unary Expression'' (000)}
+
+\subsection{``Invalid Binary Expression'' (000)}
+
+\subsection{``Invalid List Expression'' (000)}
+
+\subsection{``Invalid Set Expression'' (000)}
+
+\subsection{``Invalid Map Exprssion'' (000)}
+
+\subsection{``Invalid Set or List Exprssion'' (000)}
+
+\subsection{``Invalid Destructure Expression'' (000)}
+
+\subsection{``Invalid Module Access'' (000)}
+
+\subsection{``Invalid Package Access'' (000)}
+
+\subsection{``Resolution Error'' (000)}
+
+\subsection{``Variable Possibly Uninitialised'' (000)}
+
+\subsection{``Ambiguous Coercion'' (000)}
+
+
+\section{Control Flow (000)}
+
+\subsection{``Invalid LVal'' (000)}
+
+\subsection{``Invalid Tuple LVal'' (000)}
+
+\subsection{``Break Outside of Loop'' (000)}
+
+\subsection{``Ambiguous Variable'' (000)}
+
+\subsection{``Unknown Variable'' (000)}
+
+\subsection{``Unknown Function or Method'' (000)}
+
+\subsection{``Variable Already Defined'' (000)}
+
+\subsection{``Duplicate Default Label'' (000)}
+
+\subsection{``Duplicate Case Label'' (000)}
+
+\subsection{``Dead Code'' (000)}
+
+\subsection{``Unreachable Code'' (000)}
+
+\subsection{``Missing Return Value'' (000)}
+
+\subsection{``Branch Always Taken'' (000)}
+
+\section{Functions (000)}
+
+\subsection{``Reference Not Permitted in Function'' (000)}
+
+\subsection{``Method Invocation Not Permitted In Function'' (000)}
+
+\subsection{``Reference Access Not Permitted in Function'' (000)}
+
+\subsection{``Must Declare Thrown Exception'' (000)}
+
+\subsection{``Return from Void'' (000)}
 	
+\section{Types (000)}
+\subsection{``Subtype Error'' (000)}
+\subsection{``Incomparable Operands'' (000)}
+\subsection{``Record Type Required'' (000)}
+\subsection{``Record Missing Field'' (000)}
+
