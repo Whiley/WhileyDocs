@@ -18,30 +18,7 @@ constant const3 is 1 + const2
 \end{lstlisting}
 Here, all three constant declarations are cyclic.  The declaration for \lstinline{const1} has a {\em direct} cycle, because its definition refers to itself.  The declaration for \lstinline{const2} has an indirect cycle, because its definition refers to \lstinline{const3} which, in turn, refers back to \lstinline{const2}.
 
-\subsection{``Invalid Constant As Type'' (302)}
-
-\subsection{``Invalid Function or Method as Type'' (303)}
-
 \section{Expressions}
-\subsection{``Invalid Constant Expression'' (000)}
-
-\subsection{``Invalid Boolean Expression'' (000)}
-
-\subsection{``Invalid Numeric Expression'' (000)}
-
-\subsection{``Invalid Unary Expression'' (000)}
-
-\subsection{``Invalid Binary Expression'' (000)}
-
-\subsection{``Invalid List Expression'' (000)}
-
-\subsection{``Invalid Set Expression'' (000)}
-
-\subsection{``Invalid Map Exprssion'' (000)}
-
-\subsection{``Invalid Set or List Exprssion'' (000)}
-
-\subsection{``Invalid Destructure Expression'' (000)}
 
 \subsection{``Invalid Module Access'' (000)}
 
@@ -61,8 +38,6 @@ Here, all three constant declarations are cyclic.  The declaration for \lstinlin
 \subsection{``Invalid Tuple LVal'' (000)}
 
 \subsection{``Break Outside of Loop'' (000)}
-
-\subsection{``Ambiguous Variable'' (000)}
 
 \subsection{``Unknown Variable'' (000)}
 
@@ -95,8 +70,12 @@ Here, all three constant declarations are cyclic.  The declaration for \lstinlin
 \subsection{``Return from Void'' (000)}
 	
 \section{Types (000)}
+
 \subsection{``Subtype Error'' (000)}
+
 \subsection{``Incomparable Operands'' (000)}
+
 \subsection{``Record Type Required'' (000)}
+
 \subsection{``Record Missing Field'' (000)}
 
