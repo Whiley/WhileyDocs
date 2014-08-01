@@ -8,7 +8,7 @@ ensures r >= 0 ==> xs[r] == x:
     int i = 0
     int last = -1
     //
-    while i < |xs|:        
+    while i < |xs| where i >= 0 && last >= -1 && last < |xs| && (last >= 0 ==> xs[last] == x):        
         if xs[i] == x:
             last = i
         i = i + 1
