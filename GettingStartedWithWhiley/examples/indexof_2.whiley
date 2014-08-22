@@ -6,7 +6,7 @@ ensures i is null ==> no { x in items | x == item }
 // If return is an int i, then no index j where j $<$ i and items[j] == item
 ensures i is int ==> no { j in 0 .. i | items[j] == item }:
     //
-    i = 0
+    int i = 0
     while i < |items|:
        if items[i] == item:
            return i 

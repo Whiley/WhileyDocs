@@ -31,14 +31,9 @@ characters, etc.  Of these, the most commonly used are:
 
 \noindent A very simple example which illustrates the \lstinline{int} and
 \lstinline{bool} types is the following:
-\begin{lstlisting}
-function isLessThan(int x, int y) => bool:
-    //
-    if x < y:
-        return true
-    else:
-        return false
-\end{lstlisting}
+
+\lstinputlisting{../examples/walkthrough_1.whiley}
+
 This declares a simple function which returns \lstinline{true} if the
 first parameter, \lstinline{x}, is less than the second,
 \lstinline{y}, and \lstinline{false} otherwise.
@@ -81,13 +76,9 @@ values which cannot be represented using \lstinline{float}
 Like many modern programming languages, Whiley provides built-in types
 for representing collections.  The following illustrates a short
 function which multiplies a vector by a scalar:
-\begin{lstlisting}
-function vectorMultiply([real] vector, real scalar) => [real]:
-    //
-    for i in 0 .. |vector|:
-        vector[i] = vector[i] * scalar
-    return vector
-\end{lstlisting}
+
+\lstinputlisting{../examples/walkthrough_2.whiley}
+
 This illustrates a few of the common collection operations.  Firstly,
 the size of a collection is obtained using the {\em length} operator
 (i.e. \lstinline{|vector|} returns the length of \lstinline{vector}).
@@ -115,65 +106,30 @@ supported in Whiley are:
 All collection kinds can be iterated using the built-in
 \lstinline{for} loop construct.  For example, here is a function to iterate a map looking for a particular value:
 
-\begin{lstlisting}
-// Return the set of all keys which map to a given value
-function keysOf({int=>string} map, string value) => {string}:
-    //
-    {string} result = {} // initialise result with empty set
-    for k,v in map:      // loop over every key,value pair in map
-        if v == value:
-            result = result + {k} // add matching keys to result set
-    // return result
-    return result
-\end{lstlisting}
+\lstinputlisting{../examples/walkthrough_3.whiley}
 
 \noindent This function iterates over each key$\times$value pair (i.e. \lstinline{k,v}) in a from integers to strings (i.e. \lstinline|{int=>string}|) using the \lstinline{for} statement.
 
 \subsection{Records and Tuples}
 Aside from collection types, Whiley also allows provides {\em records} and {\em tuples} for grouping items together.  Records are similar to \lstinline{struct}s (as found in C) and objects (as found in JavaScript).  A record is constructed from one or more {\em fields}, each of which has a unique name and type.  For example, the following defines a simple record type for representing 2D points and a function for translating their position:
-\begin{lstlisting}
-// A point has two integer fields named x and y
-type Point is {int x, int y}
 
-// Translate a given point by an x and y delta
-function translate(Point p, int dx, int dy) => Point:
-    return { 
-      x: p.x + dx, // new x value is old value plus dx
-      y: p.y + dy  // new y value is old value plus dy
-    }
-\end{lstlisting}
+\lstinputlisting{../examples/walkthrough_4.whiley}
+
 Here, a {\em user-defined type} named \lstinline{Point} has been defined.  This is a record type containing two \lstinline{int} fields, \lstinline{x} and \lstinline{y}.  In the \lstinline{translate()} function, a {\em record literal} is used to construct a new \lstinline{Point} to be returned.
 
 Records are an important mechanism for giving meaning to data in Whiley.  For example, consider the following declaration of a rectangle:
 
-\begin{lstlisting}
-// A rectangle has a position, and a width and height
-type Rectangle is {
-  Point position, // position of top-left corner
-  int width,      // width of the rectangle
-  int height      // height of the rectangle
-}
-\end{lstlisting}
+\lstinputlisting{../examples/walkthrough_5.whiley}
 
 Here, we see that a rectangle has a position, a width and a height.  The names of the fields are important for conveying their meaning in the real-world.
 
 Sometimes, using a record type is a little more than necessary because the data being described is really quite simple.  In such cases we can use a {\em tuple} in Whiley, which provide a lightweight mechanism for grouping data.  For example, we might consider that using a record to defined our \lstinline{Point} is a little verbose.  Instead, we could rework the example to use a tuple as follows:
 
-\begin{lstlisting}
-// A point has two integer components; the first represents x, the second represents y.
-type Point is (int,int)
-
-// Translate a given point by an x and y delta
-function translate(Point p, int dx, int dy) => Point:
-    return p.x+dx, p.y+dy
-\end{lstlisting}
+\lstinputlisting{../examples/walkthrough_6.whiley}
 
 Since there is a widely used notation for describing 2D points --- namely $(x,y)$ --- it makes sense in this case to use a tuple over a record.  Tuples are also useful for describing functions which return multiple values.  For example, the following illustrates a simple function which swaps the order of its parameters:
 
-\begin{lstlisting}
-function swap(int x, int y) => (int, int):
-    return y, x
-\end{lstlisting}
+\lstinputlisting{../examples/walkthrough_7.whiley}
 
 Here, we see that the return type is a tuple and this provides a convenient and lightweight mechanism for returning multiple values.  Following on from this, Tuple types in Whiley also supports {\em destructuring syntax} (e.g. as found in Python).  The following example illustrates this:
 
@@ -191,15 +147,6 @@ Here, we see that variables \lstinline{x} and \lstinline{y} are assigned their r
 
 \marginpar{Encodings?}Like most programming languages, Whiley provides explicit support for dealing with strings and characters.  This is achieved through the \lstinline{char} and \lstinline{string} data types.  Here, \lstinline{char} represents unicode characters, whilst \lstinline{string} is a list of \lstinline{char}s and supports all list operations (recall~\S\ref{walkthrough_collections}).  Here's a simple example illustrating the well-known \lstinline{replace()} function:
 
-\begin{lstlisting}
-function replace(string str, char old, char n) => string:
-    //
-    int i = 0
-    while i < |str|:
-        if str[i] == old:
-            str[i] = n
-        i = i + 1
-    return str    
-\end{lstlisting}
+\lstinputlisting{../examples/walkthrough_8.whiley}
 
 This function simply iterates through the elements of a string replacing every occurrence of the character \lstinline{old} with the character \lstinline{n}.

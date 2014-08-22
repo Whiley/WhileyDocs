@@ -4,11 +4,67 @@
   <target name="compile">
     <echo message="COMPILING: ${name}"/>
     <echo message="==================================="/>
-    <wyjc verification="${verification}" verbose="false" whileydir="." whileypath="${wyrt.jar}" includes="**/*.whiley"/>
+    <wyjc verification="${verification}" verbose="false" whileydir="." whileypath="${wyrt.jar}" includes="**/${name}"/>
   </target>
 
   <target name="compileAll">
 
+    <!-- ======================================== -->
+    <!-- Chapter: Introduction -->
+    <!-- ======================================== -->
+
+    <antcall target="compile">
+      <param name="name" value="introduction_1.whiley"/>
+      <param name="verification" value="false"/>
+    </antcall>
+
+    <!-- ======================================== -->
+    <!-- Chapter: Walkthrough -->
+    <!-- ======================================== -->
+
+    <antcall target="compile">
+      <param name="name" value="walkthrough_1.whiley"/>
+      <param name="verification" value="false"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="walkthrough_2.whiley"/>
+      <param name="verification" value="false"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="walkthrough_3.whiley"/>
+      <param name="verification" value="false"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="walkthrough_4.whiley"/>
+      <param name="verification" value="false"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="walkthrough_5.whiley"/>
+      <param name="verification" value="false"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="walkthrough_6.whiley"/>
+      <param name="verification" value="false"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="walkthrough_7.whiley"/>
+      <param name="verification" value="false"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="walkthrough_8.whiley"/>
+      <param name="verification" value="false"/>
+    </antcall>
+
+
+    <!-- ======================================== -->
+    <!-- Chapter: IndexOf -->
     <!-- ======================================== -->
 
     <antcall target="compile">
@@ -18,7 +74,7 @@
 
     <antcall target="compile">
       <param name="name" value="indexof_2.whiley"/>
-      <param name="verification" value="true"/>
+      <param name="verification" value="false"/>
     </antcall>
 
   </target>
