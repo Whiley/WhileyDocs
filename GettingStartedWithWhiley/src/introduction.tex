@@ -7,18 +7,7 @@ which are then checked by the compiler.  For example, here is the
 specification for the \lstinline{max()} function which returns the
 maximum of two integers:
 
-\begin{lstlisting}
-function max(int x, int y) => (int z)
-// must return either x or y
-ensures x == z || y == z
-// return must be as large as x and y
-ensures x <= z && y <= z:
-    // implementation
-    if x > y:
-        return x
-    else:
-        return y
-\end{lstlisting}
+\lstinputlisting{../examples/introduction_1.whiley}
 
 Here, we see our first piece of Whiley code.  This declares a function
 called \lstinline{max} which accepts two integers \lstinline{x} and
