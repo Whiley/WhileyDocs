@@ -15,22 +15,8 @@ To make this work, Whiley employs {\em union types}~\cite{BC91,IN07} along with 
 following example illustrates how this works (where the body of
 \lstinline{indexOf()} is left out for brevity):
 
-\begin{lstlisting}
- function indexOf(string str, char c) => null|int:
-    ...
+\lstinputlisting{../examples/typing_1.whiley}
 
- function split(string str, char c) => [string]:
-    var idx = indexOf(str,c)
-    // idx has type null$|$int
-    if idx is int:
-        // idx now has type int
-        string below = str[0..idx]
-        string above = str[idx..]
-        return [below,above]
-    else:
-        // idx now has type null
-        return [str] // no occurrence
-\end{lstlisting}
 Here, \lstinline{indexOf()} returns the first index of a character in
 the string, or \lstinline{null} if there is none.  The type
 \lstinline{null|int} is a {\em union type}, meaning it is either an
@@ -81,23 +67,9 @@ as required in many languages).
 To represent tree-like structures, Whiley provides {\em recursive
   types} which are similar to the algebraic data types found in
 functional languages (e.g. Haskell, ML, etc).  For example:
-\begin{lstlisting}
-// A linked list is either the empty list or a link
-type LinkedList is EmptyList | Link
 
-// The empty list contains no links
-type EmptyList is null
+\lstinputlisting{../examples/typing_2.whiley}
 
-// A single link in a linked list
-type Link is {int data, LinkedList next}
-
-// Return the length of a linked list (i.e. the number of links it contains)
-function length(LinkedList l) => int:
-  if l is null:    
-    return 0 // l now has type null
-  else:    
-    return 1 + length(l.next) // l now has type \{int data, LinkedList next\}
-\end{lstlisting}
 Here, \lstinline{LinkedList} is a recursive type representing a linked
 list (i.e. a sequence of zero or more links).  The empty list is
 defined as \lstinline{null}, whilst each link contains a
@@ -132,16 +104,7 @@ for recursive data types.  This means that two otherwise identical
 types with different names are considered distinct and, for example, a
 variable of one type cannot flow into the other.  In contrast, Whiley employs {\em structural typing} of records~\cite{Card88} to give greater flexibility.  This means that the name of a type is, generally speaking, unimportant.  Instead, identical types (i.e. those with identical {\em structure}) with different names are still considered identical in Whiley.  For example:
 
-\begin{lstlisting}
-// Define the notion of a "rectangle"
-type Rectangle is { int x, int y, int width, int height }
-// Define the notion of a "bounding box"
-type BoundingBox is { int x, int y, int width, int height }
-
-// Define a function for computing the area of a rectangle
-function area(Rectangle rect) => int:
-    return rect.width * rect.height
-\end{lstlisting}
+\lstinputlisting{../examples/typing_3.whiley}
 
 In this example, the types \lstinline{Rectangle} and \lstinline{BoundingBox} are {\em identical} and can be used interchangeably.  For example, if we have a variable of type \lstinline{BoundingBox}, we can safely pass it to the \lstinline{area()} function above to compute its area.
 
@@ -158,30 +121,17 @@ The Java programming language attempts to enforce a requirement that implicit co
 \end{insight}
 
 To address the issues surrounding implicit coercions, Whiley only permits implicit coercions which are lossless.  That is, which do not result in a loss of information.  In contrast, {\em lossy} coercions require an explicit cast be used to ``force'' the coercion.  The following example illustrates:
-\begin{lstlisting}
-type Link is {int data, LinkedList next}
-type LinkedList is null | Link
-type OrderedList is null | {
-  int data, int order, OrderedList next
-}
-\end{lstlisting}
+
+\lstinputlisting{../examples/typing_4.whiley}
+
 Here, we have defined a standard linked list and a specialised
 ``ordered'' list.  The intuition is that \lstinline{order < next.order} for each node in an \lstinline{OrderedList} (although the details of how this is done are unimportant here).   These two types are not considered identical because they have different structure (i.e. \lstinline{OrderedList} has an additional field, \lstinline{order}).  However, there is still a subtyping relationship between them (i.e. \lstinline{OrderedList} subtypes \lstinline{LinkedList}).  Thus, an instance of \lstinline{OrderedList} can be used where a \lstinline{LinkedList} was expected.  For example:
 
-\begin{lstlisting}
-function sum(LinkedList l) => int:
-    if l is null:
-        return 0
-    else:
-        return l.data + sum(l.next)
-\end{lstlisting}
+\lstinputlisting{../examples/typing_5.whiley}
 
 This defines a simple recursive function for computing the sum of the elements of a \lstinline{LinkedList}.  Instances of \lstinline{OrderedList} can be passed into this function by {\em coercing} them to instances of \lstinline{LinkedList}:
 
-\begin{lstlisting}
-function sum(OrderedList l) => int:
-    return sum((LinkedList) l)
-\end{lstlisting}
+\lstinputlisting{../examples/typing_6.whiley}
 
 Here, we have used an explicit coercion (i.e. a cast) from \lstinline{OrderedList} to \lstinline{LinkedList}.  This must be done explicitly because the coercion is lossy because the field \lstinline{order} is discarded during the coercion.
 
@@ -195,25 +145,7 @@ An important concept in many modern programming languages is that of {\em subtyp
 
 The most common form of subtyping in Whiley is through the use of union types.  Indeed, we have encountered this already.  The following illustrates a very simple example:
 
-\begin{lstlisting}
-// A circle is defined by its position and radius
-type Circle is { int x, int y, int radius }
-
-// A rectangle is defined by its position and dimensions
-type Rectangle is { int x, int y, int width, int height }
-
-// A shape is either a circle or a rectangle
-type Shape is Circle | Rectangle
-
-// Determine the area of a shape
-function area(Shape s) => real:
-   if s is Rectangle:
-      // case for rectangle
-      return s.width * s.height
-   else:
-      // case for circle
-      return Math.PI * s.radius * s.radius   
-\end{lstlisting}
+\lstinputlisting{../examples/typing_7.whiley}
 
 Here, we see that a \lstinline{Shape} is either a \lstinline{Rectangle} or \lstinline{Circle}.  We say that \lstinline{Rectangle} and \lstinline{Circle} are subtypes of \lstinline{Shape}.  The Whiley compiler knows that there are only two possibilities and, hence, automatically retypes variable \lstinline{s} to \lstinline{Circle} on the false branch.
 
@@ -223,17 +155,7 @@ A useful analogy to help understanding the concept of a subtype is that of a {\e
 
 Another situation where subtyping occurs in Whiley is with the types \lstinline{any} and \lstinline{void}.  Specifically, every type is a subtype of \lstinline{any}, whilst every type is a {\em supertype} of \lstinline{void}.  To understand this, consider the following:
 
-\begin{lstlisting}
-function toInteger(Any x) => int:
-    if x is int:
-        return x
-    else if x is real:
-        return Math.round(x)
-    else if x is [any]:
-        return |x|
-    else:
-        return 0 // default value
-\end{lstlisting}
+\lstinputlisting{../examples/typing_8.whiley}
 
 In this function, parameter \lstinline{x} can hold {\em any possible value on entry}.  It could be an integer, a real, a list, a set, a record, etc.  In this case, we have picked a few examples which we can easily convert into \lstinline{int} values.  Note that the type \lstinline{[any]} describes all possible lists, including e.g. instances of \lstinline{[int]}, \lstinline{[[int]]}, \lstinline{[char]}, etc.
 

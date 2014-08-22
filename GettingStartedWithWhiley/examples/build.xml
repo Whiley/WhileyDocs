@@ -62,6 +62,49 @@
       <param name="verification" value="false"/>
     </antcall>
 
+    <!-- ======================================== -->
+    <!-- Chapter: Typing -->
+    <!-- ======================================== -->
+
+    <antcall target="compile">
+      <param name="name" value="typing_1.whiley"/>
+      <param name="verification" value="false"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="typing_2.whiley"/>
+      <param name="verification" value="false"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="typing_3.whiley"/>
+      <param name="verification" value="false"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="typing_4.whiley"/>
+      <param name="verification" value="false"/>
+    </antcall>
+
+    <!--<antcall target="compile">
+      <param name="name" value="typing_5.whiley"/>
+      <param name="verification" value="false"/>
+    </antcall>-->
+
+    <!--<antcall target="compile">
+      <param name="name" value="typing_6.whiley"/>
+      <param name="verification" value="false"/>
+    </antcall>-->
+
+    <antcall target="compile">
+      <param name="name" value="typing_7.whiley"/>
+      <param name="verification" value="false"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="typing_8.whiley"/>
+      <param name="verification" value="false"/>
+    </antcall>
 
     <!-- ======================================== -->
     <!-- Chapter: IndexOf -->

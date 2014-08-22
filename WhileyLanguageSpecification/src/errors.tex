@@ -45,13 +45,73 @@ Here, all three constant declarations are cyclic.  The declaration for \lstinlin
 
 \subsection{``Variable Already Defined'' (000)}
 
+A {\em variable redefinition} occurs when a variable is declared with a name matching another variable already in scope.  This is an error because it is not permitted for one variable to shadow another.
+
+\paragraph{Example.}  The following illustrates an example of a variable redefinition:
+
+\begin{lstlisting}
+function add([int] xs, int v) => [int]:
+    for k,v in xs:
+        xs[k] = xs[k] + v
+    return xs
+\end{lstlisting}
+
+Here, the \lstinline{for} loop attempts to declare a variable \lstinline{v}, but another variable \lstinline{v} was already declared as a parameter.
+
 \subsection{``Duplicate Default Label'' (000)}
+A {\em duplicate default label} occurs when a \lstinline{switch} statement includes more than one \lstinline{default} label.  This is an error because at most one \lstinline{default} is permitted.
+
+\paragraph{Example.}  The following illustrates an example of a duplicate \lstinline{default} label:
+
+\begin{lstlisting}
+function f(int x):
+    switch x:
+        case 0:
+            return 0
+        default:
+            return 1
+        default:
+            return 2
+\end{lstlisting}
+
+Here, the \lstinline{switch} statement has two \lstinline{default} labels.  This must be an error as, otherwise, it would be ambiguous as to which executed.
 
 \subsection{``Duplicate Case Label'' (000)}
+A {\em duplicate case label} occurs when a \lstinline{switch} statement includes more than one \lstinline{case} label matching the same value.  This is an error because at most one \lstinline{case} matching a given value is permitted.
 
-\subsection{``Dead Code'' (000)}
+\paragraph{Example.}  The following illustrates an example of a duplicate \lstinline{case} label:
+
+\begin{lstlisting}
+function f(int x):
+    switch x:
+        case 0:
+            return 0
+        case 0,1:
+            return 1
+        default:
+            return 2
+\end{lstlisting}
+
+Here, the \lstinline{switch} statement has two \lstinline{case} labels, both of which match the value \lstinline{0}.  This must be an error as, otherwise, it would be ambiguous as to which executed.
 
 \subsection{``Unreachable Code'' (000)}
+
+In a function or method, {\em unreachable code} arises when no possible execution path could reach them.  
+
+\paragraph{Example.} The following illustrates some unreachable code:
+
+\begin{lstlisting}
+function abs(int x):
+    //
+    if x < 0:
+        return -x
+    else:
+        return x
+    //
+    return 0 // unreachable
+\end{lstlisting}
+
+Here, the final \lstinline{return} statement can never be reached by any execution path through the \lstinline{abs()} function.  This is considered an error because it indicates something undesirable which may not have been intended.
 
 \subsection{``Missing Return Value'' (000)}
 
