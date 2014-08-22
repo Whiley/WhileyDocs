@@ -86,10 +86,10 @@
       <param name="verification" value="false"/>
     </antcall>
 
-    <!--<antcall target="compile">
+    <antcall target="compile">
       <param name="name" value="typing_5.whiley"/>
       <param name="verification" value="false"/>
-    </antcall>-->
+    </antcall>
 
     <!--<antcall target="compile">
       <param name="name" value="typing_6.whiley"/>

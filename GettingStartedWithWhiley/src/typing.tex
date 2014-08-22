@@ -127,11 +127,11 @@ To address the issues surrounding implicit coercions, Whiley only permits implic
 Here, we have defined a standard linked list and a specialised
 ``ordered'' list.  The intuition is that \lstinline{order < next.order} for each node in an \lstinline{OrderedList} (although the details of how this is done are unimportant here).   These two types are not considered identical because they have different structure (i.e. \lstinline{OrderedList} has an additional field, \lstinline{order}).  However, there is still a subtyping relationship between them (i.e. \lstinline{OrderedList} subtypes \lstinline{LinkedList}).  Thus, an instance of \lstinline{OrderedList} can be used where a \lstinline{LinkedList} was expected.  For example:
 
-\lstinputlisting{../examples/typing_5.whiley}
+\lstinputlisting[firstline=4]{../examples/typing_5.whiley}
 
 This defines a simple recursive function for computing the sum of the elements of a \lstinline{LinkedList}.  Instances of \lstinline{OrderedList} can be passed into this function by {\em coercing} them to instances of \lstinline{LinkedList}:
 
-\lstinputlisting{../examples/typing_6.whiley}
+\lstinputlisting[firstline=4]{../examples/typing_6.whiley}
 
 Here, we have used an explicit coercion (i.e. a cast) from \lstinline{OrderedList} to \lstinline{LinkedList}.  This must be done explicitly because the coercion is lossy because the field \lstinline{order} is discarded during the coercion.
 
