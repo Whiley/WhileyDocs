@@ -1,4 +1,17 @@
 \chapter{Introduction}
+
+Introduce some classic historical bugs, and emphasis that we want to
+reduce these as much as possible.  There are lots of good examples,
+some of which are not coding failures but failures of understanding
+the requirements, etc.
+
+Numerous important software systems have failed due to program bugs. Historic examples include the Therac-25 disaster where a computer-operated X-ray machine gave lethal doses to patients, the 1988 worm which wreaked havoc on the internet by exploiting a buffer overrun, and the (unmanned) Ariane 5 rocket which exploded shortly after launch because of an integer overflow (see this video and this list for more).
+
+\section{Programming Languages}
+
+Modern programming languages, such as Java and C\#, eliminate fairly simple classes of error (so-called type errors) through the process of type checking; however, they cannot detect more complex problems, such as the potential for a divide-by-zero error. Type checking has been used for a long time in programming languages, historical examples of which include: ALGOL, Pascal, Modula-2, C, C++, Java, C\# and more.
+
+\section{Whiley}
 The Whiley programming language has been in active development since
 2009.  The language was designed specifically to help the programmer
 eliminate bugs from his/her software.  The key feature is that Whiley
