@@ -1,5 +1,5 @@
 \chapter{Specifying Functions and Data}
-In this chapter, we explore what it means to provide specifications for programs written in the Whiley Programming Language.  At this early stage, we are only concerned with getting the specification right, and not with determining whether our program actually meets its specification.
+In this chapter, we explore what it means to provide specifications for programs written in the Whiley Programming Language.  At this early stage, we are more concerned with how write specifications than with determining whether our programs meet their specifications.
 
 {\em Clarify that there are different levels of specification, ranging from the minimum to illustrate lack of runtime error to the complete specification that a function is correct.}
 
@@ -21,17 +21,7 @@ ensures y >= 0:
     //
     return x - 1
 \end{lstlisting}
-Here, the \lstinline{requires} and \lstinline{ensures} clauses define
-the function's precondition and postcondition.  With verification
-enabled, the Whiley compiler will verify that the
-implementation of this function meets its specification.  In fact, we
-can see this for ourselves by manually constructing an appropriate
-{\em verification condition} (that is, a logical condition whose truth
-establishes that the implementation meets its specification).  In this
-case, the appropriate verification condition is
- \lstinline{x > 0 ==> x-1 >= 0}.  Unfortunately, although constructing a verification
-condition by hand was possible in this case, in general it's difficult
-if not impossible for more complex functions.
+Here, the \lstinline{requires} and \lstinline{ensures} clauses define the function's precondition and postcondition.  Informally, we can see that this function does meet its specification.  Unfortunately, for larger programs it is very difficult to be sure that informal reasoning like this is correct.  In later chapters, we will see how the Whiley system can automatically check that a function or method meets its specifications for us.
 
 The Whiley compiler reasons about functions by exploring the different
 control-flow paths through their bodies.  Furthermore, as it learns

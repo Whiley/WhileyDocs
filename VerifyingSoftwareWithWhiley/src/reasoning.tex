@@ -1,11 +1,35 @@
-\chapter{Simple Reasoning}
+\chapter{Reasoning About Programs}
+In the previous Chapter, we learned how to write specifications for our programs in the form of pre-/post-conditions and invariants.  The purpose of this was to allow us to state more clearly what our programs are supposed to do.  An important step here lies in checking that our functions do indeed meet their specifications.  In general, this is a tricky and time consuming process.  Fortunately, the Whiley system takes much of the labour out of this process and can automatically that our programs meet their specifications.  
 
-Introduction to reasoning about a function in a forwards or backwards direction.  For forwards direction, need a staged approach where we eventually introduce the concept of a skolem.  Cover control-flow constructs upto, but not including loops.  This includes if-conditions, switch statements, function calls, array assignments, reference assignments, etc.  Also, introduce basic concept of a weakest precondition versus a strongest postcondition.  Introduce control-flow graph 
-and the path sensitive traversal?
+In this chapter, we begin the process of understanding how to check that our programs meet their specifications.  To this end, we consider two approaches: {\em forwards reasoning} and {\em backwards reasoning}.  Whilst neither of these is strictly better than the other, you will most likely find forward reasoning to be more natural.  Whilst this might seem to make backward reasoning redundant, we will find that it can still be very useful in Chapter~\ref{c_reasoning_loops}.  In this chapter, we will largely ignore functions which contains {\em loops} and/or are {\em recursive} because these constructs present additional challenges and will be discussed later in Chapters~\ref{c_reasoning_loops} and~\ref{c_reasoning_recursion}.  This does not mean the programs considered in this chapter are uninteresting and, indeed, they may still contain a range of important constructs, including: {\em if statements}, {\em switch statements}, {\em list assignments}, {\em indirect assignments}, etc.
+
+{\em Also, introduce basic concept of a weakest precondition versus a strongest postcondition.  Introduce control-flow graph and the path sensitive traversal?}
 
 \section{Functions}
 
-Begin with pre / post-conditions and return statements.
+
+As a very simple example, consider the following function which accepts a positive integer and returns a
+non-negative integer (i.e. a natural number):
+\begin{lstlisting}
+function decrement(int x) => (int y) 
+// Parameter x must be greater than zero
+requires x > 0
+// Return must be greater or equal to zero
+ensures y >= 0:
+    //
+    return x - 1
+\end{lstlisting}
+Here, the \lstinline{requires} and \lstinline{ensures} clauses define
+the function's precondition and postcondition.  With verification
+enabled, the Whiley compiler will verify that the
+implementation of this function meets its specification.  In fact, we
+can see this for ourselves by manually constructing an appropriate
+{\em verification condition} (that is, a logical condition whose truth
+establishes that the implementation meets its specification).  In this
+case, the appropriate verification condition is
+ \lstinline{x > 0 ==> x-1 >= 0}.  Unfortunately, although constructing a verification
+condition by hand was possible in this case, in general it's difficult
+if not impossible for more complex functions.
 
 \section{Assignments}
 
