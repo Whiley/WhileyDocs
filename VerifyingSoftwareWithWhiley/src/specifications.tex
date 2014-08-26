@@ -1,9 +1,13 @@
 \chapter{Specifying Functions and Data}
-In this chapter, we explore what it means to provide specifications for programs written in the Whiley Programming Language.  At this early stage, we are more concerned with how write specifications than with determining whether our programs meet their specifications.
+In this chapter, we embark upon the first step in the process of establishing that a program is (in some sense) correct.  That is, to determine exactly what our program is supposed to do.  To this end, we will learn how to write {\em specifications} for our programs which precisely describe their behaviour.  
+
+In doing this, we must acknowledge that precisely describing a program's behaviour is extremely challenging and, oftentimes, we want only to specify some {\em important aspect} of its permitted behaviour.  This can give us many of the benefits from specification without all of the costs.  
+
+While we will consider how to write specifications in this chapter, we will largely ignore the issue of determining whether our programs meet their specifications.  Although this is an important part of the process, it is also challenging and we will require several chapters to fully explore how this is done.
 
 {\em Clarify that there are different levels of specification, ranging from the minimum to illustrate lack of runtime error to the complete specification that a function is correct.}
 
-\section{Overview of Specifications}
+\section{Overview}
 
 Specifying a program in Whiley consists of at least two separate activities;  firstly, we provide appropriate specifications (called {\em invariants}) for any data types we have defined;  secondly, we provide specifications in the form of {\em pre-} and {\em post-conditions} for any functions or methods defined.
 
