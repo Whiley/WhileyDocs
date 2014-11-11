@@ -394,75 +394,75 @@ function toDescriptorString(JvmType.Primitive t) => string:
 \end{lstlisting}
 Here, we see a simple \lstinline{switch} statement which choose between a number of possible values of type \lstinline{JvmType.Primitive}.  A \lstinline{default} case is given which catches the only remaining case (i.e. representing the value \lstinline{JvmType.Double}).
 
-% =======================================================================
-% ThrowStatement
-% =======================================================================
+% % =======================================================================
+% % ThrowStatement
+% % =======================================================================
 
-\section{Throw Statement}
-\label{c_stmts_throw}
-A {\em throw statement} causes an exception to thrown which, if not caught locally, causes an \gls{abrupt_termination} of the current function or method.  Functions or methods which may terminate abruptly must declare appropriate an throws clause (\S\ref{c_source_files_function_decl},\S\ref{c_source_files_method_decl}) which contains al potentially thrown exceptions.
+% \section{Throw Statement}
+% \label{c_stmts_throw}
+% A {\em throw statement} causes an exception to thrown which, if not caught locally, causes an \gls{abrupt_termination} of the current function or method.  Functions or methods which may terminate abruptly must declare appropriate an throws clause (\S\ref{c_source_files_function_decl},\S\ref{c_source_files_method_decl}) which contains al potentially thrown exceptions.
 
-\begin{syntax}
-  \verb+ThrowStmt+ & $::=$ & \token{throw}\ \verb+Expr+\\
-\end{syntax}
+% \begin{syntax}
+%   \verb+ThrowStmt+ & $::=$ & \token{throw}\ \verb+Expr+\\
+% \end{syntax}
 
-\paragraph{Example.} The following illustrates a \lstinline{throw} statement:
+% \paragraph{Example.} The following illustrates a \lstinline{throw} statement:
 
-\begin{lstlisting}
-function parseInt(int pos, string input) => (int,int)
-// Throws a syntax error if the string is malformed
-throws SyntaxError:
-    //
-    int start = pos
-    // check for negative input
-    if pos < |input| && input[pos] == '-':
-        pos = pos + 1
-    // match remainder
-    while pos < |input| && Char.isDigit(input[pos]):
-        pos = pos + 1
-    // check for error
-    if pos == start:
-        throw SyntaxError("Missing number",start,pos)
-    // done
-    return Int.parse(input[start..pos]),pos
-\end{lstlisting}
-Here, we see a function which parses a string into an integer.  The function declares that a \lstinline{SyntaxError} may be thrown.  This is required for two reasons:  firstly, the input contains no digits then an \lstinline{SyntaxError} is thrown by this function.  Additionally, the function \lstinline{Int.parse()} is declared to throw a \lstinline{SyntaxError} and, since it is not caught, this declaration must be propagated.
+% \begin{lstlisting}
+% function parseInt(int pos, string input) => (int,int)
+% // Throws a syntax error if the string is malformed
+% throws SyntaxError:
+%     //
+%     int start = pos
+%     // check for negative input
+%     if pos < |input| && input[pos] == '-':
+%         pos = pos + 1
+%     // match remainder
+%     while pos < |input| && Char.isDigit(input[pos]):
+%         pos = pos + 1
+%     // check for error
+%     if pos == start:
+%         throw SyntaxError("Missing number",start,pos)
+%     // done
+%     return Int.parse(input[start..pos]),pos
+% \end{lstlisting}
+% Here, we see a function which parses a string into an integer.  The function declares that a \lstinline{SyntaxError} may be thrown.  This is required for two reasons:  firstly, the input contains no digits then an \lstinline{SyntaxError} is thrown by this function.  Additionally, the function \lstinline{Int.parse()} is declared to throw a \lstinline{SyntaxError} and, since it is not caught, this declaration must be propagated.
 
-% =======================================================================
-% Try/Catch Block
-% =======================================================================
+% % =======================================================================
+% % Try/Catch Block
+% % =======================================================================
 
-\section{Try Statement}
-\label{c_stmts_try_catch}
-A {\em try} statement demarcates a \gls{statement_block} to be executed in the context of one or more {\em exception handlers}.  If an uncaught exception is raised within the block which matches one (or more) of the exception handlers, then control is transferred directly to that handler.  Exception handlers are matched against raised exceptions in the order of declaration.
+% \section{Try Statement}
+% \label{c_stmts_try_catch}
+% A {\em try} statement demarcates a \gls{statement_block} to be executed in the context of one or more {\em exception handlers}.  If an uncaught exception is raised within the block which matches one (or more) of the exception handlers, then control is transferred directly to that handler.  Exception handlers are matched against raised exceptions in the order of declaration.
 
-\begin{syntax}
-  \verb+TryStmt+$^\ell$ & $::=$  & \token{try}\ \token{:}\ \verb+Block+$^\gamma$\ \big(\ \token{catch} \token{(}\ \verb+Type+\ \verb+Ident+\ \token{)} \token{:}\ \verb+Block+$^{\omega_i}$\ \big)$^+$\\
-&&\\
-\multicolumn{3}{r}{(where $\ell < \gamma$ and $\forall i.\ell < \omega_i$ and $\ell < \phi$)}\\
-\end{syntax}
+% \begin{syntax}
+%   \verb+TryStmt+$^\ell$ & $::=$  & \token{try}\ \token{:}\ \verb+Block+$^\gamma$\ \big(\ \token{catch} \token{(}\ \verb+Type+\ \verb+Ident+\ \token{)} \token{:}\ \verb+Block+$^{\omega_i}$\ \big)$^+$\\
+% &&\\
+% \multicolumn{3}{r}{(where $\ell < \gamma$ and $\forall i.\ell < \omega_i$ and $\ell < \phi$)}\\
+% \end{syntax}
 
-\paragraph{Example.}  The following illustrates a \lstinline{try} statement:
+% \paragraph{Example.}  The following illustrates a \lstinline{try} statement:
 
-\begin{lstlisting}
-function parse(string input) => int|string|null
-// Input cannot be empty
-requires |input| > 0:
-    //
-    try:
-        if Char.isDigit(input[0]):
-            // must be integer
-            return Int.parse(input)
-        else:
-            // must be string
-            return input
-    catch(SyntaxError ex):
-        // We can get here from Int.parse()
-        return null
-\end{lstlisting}
-Here, we see a function which parses a string as an integer (if it begins with a digit) or returns the input string (otherwise).  The function \lstinline{Int.parse(string)} throws a \lstinline{SyntaxError} in the case that its parameter is not well-formed.  A \lstinline{try} statement is used to catch this and return \lstinline{null} in such case.
+% \begin{lstlisting}
+% function parse(string input) => int|string|null
+% // Input cannot be empty
+% requires |input| > 0:
+%     //
+%     try:
+%         if Char.isDigit(input[0]):
+%             // must be integer
+%             return Int.parse(input)
+%         else:
+%             // must be string
+%             return input
+%     catch(SyntaxError ex):
+%         // We can get here from Int.parse()
+%         return null
+% \end{lstlisting}
+% Here, we see a function which parses a string as an integer (if it begins with a digit) or returns the input string (otherwise).  The function \lstinline{Int.parse(string)} throws a \lstinline{SyntaxError} in the case that its parameter is not well-formed.  A \lstinline{try} statement is used to catch this and return \lstinline{null} in such case.
 
-\paragraph{Notes.} Exceptions in Whiley differ from those found in other languages (e.g. Java) as they do not include runtime errors (e.g. divide-by-zero, out-of-bounds access, out-of-memory, stack-overflow, etc),  Instead, all exceptions are explicitly thrown using a \lstinline{throw} statement.  In contrast, runtime errors correspond to \gls{fault}s in Whiley, and are thrown implicitly when an unrecoverable error occurs.
+% \paragraph{Notes.} Exceptions in Whiley differ from those found in other languages (e.g. Java) as they do not include runtime errors (e.g. divide-by-zero, out-of-bounds access, out-of-memory, stack-overflow, etc),  Instead, all exceptions are explicitly thrown using a \lstinline{throw} statement.  In contrast, runtime errors correspond to \gls{fault}s in Whiley, and are thrown implicitly when an unrecoverable error occurs.
 
 % =======================================================================
 % Variable Declarations

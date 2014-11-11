@@ -161,15 +161,14 @@ A {\em function declaration} defines a function within a Whiley \gls{source_file
 \begin{syntax}
   \verb+FunctionDecl+ & $::=$ & \token{function}\ \verb+Ident+\
   \verb+TypePattern+\ \token{=>}\ \verb+TypePattern+\ \big(\\
-  && \ \ \token{throws}\ \verb+Type+\ $|$\ \token{requires}\
-  \verb+Expr+\ $|$\ \token{ensures}\ \verb+Expr+\\
+  && \ \ \token{requires}\ \verb+Expr+\ $|$\ \token{ensures}\ \verb+Expr+\\
   && \big)$^*$\ \token{:}\ \verb+Block+\\
 \end{syntax}
 
 The first type pattern (i.e. before ``\lstinline{=>}'') is referred to as the {\em parameter}, whilst the second is referred to as the {\em return}.  There are three kinds of optional clause which follow:
 
 \begin{itemize}
-\item {\bf Throws clause}. This defines the exceptions which may be thrown by this function. Multiple clauses may be given, and these are taken together as a union. Furthermore, the convention is to specify \lstinline{throws} clause(s) first.
+% \item {\bf Throws clause}. This defines the exceptions which may be thrown by this function. Multiple clauses may be given, and these are taken together as a union. Furthermore, the convention is to specify \lstinline{throws} clause(s) first.
 
 \item {\bf Requires clause(s)}. These define constraints on the permissible values of the parameters on entry to the function, and are often collectively referred to as the \gls{precondition}. These expressions may refer to any variables declared within the parameter type pattern. Multiple clauses may be given, and these are taken together as a conjunction. Furthermore, the convention is to specify the \lstinline{requires} clause(s) before any \lstinline{ensures} clause(s).
 
@@ -195,8 +194,7 @@ ensures x == z || y == z:
 
 This defines the specification and implementation of the well-known
 \lstinline{max()} function which returns the largest of its
-parameters. This does not throw any exceptions, and does not enforce
-any preconditions on its parameters.
+parameters. This does not enforce any preconditions on its parameters.
 
 % =======================================================================
 % Method Declarations
@@ -217,8 +215,7 @@ heap, and/or instigate concurrent computation.
 \begin{syntax}
   \verb+MethodDecl+ & $::=$ & \token{method}\ \verb+Ident+\
   \verb+TypePattern+\ \token{=>}\ \verb+TypePattern+\ \big(\\
-  && \ \ \token{throws}\ \verb+Type+\ $|$\ \token{requires}\
-  \verb+Expr+\ $|$\ \token{ensures}\ \verb+Expr+\\
+  && \ \ \token{requires}\ \verb+Expr+\ $|$\ \token{ensures}\ \verb+Expr+\\
   && \big)$^*$\ \token{:}\ \verb+Block+\\
 \end{syntax}
 
