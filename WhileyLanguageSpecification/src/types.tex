@@ -11,6 +11,8 @@ function id(null|int x) => int|null:
 \end{lstlisting}
 In this function we see two distinct \gls{type_descriptor}s expressed in the program text, namely ``\lstinline{int|null}'' and ``\lstinline{null|int}''.  Type descriptors occur at the source-level and describe \gls{type}s which occur at the abstract (or underlying) level.  In this particular case, we have two distinct type descriptors which describe the {\em same} underlying type.  We will often refer to types as providing the semantic (i.e. meaning) of type descriptors.  
 
+\pagebreak
+
 \section{Type Descriptors}
 \label{c_types_type_descriptors}
 Type descriptors provide syntax for describing types and, in the remaining sections of this chapter, we explore the range of types supported in Whiley.  The top-level grammar for type descriptors is:

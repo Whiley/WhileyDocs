@@ -20,7 +20,6 @@ After splitting the input characters into lines, a Whiley compiler then identifi
 
 Here, \^\ demarcates the start of a line and, hence, indentation may only occur at the beginning of a line.  Indentation may be compared using the $\le$ comparator, such that $i\le ir$ always holds (where $i$ is some indentation and $r$ is either empty or represents additional indentation).  In other words, some indentation $i$ is considered less-than-or-equal to another piece of indentation $ir$ which includes the first as a prefix.  This comparator is important for delimiting \gls{statement_block}s (\S\ref{c_stmts_blocks}).
 
-\pagebreak
 \section{Comments}
 There are two kinds of comments in Whiley: \gls{line_comment}s and \gls{block_comment}s:
 \begin{lstlisting}
@@ -60,8 +59,6 @@ $|$ \token{byte}\\
 {\huge\strut} & $|$ & \token{return} $|$ \token{skip} $|$ \token{some} $|$ \token{string} $|$ \token{switch} $|$ \token{throw}\\
 {\huge\strut} & $|$ & \token{throws} $|$ \token{total} $|$ \token{true} $|$ \token{try} $|$ \token{void} $|$ \token{where} $|$ \token{while}\\
 \end{syntax}
-
-\pagebreak
 
 The following strings are reserved for use as {\em keywords}, but may additionally be used as identifiers in certain contexts:
 \begin{syntax}
