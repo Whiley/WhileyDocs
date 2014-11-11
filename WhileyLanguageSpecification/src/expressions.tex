@@ -148,7 +148,7 @@ This function converts an unsigned integer in the range \lstinline{0} ... \lstin
 
 \section{Equality Expressions}
 \label{c_expr_equality}
-An equality expression compares two (or more) values together producing a value of \lstinline{bool} type.  The equality comparator, \lstinline{==}, tests whether two values are equal.  Likewise, the inequality comparator, \lstinline{==}, tests whether two values are {\em not} equal.
+An equality expression compares two (or more) values together producing a value of \lstinline{bool} type.  The {\em equality comparator}, \lstinline{==}, tests whether two values are equal.  Likewise, the {\em inequality comparator}, \lstinline{==}, tests whether two values are {\em not} equal.
 
 \begin{syntax}
   \verb+ConditionExpr+ & $::=$ &\\
@@ -174,7 +174,7 @@ This function checks whether a given integer is contained in a list of integers.
 
 \section{Relational Expressions}
 \label{c_expr_relational}
-A relational expression compares two (or more) values together producing a value of \lstinline{bool} type.  
+A relational expression compares two (or more) values together producing a value of \lstinline{bool} type.  These are either {\em strict} (where only inequality is tested)  or {\em non-strict} (where both equality and inequality are tested).  The {\em less-than comparator}, \lstinline{<}, and {\em greater-than comparator}, \lstinline{>}, are strict.  Conversely, the {\em less-than-or-equal comparator}, \lstinline{<=}, and {\em greater-than-or-equal comparator}, \lstinline{>}, are non-strict.
 
 \begin{syntax}
   \verb+ConditionExpr+ & $::=$ &\\
@@ -184,7 +184,19 @@ A relational expression compares two (or more) values together producing a value
   & $|$ & \verb+AppendExpr+ \token{>} \verb+AppendExpr+\\
 \end{syntax}
 
-\paragraph{Example.}
+\paragraph{Example.} The following example illustrates the strict inequality comparators:
+
+\begin{lstlisting}
+function compare(int x, int y) => int:
+    if x < y:
+        return -1
+    else if x > y:
+        return 1
+    else:
+        return 0
+\end{lstlisting}
+
+This function compares two integer arguments and returns the ``sign'' of their comparison.  The strict inequality comparators are used so the case where \lstinline{x == y} can be distinguished.
 
 \section{Subset Expressions}
 \label{c_expr_relational}
