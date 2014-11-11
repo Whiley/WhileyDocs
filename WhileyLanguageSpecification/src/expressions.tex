@@ -158,6 +158,20 @@ An equality expression compares two (or more) values together producing a value 
 
 \paragraph{Example.}
 
+The following example illustrates an equality expression:
+
+\begin{lstlisting}
+function contains([int] items, int item) => bool:
+    //
+    for i in items:
+        if i == item:
+            return true
+    return false
+\end{lstlisting}
+
+This function checks whether a given integer is contained in a list of integers.  This is done by iterating each element of the list and comparing it against the given item.
+
+
 \section{Relational Expressions}
 \label{c_expr_relational}
 A relational expression compares two (or more) values together producing a value of \lstinline{bool} type.  
