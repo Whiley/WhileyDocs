@@ -54,7 +54,7 @@ Here, two named entities share the same fully qualified named.  This is permitte
 When performing \gls{name_resolution}, a Whiley compiler first attempts to resolve names within the same source file.  For any remaining unresolved, the compiler examines imported entities in reverse declaration order.  Entities are imported using an \lstinline{import} declaration:
 
 \begin{syntax}
-\verb+ImportDecl+ & $::=$ & \token{import} \Big[\ \verb+FromSpec+\ \Big]\ \verb+Ident+\ \Big(\ \big(\ \token{.} $|$ \token{..}\ \big)\ \big(\ \verb+Ident+\ $|$ \token{*}\big)\ \Big)$^*$\\
+\verb+ImportDecl+ & $::=$ & \token{import} \big[\ \verb+FromSpec+\ \big]\ \verb+Ident+\ \Big(\ \big(\ \token{.} $|$ \token{..}\ \big)\ \big(\ \verb+Ident+\ $|$ \token{*}\big)\ \Big)$^*$\\
 &&\\
 \verb+FromSpec+ & $::=$ & \big(\ \verb+Ident+ $|$ \token{*} \big) \token{from}\\
 \end{syntax}

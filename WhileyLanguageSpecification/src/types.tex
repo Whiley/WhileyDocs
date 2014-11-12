@@ -646,67 +646,61 @@ An effective collection is a union of collection types.  For example, \lstinline
 
 Although types are abstract entities we can (for the most part) imagine them as describing sets of {\em abstract values}.  For example, \lstinline{int|null} denotes the set of values containing exactly the (infinite) set of integers and \lstinline{null} (i.e. ${\tt\mathbb{Z}\cup\{null\}}$).  This is often referred to as a set-theoretic interpretation of types~\cite{AW93,Damm94,CF05,FCB08}.  Under this interpretation, for example, one type {\em subtypes}  another if the set of values it denotes is a {\em subset} of the other (see \S~\ref{c_types_subtyping} for more).  
 
-We specify the meaning of types by formalising a set theoretic interpretation of them over the language of values given in Figure~\ref{c_types_abstract_values}.  To minimise confusion, care is taken in the figure to ensure that abstract values are represented canonically.  For example, ``${\tt 2\;/\;4}$'' is not a valid abstract value since ``${\tt 1\;/\;2}$'' is its canonical representation. Likewise, ``${\tt\{2,1\}}$'' is not a valid abstract value, with ``${\tt\{1,2\}}$'' being its canonical representation.   Figure~\ref{c_types_abstract_values} separates abstract values into distinct categories (e.g. integers, rationals, tuples, etc).  These distinctions are significant.  For example, ``${\tt 0}$'' is distinct \hl{How zero represented?}{from} ``${0\;/\;0}$''.  Similarly, byte values are not expressed using the digits ${\tt 0}$ and ${\tt 1}$ (as might be expected), but in terms of the characters ${\tt t}$ and ${\tt f}$.  This ensures binary values are distinct from integer values.
+% We specify the meaning of types by formalising a set theoretic interpretation of them over the language of values given in Figure~\ref{c_types_abstract_values}.  To minimise confusion, care is taken in the figure to ensure that abstract values are represented canonically.  For example, ``${\tt 2\;/\;4}$'' is not a valid abstract value since ``${\tt 1\;/\;2}$'' is its canonical representation. Likewise, ``${\tt\{2,1\}}$'' is not a valid abstract value, with ``${\tt\{1,2\}}$'' being its canonical representation.   Figure~\ref{c_types_abstract_values} separates abstract values into distinct categories (e.g. integers, rationals, tuples, etc).  These distinctions are significant.  For example, ``${\tt 0}$'' is distinct \hl{How zero represented?}{from} ``${0\;/\;0}$''.  Similarly, byte values are not expressed using the digits ${\tt 0}$ and ${\tt 1}$ (as might be expected), but in terms of the characters ${\tt t}$ and ${\tt f}$.  This ensures binary values are distinct from integer values.
 
-An evaluation function ${\tt\llbracket T\rrbracket}$ is defined which returns the set of values associated with a type ${\tt T}$.  For example, ${\tt\llbracket bool\rrbracket=\{true,false\}}$, ${\tt\llbracket int\rrbracket=\mathbb{Z}}$, etc.  This function is defined as follows:
+% An evaluation function ${\tt\llbracket T\rrbracket}$ is defined which returns the set of values associated with a type ${\tt T}$.  For example, ${\tt\llbracket bool\rrbracket=\{true,false\}}$, ${\tt\llbracket int\rrbracket=\mathbb{Z}}$, etc.  This function is defined as follows:
 
-\begin{figure}[!t]
-\fbox{
-\begin{minipage}{0.975\textwidth}
-\begin{displaymath}
-\begin{array}{rcllr}
-{\tt v} & ::= & {\tt null} && \textrm{(null value)}\\
-    & | & {\tt true}\;|\;{\tt false} & & \textrm{(boolean values)}\\
-    & | & {\tt b} & {\tt\textrm{if}\;b\in\{t,f\}^8} & \textrm{(byte values)}\\
-    & | & {\tt i} & {\tt \textrm{if}\;i\in\mathbb{Z}}& \textrm{(integer values)}\\
-    & | & {\tt i\ /\ n} & {\tt \textrm{if}\;i\in\mathbb{Z}, n\in\mathbb{N}\;\textrm{and}\;\textrm{gcd}(i_1,i_2)=1} & \textrm{(rational values)}\\
-    & | & \textrm{`}{\tt n}\textrm{'} & {\tt \textrm{if}\;n\in\mathbb{N}}& \textrm{(character values)}\\
-    & | & {\tt (v_1,\ldots,v_n)} & & \textrm{(tuple values)}\\
-    & | & {\tt \{v_1,\ldots,v_n\}} & {\tt \textrm{if}\;\forall i.v_i<v_{i+1}}& \textrm{(set values)}\\
-    & | & {\tt \{v_1\Rightarrow v'_1,\ldots,v_n\Rightarrow v'_n\}} & {\tt \textrm{if}\;\forall i.v_i<v_{i+1}}& \textrm{(map values)}\\
-    & | & {\tt [v_1,\ldots,v_n]} & & \textrm{(list values)}\\
-    & | & {\tt \ell} & & \textrm{(locations)}\\
-    &&\\
-\end{array}
-\end{displaymath}
-\end{minipage}}
-\caption{The language of abstract values used to formalise the meaning of types in Whiley, where $\mathbb{Z}$ is the (infinite) set of integers, $\mathbb{N}$ the (infinite) set of naturals and $\textrm{gcd()}$ returns the Greatest Common Divisor of two values (e.g. using Euclid's well-known algorithm).}
-\label{c_types_abstract_values}
-\end{figure}
+% \begin{figure}[!t]
+% \fbox{
+% \begin{minipage}{0.975\textwidth}
+% \begin{displaymath}
+% \begin{array}{rcllr}
+% {\tt v} & ::= & {\tt null} && \textrm{(null value)}\\
+%     & | & {\tt true}\;|\;{\tt false} & & \textrm{(boolean values)}\\
+%     & | & {\tt b} & {\tt\textrm{if}\;b\in\{t,f\}^8} & \textrm{(byte values)}\\
+%     & | & {\tt i} & {\tt \textrm{if}\;i\in\mathbb{Z}}& \textrm{(integer values)}\\
+%     & | & {\tt i\ /\ n} & {\tt \textrm{if}\;i\in\mathbb{Z}, n\in\mathbb{N}\;\textrm{and}\;\textrm{gcd}(i_1,i_2)=1} & \textrm{(rational values)}\\
+%     & | & \textrm{`}{\tt n}\textrm{'} & {\tt \textrm{if}\;n\in\mathbb{N}}& \textrm{(character values)}\\
+%     & | & {\tt (v_1,\ldots,v_n)} & & \textrm{(tuple values)}\\
+%     & | & {\tt \{v_1,\ldots,v_n\}} & {\tt \textrm{if}\;\forall i.v_i<v_{i+1}}& \textrm{(set values)}\\
+%     & | & {\tt \{v_1\Rightarrow v'_1,\ldots,v_n\Rightarrow v'_n\}} & {\tt \textrm{if}\;\forall i.v_i<v_{i+1}}& \textrm{(map values)}\\
+%     & | & {\tt [v_1,\ldots,v_n]} & & \textrm{(list values)}\\
+%     & | & {\tt \ell} & & \textrm{(locations)}\\
+%     &&\\
+% \end{array}
+% \end{displaymath}
+% \end{minipage}}
+% \caption{The language of abstract values used to formalise the meaning of types in Whiley, where $\mathbb{Z}$ is the (infinite) set of integers, $\mathbb{N}$ the (infinite) set of naturals and $\textrm{gcd()}$ returns the Greatest Common Divisor of two values (e.g. using Euclid's well-known algorithm).}
+% \label{c_types_abstract_values}
+% \end{figure}
 
-\begin{definition}[Type Semantics]
-\label{def_acceptance}
-Every type descriptor ${\tt T}$ is characterized by the set of values it accepts,
-given by ${\tt \llbracket T\rrbracket}$ and defined as follows:
-\begin{displaymath}
-\begin{array}{rcl}
-{\tt\llbracket any\rrbracket} & = & \mathbb{D}\\
-{\tt\llbracket void\rrbracket} & = & \emptyset\\
-{\tt \llbracket null\rrbracket} & = & {\tt\{null\}}\\
-{\tt\llbracket bool\rrbracket} & = & {\tt\{ true, false\}}\\
-{\tt\llbracket byte\rrbracket} & = & {\tt\{\;b\;|\;b\in\{t,f\}^8\;\}}\\
-{\tt\llbracket int\rrbracket} & = & {\tt\mathbb{Z}}\\
-{\tt \llbracket real\rrbracket} & = & {\tt\{ v_n / v_d \;|\;v_n\in\mathbb{Z},v_d\in\mathbb{Z}\}}\\
-{\tt\llbracket char\rrbracket} & = & {\tt\mathbb{Z}}\\
-{\tt \llbracket(T_1, \ldots, T_n)\rrbracket} & = & {\tt\{ v_1,\ldots,v_n\;|\;v_1\in\llbracket T_1\rrbracket, \ldots, v_n\in\llbracket T_n\rrbracket\}}\\
-{\tt\llbracket T_1|\ldots|T_n\rrbracket} & = & {\tt \llbracket T_1\rrbracket\cup\ldots\cup \llbracket T_n\rrbracket}\\
-{\tt\llbracket T_1\&\ldots\&T_n\rrbracket} & = & {\tt \llbracket T_1\rrbracket\cap\ldots\cap \llbracket T_n\rrbracket}\\
-{\tt\llbracket!T_1\rrbracket} & = & {\tt \mathbb{D} - \llbracket T_1\rrbracket}\\
-\end{array}
-\end{displaymath}
-\end{definition}
+% \begin{definition}[Type Semantics]
+% \label{def_acceptance}
+% Every type descriptor ${\tt T}$ is characterized by the set of values it accepts,
+% given by ${\tt \llbracket T\rrbracket}$ and defined as follows:
+% \begin{displaymath}
+% \begin{array}{rcl}
+% {\tt\llbracket any\rrbracket} & = & \mathbb{D}\\
+% {\tt\llbracket void\rrbracket} & = & \emptyset\\
+% {\tt \llbracket null\rrbracket} & = & {\tt\{null\}}\\
+% {\tt\llbracket bool\rrbracket} & = & {\tt\{ true, false\}}\\
+% {\tt\llbracket byte\rrbracket} & = & {\tt\{\;b\;|\;b\in\{t,f\}^8\;\}}\\
+% {\tt\llbracket int\rrbracket} & = & {\tt\mathbb{Z}}\\
+% {\tt \llbracket real\rrbracket} & = & {\tt\{ v_n / v_d \;|\;v_n\in\mathbb{Z},v_d\in\mathbb{Z}\}}\\
+% {\tt\llbracket char\rrbracket} & = & {\tt\mathbb{Z}}\\
+% {\tt \llbracket(T_1, \ldots, T_n)\rrbracket} & = & {\tt\{ v_1,\ldots,v_n\;|\;v_1\in\llbracket T_1\rrbracket, \ldots, v_n\in\llbracket T_n\rrbracket\}}\\
+% {\tt\llbracket T_1|\ldots|T_n\rrbracket} & = & {\tt \llbracket T_1\rrbracket\cup\ldots\cup \llbracket T_n\rrbracket}\\
+% {\tt\llbracket T_1\&\ldots\&T_n\rrbracket} & = & {\tt \llbracket T_1\rrbracket\cap\ldots\cap \llbracket T_n\rrbracket}\\
+% {\tt\llbracket!T_1\rrbracket} & = & {\tt \mathbb{D} - \llbracket T_1\rrbracket}\\
+% \end{array}
+% \end{displaymath}
+% \end{definition}
 
-\noindent Here, the {\em domain} of all possible values is given by ${\tt\mathbb{D}}$, whilst the set of all integers is given by ${\tt\mathbb{Z}}$.  Furthermore, if ${\tt T}$ is a \gls{type_descriptor}, then ${\tt\llbracket T\rrbracket}$ is its underlying \gls{type}.
+% \noindent Here, the {\em domain} of all possible values is given by ${\tt\mathbb{D}}$, whilst the set of all integers is given by ${\tt\mathbb{Z}}$.  Furthermore, if ${\tt T}$ is a \gls{type_descriptor}, then ${\tt\llbracket T\rrbracket}$ is its underlying \gls{type}.
 
 \subsection{Equivalences}
-Since types are defined in terms of the set of values they represent, it is perfectly possible for two distinct type descriptors to describe the same underlying type.  For example, \lstinline{int|null} is considered equivalent to \lstinline{null|int}.  Whilst this case is fairly easy to spot, there are some cases which are not so obvious.  The definition of equivalence is given as follows:
+Since types are defined in terms of the set of values they represent, it is possible for two distinct type descriptors to describe the same underlying type.  For example, \lstinline{int|null} is considered equivalent to \lstinline{null|int}.  Whilst this case is fairly easy to spot, others are not so obvious.  Some examples are given here to illustrate:
 
-\begin{definition}[Type Equivalence]
-\label{c_types_def_equiv}
-Two type descriptors ${\tt T_1}$ and ${\tt T_2}$ are said to be {\em equivalent}, denoted by ${\tt T_1\equiv T_2}$, iff ${\tt \llbracket T_1\rrbracket = \llbracket T_2\rrbracket}$.
-\end{definition}
-
-\noindent Based on the above definition, we identify a number of such equivalences to illustrate:
 \begin{itemize}
 \item \lstinline{!any} is equivalent to \lstinline{void} and, conversely, \lstinline{any} is equivalent to \lstinline{!void}
 \item \lstinline{int&!int} is equivalent to \lstinline{void} and, conversely, \lstinline{int|!int} is equivalent to \lstinline{any}
@@ -714,18 +708,27 @@ Two type descriptors ${\tt T_1}$ and ${\tt T_2}$ are said to be {\em equivalent}
 \item \lstinline|{int$\;|\;$null f}&{bool$\;|\;$null f}| is equivalent to \lstinline|{null f}|
 \end{itemize}
 
-Under Definition~\ref{c_types_def_equiv}, an infinite number of equivalences exist between the type descriptors of Whiley, and we cannot list them all here.
+% The definition of equivalence is given as follows:
+
+% \begin{definition}[Type Equivalence]
+% \label{c_types_def_equiv}
+% Two type descriptors ${\tt T_1}$ and ${\tt T_2}$ are said to be {\em equivalent}, denoted by ${\tt T_1\equiv T_2}$, iff ${\tt \llbracket T_1\rrbracket = \llbracket T_2\rrbracket}$.
+% \end{definition}
+
+Unfortunately, an infinite number of equivalences exist between the type descriptors of Whiley, and we cannot list them all here.
 
 \subsection{Subtyping}
 \label{c_types_subtyping}
 Types in Whiley support the notion of {\em subtyping} where one type may be a {\em subtype} for another.  For example, the type \lstinline{int} is a subtype of \lstinline{any}.  Likewise, \lstinline{bool} is a subtype of \lstinline{bool|null}.  The {\em subtyping operator} is denoted by ``${\tt \le}$''; for example, ${\tt T_1\le T_2}$ indicates that type ${\tt T_1}$ is a subtype of ${\tt T_2}$.  The subtyping operator is {\em reflexive}, {\em transitive} and {\em anti-symmetric} with respect to the underlying types involved. 
 
-The subtyping operator is regarded as an algorithm for determining whether the type described by one type descriptor is a subtype of another.  The implementation of this algorithm is not straightforward and a full discussion of it is beyond the scope of this document.  Indeed, there are many possible implementations of this operator.  Nevertheless, there any valid implementation of this operator must exhibit two desirable properties:
+The subtyping operator is regarded as an algorithm for determining whether the type described by one type descriptor is a subtype of another.  The implementation of this algorithm is not straightforward and a full discussion of it is beyond the scope of this document.  Indeed, there are many possible implementations of this operator.  
 
-\begin{definition}[Subtype Soundness] A subtype operator, ${\tt\le}$, is {\em sound} if, for any types ${\tt T_1}$ and ${\tt T_2}$, it holds that ${\tt T_1\le T_2\Longrightarrow \llbracket T_1\rrbracket\subseteq \llbracket T_2\rrbracket}$.
-\end{definition}
+% Nevertheless, there any valid implementation of this operator must exhibit two desirable properties:
 
-\begin{definition}[Subtype Completeness] A subtype operator, ${\tt\le}$, is {\em complete} if, for any types ${\tt T_1}$ and ${\tt T_2}$, it holds that ${\tt \llbracket T_1\rrbracket\subseteq\llbracket T_2\rrbracket\Longrightarrow T_1\le T_2}$.
-\end{definition}
+% \begin{definition}[Subtype Soundness] A subtype operator, ${\tt\le}$, is {\em sound} if, for any types ${\tt T_1}$ and ${\tt T_2}$, it holds that ${\tt T_1\le T_2\Longrightarrow \llbracket T_1\rrbracket\subseteq \llbracket T_2\rrbracket}$.
+% \end{definition}
 
-\noindent A subtype operator which exhibits both of these properties is said to be {\em sound} and {\em complete}.  
+% \begin{definition}[Subtype Completeness] A subtype operator, ${\tt\le}$, is {\em complete} if, for any types ${\tt T_1}$ and ${\tt T_2}$, it holds that ${\tt \llbracket T_1\rrbracket\subseteq\llbracket T_2\rrbracket\Longrightarrow T_1\le T_2}$.
+% \end{definition}
+
+% \noindent A subtype operator which exhibits both of these properties is said to be {\em sound} and {\em complete}.  

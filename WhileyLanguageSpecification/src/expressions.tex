@@ -198,13 +198,29 @@ This function compares two integer arguments and returns the ``sign'' of their c
 
 \section{Subset Expressions}
 \label{c_expr_relational}
-A subset expression compares two (or more) values of set type (\S\ref{c_types_set}) together producing a value of \lstinline{bool} type.  
+A subset expression compares two (or more) values of set type (\S\ref{c_types_set}) together producing a value of \lstinline{bool} type.  These are either {\em strict} (where only inequality is tested)  or {\em non-strict} (where both equality and inequality are tested).  The {\em subset comparator}, ${\tt\subset}$, is strict.  Conversely, the {\em subset-or-equal comparator}, ${\tt\subseteq}$, is non-strict
 
 \begin{syntax}
   \verb+ConditionExpr+ & $::=$ &\\
   & $|$ & \verb+AppendExpr+ \token{$\subset$} \verb+AppendExpr+\\
   & $|$ & \verb+AppendExpr+ \token{$\subseteq$} \verb+AppendExpr+\\
 \end{syntax}
+
+\paragraph{Example.} The following example illustrates the strict comparator:
+
+\begin{lstlisting}
+function compare({int} xs, {int} ys) => int:
+    if xs $\subset$ ys:
+        return -1
+    else if ys $\subset$ xs:
+        return 2
+    else if xs == ys:
+        return 1
+    else:
+        return 0
+\end{lstlisting}
+
+This function compares two integer sets and returns the ``sign'' of their comparison.  The non-strict inequality comparators are used so the cases where \lstinline{xs == ys} and \lstinline{xs != ys} can be distinguished.
 
 \section{Element-Of Expression}
 \label{c_expr_relational}
