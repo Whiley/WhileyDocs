@@ -222,15 +222,28 @@ function compare({int} xs, {int} ys) => int:
 
 This function compares two integer sets and returns the ``sign'' of their comparison.  The non-strict inequality comparators are used so the cases where \lstinline{xs == ys} and \lstinline{xs != ys} can be distinguished.
 
+\paragraph{Notes.}  At the time of writing there is no keyword or non-unicode operator for expressing these comparators.
+
 \section{Element-Of Expression}
 \label{c_expr_relational}
-An element-of expression determines whether one value is contained within another values of collection type (\S\ref{c_types_collection}) and produces a value of \lstinline{bool} type.  
+An element-of expression determines whether one value is contained within another value of collection type (\S\ref{c_types_collection}) and produces a value of \lstinline{bool} type.  Specifically, if the element is contained then the result is \lstinline{true}, otherwise it is \lstinline{false}.
 
 \begin{syntax}
   \verb+ConditionExpr+ & $::=$ &\\
   & $|$ & \verb+AppendExpr+ \token{in} \verb+AppendExpr+\\
   & $|$ & \verb+AppendExpr+ \token{$\in$} \verb+AppendExpr+\\
 \end{syntax}
+
+\paragraph{Example.}  The following illustrates the element-of operator.
+
+\begin{lstlisting}
+function containsOne({int} xs, {int} ys):
+    for x in xs:
+        if x in ys:
+            return true
+    return false
+\end{lstlisting}
+This function accepts two integer sets and checks whether any element of the first parameter is in the second.
 
 % =======================================================================
 % Append Expressions
