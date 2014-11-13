@@ -252,14 +252,23 @@ This function accepts two integer sets and checks whether any element of the fir
 \section{Append Expressions}
 \label{c_expr_append}
 
+An append expression accepts two lists arguments and produces a value of list type.  The append operator, \lstinline{++}, concatenates the argument lists together, producing a list constructed from those elements of the first argument (in order0 followed by those of the second argument (in order).
+
 \begin{syntax}
   \verb+AppendExpr+ & $::=$ & \verb+RangeExpr+\ \big(\ \token{++}\
   \verb+RangeExpr+\ \big)$^*$\\
 \end{syntax}
 
-\paragraph{Description.}
-
-\paragraph{Examples.}
+\paragraph{Examples.} The following example illustrates the list append operator:
+\begin{lstlisting}
+function rangeOf(int start, int end) => [int]:
+    [int] r = []
+    int i = start
+    while i < end:
+        r = r ++ [i]
+        i = i + 1
+    return r
+\end{lstlisting}
 
 \paragraph{Notes.} 
 
