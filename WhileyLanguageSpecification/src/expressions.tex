@@ -270,8 +270,7 @@ function rangeOf(int start, int end) => [int]:
     return r
 \end{lstlisting}
 
-\paragraph{Notes.} 
-
+This function constructs a list containing the integer values from \lstinline{start} up to (but not including) \lstinline{end}.  The list append operator is used to construct the list, starting initially from the empty list.
 
 % =======================================================================
 % Range Expressions
@@ -280,15 +279,25 @@ function rangeOf(int start, int end) => [int]:
 \section{Range Expressions}
 \label{c_expr_range}
 
+A range expression accepts two integer arguments and produces a value of integer list type.  The {\em range operator} constructs the list of integer values from the first argument up to (but not including) the last.
+
 \begin{syntax}
   \verb+RangeExpr+ & $::=$ & \verb+ShiftExpr+\ \big[\ \token{..}\ \verb+ShiftExpr+\ \big]\\
 \end{syntax}
 
-\paragraph{Description.}
+\paragraph{Examples.}  The following illustrates the range operator:
 
-\paragraph{Examples.}
+\begin{lstlisting}
+function sum(int start, int end) => [int]:
+    int r = 0
+    for i in start .. end:
+        r = r + i
+    return r
+\end{lstlisting}
 
-\paragraph{Notes.} 
+This function sums the integers between \lstinline{start} and \lstinline{end}.  The range operator is used to construct the list to be iterated over.
+
+\paragraph{Notes.}  If the start of a range expression is greater than its end, the empty list is returned.
 
 % =======================================================================
 % Shift Expressions
