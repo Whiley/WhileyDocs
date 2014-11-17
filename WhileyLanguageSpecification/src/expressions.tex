@@ -306,16 +306,29 @@ This function sums the integers between \lstinline{start} and \lstinline{end}.  
 \section{Shift Expressions}
 \label{c_expr_shift}
 
+A shift expression accepts an argument of \lstinline{byte} type (left) and one of \lstinline{int} type (right) and produces a value of \lstinline{byte} type.  The {\em left shift operator}, \lstinline{<<}, shifts the bits of a \lstinline{byte} in an upwards direction, such that the most significant bit is discarded and the least significant bit assigned \lstinline{0}.  The {\em right shift operator}, \lstinline{>>}, shifts bits in a downwards direction, such that the least significant bit is discarded and the most significant bit assigned \lstinline{0}.  
+
 \begin{syntax}
   \verb+ShiftExpr+ & $::=$ & \verb+AdditiveExpr+\ \big[\ \big(\
   \token{<<} $|$ \token{>>}\ \big)\ \verb+AdditiveExpr+ \big]
 \end{syntax}
 
-\paragraph{Description.}
+\paragraph{Examples.} The following illustrates the left shift operator:
 
-\paragraph{Examples.}
+\begin{lstlisting}
+public function toUnsignedByte(u8 v) => byte:
+    //
+    byte mask = 00000001b
+    byte r = 0b
+    for i in 0..8:
+        if (v % 2) == 1:
+            r = r | mask
+        v = v / 2
+        mask = mask << 1
+    return r
+\end{lstlisting}
 
-\paragraph{Notes.} 
+This function accepts an integer between \lstinline{0} and \lstinline{255} and converts this into an appropriate bit representation.  The left shift operator is used to maintain an internal mask for the bit currently being initialised.
 
 % =======================================================================
 % Addititve and Multiplicative Expressions

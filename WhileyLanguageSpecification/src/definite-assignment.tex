@@ -1,1 +1,21 @@
 \chapter{Definite Assignment}
+\label{c_definite_assignment}
+
+See error reported for this check~\S\ref{c_err_var_uninitialised}.
+
+\begin{lstlisting}
+function f(int x) => int:
+   int y
+   if x < 0:
+       y = 1
+   return x + y
+\end{lstlisting}
+
+\begin{lstlisting}
+function f(int x) => int:
+   int y
+   while x < 0:
+       y = 1
+       x = x + 1
+   return x + y
+\end{lstlisting}
