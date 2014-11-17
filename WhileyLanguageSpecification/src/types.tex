@@ -74,7 +74,7 @@ Primitive types are the atomic building blocks of all types in Whiley.
 \subsection{Null}
 \label{c_types_null}
 
-The null type is typically used to show the absence of something. It is distinct from void, since variables can hold the special \lstinline{null} value (where as there is no special ``\lstinline{void}'' value).  The set of values defined by the type \lstinline{null} is the singleton set containing exactly the \lstinline{null} value.  Variables of \lstinline{null} type support only equality (\S\ref{c_expr_condition}) and inequality comparisons (\S\ref{c_expr_condition}).  The \lstinline{null} value is particularly useful for representing optional values and terminating recursive types.
+The null type is typically used to show the absence of something. It is distinct from void, since variables can hold the special \lstinline{null} value (where as there is no special ``\lstinline{void}'' value).  The set of values defined by the type \lstinline{null} is the singleton set containing exactly the \lstinline{null} value.  Variables of \lstinline{null} type support only equality comparators (\S\ref{c_expr_equality}).  The \lstinline{null} value is particularly useful for representing optional values and terminating recursive types.
 
 \begin{syntax}
   \verb+NullType+ & $::=$ & \token{null} \\
@@ -104,7 +104,7 @@ This defines \lstinline{Tree} --- a {\em recursive type} --- which is either emp
 \subsection{Booleans}
 \label{c_types_bool}
 
-The \lstinline{bool} type represents the set of boolean values (i.e. \lstinline{true} and \lstinline{false}).  Variables of \lstinline{bool} type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}), binary logical operators (\S\ref{c_expr_logical}) and logical not (\S\ref{c_expr_not}).
+The \lstinline{bool} type represents the set of boolean values (i.e. \lstinline{true} and \lstinline{false}).  Variables of \lstinline{bool} type support equality comparators (\S\ref{c_expr_equality}), binary logical operators (\S\ref{c_expr_logical}) and logical not (\S\ref{c_expr_not}).
 
 \begin{syntax}
  \verb+BoolType+ & $::=$ & \token{bool} \\
@@ -131,7 +131,7 @@ This function determines whether or not a given integer value is contained withi
 \subsection{Bytes}
 \label{c_types_byte}
 
-The type \lstinline{byte} represents the set of eight-bit sequences, whose values are expressed numerically using \lstinline{0} and \lstinline{1} followed by \lstinline{b} (e.g. 00101b).  The set of values defined by the \lstinline{byte} type is the set of all 256 possible combinations of eight-bit sequences.   Variables of \lstinline{byte} type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}), bitwise operators (\S\ref{c_expr_bitwise}), bitwise complement (\S\ref{c_expr_complement}) and shift operators (\S\ref{c_expr_shift}).
+The type \lstinline{byte} represents the set of eight-bit sequences, whose values are expressed numerically using \lstinline{0} and \lstinline{1} followed by \lstinline{b} (e.g. 00101b).  The set of values defined by the \lstinline{byte} type is the set of all 256 possible combinations of eight-bit sequences.   Variables of \lstinline{byte} type support equality comparators (\S\ref{c_expr_equality}), bitwise operators (\S\ref{c_expr_bitwise}), bitwise complement (\S\ref{c_expr_complement}) and shift operators (\S\ref{c_expr_shift}).
 
 \begin{syntax}
  \verb+ByteType+ & $::=$ & \token{byte}\\
@@ -163,7 +163,7 @@ This illustrates the conversion from a \lstinline{byte} into a \lstinline{string
 \subsection{Integers}
 \label{c_types_int}
 
-The type \lstinline{int} represents the set of arbitrary-sized integers, whose values are expressed as a sequence of one or more numerical or hexadecimal digits (e.g. \lstinline{123456}, \lstinline{0xffaf}, etc).  Variables of \lstinline{int} type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}), comparators (\S\ref{c_expr_condition}), addition (\S\ref{c_expr_addmul}), subtraction (\S\ref{c_expr_addmul}), multiplication (\S\ref{c_expr_addmul}), division (\S\ref{c_expr_addmul}), remainder (\S\ref{c_expr_addmul}) and negation (\S\ref{c_expr_negation}) operations.
+The type \lstinline{int} represents the set of arbitrary-sized integers, whose values are expressed as a sequence of one or more numerical or hexadecimal digits (e.g. \lstinline{123456}, \lstinline{0xffaf}, etc).  Variables of \lstinline{int} type support equality comparators (\S\ref{c_expr_equality}), relational comparators (\S\ref{c_expr_relational}), addition (\S\ref{c_expr_addmul}), subtraction (\S\ref{c_expr_addmul}), multiplication (\S\ref{c_expr_addmul}), division (\S\ref{c_expr_addmul}), remainder (\S\ref{c_expr_addmul}) and negation (\S\ref{c_expr_negation}) operations.
 
 
 \begin{syntax}
@@ -189,7 +189,7 @@ This illustrates the well-known recursive method for computing numbers in the {\
 \subsection{Rationals}
 \label{c_types_real}
 
-The type \lstinline{real} represents the set of arbitrary-sized rationals, whose values are expressed as a sequence of one or more numerical digits separated by a period (e.g. \lstinline{1.0}, \lstinline{0.223}, \lstinline{12.55}, etc).  The set of values defined by the type \lstinline{real} is the (infinite) set of all integer pairs, where the first element is designated the numerator, and the second designated the denominator.  Variables of \lstinline{real} type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}), comparators (\S\ref{c_expr_condition}), addition (\S\ref{c_expr_addmul}), subtraction (\S\ref{c_expr_addmul}), multiplication (\S\ref{c_expr_addmul}), division (\S\ref{c_expr_addmul}), remainder (\S\ref{c_expr_addmul}) and negation (\S\ref{c_expr_negation}) operations.  Variables of type \lstinline{real} also support the {\em rational destructuring assignment} to extract the numerator and denominator (illustrated below).
+The type \lstinline{real} represents the set of arbitrary-sized rationals, whose values are expressed as a sequence of one or more numerical digits separated by a period (e.g. \lstinline{1.0}, \lstinline{0.223}, \lstinline{12.55}, etc).  The set of values defined by the type \lstinline{real} is the (infinite) set of all integer pairs, where the first element is designated the numerator, and the second designated the denominator.  Variables of \lstinline{real} type support equality comparators (\S\ref{c_expr_equality}), relational comparators (\S\ref{c_expr_relational}), addition (\S\ref{c_expr_addmul}), subtraction (\S\ref{c_expr_addmul}), multiplication (\S\ref{c_expr_addmul}), division (\S\ref{c_expr_addmul}), remainder (\S\ref{c_expr_addmul}) and negation (\S\ref{c_expr_negation}) operations.  Variables of type \lstinline{real} also support the {\em rational destructuring assignment} to extract the numerator and denominator (illustrated below).
 
 \begin{syntax}
   \verb+RealType+ & $::=$ & \token{real} \\
@@ -215,7 +215,7 @@ This illustrates the well-known function for computing the {\em floor} of a \lst
 \subsection{Characters}
 \label{c_types_char}
 
-The type \lstinline{char} represents the set of unicode characters, whose values are expressed as an arbitrary character between quotes (e.g. \lstinline{'c'}, \lstinline{'0'}, \lstinline{'%'}, etc).  Variables of \lstinline{char} type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}), comparators (\S\ref{c_expr_condition}), addition (\S\ref{c_expr_addmul}), subtraction (\S\ref{c_expr_addmul}), multiplication (\S\ref{c_expr_addmul}), division (\S\ref{c_expr_addmul}), remainder (\S\ref{c_expr_addmul}) and negation (\S\ref{c_expr_negation}) operations. 
+The type \lstinline{char} represents the set of unicode characters, whose values are expressed as an arbitrary character between quotes (e.g. \lstinline{'c'}, \lstinline{'0'}, \lstinline{'%'}, etc).  Variables of \lstinline{char} type support equality comparators (\S\ref{c_expr_equality}), relational comparators (\S\ref{c_expr_relational}), addition (\S\ref{c_expr_addmul}), subtraction (\S\ref{c_expr_addmul}), multiplication (\S\ref{c_expr_addmul}), division (\S\ref{c_expr_addmul}), remainder (\S\ref{c_expr_addmul}) and negation (\S\ref{c_expr_negation}) operations. 
 
 \begin{syntax}
   \verb+CharType+ & $::=$ & \token{char} \\
@@ -236,7 +236,7 @@ This illustrates a very simple function for determining whether an ASCII charact
 \subsection{Any}
 \label{c_types_any}
 
-The type \lstinline{any} represents the type whose variables may hold any possible value.  Thus, \lstinline{any} is the {\em top type} (i.e. $\top$) in the lattice of types and, hence, is the supertype of all other types.  Variables of \lstinline{any} type support only equality (\S\ref{c_expr_condition}), inequality comparisons (\S\ref{c_expr_condition}) and {\em runtime type tests}.  Finally, unlike the majority of other types, there are no {\em values} of type \lstinline{any}.
+The type \lstinline{any} represents the type whose variables may hold any possible value.  Thus, \lstinline{any} is the {\em top type} (i.e. $\top$) in the lattice of types and, hence, is the supertype of all other types.  Variables of \lstinline{any} type support equality comparators (\S\ref{c_expr_equality}) and {\em runtime type tests}.  Finally, unlike the majority of other types, there are no {\em values} of type \lstinline{any}.
 
 \begin{syntax}
   \verb+AnyType+ & $::=$ & \token{any} \\
@@ -292,7 +292,7 @@ Here, the method \lstinline{update1st} is declared to return \lstinline{void} --
 \section{Tuples}
 \label{c_types_tuple}
 
-A tuple type describes a compound type made up of two or more elements in sequence, whose values are expressed as sequences of values separated by a comma (e.g. \lstinline{1,2}, \lstinline{2.0,3.32,3.45}, etc).  Tuples are similar to records, except that fields are effectively anonymous.  Variables of tuple type support equality (\S\ref{c_expr_condition}) and inequality (\S\ref{c_expr_condition}) operations, as well the {\em tuple destructuring assignment} to extract elements (illustrated below).
+A tuple type describes a compound type made up of two or more elements in sequence, whose values are expressed as sequences of values separated by a comma (e.g. \lstinline{1,2}, \lstinline{2.0,3.32,3.45}, etc).  Tuples are similar to records, except that fields are effectively anonymous.  Variables of tuple type support equality comparators (\S\ref{c_expr_equality}), as well the {\em tuple destructuring assignment} to extract elements (illustrated below).
 
 \begin{syntax}
   \verb+TupleType+ & $::=$ & \token{(}\ \verb+Type+\ \big(\ \token{,}\
@@ -317,7 +317,7 @@ This function accepts two integer parameters, and returns a tuple type containin
 \section{Records}
 \label{c_types_record}
 
-A record type describes a compound made of from one or more {\em fields}, each of which has a unique name and a corresponding type.  Variables of record type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}) and field access (\S\ref{c_expr_access}) operations, as well as field assignment (\S\ref{c_stmts_field_lval}).
+A record type describes a compound made of from one or more {\em fields}, each of which has a unique name and a corresponding type.  Variables of record type support equality comparators (\S\ref{c_expr_equality}) and field access (\S\ref{c_expr_access}) operations, as well as field assignment (\S\ref{c_stmts_field_lval}).
 
 \begin{syntax}
   \verb+RecordType+ & $::=$ & \token{\{}\ \verb+MixedType+\
@@ -353,7 +353,7 @@ The above illustrates two open records \lstinline{Writer} and \lstinline{PrintWr
 
 \section{References}
 
-Reference types in Whiley represent references to variables, such as those allocated in the heap.  They are similar to references or pointers found in many imperative and object-oriented languages (e.g. C/C++, Java, C\#, etc).  A type \lstinline{&T} represents a reference to a variable of type \lstinline{T}.  Variables of reference type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}) and dereference (\S\ref{c_expr_deref}) operations, as well as dereference assignment (\S\ref{c_stmts_deref_lval}).
+Reference types in Whiley represent references to variables, such as those allocated in the heap.  They are similar to references or pointers found in many imperative and object-oriented languages (e.g. C/C++, Java, C\#, etc).  A type \lstinline{&T} represents a reference to a variable of type \lstinline{T}.  Variables of reference type support equality comparators (\S\ref{c_expr_equality}) and dereference (\S\ref{c_expr_deref}) operations, as well as dereference assignment (\S\ref{c_stmts_deref_lval}).
 
 \begin{syntax}
   \verb+ReferenceType+ & $::=$ & \token{\&}\ \ \verb+Type+\\
@@ -377,7 +377,7 @@ The above illustrates a method which accepts two references to variables of type
 \section{Nominals}
 \label{c_types_nominal}
 
-Nominal types represent user-defined types declared within one or more Whiley \gls{source_file}s.  Nominal types provide a mechanism for enforcing {\em information hiding}, and also for constructing {\em recursive types} (\S\ref{c_types_recursive}).  All nominal types have an underlying --- or, {\em concrete} --- type which may or may not be visible within a given Whiley \gls{source_file}.  Nominal types with {\em visible} underlying types are indistinguishable from their underlying type, and support all operations therein.   Nominal types with {\em invisible} underlying types support only equality (\S\ref{c_expr_condition}) and inequality (\S\ref{c_expr_condition}) operations.  Furthermore, to enforce information hiding, nominal types cannot be destructured using runtime type tests.
+Nominal types represent user-defined types declared within one or more Whiley \gls{source_file}s.  Nominal types provide a mechanism for enforcing {\em information hiding}, and also for constructing {\em recursive types} (\S\ref{c_types_recursive}).  All nominal types have an underlying --- or, {\em concrete} --- type which may or may not be visible within a given Whiley \gls{source_file}.  Nominal types with {\em visible} underlying types are indistinguishable from their underlying type, and support all operations therein.   Nominal types with {\em invisible} underlying types support only equality comparators (\S\ref{c_expr_equality}).  Furthermore, to enforce information hiding, nominal types cannot be destructured using runtime type tests.
 
 \begin{syntax}
   \verb+NominalType+ & $::=$ & \verb+Ident+\\
@@ -416,7 +416,7 @@ Collection types in Whiley describe compound values constructed from arbitrarily
 \subsection{Sets}
 \label{c_types_set}
 
-A set type describes set values whose elements are subtypes of the element type. For example, \lstinline|{1,2,3}| is an instance of set type \lstinline|{int}|; however, \lstinline|{1.345}| is not.  Variables of set type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}), union (\S\ref{c_expr_union}), intersection (\S\ref{c_expr_intersection}), difference (\S\ref{c_expr_difference}) and element-of (\S\ref{c_expr_element_of}) operations.
+A set type describes set values whose elements are subtypes of the element type. For example, \lstinline|{1,2,3}| is an instance of set type \lstinline|{int}|; however, \lstinline|{1.345}| is not.  Variables of set type support equality comparators (\S\ref{c_expr_equality}), union (\S\ref{c_expr_union}), intersection (\S\ref{c_expr_intersection}), difference (\S\ref{c_expr_difference}) and element-of (\S\ref{c_expr_element_of}) operations.
 
 \begin{syntax}
   \verb+SetType+ & $::=$ & \token{\{} \ \verb+Type+ \ \token{\}} \\
@@ -447,7 +447,7 @@ The above illustrates a simple implementation of the well-known {\em depth-first
 \subsection{Maps}
 \label{c_types_map}
 
-A map represents a one-many mapping from variables of one type to variables of another type. For example, the map type \lstinline|{int=>real}| represents a map from integers to real values. A valid instance of this type might be \lstinline|{1=>1.2,2=>3.0}|.  Variables of map type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}), access (\S\ref{c_expr_access}), union (\S\ref{c_expr_union}), intersection (\S\ref{c_expr_intersection}), difference (\S\ref{c_expr_difference}) and element-of (\S\ref{c_expr_element_of}) operations.
+A map represents a one-many mapping from variables of one type to variables of another type. For example, the map type \lstinline|{int=>real}| represents a map from integers to real values. A valid instance of this type might be \lstinline|{1=>1.2,2=>3.0}|.  Variables of map type support equality comparators (\S\ref{c_expr_equality}), access (\S\ref{c_expr_access}), union (\S\ref{c_expr_union}), intersection (\S\ref{c_expr_intersection}), difference (\S\ref{c_expr_difference}) and element-of (\S\ref{c_expr_element_of}) operations.
 
 \begin{syntax}
   \verb+MapType+ & $::=$ & \token{\{} \ \verb+Type+ \ \token{=>} \ \verb+Type+ \ \token{\}} \\
@@ -476,7 +476,7 @@ The above illustrates a function for evaluating simple expressions which are eit
 \subsection{Lists}
 \label{c_types_list}
 
-A list type describes list values whose elements are subtypes of the element type. For example, \lstinline{[1,2,3]} is an instance of list type \lstinline{[int]}; however, \lstinline{[1.345]} is not.  Variables of list type support equality (\S\ref{c_expr_condition}), inequality (\S\ref{c_expr_condition}), append (\S\ref{c_expr_append}), sublist (\S\ref{c_expr_sublist}) and element-of (\S\ref{c_expr_element_of}) operations.
+A list type describes list values whose elements are subtypes of the element type. For example, \lstinline{[1,2,3]} is an instance of list type \lstinline{[int]}; however, \lstinline{[1.345]} is not.  Variables of list type support equality comparators (\S\ref{c_expr_equality}), append (\S\ref{c_expr_append}), sublist (\S\ref{c_expr_sublist}) and element-of (\S\ref{c_expr_element_of}) operations.
 
 \begin{syntax}
   \verb+ListType+ & $::=$ & \token{[} \ \verb+Type+ \ \token{]}\\
@@ -500,7 +500,7 @@ The above illustrates a simple function which adds two integer lists together.  
 % =======================================================================
 
 \section{Functions and Methods}
-A function or method type describes the signature of a function or method.  These types enable functions or methods to be passed around as values in Whiley and are often referred to as {\em functors}.  This enables a degree of polymorphism in the language, where the exact function or method to be called is unknown.   Variables of function or method type support equality~(\S\ref{c_expr_condition}) and inequality~(\S\ref{c_expr_condition}).
+A function or method type describes the signature of a function or method.  These types enable functions or methods to be passed around as values in Whiley and are often referred to as {\em functors}.  This enables a degree of polymorphism in the language, where the exact function or method to be called is unknown.   Variables of function or method type support equality comparators (\S\ref{c_expr_equality}) only.
 
 \begin{syntax}
   \verb+FunctionType+ & $::=$ & \token{function}\ \token{(}\

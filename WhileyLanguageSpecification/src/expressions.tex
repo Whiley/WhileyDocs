@@ -334,17 +334,29 @@ This function accepts an integer between \lstinline{0} and \lstinline{255} and c
 % Addititve and Multiplicative Expressions
 % =======================================================================
 
-\section{Additive/Multiplicative Expressions}
-\label{c_expr_addmul}
+\section{Additive Expressions}
+\label{c_expr_add}
+
+An additive expression accepts two arguments of identical type (either \lstinline{int} or \lstinline{real}) and produces a result of matching type.  
 
 \begin{syntax}
-  \verb+AdditiveExpr+ & $::=$ &\\
-  \verb+MultiplicativeExpr+ & $::=$ &\\
+  \verb+AdditiveExpr+ & $::=$ & \verb+MultiplicativeExpr+ \big[\big(\ \token{+} $|$ \token{-}\ \big) \verb+AdditiveExpr+ \big]\\
 \end{syntax}
 
-\paragraph{Description.}
+\paragraph{Example.}
 
-\paragraph{Examples.}
+\paragraph{Notes.} 
+
+\section{Multiplicative Expressions}
+\label{c_expr_mul}
+
+A multiplicative expression accepts two arguments of identical type (either \lstinline{int} or \lstinline{real}) and produces a result of matching type.  
+
+\begin{syntax}
+  \verb+MultiplicativeExpr+ & $::=$ & \verb+AccessExpr+ \big[\big(\ \token{*} $|$ \token{/} $|$ \token{\%}\ \big) \verb+MultiplicativeExpr+ \big]\\
+\end{syntax}
+
+\paragraph{Example.}
 
 \paragraph{Notes.} 
 
