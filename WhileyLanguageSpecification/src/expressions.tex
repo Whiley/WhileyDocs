@@ -337,15 +337,19 @@ This function accepts an integer between \lstinline{0} and \lstinline{255} and c
 \section{Additive Expressions}
 \label{c_expr_add}
 
-An additive expression accepts two arguments of identical type (either \lstinline{int} or \lstinline{real}) and produces a result of matching type.  
+An additive expression accepts two arguments of identical type (either \lstinline{int} or \lstinline{real}) and produces a result of matching type.  The {\em addition operator}, \lstinline{+}, adds both arguments together whilst the {\em subtraction operator}, \lstinline{-}, subtracts its right argument from its left argument.
 
 \begin{syntax}
   \verb+AdditiveExpr+ & $::=$ & \verb+MultiplicativeExpr+ \big[\big(\ \token{+} $|$ \token{-}\ \big) \verb+AdditiveExpr+ \big]\\
 \end{syntax}
 
-\paragraph{Example.}
+\paragraph{Example.}  The following illustrates the additive operators:
+\begin{lstlisting}
+function diff(int a, int b) => int:
+    return a - b
+\end{lstlisting}
+This function simply computes the difference between its two arguments using the subtraction operator.
 
-\paragraph{Notes.} 
 
 \section{Multiplicative Expressions}
 \label{c_expr_mul}
