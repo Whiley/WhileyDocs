@@ -380,14 +380,23 @@ This function accepts a non-negative integer and uses this to index into a list.
 \label{c_expr_access}
 
 \begin{syntax}
-  \verb+AccessExpr+ & $::=$ &\\
+  \verb+AccessExpr+ & $::=$ & \verb+TermExpr+\\
+   &  \big( &\token{[}\ \verb+AdditiveExpr+\ \token{]}\\
+   & $|$ & \token{[}\ \verb+AdditiveExpr+\ \token{..}\ \verb+AdditiveExpr+\ \token{]}\\
+   & $|$ & \token{.}\ \verb+Ident+\ \big[\ \token{(}\ \verb+ArgsList+\ \token{)}\ \big]\\
+   & $|$ & \token{->}\ \verb+Ident+\ \big[\ \token{(}\ \verb+ArgsList+\ \token{)}\ \big]\\
+   & \big)$^*$&\\
+&&\\
+\verb+ArgsList+ & $::=$ & \big[\ \verb+UnitExpr+\ \big(\ \token{,}\ \verb+UnitExpr+\ \big)$^*$\ \big]\\
 \end{syntax}
 
 \paragraph{Description.}
 
+The {\em arrow operator} returns a field of the value referenced by the argument.
+
 \paragraph{Examples.}
 
-\paragraph{Notes.} 
+\paragraph{Notes.} The arrow operation ``\lstinline{e->f}'' is a short-hand notation for ``\lstinline{(*e).f}'' and can be used when \lstinline{e} has effective record type (\S\ref{c_types_effective_records}).
 
 % =======================================================================
 % Term Expressions
@@ -397,7 +406,20 @@ This function accepts a non-negative integer and uses this to index into a list.
 \label{c_expr_term}
 
 \begin{syntax}
-  \verb+TermExpr+ & $::=$ &\\
+  \verb+TermExpr+ & $::=$ & \verb+Ident+\\
+  & & \verb+Literal+\\
+  & & \verb+NewExpr+\\
+  & & \verb+SetExpr+\\
+  & & \verb+MapExpr+\\
+  & & \verb+ListExpr+\\
+  & & \verb+RecordExpr+\\
+  & & \verb+NegationExpr+\\
+  & & \verb+LengthOfExpr+\\
+  & & \verb+BracketedExpr+\\
+  & & \verb+LogicalNotExpr+\\
+  & & \verb+BitwiseCompExpr+\\
+  & & \verb+DereferenceExpr+\\
+  & & \verb+LambdaExpr+\\
 \end{syntax}
 
 \paragraph{Description.}
@@ -413,14 +435,14 @@ This function accepts a non-negative integer and uses this to index into a list.
 \section{Dereference Expressions}
 \label{c_expr_dereference}
 
-A {\em dereference expression} accepts an argument of reference type and returns a value (or element) of the reference's target type.  The {\em dereference operator} returns the value referenced by the argument.  The {\em arrow operator} returns a field of the value referenced by the argument.
+A {\em dereference expression} accepts an argument of reference type and returns a value (or element) of the reference's target type.  The {\em dereference operator} returns the value referenced by the argument.  
 
 \begin{syntax}
   \verb+DereferenceExpr+ & $::=$ & \token{*}\ \verb+TermExpr+\\\
   & $|$ & \verb+TermExpr+\ \token{->}\ \verb+Identifier+\\
 \end{syntax}
 
-\paragraph{Example.} The following illustrates the arrow operator:
+\paragraph{Example.} The following illustrates the dereference operator:
 
 \begin{lstlisting}
 type LinkedList is null | &{LinkedList next, int data}
@@ -430,10 +452,10 @@ method length(LinkedList l) => int:
     if l is null:
         return 0
     else:
-        return 1 + length(l->next)
+        return 1 + length((*l).next)
 \end{lstlisting}
 
 This function traverses a linked list counting the number of links it contains.  The arrow operator is used to access the next link in the chain.
 
-\paragraph{Notes.} The dereference operation ``\lstinline{e->f}'' is a short-hand notation for ``\lstinline{(*e).f}'' and can be used when \lstinline{e} has effective record type (\S\ref{c_types_effective_records}).
+\paragraph{Notes.}
 
