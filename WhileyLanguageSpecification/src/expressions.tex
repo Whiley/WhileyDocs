@@ -354,15 +354,23 @@ This function simply computes the difference between its two arguments using the
 \section{Multiplicative Expressions}
 \label{c_expr_mul}
 
-A multiplicative expression accepts two arguments of identical type (either \lstinline{int} or \lstinline{real}) and produces a result of matching type.  
+A multiplicative expression accepts two arguments of identical type (either \lstinline{int} or \lstinline{real}) and produces a result of matching type.  The {\em multiplication operator}, \lstinline{*}, multiplies both arguments together whilst the {\em division operator}, \lstinline{/}, divides its left argument by its right argument.  Finally, the {\em remainder operator} returns the remainder of its operands from an implied division.  
 
 \begin{syntax}
   \verb+MultiplicativeExpr+ & $::=$ & \verb+AccessExpr+ \big[\big(\ \token{*} $|$ \token{/} $|$ \token{\%}\ \big) \verb+MultiplicativeExpr+ \big]\\
 \end{syntax}
 
-\paragraph{Example.}
+\paragraph{Example.} The following illustrates the remainder operator:
 
-\paragraph{Notes.} 
+\begin{lstlisting}
+function indexOf([int] xs, int i)
+requires i >= 0 && |xs| > 0:
+    //
+    return xs[i % |xs|]
+\end{lstlisting}
+This function accepts a non-negative integer and uses this to index into a list.  To ensure the list access is within bounds, the remainder operator is used.  Furthermore, the function requires the list is non-empty to prevent a fault with the remainder operator.
+
+\paragraph{Notes.}  For division, the right operator must be non-zero otherwise a \gls{fault} is raised, and likewise for remainder.  For integer division, the result is rounded towards zero.  For a remainder operation, the result may be negative (e.g. \lstinline{-4 % 3 == -1}).
 
 % =======================================================================
 % Access Expressions
@@ -405,6 +413,27 @@ A multiplicative expression accepts two arguments of identical type (either \lst
 \section{Dereference Expressions}
 \label{c_expr_dereference}
 
+A {\em dereference expression} accepts an argument of reference type and returns a value (or element) of the reference's target type.  The {\em dereference operator} returns the value referenced by the argument.  The {\em arrow operator} returns a field of the value referenced by the argument.
 
- The dereference operation ``\lstinline{e->f}'' is a short-hand notation for ``\lstinline{(*e).f}'' and can be used when \lstinline{e} has effective record type (\S\ref{c_types_effective_records}).
+\begin{syntax}
+  \verb+DereferenceExpr+ & $::=$ & \token{*}\ \verb+TermExpr+\\\
+  & $|$ & \verb+TermExpr+\ \token{->}\ \verb+Identifier+\\
+\end{syntax}
+
+\paragraph{Example.} The following illustrates the arrow operator:
+
+\begin{lstlisting}
+type LinkedList is null | &{LinkedList next, int data}
+
+method length(LinkedList l) => int:
+    //
+    if l is null:
+        return 0
+    else:
+        return 1 + length(l->next)
+\end{lstlisting}
+
+This function traverses a linked list counting the number of links it contains.  The arrow operator is used to access the next link in the chain.
+
+\paragraph{Notes.} The dereference operation ``\lstinline{e->f}'' is a short-hand notation for ``\lstinline{(*e).f}'' and can be used when \lstinline{e} has effective record type (\S\ref{c_types_effective_records}).
 
