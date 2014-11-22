@@ -7,4 +7,5 @@ ensures |xs| == |ys|:
    while i<|xs| where i>=0 && |xs|==|zs|:
        int j = |xs| - (i+1)
        xs[i] = zs[j]
+       i = i + 1
    return xs
