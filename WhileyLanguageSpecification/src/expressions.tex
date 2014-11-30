@@ -44,6 +44,8 @@ A unit expression is an expression which returns exactly one value.  There is a 
                   &  $|$  & \verb+AdditiveExpr+\\
                   &  $|$  & \verb+MultiplicativeExpr+\\
                   &  $|$  & \verb+AccessExpr+\\
+                  &  $|$  & \verb+UnaryExpr+\\
+                  &  $|$  & \verb+LambdaExpr+\\
                   &  $|$  & \verb+TermExpr+\\
                 
 \end{syntax}
@@ -399,40 +401,133 @@ The {\em arrow operator} returns a field of the value referenced by the argument
 \paragraph{Notes.} The arrow operation ``\lstinline{e->f}'' is a short-hand notation for ``\lstinline{(*e).f}'' and can be used when \lstinline{e} has effective record type (\S\ref{c_types_effective_records}).
 
 % =======================================================================
-% Term Expressions
+% Unary Expressions
 % =======================================================================
 
-\section{Term Expressions}
+\section{Unary Expressions}
 \label{c_expr_term}
 
 \begin{syntax}
-  \verb+TermExpr+ & $::=$ & \verb+Ident+\\
-  & & \verb+Literal+\\
-  & & \verb+NewExpr+\\
-  & & \verb+SetExpr+\\
-  & & \verb+MapExpr+\\
-  & & \verb+ListExpr+\\
-  & & \verb+RecordExpr+\\
-  & & \verb+NegationExpr+\\
-  & & \verb+LengthOfExpr+\\
-  & & \verb+BracketedExpr+\\
-  & & \verb+LogicalNotExpr+\\
-  & & \verb+BitwiseCompExpr+\\
-  & & \verb+DereferenceExpr+\\
-  & & \verb+LambdaExpr+\\
+  \verb+UnaryExpr+ & $::=$ & \verb+NegationExpr+\\
+  & $|$ & \verb+LengthOfExpr+\\
+  & $|$ & \verb+BracketedExpr+\\
+  & $|$ & \verb+CastExpr+\\
+  & $|$ & \verb+LogicalNotExpr+\\
+  & $|$ & \verb+BitwiseCompExpr+\\
+  & $|$ & \verb+NewExpr+\\
+  & $|$ & \verb+DereferenceExpr+\\
 \end{syntax}
 
-\paragraph{Description.}
+% =======================================================================
+% Negation Expression
+% =======================================================================
 
-\paragraph{Examples.}
+\section{Negation Expression}
+\label{c_expr_negation}
 
-\paragraph{Notes.} 
+\begin{syntax}
+\verb+NegationExpr+ & $::=$ & \token{-}\ \verb+AccessExpr+\\
+\end{syntax}
+
+\paragraph{Example.}
+
+\paragraph{Notes.}
+
+% =======================================================================
+% LengthOf Expression
+% =======================================================================
+
+\section{LengthOf Expression}
+\label{c_expr_lengthof}
+
+\begin{syntax}
+\verb+LengthOfExpr+ & $::=$ & \token{|}\ \verb+AppendExpr+\ \token{|}\\
+\end{syntax}
+
+\paragraph{Example.}
+
+\paragraph{Notes.}
+
+% =======================================================================
+% Bracketed Expression
+% =======================================================================
+
+\section{Bracketed Expression}
+\label{c_expr_bracketed}
+
+\begin{syntax}
+\verb+BracketedExpr+ & $::=$ & \token{(}\ \verb+MultiExpr+\ \token{)}\\
+\end{syntax}
+
+\paragraph{Example.}
+
+\paragraph{Notes.}
+
+% =======================================================================
+% Cast Expression
+% =======================================================================
+
+\section{Cast Expression}
+\label{c_expr_cast}
+
+\begin{syntax}
+\verb+CastExpr+ & $::=$ & \token{(}\ \verb+DefiniteType+ \token{)}\ \verb+MultiExpr+\\
+\end{syntax}
+
+\paragraph{Example.}
+
+\paragraph{Notes.}
+
+% =======================================================================
+% Logical Not Expression
+% =======================================================================
+
+\section{Logical Not Expression}
+\label{c_expr_logical_not}
+
+\begin{syntax}
+\verb+LogicalNotExpr+ & $::=$ & \token{!}\ \verb+ConditionExpr+\\
+\end{syntax}
+
+\paragraph{Example.}
+
+\paragraph{Notes.}
+
+% =======================================================================
+% Bitwise Complement Expression
+% =======================================================================
+
+\section{Bitwise Complement Expression}
+\label{c_expr_bitwise_complement}
+
+\begin{syntax}
+\verb+BitwiseCompExpr+ & $::=$ & \token{~}\ \verb+UnitExpr+\\
+\end{syntax}
+
+\paragraph{Example.}
+
+\paragraph{Notes.}
+
+% =======================================================================
+% New Expression
+% =======================================================================
+
+\section{New Expression}
+\label{c_expr_new}
+
+\begin{syntax}
+\verb+NewExpr+ & $::=$ & \token{new}\ \verb+UnitExpr+\\
+\end{syntax}
+
+\paragraph{Example.}
+
+\paragraph{Notes.}
 
 % =======================================================================
 % Dereference Expressions
 % =======================================================================
 
-\section{Dereference Expressions}
+\section{Dereference Expression}
 \label{c_expr_dereference}
 
 A {\em dereference expression} accepts an argument of reference type and returns a value (or element) of the reference's target type.  The {\em dereference operator} returns the value referenced by the argument.  
@@ -456,6 +551,94 @@ method length(LinkedList l) => int:
 \end{lstlisting}
 
 This function traverses a linked list counting the number of links it contains.  The arrow operator is used to access the next link in the chain.
+
+\paragraph{Notes.}
+
+% =======================================================================
+% Term Expressions
+% =======================================================================
+
+\section{Term Expressions}
+\label{c_expr_term}
+
+A {\em terminal expression} is one which can terminate an expression tree (though does not necessarily do so).  For example, a numeric literal represents a terminal node in an expression tree.
+
+\begin{syntax}
+  \verb+TermExpr+ & $::=$ & \verb+Ident+\\
+  & $|$ & \verb+Literal+\\
+  & $|$ & \verb+SetExpr+\\
+  & $|$ & \verb+MapExpr+\\
+  & $|$ & \verb+ListExpr+\\
+  & $|$ & \verb+RecordExpr+\\
+\end{syntax}
+
+% =======================================================================
+% Set Expression
+% =======================================================================
+
+\section{Set Expression}
+\label{c_expr_set}
+
+\begin{syntax}
+\end{syntax}
+
+\paragraph{Example.}
+
+\paragraph{Notes.}
+
+% =======================================================================
+% Map Expression
+% =======================================================================
+
+\section{Map Expression}
+\label{c_expr_map}
+
+\begin{syntax}
+\end{syntax}
+
+\paragraph{Example.}
+
+\paragraph{Notes.}
+
+% =======================================================================
+% List Expression
+% =======================================================================
+
+\section{List Expression}
+\label{c_expr_list}
+
+\begin{syntax}
+\end{syntax}
+
+\paragraph{Example.}
+
+\paragraph{Notes.}
+
+% =======================================================================
+% Record Expression
+% =======================================================================
+
+\section{Record Expression}
+\label{c_expr_record}
+
+\begin{syntax}
+\end{syntax}
+
+\paragraph{Example.}
+
+\paragraph{Notes.}
+
+% =======================================================================
+% Lambda Expression
+% =======================================================================
+
+\section{Lambda Expression}
+\label{c_expr_lambda}
+
+\begin{syntax}
+\end{syntax}
+
+\paragraph{Example.}
 
 \paragraph{Notes.}
 
