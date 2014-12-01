@@ -425,11 +425,23 @@ The {\em arrow operator} returns a field of the value referenced by the argument
 \section{Negation Expression}
 \label{c_expr_negation}
 
+A negation expression accepts one argument of numeric type and produces a result of matching type.  Specifically, the {\em negation operator} mathematically negates the given value, which is always equivalent to subtracting the operand from zero.
+
 \begin{syntax}
 \verb+NegationExpr+ & $::=$ & \token{-}\ \verb+AccessExpr+\\
 \end{syntax}
 
-\paragraph{Example.}
+\paragraph{Example.} The following illustrates the negation operator:
+
+\begin{lstlisting}
+function negatableIndexOf(int i, [int] items) => int
+requires -|items| <= i && i < |items|:
+   //
+   if i < 0:
+       return -items[-(i+1)]
+   else:
+       return items[i]
+\end{lstlisting}
 
 \paragraph{Notes.}
 
