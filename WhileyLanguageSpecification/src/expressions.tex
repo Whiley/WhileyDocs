@@ -422,7 +422,7 @@ The {\em arrow operator} returns a field of the value referenced by the argument
 % Negation Expression
 % =======================================================================
 
-\section{Negation Expression}
+\subsection{Negation Expression}
 \label{c_expr_negation}
 
 A negation expression accepts one argument of numeric type and produces a result of matching type.  Specifically, the {\em negation operator} mathematically negates the given value, which is always equivalent to subtracting the operand from zero.
@@ -434,7 +434,7 @@ A negation expression accepts one argument of numeric type and produces a result
 \paragraph{Example.} The following illustrates the negation operator:
 
 \begin{lstlisting}
-function negatableIndexOf(int i, [int] items) => int
+function negAccess(int i, [int] items) => int
 requires -|items| <= i && i < |items|:
    //
    if i < 0:
@@ -449,7 +449,7 @@ requires -|items| <= i && i < |items|:
 % LengthOf Expression
 % =======================================================================
 
-\section{LengthOf Expression}
+\subsection{LengthOf Expression}
 \label{c_expr_lengthof}
 
 \begin{syntax}
@@ -464,7 +464,7 @@ requires -|items| <= i && i < |items|:
 % Bracketed Expression
 % =======================================================================
 
-\section{Bracketed Expression}
+\subsection{Bracketed Expression}
 \label{c_expr_bracketed}
 
 \begin{syntax}
@@ -479,7 +479,7 @@ requires -|items| <= i && i < |items|:
 % Cast Expression
 % =======================================================================
 
-\section{Cast Expression}
+\subsection{Cast Expression}
 \label{c_expr_cast}
 
 \begin{syntax}
@@ -494,7 +494,7 @@ requires -|items| <= i && i < |items|:
 % Logical Not Expression
 % =======================================================================
 
-\section{Logical Not Expression}
+\subsection{Logical Not Expression}
 \label{c_expr_logical_not}
 
 \begin{syntax}
@@ -509,7 +509,7 @@ requires -|items| <= i && i < |items|:
 % Bitwise Complement Expression
 % =======================================================================
 
-\section{Bitwise Complement Expression}
+\subsection{Bitwise Complement Expression}
 \label{c_expr_bitwise_complement}
 
 \begin{syntax}
@@ -524,7 +524,7 @@ requires -|items| <= i && i < |items|:
 % New Expression
 % =======================================================================
 
-\section{New Expression}
+\subsection{New Expression}
 \label{c_expr_new}
 
 \begin{syntax}
@@ -539,7 +539,7 @@ requires -|items| <= i && i < |items|:
 % Dereference Expressions
 % =======================================================================
 
-\section{Dereference Expression}
+\subsection{Dereference Expression}
 \label{c_expr_dereference}
 
 A {\em dereference expression} accepts an argument of reference type and returns a value (or element) of the reference's target type.  The {\em dereference operator} returns the value referenced by the argument.  
@@ -588,7 +588,7 @@ A {\em terminal expression} is one which can terminate an expression tree (thoug
 % Set Expression
 % =======================================================================
 
-\section{Set Expression}
+\subsection{Set Expression}
 \label{c_expr_set}
 
 \begin{syntax}
@@ -602,7 +602,7 @@ A {\em terminal expression} is one which can terminate an expression tree (thoug
 % Map Expression
 % =======================================================================
 
-\section{Map Expression}
+\subsection{Map Expression}
 \label{c_expr_map}
 
 \begin{syntax}
@@ -616,7 +616,7 @@ A {\em terminal expression} is one which can terminate an expression tree (thoug
 % List Expression
 % =======================================================================
 
-\section{List Expression}
+\subsection{List Expression}
 \label{c_expr_list}
 
 \begin{syntax}
@@ -630,7 +630,7 @@ A {\em terminal expression} is one which can terminate an expression tree (thoug
 % Record Expression
 % =======================================================================
 
-\section{Record Expression}
+\subsection{Record Expression}
 \label{c_expr_record}
 
 \begin{syntax}
@@ -644,7 +644,7 @@ A {\em terminal expression} is one which can terminate an expression tree (thoug
 % Lambda Expression
 % =======================================================================
 
-\section{Lambda Expression}
+\subsection{Lambda Expression}
 \label{c_expr_lambda}
 
 \begin{syntax}
