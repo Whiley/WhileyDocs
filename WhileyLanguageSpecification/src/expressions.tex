@@ -104,10 +104,16 @@ The function \lstinline{implies()} implements the well-known equivalence between
 \paragraph{Notes.} 
 
 % =======================================================================
+% Binary Expressions
+% =======================================================================
+
+\section{Binary Expressions}
+
+% =======================================================================
 % Bitwise Expressions
 % =======================================================================
 
-\section{Bitwise Expressions}
+\subsection{Bitwise Expressions}
 \label{c_expr_bitwise}
 A bitwise expression operates on values of \lstinline{byte} type (\S\ref{c_types_byte}).  The {\em bitwise OR} operator, \lstinline{|}, performs a logical OR between the respective bits of each operand, and produces a \lstinline{byte}.  The {\em bitwise AND} operator, \lstinline{&}, performs a logical AND between the respective bits of each operand, and produces a \lstinline{byte}.   The {\em bitwise exclusive-OR} operator, \lstinline{^}, performs a logical exclusive-OR between the respective bits of each operand, and produces a \lstinline{byte}.
 
@@ -146,7 +152,7 @@ This function converts an unsigned integer in the range \lstinline{0} ... \lstin
 % Condition Expressions
 % =======================================================================
 
-\section{Equality Expressions}
+\subsection{Equality Expressions}
 \label{c_expr_equality}
 An equality expression compares two (or more) values together producing a value of \lstinline{bool} type.  The {\em equality comparator}, \lstinline{==}, tests whether two values are equal.  Likewise, the {\em inequality comparator}, \lstinline{==}, tests whether two values are {\em not} equal.
 
@@ -172,7 +178,7 @@ function contains([int] items, int item) => bool:
 This function checks whether a given integer is contained in a list of integers.  This is done by iterating each element of the list and comparing it against the given item.
 
 
-\section{Relational Expressions}
+\subsection{Relational Expressions}
 \label{c_expr_relational}
 A relational expression compares two (or more) values together producing a value of \lstinline{bool} type.  These are either {\em strict} (where only inequality is tested)  or {\em non-strict} (where both equality and inequality are tested).  The {\em less-than comparator}, \lstinline{<}, and {\em greater-than comparator}, \lstinline{>}, are strict.  Conversely, the {\em less-than-or-equal comparator}, \lstinline{<=}, and {\em greater-than-or-equal comparator}, \lstinline{>}, are non-strict.
 
@@ -198,7 +204,7 @@ function compare(int x, int y) => int:
 
 This function compares two integer arguments and returns the ``sign'' of their comparison.  The strict inequality comparators are used so the case where \lstinline{x == y} can be distinguished.
 
-\section{Subset Expressions}
+\subsection{Subset Expressions}
 \label{c_expr_relational}
 A subset expression compares two (or more) values of set type (\S\ref{c_types_set}) together producing a value of \lstinline{bool} type.  These are either {\em strict} (where only inequality is tested)  or {\em non-strict} (where both equality and inequality are tested).  The {\em subset comparator}, ${\tt\subset}$, is strict.  Conversely, the {\em subset-or-equal comparator}, ${\tt\subseteq}$, is non-strict
 
@@ -226,7 +232,7 @@ This function compares two integer sets and returns the ``sign'' of their compar
 
 \paragraph{Notes.}  At the time of writing there is no keyword or non-unicode operator for expressing these comparators.
 
-\section{Element-Of Expression}
+\subsection{Element-Of Expression}
 \label{c_expr_relational}
 An element-of expression determines whether one value is contained within another value of collection type (\S\ref{c_types_collection}) and produces a value of \lstinline{bool} type.  Specifically, if the element is contained then the result is \lstinline{true}, otherwise it is \lstinline{false}.
 
@@ -251,7 +257,7 @@ This function accepts two integer sets and checks whether any element of the fir
 % Append Expressions
 % =======================================================================
 
-\section{Append Expressions}
+\subsection{Append Expressions}
 \label{c_expr_append}
 
 An append expression accepts two lists arguments and produces a value of list type.  The append operator, \lstinline{++}, concatenates the argument lists together, producing a list constructed from those elements of the first argument (in order0 followed by those of the second argument (in order).
@@ -278,7 +284,7 @@ This function constructs a list containing the integer values from \lstinline{st
 % Range Expressions
 % =======================================================================
 
-\section{Range Expressions}
+\subsection{Range Expressions}
 \label{c_expr_range}
 
 A range expression accepts two integer arguments and produces a value of integer list type.  The {\em range operator} constructs the list of integer values from the first argument up to (but not including) the last.
@@ -305,7 +311,7 @@ This function sums the integers between \lstinline{start} and \lstinline{end}.  
 % Shift Expressions
 % =======================================================================
 
-\section{Shift Expressions}
+\subsection{Shift Expressions}
 \label{c_expr_shift}
 
 A shift expression accepts an argument of \lstinline{byte} type (left) and one of \lstinline{int} type (right) and produces a value of \lstinline{byte} type.  The {\em left shift operator}, \lstinline{<<}, shifts the bits of a \lstinline{byte} in an upwards direction, such that the most significant bit is discarded and the least significant bit assigned \lstinline{0}.  The {\em right shift operator}, \lstinline{>>}, shifts bits in a downwards direction, such that the least significant bit is discarded and the most significant bit assigned \lstinline{0}.  
@@ -336,7 +342,7 @@ This function accepts an integer between \lstinline{0} and \lstinline{255} and c
 % Addititve and Multiplicative Expressions
 % =======================================================================
 
-\section{Additive Expressions}
+\subsection{Additive Expressions}
 \label{c_expr_add}
 
 An additive expression accepts two arguments of identical type (either \lstinline{int} or \lstinline{real}) and produces a result of matching type.  The {\em addition operator}, \lstinline{+}, adds both arguments together whilst the {\em subtraction operator}, \lstinline{-}, subtracts its right argument from its left argument.
@@ -353,7 +359,7 @@ function diff(int a, int b) => int:
 This function simply computes the difference between its two arguments using the subtraction operator.
 
 
-\section{Multiplicative Expressions}
+\subsection{Multiplicative Expressions}
 \label{c_expr_mul}
 
 A multiplicative expression accepts two arguments of identical type (either \lstinline{int} or \lstinline{real}) and produces a result of matching type.  The {\em multiplication operator}, \lstinline{*}, multiplies both arguments together whilst the {\em division operator}, \lstinline{/}, divides its left argument by its right argument.  Finally, the {\em remainder operator} returns the remainder of its operands from an implied division.  
@@ -567,18 +573,14 @@ This function traverses a linked list counting the number of links it contains. 
 \paragraph{Notes.}
 
 % =======================================================================
-% Term Expressions
+% Nary Expressions
 % =======================================================================
 
-\section{Term Expressions}
-\label{c_expr_term}
-
-A {\em terminal expression} is one which can terminate an expression tree (though does not necessarily do so).  For example, a numeric literal represents a terminal node in an expression tree.
+\section{Nary Expressions}
+\label{c_expr_nary}
 
 \begin{syntax}
-  \verb+TermExpr+ & $::=$ & \verb+Ident+\\
-  & $|$ & \verb+Literal+\\
-  & $|$ & \verb+SetExpr+\\
+  \verb+TermExpr+ & $::=$ & \verb+SetExpr+\\
   & $|$ & \verb+MapExpr+\\
   & $|$ & \verb+ListExpr+\\
   & $|$ & \verb+RecordExpr+\\
@@ -641,10 +643,25 @@ A {\em terminal expression} is one which can terminate an expression tree (thoug
 \paragraph{Notes.}
 
 % =======================================================================
+% Term Expressions
+% =======================================================================
+
+\section{Term Expressions}
+\label{c_expr_term}
+
+A {\em terminal expression} is one which can terminate an expression tree (though does not necessarily do so).  For example, a numeric literal represents a terminal node in an expression tree.
+
+\begin{syntax}
+  \verb+TermExpr+ & $::=$ & \verb+Ident+\\
+  & $|$ & \verb+Literal+\\
+\end{syntax}
+
+
+% =======================================================================
 % Lambda Expression
 % =======================================================================
 
-\subsection{Lambda Expression}
+\section{Lambda Expression}
 \label{c_expr_lambda}
 
 \begin{syntax}
