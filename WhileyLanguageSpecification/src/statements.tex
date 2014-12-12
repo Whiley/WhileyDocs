@@ -239,6 +239,35 @@ Here, we see a simple \lstinline{for} loop which iterates over all elements of t
 \paragraph{Notes.}   When multiple \lstinline{where} clauses are given, these are combined using a conjunction to form the loop invariant.  The combined invariant must hold on entry to the loop and after each iteration.  Thus, when the condition evaluates to \lstinline{false}, the loop invariant is guaranteed to hold.  However, the loop invariant need not hold when the loop is exited using a \lstinline{break} (\S\ref{c_stmts_break}) statement.
 
 % =======================================================================
+% ReturnStatement
+% =======================================================================
+
+\section{Fail Statement}
+\label{c_stmts_return}
+A {\em fail statement} is used to signal unreachable code.  At runtime, this forces abrupt termination of the program.  At verification time, the verifier will ensure the statement is unreachable.
+
+\begin{syntax}
+  \verb+FailStmt+ & $::=$ & \token{fail}\\
+\end{syntax}
+
+\paragraph{Example.} The following illustrates a \lstinline{fail} statement:
+
+\begin{lstlisting}
+type nat is (int x) where x >= 0
+type neg is (int x) where x < 0
+
+function f(int|null x) => bool|null:
+  //
+  if x is nat:
+     return true
+  else if x is neg:
+     return false
+  else:
+     fail
+\end{lstlisting}
+Here, we see a simple function which checks whether its parameter \lstinline{x} is positive or negative.  A \lstinline{fail} statement is used to signal that the last branch is, in fact, unreachable. 
+
+% =======================================================================
 % If Statement
 % =======================================================================
 
