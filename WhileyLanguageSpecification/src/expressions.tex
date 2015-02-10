@@ -51,10 +51,38 @@ A unit expression is an expression which returns exactly one value.  There is a 
 \end{syntax}
 
 % =======================================================================
+% Quantifier Expressions
+% =======================================================================
+
+\section{Quantifier Expressions}
+\label{c_expr_quantifier}
+
+\begin{syntax}
+\verb+QuantExpr+ & $::=$ & \big(\ \token{no} $|$ \token{some} $|$
+\token{all}\ \big)\ \token{\{}\\
+&&\ \verb+Ident+ \token{in} \verb+Expr+ \big( \token{,}\ \verb+Ident+\
+\token{in}\ \verb+Expr+\ \big)$^+$\ \token{|}\ \verb+LogicalExpr+\\
+&& \token{\}}\\
+\end{syntax}
+
+\paragraph{Description.}
+
+\paragraph{Examples.}
+
+\paragraph{Notes.} 
+
+% =======================================================================
+% Binary Expressions
+% =======================================================================
+
+\section{Binary Expressions}
+\label{c_expr_binary}
+
+% =======================================================================
 % Logical Expressions
 % =======================================================================
 
-\section{Logical Expressions}
+\subsection{Logical Expressions}
 \label{c_expr_logical}
 
 A logical expression operates on values of \lstinline{bool} type (\S\ref{c_types_bool}) to produce another \lstinline{bool} value.  The {\em if-and-only-if (iff)} operator, \lstinline{<==>}, returns \lstinline{true} if either both operands are \lstinline{true} or both are \lstinline{false}.  The {\em implication} operator, \lstinline{==>}, returns \lstinline{true} if either the left operand is \lstinline{false}, or both operands are \lstinline{true}.  The {\em logical OR} operator returns \lstinline{true} if either operand is \lstinline{true}, whilst the {\em logical AND} operator returns \lstinline{true} if both operands are \lstinline{true}.
@@ -83,31 +111,119 @@ function iff(bool x, bool y) => bool:
 The function \lstinline{implies()} implements the well-known equivalence between implication and logical OR.  The function \lstinline{iff()} implements the well-known equivalence between implication and iff.
 
 % =======================================================================
-% Quantifier Expressions
+% Relational Expressions
 % =======================================================================
 
-\section{Quantifier Expressions}
-\label{c_expr_quantifier}
+\subsection{Relational Expressions}
+\label{c_expr_relational}
+
+A relational expression compares two (or more) values together producing a value of \lstinline{bool} type.  Such expressions determine whether a given relationship exists between values. 
+
+% =======================================================================
+% Condition Expressions
+% =======================================================================
+
+\subsubsection{Equality Expressions}
+\label{c_expr_equality}
+The {\em equality comparator}, \lstinline{==}, tests whether two values are equal.  Likewise, the {\em inequality comparator}, \lstinline{==}, tests whether two values are {\em not} equal.
 
 \begin{syntax}
-\verb+QuantExpr+ & $::=$ & \big(\ \token{no} $|$ \token{some} $|$
-\token{all}\ \big)\ \token{\{}\\
-&&\ \verb+Ident+ \token{in} \verb+Expr+ \big( \token{,}\ \verb+Ident+\
-\token{in}\ \verb+Expr+\ \big)$^+$\ \token{|}\ \verb+LogicalExpr+\\
-&& \token{\}}\\
+  \verb+ConditionExpr+ & $::=$ &\\
+  & $|$ & \verb+AppendExpr+ \token{==} \verb+AppendExpr+\\
+  & $|$ & \verb+AppendExpr+ \token{!=} \verb+AppendExpr+\\
 \end{syntax}
 
-\paragraph{Description.}
+\paragraph{Example.}
 
-\paragraph{Examples.}
+The following example illustrates an equality expression:
 
-\paragraph{Notes.} 
+\begin{lstlisting}
+function contains([int] items, int item) => bool:
+    //
+    for i in items:
+        if i == item:
+            return true
+    return false
+\end{lstlisting}
 
-% =======================================================================
-% Binary Expressions
-% =======================================================================
+This function checks whether a given integer is contained in a list of integers.  This is done by iterating each element of the list and comparing it against the given item.
 
-\section{Binary Expressions}
+
+\subsubsection{Inequality Expressions}
+\label{c_expr_inequality}
+Inequality expressions are either {\em strict} (where only inequality is tested)  or {\em non-strict} (where both equality and inequality are tested).  The {\em less-than comparator}, \lstinline{<}, and {\em greater-than comparator}, \lstinline{>}, are strict.  Conversely, the {\em less-than-or-equal comparator}, \lstinline{<=}, and {\em greater-than-or-equal comparator}, \lstinline{>}, are non-strict.
+
+\begin{syntax}
+  \verb+ConditionExpr+ & $::=$ &\\
+  & $|$ & \verb+AppendExpr+ \token{<} \verb+AppendExpr+\\
+  & $|$ & \verb+AppendExpr+ \token{<=} \verb+AppendExpr+\\
+  & $|$ & \verb+AppendExpr+ \token{=>} \verb+AppendExpr+\\
+  & $|$ & \verb+AppendExpr+ \token{>} \verb+AppendExpr+\\
+\end{syntax}
+
+\paragraph{Example.} The following example illustrates the strict inequality comparators:
+
+\begin{lstlisting}
+function compare(int x, int y) => int:
+    if x < y:
+        return -1
+    else if x > y:
+        return 1
+    else:
+        return 0
+\end{lstlisting}
+
+This function compares two integer arguments and returns the ``sign'' of their comparison.  The strict inequality comparators are used so the case where \lstinline{x == y} can be distinguished.
+
+\subsubsection{Subset Expressions}
+\label{c_expr_relational}
+Subset expressions are either {\em strict} (where only inequality is tested)  or {\em non-strict} (where both equality and inequality are tested).  The {\em subset comparator}, ${\tt\subset}$, is strict.  Conversely, the {\em subset-or-equal comparator}, ${\tt\subseteq}$, is non-strict
+
+\begin{syntax}
+  \verb+ConditionExpr+ & $::=$ &\\
+  & $|$ & \verb+AppendExpr+ \token{$\subset$} \verb+AppendExpr+\\
+  & $|$ & \verb+AppendExpr+ \token{$\subseteq$} \verb+AppendExpr+\\
+\end{syntax}
+
+\paragraph{Example.} The following example illustrates the strict comparator:
+
+\begin{lstlisting}
+function compare({int} xs, {int} ys) => int:
+    if xs $\subset$ ys:
+        return -1
+    else if ys $\subset$ xs:
+        return 2
+    else if xs == ys:
+        return 1
+    else:
+        return 0
+\end{lstlisting}
+
+This function compares two integer sets and returns the ``sign'' of their comparison.  The non-strict inequality comparators are used so the cases where \lstinline{xs == ys} and \lstinline{xs != ys} can be distinguished.
+
+\paragraph{Notes.}  At the time of writing there is no keyword or non-unicode operator for expressing these comparators.
+
+\subsubsection{Element-Of Expression}
+\label{c_expr_relational}
+An element-of expression determines whether one value is contained within another value of collection type (\S\ref{c_types_collection}) and produces a value of \lstinline{bool} type.  Specifically, if the element is contained then the result is \lstinline{true}, otherwise it is \lstinline{false}.
+
+\begin{syntax}
+  \verb+ConditionExpr+ & $::=$ &\\
+  & $|$ & \verb+AppendExpr+ \token{in} \verb+AppendExpr+\\
+  & $|$ & \verb+AppendExpr+ \token{$\in$} \verb+AppendExpr+\\
+\end{syntax}
+
+\paragraph{Example.}  The following illustrates the element-of operator.
+
+\begin{lstlisting}
+function containsOne({int} xs, {int} ys):
+    for x in xs:
+        if x in ys:
+            return true
+    return false
+\end{lstlisting}
+This function accepts two integer sets and checks whether any element of the first parameter is in the second.
+
 
 % =======================================================================
 % Bitwise Expressions
@@ -148,110 +264,11 @@ function toUnsignedByte(u8 v) => byte:
 
 This function converts an unsigned integer in the range \lstinline{0} ... \lstinline{255} to a \lstinline{byte}.  The bitwise OR operator is used to construct the resulting \lstinline{byte} by setting individual bits via the \lstinline{mask}.  This example also illustrates the left-shift operator (\S\ref{c_expr_shift}).
 
-% =======================================================================
-% Condition Expressions
-% =======================================================================
 
-\subsection{Equality Expressions}
-\label{c_expr_equality}
-An equality expression compares two (or more) values together producing a value of \lstinline{bool} type.  The {\em equality comparator}, \lstinline{==}, tests whether two values are equal.  Likewise, the {\em inequality comparator}, \lstinline{==}, tests whether two values are {\em not} equal.
+\subsection{Set Expressions}
+\label{c_expr_set}
 
-\begin{syntax}
-  \verb+ConditionExpr+ & $::=$ &\\
-  & $|$ & \verb+AppendExpr+ \token{==} \verb+AppendExpr+\\
-  & $|$ & \verb+AppendExpr+ \token{!=} \verb+AppendExpr+\\
-\end{syntax}
-
-\paragraph{Example.}
-
-The following example illustrates an equality expression:
-
-\begin{lstlisting}
-function contains([int] items, int item) => bool:
-    //
-    for i in items:
-        if i == item:
-            return true
-    return false
-\end{lstlisting}
-
-This function checks whether a given integer is contained in a list of integers.  This is done by iterating each element of the list and comparing it against the given item.
-
-
-\subsection{Relational Expressions}
-\label{c_expr_relational}
-A relational expression compares two (or more) values together producing a value of \lstinline{bool} type.  These are either {\em strict} (where only inequality is tested)  or {\em non-strict} (where both equality and inequality are tested).  The {\em less-than comparator}, \lstinline{<}, and {\em greater-than comparator}, \lstinline{>}, are strict.  Conversely, the {\em less-than-or-equal comparator}, \lstinline{<=}, and {\em greater-than-or-equal comparator}, \lstinline{>}, are non-strict.
-
-\begin{syntax}
-  \verb+ConditionExpr+ & $::=$ &\\
-  & $|$ & \verb+AppendExpr+ \token{<} \verb+AppendExpr+\\
-  & $|$ & \verb+AppendExpr+ \token{<=} \verb+AppendExpr+\\
-  & $|$ & \verb+AppendExpr+ \token{=>} \verb+AppendExpr+\\
-  & $|$ & \verb+AppendExpr+ \token{>} \verb+AppendExpr+\\
-\end{syntax}
-
-\paragraph{Example.} The following example illustrates the strict inequality comparators:
-
-\begin{lstlisting}
-function compare(int x, int y) => int:
-    if x < y:
-        return -1
-    else if x > y:
-        return 1
-    else:
-        return 0
-\end{lstlisting}
-
-This function compares two integer arguments and returns the ``sign'' of their comparison.  The strict inequality comparators are used so the case where \lstinline{x == y} can be distinguished.
-
-\subsection{Subset Expressions}
-\label{c_expr_relational}
-A subset expression compares two (or more) values of set type (\S\ref{c_types_set}) together producing a value of \lstinline{bool} type.  These are either {\em strict} (where only inequality is tested)  or {\em non-strict} (where both equality and inequality are tested).  The {\em subset comparator}, ${\tt\subset}$, is strict.  Conversely, the {\em subset-or-equal comparator}, ${\tt\subseteq}$, is non-strict
-
-\begin{syntax}
-  \verb+ConditionExpr+ & $::=$ &\\
-  & $|$ & \verb+AppendExpr+ \token{$\subset$} \verb+AppendExpr+\\
-  & $|$ & \verb+AppendExpr+ \token{$\subseteq$} \verb+AppendExpr+\\
-\end{syntax}
-
-\paragraph{Example.} The following example illustrates the strict comparator:
-
-\begin{lstlisting}
-function compare({int} xs, {int} ys) => int:
-    if xs $\subset$ ys:
-        return -1
-    else if ys $\subset$ xs:
-        return 2
-    else if xs == ys:
-        return 1
-    else:
-        return 0
-\end{lstlisting}
-
-This function compares two integer sets and returns the ``sign'' of their comparison.  The non-strict inequality comparators are used so the cases where \lstinline{xs == ys} and \lstinline{xs != ys} can be distinguished.
-
-\paragraph{Notes.}  At the time of writing there is no keyword or non-unicode operator for expressing these comparators.
-
-\subsection{Element-Of Expression}
-\label{c_expr_relational}
-An element-of expression determines whether one value is contained within another value of collection type (\S\ref{c_types_collection}) and produces a value of \lstinline{bool} type.  Specifically, if the element is contained then the result is \lstinline{true}, otherwise it is \lstinline{false}.
-
-\begin{syntax}
-  \verb+ConditionExpr+ & $::=$ &\\
-  & $|$ & \verb+AppendExpr+ \token{in} \verb+AppendExpr+\\
-  & $|$ & \verb+AppendExpr+ \token{$\in$} \verb+AppendExpr+\\
-\end{syntax}
-
-\paragraph{Example.}  The following illustrates the element-of operator.
-
-\begin{lstlisting}
-function containsOne({int} xs, {int} ys):
-    for x in xs:
-        if x in ys:
-            return true
-    return false
-\end{lstlisting}
-This function accepts two integer sets and checks whether any element of the first parameter is in the second.
+Set union, intersection and difference.
 
 % =======================================================================
 % Append Expressions
@@ -576,8 +593,8 @@ This function traverses a linked list counting the number of links it contains. 
 % Nary Expressions
 % =======================================================================
 
-\section{Nary Expressions}
-\label{c_expr_nary}
+\section{Constructor Expressions}
+\label{c_expr_constructor}
 
 \begin{syntax}
   \verb+TermExpr+ & $::=$ & \verb+SetExpr+\\
@@ -590,8 +607,8 @@ This function traverses a linked list counting the number of links it contains. 
 % Set Expression
 % =======================================================================
 
-\subsection{Set Expression}
-\label{c_expr_set}
+\subsection{Set Constructors}
+\label{c_expr_set_constructor}
 
 \begin{syntax}
 \end{syntax}
@@ -604,8 +621,8 @@ This function traverses a linked list counting the number of links it contains. 
 % Map Expression
 % =======================================================================
 
-\subsection{Map Expression}
-\label{c_expr_map}
+\subsection{Map Constructors}
+\label{c_expr_map_constructor}
 
 \begin{syntax}
 \end{syntax}
@@ -618,8 +635,8 @@ This function traverses a linked list counting the number of links it contains. 
 % List Expression
 % =======================================================================
 
-\subsection{List Expression}
-\label{c_expr_list}
+\subsection{List Constructors}
+\label{c_expr_list_constructor}
 
 \begin{syntax}
 \end{syntax}
@@ -632,8 +649,8 @@ This function traverses a linked list counting the number of links it contains. 
 % Record Expression
 % =======================================================================
 
-\subsection{Record Expression}
-\label{c_expr_record}
+\subsection{Record Constructors}
+\label{c_expr_record_constructor}
 
 \begin{syntax}
 \end{syntax}

@@ -163,7 +163,7 @@ This illustrates the conversion from a \lstinline{byte} into a \lstinline{string
 \subsection{Integers}
 \label{c_types_int}
 
-The type \lstinline{int} represents the set of arbitrary-sized integers, whose values are expressed as a sequence of one or more numerical or hexadecimal digits (e.g. \lstinline{123456}, \lstinline{0xffaf}, etc).  Variables of \lstinline{int} type support equality comparators (\S\ref{c_expr_equality}), relational comparators (\S\ref{c_expr_relational}), addition (\S\ref{c_expr_addmul}), subtraction (\S\ref{c_expr_addmul}), multiplication (\S\ref{c_expr_addmul}), division (\S\ref{c_expr_addmul}), remainder (\S\ref{c_expr_addmul}) and negation (\S\ref{c_expr_negation}) operations.
+The type \lstinline{int} represents the set of arbitrary-sized integers, whose values are expressed as a sequence of one or more numerical or hexadecimal digits (e.g. \lstinline{123456}, \lstinline{0xffaf}, etc).  Variables of \lstinline{int} type support equality comparators (\S\ref{c_expr_equality}), inequality comparators (\S\ref{c_expr_inequality}), addition (\S\ref{c_expr_addmul}), subtraction (\S\ref{c_expr_addmul}), multiplication (\S\ref{c_expr_addmul}), division (\S\ref{c_expr_addmul}), remainder (\S\ref{c_expr_addmul}) and negation (\S\ref{c_expr_negation}) operations.
 
 
 \begin{syntax}
@@ -189,7 +189,7 @@ This illustrates the well-known recursive method for computing numbers in the {\
 \subsection{Rationals}
 \label{c_types_real}
 
-The type \lstinline{real} represents the set of arbitrary-sized rationals, whose values are expressed as a sequence of one or more numerical digits separated by a period (e.g. \lstinline{1.0}, \lstinline{0.223}, \lstinline{12.55}, etc).  The set of values defined by the type \lstinline{real} is the (infinite) set of all integer pairs, where the first element is designated the numerator, and the second designated the denominator.  Variables of \lstinline{real} type support equality comparators (\S\ref{c_expr_equality}), relational comparators (\S\ref{c_expr_relational}), addition (\S\ref{c_expr_addmul}), subtraction (\S\ref{c_expr_addmul}), multiplication (\S\ref{c_expr_addmul}), division (\S\ref{c_expr_addmul}), remainder (\S\ref{c_expr_addmul}) and negation (\S\ref{c_expr_negation}) operations.  Variables of type \lstinline{real} also support the {\em rational destructuring assignment} to extract the numerator and denominator (illustrated below).
+The type \lstinline{real} represents the set of arbitrary-sized rationals, whose values are expressed as a sequence of one or more numerical digits separated by a period (e.g. \lstinline{1.0}, \lstinline{0.223}, \lstinline{12.55}, etc).  The set of values defined by the type \lstinline{real} is the (infinite) set of all integer pairs, where the first element is designated the numerator, and the second designated the denominator.  Variables of \lstinline{real} type support equality comparators (\S\ref{c_expr_equality}), inequality comparators (\S\ref{c_expr_inequality}), addition (\S\ref{c_expr_addmul}), subtraction (\S\ref{c_expr_addmul}), multiplication (\S\ref{c_expr_addmul}), division (\S\ref{c_expr_addmul}), remainder (\S\ref{c_expr_addmul}) and negation (\S\ref{c_expr_negation}) operations.  Variables of type \lstinline{real} also support the {\em rational destructuring assignment} to extract the numerator and denominator (illustrated below).
 
 \begin{syntax}
   \verb+RealType+ & $::=$ & \token{real} \\
@@ -215,7 +215,7 @@ This illustrates the well-known function for computing the {\em floor} of a \lst
 \subsection{Characters}
 \label{c_types_char}
 
-The type \lstinline{char} represents the set of unicode characters, whose values are expressed as an arbitrary character between quotes (e.g. \lstinline{'c'}, \lstinline{'0'}, \lstinline{'%'}, etc).  Variables of \lstinline{char} type support equality comparators (\S\ref{c_expr_equality}), relational comparators (\S\ref{c_expr_relational}), addition (\S\ref{c_expr_addmul}), subtraction (\S\ref{c_expr_addmul}), multiplication (\S\ref{c_expr_addmul}), division (\S\ref{c_expr_addmul}), remainder (\S\ref{c_expr_addmul}) and negation (\S\ref{c_expr_negation}) operations. 
+The type \lstinline{char} represents the set of unicode characters, whose values are expressed as an arbitrary character between quotes (e.g. \lstinline{'c'}, \lstinline{'0'}, \lstinline{'%'}, etc).  Variables of \lstinline{char} type support equality comparators (\S\ref{c_expr_equality}), inequality comparators (\S\ref{c_expr_inequality}), addition (\S\ref{c_expr_addmul}), subtraction (\S\ref{c_expr_addmul}), multiplication (\S\ref{c_expr_addmul}), division (\S\ref{c_expr_addmul}), remainder (\S\ref{c_expr_addmul}) and negation (\S\ref{c_expr_negation}) operations. 
 
 \begin{syntax}
   \verb+CharType+ & $::=$ & \token{char} \\
