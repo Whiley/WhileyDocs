@@ -209,27 +209,6 @@ function floor(real x) => int:
 This illustrates the well-known function for computing the {\em floor} of a \lstinline{real} variable \lstinline{x} (i.e. the greatest integer not larger than \lstinline{x}).  The rational destructuring assignment is used to extract the numerator and denominator of the parameter \lstinline{x}.
 
 % =======================================================================
-% Char
-% =======================================================================
-
-\subsection{Characters}
-\label{c_types_char}
-
-The type \lstinline{char} represents the set of unicode characters, whose values are expressed as an arbitrary character between quotes (e.g. \lstinline{'c'}, \lstinline{'0'}, \lstinline{'%'}, etc).  Variables of \lstinline{char} type support equality comparators (\S\ref{c_expr_equality}), inequality comparators (\S\ref{c_expr_inequality}), addition (\S\ref{c_expr_addmul}), subtraction (\S\ref{c_expr_addmul}), multiplication (\S\ref{c_expr_addmul}), division (\S\ref{c_expr_addmul}), remainder (\S\ref{c_expr_addmul}) and negation (\S\ref{c_expr_negation}) operations. 
-
-\begin{syntax}
-  \verb+CharType+ & $::=$ & \token{char} \\
-\end{syntax}
-
-\paragraph{Example.} The following illustrates a simple example of the \lstinline{char} type:
-
-\begin{lstlisting}
-function isUpperCase(char c) => bool:
-    return 'A' <= c && c <= 'Z'
-\end{lstlisting}
-This illustrates a very simple function for determining whether an ASCII character is uppercase or not.
-
-% =======================================================================
 % Any
 % =======================================================================
 

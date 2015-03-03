@@ -8,7 +8,7 @@ we'll introduce the basic building blocks of the language.
 
 As found in many languages, Whiley supports a range of primitive
 datatypes for representing boolean, integers, real numbers, bytes,
-characters, etc.  Of these, the most commonly used are:
+etc.  Of these, the most commonly used are:
 
 \begin{itemize}
 \item {\bf Booleans} are denoted by the type \lstinline{bool}.  This is the
@@ -142,11 +142,3 @@ Here, we see that the return type is a tuple and this provides a convenient and 
 \end{lstlisting}
 
 Here, we see that variables \lstinline{x} and \lstinline{y} are assigned their respective component of the tuple returned from \lstinline{swap}.  Again, this syntax simplies the use of functions with multiple return values.
-
-\subsection{Strings and Characters}
-
-\marginpar{Encodings?}Like most programming languages, Whiley provides explicit support for dealing with strings and characters.  This is achieved through the \lstinline{char} and \lstinline{string} data types.  Here, \lstinline{char} represents unicode characters, whilst \lstinline{string} is a list of \lstinline{char}s and supports all list operations (recall~\S\ref{walkthrough_collections}).  Here's a simple example illustrating the well-known \lstinline{replace()} function:
-
-\lstinputlisting{../examples/walkthrough_8.whiley}
-
-This function simply iterates through the elements of a string replacing every occurrence of the character \lstinline{old} with the character \lstinline{n}.
