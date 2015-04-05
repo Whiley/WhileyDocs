@@ -17,10 +17,7 @@ A multi-expression is an expression composed of two or more unit expressions and
 
 \paragraph{Example.}  The following example illustrates the use of a multi-expression:
 
-\begin{lstlisting}
-function scale(real x, real y, real p) => (real,real):
-    return (x*p), (y*p)
-\end{lstlisting}
+\lstinputlisting{../examples/ch6/eg_1.whiley}
 
 This function accepts three \lstinline{real} values and returns two.  In the body, the \lstinline{return} statement contains a multi-expression which produces a tuple composed of two \lstinline{real} values.
 
@@ -72,13 +69,7 @@ A logical expression operates on values of \lstinline{bool} type (\S\ref{c_types
 
 \paragraph{Example.}  The following examples illustrate some of the logical operators:
 
-\begin{lstlisting}
-function implies(bool x, bool y) => bool:
-    return !x || y
-
-function iff(bool x, bool y) => bool:
-    return implies(x,y) && implies(y,x)
-\end{lstlisting}
+\lstinputlisting{../examples/ch6/eg_2.whiley}
 
 The function \lstinline{implies()} implements the well-known equivalence between implication and logical OR.  The function \lstinline{iff()} implements the well-known equivalence between implication and iff.
 
@@ -133,18 +124,7 @@ A bitwise expression operates on values of \lstinline{byte} type (\S\ref{c_types
 
 \paragraph{Example.}  The following example illustrates the bitwise OR operator:
 
-\begin{lstlisting}
-function toUnsignedByte(u8 v) => byte:
-    //
-    byte mask = 00000001b
-    byte r = 0b
-    for i in 0..8:
-        if (v % 2) == 1:
-            r = r | mask
-        v = v / 2
-        mask = mask << 1
-    return r  
-\end{lstlisting}
+\lstinputlisting[firstline=3]{../examples/ch6/eg_3.whiley}
 
 This function converts an unsigned integer in the range \lstinline{0} ... \lstinline{255} to a \lstinline{byte}.  The bitwise OR operator is used to construct the resulting \lstinline{byte} by setting individual bits via the \lstinline{mask}.  This example also illustrates the left-shift operator (\S\ref{c_expr_shift}).
 
@@ -166,14 +146,7 @@ An equality expression compares two (or more) values together producing a value 
 
 The following example illustrates an equality expression:
 
-\begin{lstlisting}
-function contains([int] items, int item) => bool:
-    //
-    for i in items:
-        if i == item:
-            return true
-    return false
-\end{lstlisting}
+\lstinputlisting{../examples/ch6/eg_4.whiley}
 
 This function checks whether a given integer is contained in a list of integers.  This is done by iterating each element of the list and comparing it against the given item.
 
@@ -192,15 +165,7 @@ A relational expression compares two (or more) values together producing a value
 
 \paragraph{Example.} The following example illustrates the strict inequality comparators:
 
-\begin{lstlisting}
-function compare(int x, int y) => int:
-    if x < y:
-        return -1
-    else if x > y:
-        return 1
-    else:
-        return 0
-\end{lstlisting}
+\lstinputlisting{../examples/ch6/eg_5.whiley}
 
 This function compares two integer arguments and returns the ``sign'' of their comparison.  The strict inequality comparators are used so the case where \lstinline{x == y} can be distinguished.
 
@@ -216,17 +181,7 @@ A subset expression compares two (or more) values of set type (\S\ref{c_types_se
 
 \paragraph{Example.} The following example illustrates the strict comparator:
 
-\begin{lstlisting}
-function compare({int} xs, {int} ys) => int:
-    if xs $\subset$ ys:
-        return -1
-    else if ys $\subset$ xs:
-        return 2
-    else if xs == ys:
-        return 1
-    else:
-        return 0
-\end{lstlisting}
+\lstinputlisting{../examples/ch6/eg_6.whiley}
 
 This function compares two integer sets and returns the ``sign'' of their comparison.  The non-strict inequality comparators are used so the cases where \lstinline{xs == ys} and \lstinline{xs != ys} can be distinguished.
 
@@ -244,13 +199,8 @@ An element-of expression determines whether one value is contained within anothe
 
 \paragraph{Example.}  The following illustrates the element-of operator.
 
-\begin{lstlisting}
-function containsOne({int} xs, {int} ys):
-    for x in xs:
-        if x in ys:
-            return true
-    return false
-\end{lstlisting}
+\lstinputlisting{../examples/ch6/eg_7.whiley}
+
 This function accepts two integer sets and checks whether any element of the first parameter is in the second.
 
 % =======================================================================
@@ -268,15 +218,8 @@ An append expression accepts two lists arguments and produces a value of list ty
 \end{syntax}
 
 \paragraph{Examples.} The following example illustrates the list append operator:
-\begin{lstlisting}
-function rangeOf(int start, int end) => [int]:
-    [int] r = []
-    int i = start
-    while i < end:
-        r = r ++ [i]
-        i = i + 1
-    return r
-\end{lstlisting}
+
+\lstinputlisting{../examples/ch6/eg_8.whiley}
 
 This function constructs a list containing the integer values from \lstinline{start} up to (but not including) \lstinline{end}.  The list append operator is used to construct the list, starting initially from the empty list.
 
@@ -295,13 +238,7 @@ A range expression accepts two integer arguments and produces a value of integer
 
 \paragraph{Examples.}  The following illustrates the range operator:
 
-\begin{lstlisting}
-function sum(int start, int end) => [int]:
-    int r = 0
-    for i in start .. end:
-        r = r + i
-    return r
-\end{lstlisting}
+\lstinputlisting{../examples/ch6/eg_9.whiley}
 
 This function sums the integers between \lstinline{start} and \lstinline{end}.  The range operator is used to construct the list to be iterated over.
 
@@ -323,18 +260,7 @@ A shift expression accepts an argument of \lstinline{byte} type (left) and one o
 
 \paragraph{Examples.} The following illustrates the left shift operator:
 
-\begin{lstlisting}
-public function toUnsignedByte(u8 v) => byte:
-    //
-    byte mask = 00000001b
-    byte r = 0b
-    for i in 0..8:
-        if (v % 2) == 1:
-            r = r | mask
-        v = v / 2
-        mask = mask << 1
-    return r
-\end{lstlisting}
+\lstinputlisting[firstline=3]{../examples/ch6/eg_10.whiley}
 
 This function accepts an integer between \lstinline{0} and \lstinline{255} and converts this into an appropriate bit representation.  The left shift operator is used to maintain an internal mask for the bit currently being initialised.
 
@@ -352,10 +278,9 @@ An additive expression accepts two arguments of identical type (either \lstinlin
 \end{syntax}
 
 \paragraph{Example.}  The following illustrates the additive operators:
-\begin{lstlisting}
-function diff(int a, int b) => int:
-    return a - b
-\end{lstlisting}
+
+\lstinputlisting{../examples/ch6/eg_11.whiley}
+
 This function simply computes the difference between its two arguments using the subtraction operator.
 
 
@@ -370,12 +295,8 @@ A multiplicative expression accepts two arguments of identical type (either \lst
 
 \paragraph{Example.} The following illustrates the remainder operator:
 
-\begin{lstlisting}
-function indexOf([int] xs, int i)
-requires i >= 0 && |xs| > 0:
-    //
-    return xs[i % |xs|]
-\end{lstlisting}
+\lstinputlisting{../examples/ch6/eg_12.whiley}
+
 This function accepts a non-negative integer and uses this to index into a list.  To ensure the list access is within bounds, the remainder operator is used.  Furthermore, the function requires the list is non-empty to prevent a fault with the remainder operator.
 
 \paragraph{Notes.}  For division, the right operator must be non-zero otherwise a \gls{fault} is raised, and likewise for remainder.  For integer division, the result is rounded towards zero.  For a remainder operation, the result may be negative (e.g. \lstinline{-4 % 3 == -1}).
@@ -439,15 +360,7 @@ A negation expression accepts one argument of numeric type and produces a result
 
 \paragraph{Example.} The following illustrates the negation operator:
 
-\begin{lstlisting}
-function negAccess(int i, [int] items) => int
-requires -|items| <= i && i < |items|:
-   //
-   if i < 0:
-       return -items[-(i+1)]
-   else:
-       return items[i]
-\end{lstlisting}
+\lstinputlisting{../examples/ch6/eg_13.whiley}
 
 \paragraph{Notes.}
 
@@ -557,16 +470,7 @@ A {\em dereference expression} accepts an argument of reference type and returns
 
 \paragraph{Example.} The following illustrates the dereference operator:
 
-\begin{lstlisting}
-type LinkedList is null | &{LinkedList next, int data}
-
-method length(LinkedList l) => int:
-    //
-    if l is null:
-        return 0
-    else:
-        return 1 + length((*l).next)
-\end{lstlisting}
+\lstinputlisting{../examples/ch6/eg_14.whiley}
 
 This function traverses a linked list counting the number of links it contains.  The arrow operator is used to access the next link in the chain.
 

@@ -1,0 +1,20 @@
+<project name="BuildTemplate">  
+
+  <target name="compile">
+    <echo message="COMPILING: ${ant.project.name}"/>
+    <echo message="==================================="/>
+    <wyjc verification="${wyc.verification}" verbose="false" wyildir="." whileydir="." whileypath="${wyrt.jar}" includes="**/*.whiley"/>
+    <javac debug="true" srcdir="." includeantruntime="false" includes="**/*.java" classpath=".:${wyjc.jar}"/> 
+  </target>
+
+  <target name="clean">
+    <echo message="CLEANING: ${ant.project.name}"/>
+    <echo message="==================================="/>
+    <delete includeEmptyDirs="true" failonerror="false">
+      <fileset dir="." includes="**/*.class"/>
+      <fileset dir="." includes="**/*.wyil"/>
+    </delete>
+  </target>
+
+</project>  
+
