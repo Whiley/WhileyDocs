@@ -61,7 +61,6 @@ Primitive types are the atomic building blocks of all types in Whiley.
   & $|$ & \verb+NullType+ \\
   & $|$ & \verb+BoolType+ \\
   & $|$ & \verb+ByteType+ \\
-  & $|$ & \verb+CharType+ \\
   & $|$ & \verb+IntType+ \\
   & $|$ & \verb+RealType+ \\
 \end{syntax}
@@ -167,25 +166,6 @@ The type \lstinline{real} represents the set of arbitrary-sized rationals, whose
 \lstinputlisting{../examples/ch4/eg_6.whiley}
 
 This illustrates the well-known function for computing the {\em floor} of a \lstinline{real} variable \lstinline{x} (i.e. the greatest integer not larger than \lstinline{x}).  The rational destructuring assignment is used to extract the numerator and denominator of the parameter \lstinline{x}.
-
-% =======================================================================
-% Char
-% =======================================================================
-
-\subsection{Characters}
-\label{c_types_char}
-
-The type \lstinline{char} represents the set of unicode characters, whose values are expressed as an arbitrary character between quotes (e.g. \lstinline{'c'}, \lstinline{'0'}, \lstinline{'%'}, etc).  Variables of \lstinline{char} type support equality comparators (\S\ref{c_expr_equality}), relational comparators (\S\ref{c_expr_relational}), addition (\S\ref{c_expr_addmul}), subtraction (\S\ref{c_expr_addmul}), multiplication (\S\ref{c_expr_addmul}), division (\S\ref{c_expr_addmul}), remainder (\S\ref{c_expr_addmul}) and negation (\S\ref{c_expr_negation}) operations. 
-
-\begin{syntax}
-  \verb+CharType+ & $::=$ & \token{char} \\
-\end{syntax}
-
-\paragraph{Example.} The following illustrates a simple example of the \lstinline{char} type:
-
-\lstinputlisting[firstline=2]{../examples/ch4/eg_7.whiley}
-
-This illustrates a very simple function for determining whether an ASCII character is uppercase or not.
 
 % =======================================================================
 % Any
