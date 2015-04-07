@@ -4,7 +4,7 @@ type LinkedList is null | Link
 type Link is {int data, LinkedList next}
 
 // Return length of linked list (i.e. number of links it contains)
-function length(LinkedList l) => int:
+function length(LinkedList l) -> int:
   if l is null:
     // l now has type null    
     return 0  

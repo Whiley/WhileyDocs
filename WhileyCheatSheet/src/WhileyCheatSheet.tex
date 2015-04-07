@@ -37,7 +37,7 @@ Values are the fundamental units of execution in Whiley and have value semantics
 \section*{Types}
 The Whiley programming language is {\em statically typed}, meaning that every expression has a type determined at compile time.  Furthermore, evaluating an expression is guaranteed to yield a value of its type.\\\\ 
 \begin{tabular}{l r}
-\token{\lstinline+null+} \token{\lstinline+bool+} \token{\lstinline+int+} \token{\lstinline+real+} \token{\lstinline+string+} & {\em Primitive types}\\
+\token{\lstinline+null+} \token{\lstinline+bool+} \token{\lstinline+int+} \token{\lstinline+real+} & {\em Primitive types}\\
 \token{\lstinline+int|null+} \token{\lstinline+bool|int|real+} & {\em Union types}\\
 \token{\lstinline+(int,int)+} \token{\lstinline+(int,null,bool)+} & {\em Tuple types}\\
 \token{\lstinline+[int]+} \token{\lstinline+[[bool]]+} \token{\lstinline+[int|null]+} & {\em List types}\\
@@ -306,7 +306,7 @@ type LinkedList is null | Link
 {\em Function declarations} define functions which are {\em pure} and may not have side-effects.  They are guaranteed to return the same result given the same arguments, and are permitted within specifications. 
 
 \begin{lstlisting}
-function find([int] xs, int x) => int:
+function find([int] xs, int x) -> int:
    ...
 \end{lstlisting}
 
@@ -326,7 +326,7 @@ that must hold when the function is called.  A {\em
 which is required to be true after the function is called.
 
 \begin{lstlisting}
-function decrement(int x) => (int y) 
+function decrement(int x) -> (int y) 
 // Parameter x must be greater than zero
 requires x > 0
 // Return must be greater or equal to zero
