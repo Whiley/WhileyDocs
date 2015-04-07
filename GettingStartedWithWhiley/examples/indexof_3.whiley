@@ -1,5 +1,5 @@
 
-function indexOf([int] items, int item) => (int|null r)
+function indexOf([int] items, int item) -> (int|null r)
 // If return is an int r, then items[r] == item
 ensures r is int ==> items[r] == item
 // If return is null, then no element x in items where x == item

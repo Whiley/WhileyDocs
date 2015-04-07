@@ -1,4 +1,4 @@
-function toInteger(any x) => int:
+function toInteger(any x) -> int:
     if x is int:
         return x
     else if x is real:

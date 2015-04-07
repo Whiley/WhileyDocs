@@ -1,19 +1,19 @@
-function indexOf(string str, char c) => null|int:
+function indexOf([int] items, int item) -> null|int:
    int i = 0
-   while i < |str|:
-      if str[i] == c:
+   while i < |items|:
+      if items[i] == item:
          return i
       i = i + 1
    return null
 
-function split(string str, char c) => [string]:
-   int|null idx = indexOf(str,c)
+function split([int] items, int item) -> [[int]]:
+   int|null idx = indexOf(items,item)
    // idx has type null$|$int
    if idx is int:
        // idx now has type int
-       string below = str[0..idx]
-       string above = str[idx..]
+       [int] below = items[0..idx]
+       [int] above = items[idx..]
        return [below,above]
    else:
        // idx now has type null
-       return [str] // no occurrence
+       return [items] // no occurrence

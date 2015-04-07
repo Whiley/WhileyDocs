@@ -1,4 +1,4 @@
-function isLessThan(int x, int y) => bool:
+function isLessThan(int x, int y) -> bool:
     //
     if x < y:
         return true
