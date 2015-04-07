@@ -21,51 +21,20 @@ In addition to the microwave state, a number of external events are permitted.  
 \subsection{Microwave State}
 The state of the microwave is represented in Whiley using a record containing the main three components, along with an appropriate invariant.  The following illustrates:
 
-\begin{lstlisting}
-type nat is (int x) where x >= 0
-
-// First, define the state of the microwave.
-type Microwave is {
-        bool heatOn, // if true, the oven is cooking
-        bool doorOpen, // if true, the door is open
-        nat timer // timer setting (in seconds)
-} where !doorOpen || !heatOn
-\end{lstlisting}
+\lstinputlisting[firstline=7,lastline=14]{../examples/microwave.whiley}
 
 Here, boolean values are used to represent the state of the heating element, and the door sensor, whilst a natural number represents the timer value.  The invariant states that either the door is closed, or the heating element is off.
 
 \subsection{Events}
 
 Events can be modelled in Whiley using functions which map one microwave state to another.  Here are the two functions representing the {\em open} and {\em close} events:
-\begin{lstlisting}
-// A door closed event is triggered when the sensor detects that the door is closed.
-function doorClosed(Microwave m) => Microwave
-requires m.doorOpen:
-        //
-        m.doorOpen = false
-        return m
 
-// A door opened event is triggered when the sensor detects that the door is opened.
-function doorOpened(Microwave m) => Microwave
-requires !m.doorOpen:
-        //
-        m.doorOpen = true
-        m.heatOn = false
-        return m
-\end{lstlisting}
+\lstinputlisting[firstline=47,lastline=60]{../examples/microwave.whiley}
 
 Here, we can see that preconditions on the functions act as guards restricting when the events may fire.  The Whiley compiler will statically verify that the \lstinline{Microwave} invariant holds for the turn value, assuming it held for the parameter.  Thus, failing to set \lstinline{m.heatOn = false} in \lstinline{doorOpened()} results in a compile time error which signal that the safety property is not be enforced.
 
 Likewise, we can specify the {\em start} event and, in doing so, we must ensure the safety property is enforced.  Specifically, when the heating element is turned on, the door must be closed:
 
-\begin{lstlisting}
-// Signals that the "start cooking" button has been pressed. 
-function startCooking(Microwave m) => Microwave:
-        //        
-        // Here, we check the all important safety property
-        if !m.doorOpen:
-                m.heatOn = true
-        return m
-\end{lstlisting}
+\lstinputlisting[firstline=38,lastline=45]{../examples/microwave.whiley}
 
 Here we can see that, if the door is open when the start button is pressed, nothing happens.  Again, failing to check whether the door is open in \lstinline{startCooking()} results in a compile time error which signal that the safety property is not be enforced.
