@@ -17,25 +17,9 @@ following example illustrates how this works (where the body of
 
 \lstinputlisting{../examples/typing_1.whiley}
 
-Here, \lstinline{indexOf()} returns the first index of a character in
-the string, or \lstinline{null} if there is none.  The type
-\lstinline{null|int} is a {\em union type}, meaning it is either an
-\lstinline{int} or \lstinline{null}.  The \lstinline{split()} function
-splits a string into two pieces based on the first occurrence of a
-given character \lstinline{c}, or leaves the string as is otherwise.
-It calls \lstinline{indexOf()} to determine the first occurrence of
-\lstinline{c} in \lstinline{str}.  Observe that variable
-\lstinline{idx} has been declared as type \lstinline{var}, meaning the
-compiler will automatically infer the best possible type for it.
+Here, \lstinline{indexOf()} returns the first index of an item in a list of items, or \lstinline{null} if there is none.  The type \lstinline{null|int} is a {\em union type}, meaning it is either an \lstinline{int} or \lstinline{null}.  The \lstinline{split()} function splits a list into two pieces based on the first occurrence of a given \lstinline{item}, or leaves the list as is otherwise.  It calls \lstinline{indexOf()} to determine the first occurrence of \lstinline{item} in \lstinline{items}.  Observe that variable \lstinline{idx} has been declared as type \lstinline{var}, meaning the compiler will automatically infer the best possible type for it.
 
-In the above example, Whiley's flow typing system seamlessly ensures
-that \lstinline{null} is never dereferenced.  This is because the type
-\lstinline{null|int} cannot be treated as an \lstinline{int}.
-Instead, one must first check it is an \lstinline{int} using a type
-test, such as ``\lstinline{idx is int}''.  Whiley automatically
-{\em retypes} \lstinline{idx} to \lstinline{int} when this is known to be
-true, thereby avoiding any awkward and unnecessary syntax (e.g. a cast
-as required in many languages).
+In the above example, Whiley's flow typing system seamlessly ensures that \lstinline{null} is never dereferenced.  This is because the type \lstinline{null|int} cannot be treated as an \lstinline{int}. Instead, one must first check it is an \lstinline{int} using a type test, such as ``\lstinline{idx is int}''.  Whiley automatically {\em retypes} \lstinline{idx} to \lstinline{int} when this is known to be true, thereby avoiding any awkward and unnecessary syntax (e.g. a cast as required in many languages).
 
 \begin{insight}{Null References.}  In many languages (e.g. C/C++,
   Java, etc) the use of \lstinline{null} is a significant source of

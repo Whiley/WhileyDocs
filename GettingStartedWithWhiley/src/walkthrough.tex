@@ -92,7 +92,7 @@ supported in Whiley are:
 \begin{itemize}
 \item {\bf Sets} (e.g. \lstinline|{int}|) provide the simplest form of collection, and are constructing using a {\em set constructor} (e.g. \lstinline|{1,2,3}|).  They support the {\em set union} (e.g. \lstinline{xs + ys}), {\em set intersection} (e.g. \lstinline{xs & ys}) and {\em set difference} (e.g. \lstinline{xs - ys}) operators.  One can test for inclusion using the {\em element of} operator (e.g. \lstinline{x in xs}), or the {\em subset} (e.g. \lstinline{xs $\subset$ ys}) and {\em subset or equal} (e.g. \lstinline{xs $\subseteq$ ys}) operators.
   
-\item {\bf Maps} (e.g. \lstinline|{int=>string}|) provide a halfway point between sets and lists.  They are similar to dictionaries in Python or the \lstinline{Map} interface in Java.  They can be viewed as a set of {\em key$\times$ value} pairs, where every key maps to exactly one value.  Maps are constructed using a {\em map constructor} (e.g. \lstinline|{1=>"hello",2=>"world"}|), and elements are accessed using the {\em map access} operator (e.g. \lstinline{map[i]}).  
+\item {\bf Maps} (e.g. \lstinline|{int=>[int]}|) provide a halfway point between sets and lists.  They are similar to dictionaries in Python or the \lstinline{Map} interface in Java.  They can be viewed as a set of {\em key$\times$ value} pairs, where every key maps to exactly one value.  Maps are constructed using a {\em map constructor} (e.g. \lstinline|{1=>"hello",2=>"world"}|), and elements are accessed using the {\em map access} operator (e.g. \lstinline{map[i]}).  
 
 \item {\bf Lists} (e.g. \lstinline{[int]}) are similar to arrays
   (e.g. in Java), but they can also be resized.  As can be seen above,
@@ -108,7 +108,7 @@ All collection kinds can be iterated using the built-in
 
 \lstinputlisting{../examples/walkthrough_3.whiley}
 
-\noindent This function iterates over each key$\times$value pair (i.e. \lstinline{k,v}) in a from integers to strings (i.e. \lstinline|{int=>string}|) using the \lstinline{for} statement.
+\noindent This function iterates over each key$\times$value pair (i.e. \lstinline{k,v}) in a from integers to integer lists (i.e. \lstinline|{int=>[int]}|) using the \lstinline{for} statement.
 
 \subsection{Records and Tuples}
 Aside from collection types, Whiley also allows provides {\em records} and {\em tuples} for grouping items together.  Records are similar to \lstinline{struct}s (as found in C) and objects (as found in JavaScript).  A record is constructed from one or more {\em fields}, each of which has a unique name and type.  For example, the following defines a simple record type for representing 2D points and a function for translating their position:
@@ -142,3 +142,23 @@ Here, we see that the return type is a tuple and this provides a convenient and 
 \end{lstlisting}
 
 Here, we see that variables \lstinline{x} and \lstinline{y} are assigned their respective component of the tuple returned from \lstinline{swap}.  Again, this syntax simplies the use of functions with multiple return values.
+
+\subsection{Strings and Characters}
+
+Unlike many programming languages, Whiley does not provide explicit data types representing strings and characters.  The reason for this is that such data types can already be encoded within the language and, by doing so, we can easily support the full range of different encodings (e.g. ASCII versus UTF-8, etc).  In Whiley, a string is simply a list of integers.  The following example illustrates the well-known \lstinline{replace()} function:
+
+\begin{lstlisting}
+import string from whiley.lang.ASCII
+import char from whiley.lang.ASCII
+
+function replace(string str, char old, char n) => string:
+  //
+  int i = 0
+  while i < |str|:
+     if str[i] == old:
+        str[i] = n
+     i = i + 1
+  return str
+\end{lstlisting}
+
+This uses the standard ASCII representation of strings and characters, which are imported from the standard library.  
