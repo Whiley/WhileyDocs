@@ -6,20 +6,9 @@ The execution of a Whiley program is controlled by \gls{statement}s, which cause
 \label{c_stmts_blocks}
 
 A \gls{statement_block} is a sequence of zero or more consecutive statements which have the same indentation.  Statement blocks are used to group statements together when constructing \gls{compound_statement}s.  For example:
-\begin{lstlisting}
-function sum([int] items) => int:
-    // outer block begins
-    int r = 0
-    int i = 0
-    while i < |items|:
-        // inner block begins
-        r = r + items[i]
-        i = i + 1
-        // inner block ends
-    //
-    return r
-    // outer block ends
-\end{lstlisting}
+
+\lstinputlisting{../examples/ch5/eg_1.whiley}
+
 The above example contains two statement blocks, one nested inside the other.  The outer block demarcates the body of the \lstinline{sum()} function, whilst the inner block demarcates the body of the \lstinline{while} statement.
 
 % =======================================================================
@@ -35,13 +24,9 @@ Represents an {\em assert statement} of the form ``\lstinline{assert e}'', where
 \end{syntax}
 
 \paragraph{Example.} The following illustrates an \lstinline{assert} statement:
-\begin{lstlisting}
-function abs(int x) => int:
-    if x < 0:
-        x = -x
-    assert x >= 0
-    return x
-\end{lstlisting}
+
+\lstinputlisting{../examples/ch5/eg_2.whiley}
+
 Here, an assertion is used to check that the value being returned by the \lstinline{abs()} is non-negative.  Since this is a true statement of the function, this statement will never raise a fault.
 
 % =======================================================================
@@ -58,12 +43,9 @@ As {\em assignment statement} is of the form \lstinline{leftHandSide = rightHand
 
 
 \paragraph{Example.} The following illustrates different possible assignment statements:
-\begin{lstlisting}
-x = y       // variable assignment
-x.f = y     // field assignment
-x[i] = y    // list assignment
-x[i].f = y  // compound assignment
-\end{lstlisting}
+
+\lstinputlisting{../examples/ch5/eg_3.whiley}
+
 The last assignment here illustrates that the left-hand side of an assignment can be arbitrarily complex, involving nested assignments into lists and records.
 
 % =======================================================================
@@ -80,12 +62,8 @@ An {\em assume statement} is of the form ``\lstinline{assume e}'', where \lstinl
 
 \paragraph{Example.} The following illustrates an \lstinline{assume} statement:
 
-\begin{lstlisting}
-function abs(int x) => (int y) ensures y >= 0:
-    //
-    assume x >= 0
-    return x
-\end{lstlisting}
+\lstinputlisting{../examples/ch5/eg_4.whiley}
+
 Here, the programmer has used an assumption to ensure this function passes verification.  This would not appear to be safe in this case, and may lead to a fault at runtime.
 
 % =======================================================================
@@ -102,17 +80,8 @@ A {\em break statement} transfers control out of the enclosing loop (i.e. \lstin
 
 \paragraph{Example.} The following illustrates a \lstinline{break} statement:
 
-\begin{lstlisting}
-// Remove lowest element holding x from xs
-function remove([int] xs, int x) => [int]:
-    int i = 0
-    while i < |xs|:
-        if xs[i] == x:
-           break
-        else:
-           i = i + 1
-    return xs[0..i] ++ xs[i+1..]
-\end{lstlisting}
+\lstinputlisting{../examples/ch5/eg_5.whiley}
+
 Here, we see a \lstinline{break} statement being used to exit a \lstinline{while} loop when the first element matching parameter \lstinline{x} is found.  
 
 \paragraph{Notes.} Unlike many other programming languages (e.g. Java), \lstinline{break} statements cannot be used to transfer control out of a \lstinline{switch} statement (\S\ref{c_stmts_switch}).  This is because \lstinline{switch} statements have {\em explicit}, rather than {\em implicit}, fall-through.
@@ -131,16 +100,8 @@ A {\em continue statement} can be used either to transfer control to the next it
 
 \paragraph{Example.} The following illustrates a \lstinline{continue} statement:
 
-\begin{lstlisting}
-function sumNonNegative([int] xs) => int:
-    int i = 0
-    int r = 0
-    for i in 0 .. |xs|:
-        if xs[i] < 0:
-            continue
-        r = r + xs[i]
-    return r
-\end{lstlisting}
+\lstinputlisting{../examples/ch5/eg_6.whiley}
+
 Here, a \lstinline{continue} statement is used to ensure the negative numbers are not included in the result of the function.
 
 \paragraph{Notes.} Unlike many other programming languages (e.g. Java), \lstinline{continue} statements are used to transfer control to the next case of a \lstinline{switch} statement (\S\ref{c_stmts_switch}).  This is because \lstinline{switch} statements have {\em explicit}, rather than {\em implicit}, fall-through.
@@ -158,14 +119,8 @@ A {\em debug statement} outputs the result of evaluating its expression to the {
 
 \paragraph{Example.} The following illustrates a \lstinline{debug} statement:
 
-\begin{lstlisting}
-function f(int x) => int:
-    debug "f(" ++ x ++ ") called"
-    if x == 1 || x == 0:
-       return x
-    else:
-       return f(x-1) + f(x-2)
-\end{lstlisting}
+\lstinputlisting{../examples/ch5/eg_7.whiley}
+
 Here, we see a recursive implementation of the well-known {\em fibonacci} sequence.  A \lstinline{debug} statement is being used to investigate the parameter values passed to the function.
 
 % =======================================================================
@@ -186,20 +141,8 @@ A do-while statement repeatedly executes a statement block until an expression (
 
 \paragraph{Example.} The following illustrates an do-while statement:
 
-\begin{lstlisting}
-function sum([int] xs) => int
-// Input must not be empty list
-requires |xs| > 0:
-  //
-  int r = 0
-  int i = 0
-  do:
-    r = r + xs[i]
-    i = i + 1
-  while i < |xs| where i >= 0:
-  //
-  return r
-\end{lstlisting}
+\lstinputlisting{../examples/ch5/eg_8.whiley}
+
 Here, we see a simple do-while statement which sums the elements of variable \lstinline{xs}, storing the result in variable \lstinline{r}.  A loop invariant is given which establishes that variable \lstinline{i} is non-negative.
 
 \paragraph{Notes.}   When multiple \lstinline{where} clauses are given, these are combined using a conjunction to form the loop invariant.  The combined invariant must hold on entry to the loop and after each iteration.  Thus, when the condition evaluates to \lstinline{false}, the loop invariant is guaranteed to hold.  However, the loop invariant need not hold when the loop is exited using a \lstinline{break} (\S\ref{c_stmts_break}) statement.
@@ -222,18 +165,8 @@ A {\em for statement} iterates over all elements in a collection obtained from e
 
 \paragraph{Example.} The following illustrates a \lstinline{for} statement:
 
-\begin{lstlisting}
-function max([int] items) => int
-// Input list cannot be empty
-requires |items| > 0:
-   //
-   int r = items[0]
-   
-   for i,v in items:
-        r = Math.max(r,v)
-   
-   return v
-\end{lstlisting}
+\lstinputlisting{../examples/ch5/eg_9.whiley}
+
 Here, we see a simple \lstinline{for} loop which iterates over all elements of the list \lstinline{items}.  At each iteration, variable \lstinline{i} holds the index whilst \lstinline{v} contains the element at that index (i.e. \lstinline{v == items[i]}).
 
 \paragraph{Notes.}   When multiple \lstinline{where} clauses are given, these are combined using a conjunction to form the loop invariant.  The combined invariant must hold on entry to the loop and after each iteration.  Thus, when the condition evaluates to \lstinline{false}, the loop invariant is guaranteed to hold.  However, the loop invariant need not hold when the loop is exited using a \lstinline{break} (\S\ref{c_stmts_break}) statement.
@@ -252,19 +185,8 @@ A {\em fail statement} is used to signal unreachable code.  At runtime, this for
 
 \paragraph{Example.} The following illustrates a \lstinline{fail} statement:
 
-\begin{lstlisting}
-type nat is (int x) where x >= 0
-type neg is (int x) where x < 0
+\lstinputlisting{../examples/ch5/eg_10.whiley}
 
-function f(int|null x) => bool|null:
-  //
-  if x is nat:
-     return true
-  else if x is neg:
-     return false
-  else:
-     fail
-\end{lstlisting}
 Here, we see a simple function which checks whether its parameter \lstinline{x} is positive or negative.  A \lstinline{fail} statement is used to signal that the last branch is, in fact, unreachable. 
 
 % =======================================================================
@@ -287,15 +209,8 @@ An \lstinline{if} statement conditionally executes a \gls{statement_block} based
 
 \paragraph{Example.} The following illustrates an \lstinline{if} statement:
 
-\begin{lstlisting}
-function max(int x, int y) => int:
-    if(x > y):
-        return x
-    else if(x == y):
-        return 0
-    else:
-        return y
-\end{lstlisting}
+\lstinputlisting{../examples/ch5/eg_11.whiley}
+
 Here, we see an \lstinline{if} statement with two conditional outcomes
 and one default outcome.
 
@@ -316,15 +231,8 @@ A while statement repeatedly executes a statement block until an expression (the
 
 \paragraph{Example.} The following illustrates an \lstinline{while} statement:
 
-\begin{lstlisting}
-function sum([int] xs) => int:
-  int r = 0
-  int i = 0
-  while i < |xs| where i >= 0:
-    r = r + xs[i]
-    i = i + 1
-  return r
-\end{lstlisting}
+\lstinputlisting{../examples/ch5/eg_12.whiley}
+
 Here, we see a simple \lstinline{while} statement which sums the elements of variable \lstinline{xs}, storing the result in variable \lstinline{r}.  A loop invariant is given which establishes that variable \lstinline{i} is non-negative.
 
 \paragraph{Notes.}   When multiple \lstinline{where} clauses are given, these are combined using a conjunction to form the loop invariant.  The combined invariant must hold on entry to the loop and after each iteration.  Thus, when the condition evaluates to \lstinline{false}, the loop invariant is guaranteed to hold.  However, the loop invariant need not hold when the loop is exited using a \lstinline{break} (\S\ref{c_stmts_break}) statement.
@@ -344,10 +252,8 @@ A {\em return statement} has an optional expression referred to as the {\em retu
 
 \paragraph{Example.} The following illustrates a \lstinline{return} statement:
 
-\begin{lstlisting}
-function f(int x) => int:
-    return x + 1
-\end{lstlisting}
+\lstinputlisting{../examples/ch5/eg_13.whiley}
+
 Here, we see a simple simple function which returns the increment of its parameter \lstinline{x} using a \lstinline{return} statement.
 
 
@@ -367,18 +273,8 @@ A {\em skip statement} is a no-operation and has no effect on the environment.  
 
 \paragraph{Example.} The following illustrates a \lstinline{skip} statement:
 
-\begin{lstlisting}
-function abs(int x) => (int y)
-// Return value cannot be negative
-ensures y >= 0:
-    //
-    if x >= 0:
-        skip
-    else:
-        x = -x
-    //
-    return x
-\end{lstlisting}
+\lstinputlisting{../examples/ch5/eg_14.whiley}
+
 Here, we see a \lstinline{skip} statement being used to represent an empty statement block.  
 
 % =======================================================================
@@ -401,27 +297,9 @@ A {\em switch statement} transfers control to one of several statement blocks, r
 
 \paragraph{Example.} The following illustrates a \lstinline{switch} statement:
 
-\begin{lstlisting}
-function toDescriptorString(JvmType.Primitive t) => string:
-    switch t:
-        case JvmType.Boolean:
-            return "Z"
-        case JvmType.Byte:
-            return "B"
-        case JvmType.Char:
-            return "C"
-        case JvmType.Short:
-            return "S"
-        case JvmType.Int:
-            return "I"
-        case JvmType.Long:
-            return "J"
-        case JvmType.Float:
-            return "F"
-        default:
-            return "D"
-\end{lstlisting}
-Here, we see a simple \lstinline{switch} statement which choose between a number of possible values of type \lstinline{JvmType.Primitive}.  A \lstinline{default} case is given which catches the only remaining case (i.e. representing the value \lstinline{JvmType.Double}).
+\lstinputlisting[firstline=15]{../examples/ch5/eg_15.whiley}
+
+Here, we see a simple \lstinline{switch} statement which choose between a number of possible values of type \lstinline{Primitive}.  A \lstinline{default} case is given which catches the only remaining case (i.e. representing the value \lstinline{Double}).
 
 % % =======================================================================
 % % ThrowStatement
@@ -507,10 +385,7 @@ A \gls{variable_declaration} statement has an optional expression assignment ref
 \end{syntax}
 
 \paragraph{Example.} Some example variable declarations are:
-\begin{lstlisting}
-int x
-int y = 1
-int z = x + y
-int a, int b = x,y
-\end{lstlisting}
+
+\lstinputlisting{../examples/ch5/eg_16.whiley}
+
 Here we see four variable declarations.  The first has no initialiser, whilst the remainder have initialisers.  The final declaration illustrates a more complex use of type patterns where two variables of type \lstinline{int} are initialised from a tuple expression

@@ -5,10 +5,9 @@ The Whiley programming language is {\em statically typed}, meaning that every ex
 \label{c_types_type_overview}
 
 Types in Whiley are unusual (in part) because there is a large gap between their {\em syntactic} description and their underlying {\em semantic} meaning.  In most programming languages (e.g. Java), this gap is either small or non-existent and, hence, there is little to worry about.  However, in Whiley, we must tread carefully to avoid confusion.  The following example attempts to illustrate this gap between the syntax and semantics of types:
-\begin{lstlisting}
-function id(null|int x) => int|null:
-    return x
-\end{lstlisting}
+
+\lstinputlisting{../examples/ch4/eg_1.whiley}
+
 In this function we see two distinct \gls{type_descriptor}s expressed in the program text, namely ``\lstinline{int|null}'' and ``\lstinline{null|int}''.  Type descriptors occur at the source-level and describe \gls{type}s which occur at the abstract (or underlying) level.  In this particular case, we have two distinct type descriptors which describe the {\em same} underlying type.  We will often refer to types as providing the semantic (i.e. meaning) of type descriptors.  
 
 \pagebreak
@@ -62,7 +61,6 @@ Primitive types are the atomic building blocks of all types in Whiley.
   & $|$ & \verb+NullType+ \\
   & $|$ & \verb+BoolType+ \\
   & $|$ & \verb+ByteType+ \\
-  & $|$ & \verb+CharType+ \\
   & $|$ & \verb+IntType+ \\
   & $|$ & \verb+RealType+ \\
 \end{syntax}
@@ -82,17 +80,8 @@ The null type is typically used to show the absence of something. It is distinct
 
 \paragraph{Example.} The following illustrates a simple example of the \lstinline{null} type:
 
-\begin{lstlisting}
-type Tree is null | { int data, Tree left, Tree right }
+\lstinputlisting{../examples/ch4/eg_2.whiley}
 
-function height(Tree t) => int:
-    if t is null:
-        // height of empty tree is zero
-        return 0
-    else:
-        // height is this node plus maximum height of subtrees
-        return 1 + Math.max(height(t.left), height(t.right))
-\end{lstlisting}
 This defines \lstinline{Tree} --- a {\em recursive type} --- which is either empty (i.e. \lstinline{null}) or consists of a field \lstinline{data} and two subtrees, \lstinline{left} and \lstinline{right}.  The \lstinline{height} function calculates the height of a \lstinline{Tree} as the longest path from the root through the tree.
 
 \paragraph{Notes.}  With all of the problems surrounding \lstinline{null} and \lstinline{NullPointerException}s in languages like Java and C, it may seem that this type should be avoided. However, it remains a very useful abstraction around (e.g. for terminating recursive types) and, in Whiley, is treated in a completely safe manner (unlike e.g. Java).
@@ -112,16 +101,8 @@ The \lstinline{bool} type represents the set of boolean values (i.e. \lstinline{
 
 \paragraph{Example.} The following illustrates a simple example of the \lstinline{bool} type:
 
-\begin{lstlisting}
-// Determine whether item is contained in list or not
-function contains([int] list, int item) => bool:
-    // examine every element of list
-    for l in list:
-        if l == item:
-            return true
-    // done
-    return false
-\end{lstlisting}
+\lstinputlisting{../examples/ch4/eg_3.whiley}
+
 This function determines whether or not a given integer value is contained within a list of integers.  If so, it returns \lstinline{true}, otherwise it returns \lstinline{false}.
 
 % =======================================================================
@@ -139,18 +120,8 @@ The type \lstinline{byte} represents the set of eight-bit sequences, whose value
 
 \paragraph{Example.} The following illustrates a simple example of the \lstinline{byte} type:
 
-\begin{lstlisting}
-// convert a byte into a string
-function toString(byte b) => string:
-    string r = "b"
-    for i in 0..8:
-        if (b & 00000001b) == 00000001b:
-            r = "1" ++ r
-        else:
-            r = "0" ++ r
-        b = b >> 1	
-    return r
-\end{lstlisting}
+\lstinputlisting[firstline=2]{../examples/ch4/eg_4.whiley}
+
 This illustrates the conversion from a \lstinline{byte} into a \lstinline{string}.  The conversion is performed one digit at a time, starting from the rightmost bit.
 
 \paragraph{Notes.}  Unlike for many languages, there is no representation associated with a byte. For example, to extract an integer value from a byte, it must be explicitly decoded according to some representation (e.g. two's compliment) using an auxillary function (e.g. \lstinline{Byte.toInt()}).
@@ -172,13 +143,8 @@ The type \lstinline{int} represents the set of arbitrary-sized integers, whose v
 
 \paragraph{Example.} The following illustrates a simple example of the \lstinline{int} type:
 
-\begin{lstlisting}
-function fib(int x) => int:
-    if x <= 1:
-        return x
-    else:
-        return fib(x-1) + fib(x-2)
-\end{lstlisting}
+\lstinputlisting{../examples/ch4/eg_5.whiley}
+
 This illustrates the well-known recursive method for computing numbers in the {\em fibonacci} sequence.
 
 \paragraph{Notes.}  Since integers in Whiley are of arbitrary size, {\em integer overflow} is not possible.  This contrasts with other languages (e.g. Java) that used {\em fixed-width} number representations (e.g. 32bit two's complement).  Furthermore, there is nothing equivalent to the constants found in such languages for representing the uppermost and least integers expressible (e.g. \lstinline{Integer.MIN_VALUE} and \lstinline{Integer.MAX_VALUE}, as found in Java).
@@ -197,15 +163,8 @@ The type \lstinline{real} represents the set of arbitrary-sized rationals, whose
 
 \paragraph{Example.} The following illustrates a simple example of the \lstinline{real} type:
 
-\begin{lstlisting}
-function floor(real x) => int:
-    int num / int den = x    // extract numerator and denominator
-    int r = num / den        // integer division
-    if x < 0.0 && den != 1: 	 
-        return r - 1 
-    else:
-        return r 
-\end{lstlisting}
+\lstinputlisting{../examples/ch4/eg_6.whiley}
+
 This illustrates the well-known function for computing the {\em floor} of a \lstinline{real} variable \lstinline{x} (i.e. the greatest integer not larger than \lstinline{x}).  The rational destructuring assignment is used to extract the numerator and denominator of the parameter \lstinline{x}.
 
 % =======================================================================
@@ -223,15 +182,7 @@ The type \lstinline{any} represents the type whose variables may hold any possib
 
 \paragraph{Example.} The following illustrates a simple example of the \lstinline{any} type:
 
-\begin{lstlisting}
-function toInt(any val) => int:
-    if val is int:
-        return val
-    else if val is real:
-        return Math.floor(val)
-    else:
-        return 0 // default value        
-\end{lstlisting}
+\lstinputlisting{../examples/ch4/eg_8.whiley}
 
 Here, the function \lstinline{toInt} accepts {\em any valid Whiley value}, which includes all values of type \lstinline{int}, \lstinline{real}, collections, records, etc.  The function then inspects the value that it has been passed and, in the case of values of type \lstinline{int} and \lstinline{real}, returns an integer approximation; for all other values, it returns \lstinline{0}.
 
@@ -252,15 +203,7 @@ The \lstinline{void} type represents the type whose variables cannot exist (i.e.
 
 \paragraph{Example.} The following example illustrates several uses of the \lstinline{void} type:
 
-\begin{lstlisting}
-// Attempt to update first element
-method update1st(&[int] list, int value) => void:
-    // First, check whether list is empty or not
-    if *list != [void]:
-       // Then, update 1st element
-       (*list)[0] = x
-    // done
-\end{lstlisting}
+\lstinputlisting{../examples/ch4/eg_9.whiley}
 
 Here, the method \lstinline{update1st} is declared to return \lstinline{void} --- meaning it does not return a value.  Instead, this method updates some existing state accessible through the reference \lstinline{list}.  Within the method body, the value accessible via this reference is compared against the \lstinline{[void]} (i.e. the {\em empty list}).
 
@@ -283,10 +226,8 @@ A tuple type describes a compound type made up of two or more elements in sequen
 
 \paragraph{Example.} The following example illustrates several uses of tuples:
 
-\begin{lstlisting}
-function swap(int x, int y) => (int,int):
-    return y,x
-\end{lstlisting}
+\lstinputlisting{../examples/ch4/eg_10.whiley}
+
 This function accepts two integer parameters, and returns a tuple type containing two integers.  The function simple reverses the order that the values occur in the tuple passed as a parameter.
  
 % =======================================================================
@@ -305,25 +246,10 @@ A record type describes a compound made of from one or more {\em fields}, each o
 \end{syntax}
 
 Records use {\em mixed types} for defining fields (see \S\ref{c_types_mixed}), meaning that field names may be mixed within their type.  This is primarily useful for fields of function or method type (see below).  Records using the \token{...} notation are referred to as {\em open records} (e.g. \lstinline|{int x, ...}|), otherwise they are referred to as {\em closed records} (e.g. \lstinline|{int x, int y}|).  Open records represent all records containing {\em at least} the given fields, whilst closed records represent those containing {\em exactly} the given fields.   
-
 \paragraph{Example.} The following example illustrates an open record type: 
-\begin{lstlisting}
-type Writer is { 
-   method write([byte]) => int,
-   ...
-}
-type PrintWriter is { 
-   method write([byte]) => int,
-   method println(string) => void,
-   ...
-}
-// Create print writer if not already one
-function create(Writer writer) => PrintWriter:
-    if writer is PrintWriter:
-        return writer
-    else:
-        return new PrinterWriter(writer)
-\end{lstlisting}
+
+\lstinputlisting[firstline=3]{../examples/ch4/eg_11.whiley}
+
 The above illustrates two open records \lstinline{Writer} and \lstinline{PrintWriter}.  The former has one field (\lstinline{write}), whilst the latter has two fields (\lstinline{write} and \lstinline{println}).  The above also illustrates use of mixed types.  For example, the field ``\lstinline{write}'' is declared as ``\lstinline{method write([byte]) => int}'' which mixes together the field name (i.e. ``\lstinline{write}'') with its type (i.e. ``\lstinline{method([byte]) => int}'').
 
 % =======================================================================
@@ -339,13 +265,8 @@ Reference types in Whiley represent references to variables, such as those alloc
 \end{syntax}
 
 \paragraph{Example.} The following example illustrates reference types:
-\begin{lstlisting}
-// Swap contents of heap-allocated int variables
-method swap(&int pX, &int pY):
-    int tmp = *pX
-    *pX = *pY
-    *pY = tmp
-\end{lstlisting} 
+
+\lstinputlisting{../examples/ch4/eg_12.whiley}
 
 The above illustrates a method which accepts two references to variables of type \lstinline{int} that may refer to the same variable.  The method simply swaps the contents of the variables to which they refer.
 
@@ -403,19 +324,7 @@ A set type describes set values whose elements are subtypes of the element type.
 
 \paragraph{Example.} The following example illustrates set types:
 
-\begin{lstlisting}
-// Adjacency list representation
-type Graph is ([{int}])
-
-function depthFirstSearch(int v, Graph graph, {int} visited) => {int}:
-    visited = visited + {v}
-    // Traverse edges not yet visited
-    for w in graph[v]:
-        if !(w in visited):
-            visited = depthFirstSearch(w,graph,visited)
-    // Done
-    return visited
-\end{lstlisting}
+\lstinputlisting{../examples/ch4/eg_13.whiley}
 
 The above illustrates a simple implementation of the well-known {\em depth-first search} algorithm.  In the example, a \lstinline{Graph} is a list of sets of edge targets, where any \lstinline{w in g[v]} describes an edge from \lstinline{v} to \lstinline{w} in the graph.  The \lstinline{visited} set is used to maintain a list of previously seen vertices, in order to prevent the same vertex from being visited more than once.  
 
@@ -434,17 +343,7 @@ A map represents a one-many mapping from variables of one type to variables of a
 
 \paragraph{Example.} The following example illustrates map types:
 
-\begin{lstlisting}
-type Expr is int | string // simple expression forms
-
-function evaluate(Expr e, {string=>int} environment) => int:
-    if e is int:
-        // expression is constant, so return this directly
-        return e
-    else:
-        // expression is variable, so look up its value in environment
-        return environment[e]
-\end{lstlisting}
+\lstinputlisting[firstline=3]{../examples/ch4/eg_14.whiley}
 
 The above illustrates a function for evaluating simple expressions which are either integer constants or variable names.  To evaluate an expression which is an integer constant, we simply return that constant.  To evaluate an expression which is a variable name, we look up the current value of that variable in an environment which maps variable names to integer constants.
 
@@ -463,14 +362,7 @@ A list type describes list values whose elements are subtypes of the element typ
 
 \paragraph{Example.} The following example illustrates list types:
 
-\begin{lstlisting}
-function add([int] v1, [int] v2) => ([int] v3):
-    int i=0
-    while i < |v1|:
-        v1[i] = v1[i] + v2[i]
-        i = i + 1
-    return v1
-\end{lstlisting}
+\lstinputlisting{../examples/ch4/eg_15.whiley}
 
 The above illustrates a simple function which adds two integer lists together.  The function's \gls{precondition} requires that both input list have the same length, whilst its \gls{postcondition}s ensures that this matches the length of the output.
 
@@ -491,16 +383,8 @@ A function or method type describes the signature of a function or method.  Thes
 
 \paragraph{Example.} The following example illustrates function types:
 
-\begin{lstlisting}
-type Fun is function(int) => int
+\lstinputlisting{../examples/ch4/eg_16.whiley}
 
-function map([int] items, Fun fn) => [int]:
-    //
-    for i,v in items:
-        items[i] = fn(v)
-    //
-    return items
-\end{lstlisting}
 The above illustrates the well-known {\em map} function, which maps all elements of a list according to a given function.
 
 % =======================================================================
@@ -519,16 +403,7 @@ A union type is constructed from two or more component types and contains any va
 
 \paragraph{Example.} The following example illustrates a union type:
 
-\begin{lstlisting}
-// Return lowest index of matching item, or null if none
-function indexOf([int] items, int value) => int|null:
-    for i,v in items:
-        if v == value:
-            // match
-            return i
-    // item not found
-    return null
-\end{lstlisting}
+\lstinputlisting{../examples/ch4/eg_17.whiley}
 
 Here, a union type is used to construct a more expressive return value.  If no matching element is found, \lstinline{null} is returned (rather than e.g. \lstinline{-1}).
 
@@ -548,17 +423,8 @@ An intersection type is constructed from two or more component types and contain
 
 \paragraph{Example.} The following example illustrates an intersection type:
 
-\begin{lstlisting}
-type Reader is { 
-   method read(int) => [byte],
-   ...
-}
-type Writer is { 
-   method write([byte]) => int,
-   ...
-}
-type ReaderWriter is Reader & Writer
-\end{lstlisting}
+\lstinputlisting{../examples/ch4/eg_18.whiley}
+
 Here, the type \lstinline{Reader} is defined as any record containing a \lstinline{read(int)} method, whilst the type \lstinline{Writer} is defined as any record containing a \lstinline{write([byte])} method.  Then, the intersection type \lstinline{ReaderWriter} is defined as any record containing {\em both} a \lstinline{read(int)} and \lstinline{write([byte])} method.
 
 % =======================================================================
@@ -576,13 +442,8 @@ A negation type is constructed a component type and contains any value {\em not}
 
 \paragraph{Example.} The following example illustrates a negation type:
 
-\begin{lstlisting}
-function f(any item) => !null:
-    if item is null:
-        return 0
-    else:
-        return item
-\end{lstlisting}
+\lstinputlisting{../examples/ch4/eg_19.whiley}
+
 Here, the function \lstinline{f()} accepts a parameter of any type, and returns a value which is permitted to be anything except \lstinline{null}.  The above also illustrates how the type test operator (\S\ref{c_expr_type_test}) retypes variables on the false branch using negation types.
 
 \section{Recursive Types}
@@ -592,16 +453,7 @@ Recursive types describe tree-like structures of arbitrary depth.  For example, 
 
 \paragraph{Example.} The following example illustrates a simple recursive type:
 
-\begin{lstlisting}
-type Node is { Tree left, Tree right, int data }
-type Tree is null | Node
-
-function sizeOf(Tree t) => int:
-    if t == null:
-        return 0
-    else:
-        return 1 + sizeOf(t.left) + sizeOf(t.right)
-\end{lstlisting}
+\lstinputlisting{../examples/ch4/eg_20.whiley}
 
 Here, the type \lstinline{Tree} is recursive because it is defined in terms of itself.  An instance of type \lstinline{Tree} is a sequence of nested records which is arbitrarily deep, and whose branches are terminated by \lstinline{null}.  The function \lstinline{sizeOf()} traverses an arbitrary instance of \lstinline{Tree} and returns the number of \lstinline{Node}s it contains.
 

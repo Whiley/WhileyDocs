@@ -1,0 +1,6 @@
+<project name="Chapter 4" default="compile">  
+
+  <import file="../config.xml"/> 
+  <import file="../build-template.xml"/>  
+
+</project>

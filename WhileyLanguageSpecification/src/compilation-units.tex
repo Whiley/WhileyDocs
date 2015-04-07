@@ -28,23 +28,14 @@ Any source file which does not provide a \lstinline{package} declaration is cons
 There are four functional entities which can be defined within a Whiley source file: \gls{type_declaration}s (\S\ref{c_source_files_type_decl}), \gls{constant_declaration}s (\S\ref{c_source_files_constant_decl}), \gls{function_declaration}s (\S\ref{c_source_files_function_decl}) and \gls{method_declaration}s (\S\ref{c_source_files_method_decl}).  These define {\em named entities} which may be referenced from other \gls{compilation_unit}s.  Every named entity has a unique {\em fully-qualified} name constructed from the enclosing package name, the source file name and the declared name.  For example:\\
 
 \noindent \verb+Graphics.whiley+
-\begin{lstlisting}
-package tracer
 
-type Point is { int x, int y }
+\lstinputlisting{../examples/ch3/eg_1.whiley}
 
-constant Origin is { x: 0, y: 0 } 
-\end{lstlisting}
 This declares two named entities: \lstinline{tracer.Graphics.Point} and \lstinline{tracer.Graphics.Origin}.  
 
 Two named entities may {\em clash} if they have the same fully qualified name and are in the same category.  There are three entity categories: {\em types}, {\em constants} and {\em functions/methods}.  The following illustrates a common pattern:
 
-\begin{lstlisting}
-type Point is { int x, int y }
-
-function Point(int x, int y) => Point:
-    return {x: x, y: y}
-\end{lstlisting}
+\lstinputlisting{../examples/ch3/eg_2.whiley}
 
 Here, two named entities share the same fully qualified named.  This is permitted because they are in different categories.
 
@@ -92,13 +83,7 @@ referred to within the optional \lstinline{where} clause.
 \paragraph{Examples.}  Some simple examples illustrating type
 declarations are:
 
-\begin{lstlisting}
-// Define a simple point type
-type Point is { int x, int y }
-
-// Define the type of natural numbers
-type nat is (int x) where x >= 0
-\end{lstlisting}
+\lstinputlisting{../examples/ch3/eg_3.whiley}
 
 The first declaration defines an unconstrained record type named
 \lstinline{Point}, whilst the second defines a constrained integer
@@ -131,13 +116,7 @@ operators (e.g. for arithmetic) are permitted.
 
 \paragraph{Examples.}  Some simple examples to illustrate constant declarations are:
 
-\begin{lstlisting}
-// Define the well-known mathematical constant to 10 decimal places.
-constant PI is 3.141592654
-
-// Define a constant expression which is twice PI
-constant TWO_PI is PI * 2.0
-\end{lstlisting}
+\lstinputlisting{../examples/ch3/eg_4.whiley}
 
 The first declaration defines the constant \lstinline{PI} to have the
 \lstinline{real} value \lstinline{3.141592654}.  The second
@@ -159,12 +138,12 @@ A {\em function declaration} defines a function within a Whiley \gls{source_file
 
 \begin{syntax}
   \verb+FunctionDecl+ & $::=$ & \token{function}\ \verb+Ident+\
-  \verb+TypePattern+\ \token{=>}\ \verb+TypePattern+\ \big(\\
+  \verb+TypePattern+\ \token{->}\ \verb+TypePattern+\ \big(\\
   && \ \ \token{requires}\ \verb+Expr+\ $|$\ \token{ensures}\ \verb+Expr+\\
   && \big)$^*$\ \token{:}\ \verb+Block+\\
 \end{syntax}
 
-The first type pattern (i.e. before ``\lstinline{=>}'') is referred to as the {\em parameter}, whilst the second is referred to as the {\em return}.  There are three kinds of optional clause which follow:
+The first type pattern (i.e. before ``\lstinline{->}'') is referred to as the {\em parameter}, whilst the second is referred to as the {\em return}.  There are three kinds of optional clause which follow:
 
 \begin{itemize}
 % \item {\bf Throws clause}. This defines the exceptions which may be thrown by this function. Multiple clauses may be given, and these are taken together as a union. Furthermore, the convention is to specify \lstinline{throws} clause(s) first.
@@ -178,18 +157,7 @@ The first type pattern (i.e. before ``\lstinline{=>}'') is referred to as the {\
 The following function declaration provides a small example to
 illustrate:
 
-\begin{lstlisting}
-function max(int x, int y) => (int z)
-// return must be greater than either parameter
-ensures x <= z && y <= z
-// return must equal one of the parmaeters
-ensures x == z || y == z:
-    // implementation
-    if x > y:
-        return x
-    else:
-        return y
-\end{lstlisting}
+\lstinputlisting{../examples/ch3/eg_5.whiley}
 
 This defines the specification and implementation of the well-known
 \lstinline{max()} function which returns the largest of its
@@ -213,30 +181,17 @@ heap, and/or instigate concurrent computation.
 
 \begin{syntax}
   \verb+MethodDecl+ & $::=$ & \token{method}\ \verb+Ident+\
-  \verb+TypePattern+\ \token{=>}\ \verb+TypePattern+\ \big(\\
+  \verb+TypePattern+\ \token{->}\ \verb+TypePattern+\ \big(\\
   && \ \ \token{requires}\ \verb+Expr+\ $|$\ \token{ensures}\ \verb+Expr+\\
   && \big)$^*$\ \token{:}\ \verb+Block+\\
 \end{syntax}
 
-The first type pattern (i.e. before ``\lstinline{=>}'') is referred to as the {\em parameter}, whilst the second is referred to as the {\em   return}.  The three optional clauses are defined identically as for function declarations~(\S\ref{c_source_files_function_decl}).
+The first type pattern (i.e. before ``\lstinline{->}'') is referred to as the {\em parameter}, whilst the second is referred to as the {\em   return}.  The three optional clauses are defined identically as for function declarations~(\S\ref{c_source_files_function_decl}).
 
 \paragraph{Examples.}  The following method declaration provides a
 small example to illustrate:
 
-\begin{lstlisting}
-// Define the well-known concept of a linked list
-type LinkedList is null | &{ LinkedList next, int data }
-
-// Define a method which inserts a new item onto the end of the list
-method insertAfter(LinkedList list, int item) => LinkedList:
-    if list is null:
-        // reached the end of the list, so allocate new node
-        return new { next: null, data: item }
-    else:
-        // continue traversing the list
-        list->next = insertAfter(list->next, item)
-        return list
-\end{lstlisting}
+\lstinputlisting{../examples/ch3/eg_6.whiley}
 
 
 
