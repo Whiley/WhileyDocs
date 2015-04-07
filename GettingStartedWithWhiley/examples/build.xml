@@ -107,6 +107,94 @@
     </antcall>
 
     <!-- ======================================== -->
+    <!-- Chapter: Minesweeper -->
+    <!-- ======================================== -->
+
+    <antcall target="compile">
+      <param name="name" value="minesweeper.whiley"/>
+      <param name="verification" value="false"/>
+    </antcall>   
+    
+    <!-- ======================================== -->
+    <!-- Chapter: Verification -->
+    <!-- ======================================== -->
+
+    <antcall target="compile">
+      <param name="name" value="verification_1.whiley"/>
+      <param name="verification" value="true"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="verification_2.whiley"/>
+      <param name="verification" value="true"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="verification_3.whiley"/>
+      <param name="verification" value="true"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="verification_4.whiley"/>
+      <param name="verification" value="true"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="verification_5.whiley"/>
+      <param name="verification" value="true"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="verification_6.whiley"/>
+      <param name="verification" value="true"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="verification_7.whiley"/>
+      <param name="verification" value="true"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="verification_8.whiley"/>
+      <param name="verification" value="false"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="verification_9.whiley"/>
+      <param name="verification" value="true"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="verification_10.whiley"/>
+      <param name="verification" value="true"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="verification_11.whiley"/>
+      <param name="verification" value="false"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="verification_12.whiley"/>
+      <param name="verification" value="false"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="verification_13.whiley"/>
+      <param name="verification" value="false"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="verification_14.whiley"/>
+      <param name="verification" value="false"/>
+    </antcall>
+
+    <antcall target="compile">
+      <param name="name" value="verification_X.whiley"/>
+      <param name="verification" value="false"/>
+    </antcall>
+    
+    <!-- ======================================== -->
     <!-- Chapter: IndexOf -->
     <!-- ======================================== -->
 

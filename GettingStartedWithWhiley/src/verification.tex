@@ -23,15 +23,9 @@ condition over the return values of a function which is required to be
 true after the function is called.  As a very simple example, consider
 the following function which accepts a positive integer and returns a
 non-negative integer (i.e. natural number):
-\begin{lstlisting}
-function decrement(int x) => (int y) 
-// Parameter x must be greater than zero
-requires x > 0
-// Return must be greater or equal to zero
-ensures y >= 0:
-    //
-    return x - 1
-\end{lstlisting}
+
+\lstinputlisting{../examples/verification_1.whiley}
+
 Here, the \lstinline{requires} and \lstinline{ensures} clauses define
 the function's precondition and postcondition.  With verification
 enabled, the Whiley compiler will verify that the
@@ -48,16 +42,9 @@ The Whiley compiler reasons about functions by exploring the different
 control-flow paths through their bodies.  Furthermore, as it learns
 more about the variables used in the function, it automatically takes
 this into account.  For example:
-\begin{lstlisting}
-function abs(int x) => (int y)
-// Return value cannot be negative
-ensures y >= 0:
-    //
-    if x >= 0:
-        return x
-    else:
-        return -x
-\end{lstlisting}
+
+\lstinputlisting{../examples/verification_2.whiley}
+
 The Whiley compiler verifies that the implementation of this function
 meets its specification.  At this point, it is worth considering in
 more detail what this really means.  Since the Whiley compiler
@@ -74,16 +61,7 @@ The above illustrates a function specification given through explicit pre- and
 post-conditions.  However, we may also employ {\em constrained types}
 to simplify it as follows:
 
-\begin{lstlisting}
-type nat is (int n) where n >= 0
-type pos is (int p) where p > 0
-
-function f(pos x) => (nat n)
-// Return must differ from parameter
-ensures n != x:
-    //
-    return x-1
-\end{lstlisting}
+\lstinputlisting{../examples/verification_3.whiley}
 
 Here, the \lstinline{type} declaration includes a \lstinline{where}
 clause constraining the permissible values for the type ($\$$
@@ -102,13 +80,8 @@ have the same {\em underlying} type, then ${\tt T_1}$ is a subtype of
 ${\tt T_2}$ iff the constraint on ${\tt T_1}$ implies that of ${\tt
   T_2}$.  Consider the following:
 
-\begin{lstlisting}
- type anat is (int x) where x >= 0
- type bnat is (int x) where 2*x >= x
+\lstinputlisting{../examples/verification_4.whiley}
 
- function f(anat x) => bnat:
-     return x
-\end{lstlisting}
 In this case, we have two alternate (and completely equivalent)
 definitions for a natural number (we can see that \lstinline{bnat} is
 equivalent to \lstinline{anat} by subtracting \lstinline{x} from both sides).
@@ -118,29 +91,17 @@ and statically verifies that this function is correct.
 \subsection{Quantification}
 The pre/post-conditions and invariants we have seen above were for constraining primitive types.  But, what if we want to say constrain all elements in collection?  In that case, we need to use a {\em quantifier}, as this allows us to iterate all elements in a collection.  Suppose we wanted to define the type of all integer lists whose elements are non-negative.  We can do this use the {\em universal} \lstinline{all} quantifier in Whiley like so:
 
-\begin{lstlisting}
-type ListOfNats is ([int] items)
-// every x in items must be greater-or-equal-to zero
-where all { x in items | x >= 0 }
-\end{lstlisting}
+\lstinputlisting{../examples/verification_5.whiley}
 
 The invariant given in the \lstinline{where} clause simply states that every element in the list must greater-or-equal-to zero.  The \lstinline{all} quantifier is normally read as ``for all''.
 
 In Whiley, there are a range of different quantifiers one can use.  For example, the above could be rewritten using the \lstinline{no} quantifier, like so:
 
-\begin{lstlisting}
-type ListOfNats is ([int] items)
-// no x in items is less-than zero
-where no { x in items | x < 0 }
-\end{lstlisting}
+\lstinputlisting{../examples/verification_6.whiley}
 
 Similarly, we could rewrite the above using an {\em existential} quantifier.  Unlike a universal quantifier (which applies to all elements) an existential quantifier applies to just one element.  We can rewrite our \lstinline{ListOfNats} data type using the \lstinline{some} quantifier in Whiley, like so:
 
-\begin{lstlisting}
-type ListOfNats is ([int] items)
-// does not exist an x in items where is less-than zero
-where !some { x in items | x < 0 }
-\end{lstlisting}
+\lstinputlisting{../examples/verification_7.whiley}
 
 The \lstinline{some} requires that there is one (or more) elements which meet the criteria, and is normally read as ``there exists''.  Thus, a literal reading of the above invariant would be: {\em it is not the case that there exists an element \lstinline{x} in items where \lstinline{x < 0}}.  Essentially, however, this has the same effect as for the \lstinline{no} quantifier.  
 
@@ -161,17 +122,7 @@ key points about loop invariants:
 To illustrate these three aspects, we'll use some simple loop
 examples.  For example, consider the following example:
 
-\begin{lstlisting}
-function f(int x) => (int y)
-// return cannot be negative
-ensures y >= 0:
-    //
-    int i = 0
-    while i < x where i > 0:
-        i = i + 1 
-    //
-    return i
-\end{lstlisting}
+\lstinputlisting{../examples/verification_8.whiley}
 
 Loop invariants in Whiley are indicated by the \lstinline{where}
 clause.  Thus, in the above example, the loop invariant is
@@ -188,19 +139,8 @@ illustrate this.
 guaranteed to produce a natural number.  The following Whiley program
 illustrates this:
 
-\begin{lstlisting}
-type nat is (int x) where x >= 0
+\lstinputlisting{../examples/verification_9.whiley}
 
-function sum([nat] items) => nat:
-    int r = 0
-    int i = 0
-    //
-    while i < |items| where i >= 0 && r >= 0:
-        r = r + items[i]
-        i = i + 1
-    //
-    return r
-\end{lstlisting}
 The Whiley compiler statically verifies that \lstinline{sum()} does
 indeed meet this specification.  This is true in Whiley because
 integer arithmetic is {\em unbounded} --- meaning it does not suffer
@@ -208,14 +148,8 @@ from overflow as other languages do (e.g. Java).  The loop invariant
 is necessary to help the Whiley compiler verify this function.
 However, we can avoid the need for a loop invariant by declaring
 variables \lstinline{i} and \lstinline{r} more precisely:
-\begin{lstlisting}
-function sum([nat] items) => nat:
-    nat r = 0
-    nat i = 0
-    //
-    while i < |items|:
-        ...
-\end{lstlisting}
+
+\lstinputlisting[firstline=3,lastline=8]{../examples/verification_10.whiley}
 
 This time, we have declared the variables \lstinline{i} and
 \lstinline{r} as having type \lstinline{nat}.  The Whiley compiler
@@ -228,23 +162,9 @@ invariant are used independently to increase knowledge.  However,
 sometimes they need to be used in concert.  Consider the following
 function for initialising a list of a given size:
 
-\begin{lstlisting}
-function create(int count, int value) => ([int] r)
-// Cannot create negatively sized lists!
-requires count >= 0, 
-// Returned list must have count elements
-ensures |r| == count:
-   //
-   int i = 0
-   [int] r = []
-   while i < count:
-      r = r + [value]
-      i = i + 1
-   //
-   return r
-\end{lstlisting}
+\lstinputlisting{../examples/verification_11.whiley}
 
-This example uses the list append operator (i.e. \lstinline{r + [value]})
+This example uses the list append operator (i.e. \lstinline{r ++ [value]})
  and is surprisingly challenging to verify.  An obvious
 approach is to connect the size of \lstinline{r} with \lstinline{i} as
 follows:
@@ -284,19 +204,7 @@ specification.  Of course, if this is not the case, then this will
 eventually be discovered as the compiler progresses through the
 program.  For example, consider this program:
 
-\begin{lstlisting}
-function f(int x) => (int y)
-// Return cannot be negative
-ensures y >= 0:
-    //
-    return x
-
-function g() => (int y)
-// Return cannot be negative
-ensures y >= 0:
-    //
-    return f(1)
-\end{lstlisting}
+\lstinputlisting{../examples/verification_12.whiley}
 
 This program will not verify because the implementation of
 \lstinline{f()} does not meet its specification.  For example,
@@ -310,32 +218,11 @@ assumes that \lstinline{f()} meets it specification.
 
 In many cases it is possible to sufficiently encode a function's meaning within its specification to allow a program to verify.  However, occasionally, what we need is to difficult for the Whiley compiler to handle.  A good example is the \lstinline{sum()} function, which we can try to specify as follows:
 
-\begin{lstlisting}
-function sum([int] xs) => (int r)
-requires |xs| > 0
-// Base case: list of size 1
-ensures |xs| == 1 ==> r == xs[0] 
-// General case: list of size greater than 1
-ensures |xs| > 1 ==> r == xs[0] + sum(xs[1..]):
-   ...
-\end{lstlisting}
+\lstinputlisting[lastline=7]{../examples/verification_13.whiley}
 
 Here, we have carefully encoded the meaning of \lstinline{sum()} within its specification.  Unfortunately, at the time of writing, the Whiley compiler reason accurately about this specification, and this makes exploiting known mathematical properties in subsequent specifications impossible.  For example, the following illustrates a simple function for reversing a list:
 
-\begin{lstlisting}
-// Rotate head item to back of list
-function reverse([int] xs) => ([int] ys)
-// Permutation does not change sum
-ensures |xs| > 0 ==> sum(xs) == sum(ys):
-   //
-   int i = 0
-   [int] zs = xs
-   //
-   while i < |xs| where i >= 0 && |xs| == |zs|:
-       int j = |xs| - (i+1)
-       xs[i] = zs[j]
-   return xs
-\end{lstlisting}
+\lstinputlisting[lastline=12]{../examples/verification_14.whiley}
 
 Unfortunately, there is no hope to automatically verify the seemingly straightforward property that the sum is preserved by this function.  Instead, one can use an \lstinline{assume} statement in Whiley to override the verifier.  Such a statement provides a way to instruct the verifier to blindly assume something holds.  For this example, we have:
 \begin{lstlisting}
