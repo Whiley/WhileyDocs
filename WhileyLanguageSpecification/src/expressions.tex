@@ -164,7 +164,7 @@ This function checks whether a given integer is contained in a list of integers.
 Inequality expressions are either {\em strict} (where only inequality is tested)  or {\em non-strict} (where both equality and inequality are tested).  The {\em less-than comparator}, \lstinline{<}, and {\em greater-than comparator}, \lstinline{>}, are strict.  Conversely, the {\em less-than-or-equal comparator}, \lstinline{<=}, and {\em greater-than-or-equal comparator}, \lstinline{>}, are non-strict.
 
 \begin{syntax}
-  \verb+ConditionExpr+ & $::=$ &\\
+  \verb+InequalityExpr+ & $::=$ &\\
   & $|$ & \verb+AppendExpr+ \token{<} \verb+AppendExpr+\\
   & $|$ & \verb+AppendExpr+ \token{<=} \verb+AppendExpr+\\
   & $|$ & \verb+AppendExpr+ \token{=>} \verb+AppendExpr+\\
@@ -252,10 +252,10 @@ function toUnsignedByte(u8 v) => byte:
 This function converts an unsigned integer in the range \lstinline{0} ... \lstinline{255} to a \lstinline{byte}.  The bitwise OR operator is used to construct the resulting \lstinline{byte} by setting individual bits via the \lstinline{mask}.  This example also illustrates the left-shift operator (\S\ref{c_expr_shift}).
 
 
-\subsection{Set Expressions}
-\label{c_expr_set}
-
-Set union, intersection and difference.
+% \subsection{Set Expressions}
+% \label{c_expr_set}
+%
+% Set union, intersection and difference.
 
 % =======================================================================
 % Append Expressions
@@ -538,9 +538,7 @@ This function traverses a linked list counting the number of links it contains. 
 \label{c_expr_constructor}
 
 \begin{syntax}
-  \verb+TermExpr+ & $::=$ & \verb+SetExpr+\\
-  & $|$ & \verb+MapExpr+\\
-  & $|$ & \verb+ListExpr+\\
+  \verb+TermExpr+ & $::=$ & \verb+ListExpr+\\
   & $|$ & \verb+RecordExpr+\\
 \end{syntax}
 
@@ -548,29 +546,29 @@ This function traverses a linked list counting the number of links it contains. 
 % Set Expression
 % =======================================================================
 
-\subsection{Set Constructors}
-\label{c_expr_set_constructor}
-
-\begin{syntax}
-\end{syntax}
-
-\paragraph{Example.}
-
-\paragraph{Notes.}
+% \subsection{Set Constructors}
+% \label{c_expr_set_constructor}
+%
+% \begin{syntax}
+% \end{syntax}
+%
+% \paragraph{Example.}
+%
+% \paragraph{Notes.}
 
 % =======================================================================
 % Map Expression
 % =======================================================================
 
-\subsection{Map Constructors}
-\label{c_expr_map_constructor}
-
-\begin{syntax}
-\end{syntax}
-
-\paragraph{Example.}
-
-\paragraph{Notes.}
+% \subsection{Map Constructors}
+% \label{c_expr_map_constructor}
+%
+% \begin{syntax}
+% \end{syntax}
+%
+% \paragraph{Example.}
+%
+% \paragraph{Notes.}
 
 % =======================================================================
 % List Expression

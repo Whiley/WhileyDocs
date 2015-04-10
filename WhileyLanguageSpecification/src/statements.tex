@@ -151,25 +151,25 @@ Here, we see a simple do-while statement which sums the elements of variable \ls
 % For Statement
 % =======================================================================
 
-\section{For Statement}
-\label{c_stmts_for}
-A {\em for statement} iterates over all elements in a collection obtained from evaluating the {\em source expression}.  Optional \lstinline{where} clause(s) are permitted which, together, are commonly referred to as the \gls{loop_invariant}.  
-
-\begin{syntax}
-  \verb+ForStmt+$^\ell$ & $::=$ & \token{for}\ \verb+VarPattern+\
-  \token{in}\ \verb+Expr+\ \big(\ \token{where}\ \verb+Expr+\
-  \big)$^*$\ \token{:} \verb+Block+$^\gamma$\\
-&&\\
-\multicolumn{3}{r}{(where $\ell < \gamma$)}\\
-\end{syntax}
-
-\paragraph{Example.} The following illustrates a \lstinline{for} statement:
-
-\lstinputlisting{../examples/ch5/eg_9.whiley}
-
-Here, we see a simple \lstinline{for} loop which iterates over all elements of the list \lstinline{items}.  At each iteration, variable \lstinline{i} holds the index whilst \lstinline{v} contains the element at that index (i.e. \lstinline{v == items[i]}).
-
-\paragraph{Notes.}   When multiple \lstinline{where} clauses are given, these are combined using a conjunction to form the loop invariant.  The combined invariant must hold on entry to the loop and after each iteration.  Thus, when the condition evaluates to \lstinline{false}, the loop invariant is guaranteed to hold.  However, the loop invariant need not hold when the loop is exited using a \lstinline{break} (\S\ref{c_stmts_break}) statement.
+% \section{For Statement}
+% \label{c_stmts_for}
+% A {\em for statement} iterates over all elements in a collection obtained from evaluating the {\em source expression}.  Optional \lstinline{where} clause(s) are permitted which, together, are commonly referred to as the \gls{loop_invariant}.  
+%
+% \begin{syntax}
+%   \verb+ForStmt+$^\ell$ & $::=$ & \token{for}\ \verb+VarPattern+\
+%   \token{in}\ \verb+Expr+\ \big(\ \token{where}\ \verb+Expr+\
+%   \big)$^*$\ \token{:} \verb+Block+$^\gamma$\\
+% &&\\
+% \multicolumn{3}{r}{(where $\ell < \gamma$)}\\
+% \end{syntax}
+%
+% \paragraph{Example.} The following illustrates a \lstinline{for} statement:
+%
+% \lstinputlisting{../examples/ch5/eg_9.whiley}
+%
+% Here, we see a simple \lstinline{for} loop which iterates over all elements of the list \lstinline{items}.  At each iteration, variable \lstinline{i} holds the index whilst \lstinline{v} contains the element at that index (i.e. \lstinline{v == items[i]}).
+%
+% \paragraph{Notes.}   When multiple \lstinline{where} clauses are given, these are combined using a conjunction to form the loop invariant.  The combined invariant must hold on entry to the loop and after each iteration.  Thus, when the condition evaluates to \lstinline{false}, the loop invariant is guaranteed to hold.  However, the loop invariant need not hold when the loop is exited using a \lstinline{break} (\S\ref{c_stmts_break}) statement.
 
 % =======================================================================
 % ReturnStatement
