@@ -21,6 +21,11 @@
   description={An assertion statement is specified with the \lstinline{assert} keyword and identifies a condition which must hold at that point for all possible executions}
 }
 
+\newglossaryentry{access_control}{
+  name={access control},
+  description={Mechanisms for restricting the visibility of named \glspl{declaration}}
+}
+
 
 % ===============================================
 % B
@@ -70,6 +75,16 @@
   description={The top-level package which has no name, and is considered to be a ``global'' package.}
 }
 
+\newglossaryentry{declaration}{
+  name={declaration},
+  description={A declaration defines a new named entity within its  enclosing \gls{source_file}.}
+}
+
+\newglossaryentry{declaration_modifier}{
+  name={declaration modifier},
+  description={A declaration modifier provides additional meaning to a \gls{declaration}.}
+}
+
 % ===============================================
 % E
 % ===============================================
@@ -86,6 +101,11 @@
 \newglossaryentry{fault}{
   name={fault},
   description={A fault is raised when an unrecoverable error in the program occurs.  For a verified program, no faults are possible except to indicate an out-of-memory failure.}
+}
+
+\newglossaryentry{ffi}{
+  name={foreign function interface},
+  description={A mechanism provided to enable inter-operation between Whiley source files and source files written in other languages.}
 }
 
 \newglossaryentry{function_declaration}{
@@ -160,6 +180,11 @@
 \newglossaryentry{name_resolution}{
   name={name resolution},
   description={The process of determining the fully qualified name of an identifier within a \gls{source_file}.  Names are first resolved within the same source file, and then by searching the list of imported entities in reverse order}
+}
+
+\newglossaryentry{name_mangling}{
+  name={name mangling},
+  description={The process of encoding information (e.g. about type parameters) within the exported name of a declaration.}
 }
 
 \newglossaryentry{negation_type}{

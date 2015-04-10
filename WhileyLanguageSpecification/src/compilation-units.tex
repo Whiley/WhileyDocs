@@ -33,7 +33,7 @@ There are four functional entities which can be defined within a Whiley source f
 
 This declares two named entities: \lstinline{tracer.Graphics.Point} and \lstinline{tracer.Graphics.Origin}.  
 
-Two named entities may {\em clash} if they have the same fully qualified name and are in the same category.  There are three entity categories: {\em types}, {\em constants} and {\em functions/methods}.  The following illustrates a common pattern:
+\noindent Two named entities may {\em clash} if they have the same fully qualified name and are in the same category.  There are three entity categories: {\em types}, {\em constants} and {\em functions/methods}.  The following illustrates a common pattern:
 
 \lstinputlisting{../examples/ch3/eg_2.whiley}
 
@@ -54,11 +54,24 @@ A declaration of the form ``\lstinline{import some.pkg.File}'' imports the \gls{
 
 A {\em wildcard} may be used in place of the compilation unit name (e.g. ``\lstinline{import some.pkg.*}'') to import {\em all} compilation units within the given package.  A {\em package match} may be used in place of some of all of the package component (e.g. ``\lstinline{import some..File}'') to import all compilation units with matching name and package {\em prefix} and/or {\em suffix}.  A {\em wildcard} may be used in place of the entity name (e.g. ``\lstinline{import * from some.pkg.File}'') to import {\em all} named entities within the given compilation unit.  
 
-\section{Named Declarations}
+\section{Declarations}
 
-Camel case
+A \gls{declaration} defines a new entity within a Whiley source file and provides a {\em name} by which it can be referred to within this source file, or from other source files.
 
 \subsection{Access Control}
+
+Several mechanisms for \gls{access_control} are provided through the following \glspl{declaration_modifier}:
+
+\begin{itemize}
+\item The \lstinline{public} modifier declares that the \gls{declaration} is visible from other Whiley source files.
+\item The \lstinline{private} modifier declares that the \gls{declaration} is visible only within the enclosing Whiley source file.
+\item The \lstinline{native} modifier declares that the \gls{declaration} is provided by the underlying system.
+\item The \lstinline{export} modifier declares that the \gls{declaration} is visible to source files written in other languages.  Declarations with this modifier cannot be overloaded.
+\end{itemize}
+
+\noindent When no modifier is given, the default of \lstinline{private} is assumed.  
+
+\paragraph{Notes.} The \lstinline{native} and \lstinline{export} modifiers together form the \gls{ffi}.  The restriction on declarations declared with the \lstinline{export} modifier is to enable names to be exported without \gls{name_mangling}.
 
 % =======================================================================
 % Type Declarations
