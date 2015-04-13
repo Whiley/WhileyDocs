@@ -135,7 +135,7 @@ The \lstinline{real} type (\S\ref{c_types_real}) represents the infinite set of 
 
 \subsection{Character Literals}
 
-A {\em character literal} is expressed as a single character or an escape sequence enclosed in single quotes (e.g. \lstinline{'c'}).
+A {\em character literal} is expressed as a single character or an escape sequence enclosed in single quotes (e.g. \lstinline{'c'}).  Character literals generate integer constants corresponding to Unicode code points, which is necessary because there is no native character type.
 
 \begin{syntax}
   \verb+CharLiteral+ & $::=$ & \token{'}\ \big(\ \verb+Character+\ $|$ \verb+Escape+\ \big)\ \token{'} \\
@@ -143,7 +143,7 @@ A {\em character literal} is expressed as a single character or an escape sequen
 
 \subsection{String Literals}
 
-A {\em string literal} is expressed as a sequence of zero or more characters or escape sequences enclosed in double quotes (e.g. \lstinline{"Hello World"}).
+A {\em string literal} is expressed as a sequence of zero or more characters or escape sequences enclosed in double quotes (e.g. \lstinline{"Hello World"}).  String literals generate lists of integers corresponding to Unicode code points, which is necessary as there is no native string type.
 
 \begin{syntax}
   \verb+StringLiteral+ & $::=$ & \token{"}\ \big(\ \verb+Character+\ $|$ \verb+Escape+\ \big)$^*$\ \token{"} \\

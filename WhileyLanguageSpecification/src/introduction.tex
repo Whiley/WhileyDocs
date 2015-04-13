@@ -1,20 +1,11 @@
 \chapter{Introduction}
 
-This document provides a specification of the {\em Whiley Programming Language}.  Whiley is a hybrid imperative and functional programming language designed to produce programs with as few errors as possible.  Whiley allows explicit specifications to be given for functions, methods and data structures, and employs a \gls{verifying_compiler} to check whether programs meet their specifications.  As such, Whiley is ideally suited for use in \gls{safety_critical_system}s.  However, there are many benefits to be gained from using Whiley in a general setting (e.g. improved documentation, maintainability, reliability, etc).  Finally, this document is {\em not} intended as a general introduction to the language, and the reader is referred to alternative documents for learning the language~\cite{Pearce14a}.
+This document provides a specification of the {\em Whiley Programming Language}.  Whiley is a hybrid imperative and functional programming language designed to produce programs with as few errors as possible.  Whiley allows explicit specifications to be given for functions, methods and data structures, and employs a \gls{verifying_compiler} to check whether programs meet their specifications.  For example, Whiley would be ideally suited for use in \gls{safety_critical_system}s.  However, there are many benefits to be gained from using Whiley in a general setting (e.g. improved documentation, maintainability, reliability, etc).  Finally, this document is {\em not} intended as a general introduction to the language, and the reader is referred to alternative documents for learning the language~\cite{Pearce14a}.
 
 
 \section{Background}
 
-Reliability of large software systems is a difficult problem facing
-software engineering, where subtle errors can have disastrous
-consequences.  Infamous examples include: the Therac-25 disaster where
-a computer-operated X-ray machine gave lethal doses to
-patients~\cite{LT93}; the 1988 worm which reeked havoc on the internet
-by exploiting a buffer overrun~\cite{ER89}; the 1991 Patriot missile
-failure where a rounding error resulted in the missile catastrophically
-hitting a barracks~\cite{GAO}; and, the Ariane 5 rocket which exploded
-shortly after launch because of an integer overflow, costing the ESA
-an estimated \$500 million~\cite{ARIAN5}.
+Reliability of large software systems is a difficult problem facing software engineering, where subtle errors can have disastrous consequences.  Infamous examples include: the Therac-25 disaster where a computer-operated X-ray machine gave lethal doses to patients~\cite{LT93}; the 1988 worm which reeked havoc on the internet by exploiting a buffer overrun~\cite{ER89}; the 1991 Patriot missile failure where a rounding error resulted in the missile catastrophically hitting a barracks~\cite{GAO}; and, the Ariane 5 rocket which exploded shortly after launch because of an integer overflow, costing the ESA an estimated \$500 million~\cite{ARIAN5}.
 
 % The most widely used and accepted approach to improving software
 % reliability is through extensive testing and manual code inspection.
