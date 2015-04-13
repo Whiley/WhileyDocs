@@ -110,13 +110,12 @@ The \lstinline{byte} type (\S\ref{c_types_byte}) has 256 values which are expres
  \verb+ByteLiteral+ & $::=$ & \big(\ \token{0}\ $|$\ \token{1}\ \big)$^+$\ \token{b}\\
 \end{syntax}
 
-
 Byte literals do not need to contain exactly eight digits and, when fewer digits are given, are padded out to eight digits by appending zero's from the left (e.g. \lstinline{00101b} becomes \lstinline{00000101b}).
 
 
 \subsection{Integer Literals}
 
-The \lstinline{int} type (\S\ref{c_types_int}) represents the infinite set of integer values which are expressed as sequences of numeric or hexadecimal digits (e.g. \lstinline{123456}, \lstinline{0xffaf}, etc).
+An {\em integer literal} is a sequence of numeric or hexadecimal digits (e.g. \lstinline{123456}, \lstinline{0xffaf}, etc) corresponding to a value of \lstinline{int} type (\S\ref{c_types_int}).
 
 \begin{syntax}
   \verb+IntLiteral+ & $::=$ & \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ \big)$^+$ \\
@@ -125,9 +124,9 @@ The \lstinline{int} type (\S\ref{c_types_int}) represents the infinite set of in
 
 Since integer values in Whiley are of arbitrary size (\S\ref{c_types_int}), there is no limit on the size of an integer literal.
 
-\subsection{Real Literals}
+\subsection{Decimal Literals}
 
-The \lstinline{real} type (\S\ref{c_types_real}) represents the infinite set of rational values which are expressed as sequences of numeric digits separated by a period (e.g. \lstinline{1.0}, \lstinline{0.223}, \lstinline{12.55}, etc).
+A {\em decimal literal} is a sequence of numeric digits separated by a period (e.g. \lstinline{1.0}, \lstinline{0.223}, \lstinline{12.55}, etc) corresponding to a value of \lstinline{real} type (\S\ref{c_types_real}).
 
 \begin{syntax}
   \verb+RealLiteral+ & $::=$ & \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ \big)$^+$\ \token{.}\ \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ \big)$^+$ \\
