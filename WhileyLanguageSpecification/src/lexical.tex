@@ -12,6 +12,7 @@ A Whiley compiler splits the sequence of (Unicode) input characters into lines b
 Here, \token{\textbackslash n} represents the ASCII character \verb+LF+ (\verb+0xA+), whilst \token{\textbackslash r} represents the ASCII character \verb+CR+ (\verb+0xD+).  The two characters \token{\textbackslash r} \token{\textbackslash n} taken together form one line terminator.
 
 \section{Indentation}
+\label{c_lex_indentation}
 After splitting the input characters into lines, a Whiley compiler then identifies the {\em indentation} of each line.  This is necessary because Whiley employs \gls{indentation_syntax} meaning that indentation is significant in the meaning of Whiley programs.  
 
 \begin{syntax}

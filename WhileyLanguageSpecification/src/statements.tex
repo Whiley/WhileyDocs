@@ -1,11 +1,11 @@
 \chapter{Statements}
 
-The execution of a Whiley program is controlled by \gls{statement}s, which cause effects on the environment.  However, statements in Whiley do not produce values.  \Gls{compound_statement} statements may contain other statements.
+The execution of a Whiley program is controlled by \gls{statement}s, which cause effects on the environment.  However, statements in Whiley do not produce values.  \Glspl{compound_statement} may contain other statements.
 
 \section{Blocks}
 \label{c_stmts_blocks}
 
-A \gls{statement_block} is a sequence of zero or more consecutive statements which have the same indentation.  Statement blocks are used to group statements together when constructing \gls{compound_statement}s.  For example:
+A \gls{statement_block} is a sequence of zero or more consecutive statements which have the same indentation (\S\ref{c_lex_indentation}).  Statement blocks are used to group statements together when constructing \gls{compound_statement}s.  For example:
 
 \lstinputlisting{../examples/ch5/eg_1.whiley}
 
@@ -72,7 +72,7 @@ Here, the programmer has used an assumption to ensure this function passes verif
 
 \section{Break Statement}
 \label{c_stmts_break}
-A {\em break statement} transfers control out of the enclosing loop (i.e. \lstinline{do}, \lstinline{for}, \lstinline{while}).  It is a compile-time error if no such enclosing loop exists.
+A {\em break statement} transfers control out of the lexically-nearest enclosing loop (i.e. \lstinline{do}, \lstinline{while}).  It is a compile-time error if no such enclosing loop exists.
 
 \begin{syntax}
   \verb+BreakStmt+ & $::=$ & \token{break}\\
@@ -92,7 +92,7 @@ Here, we see a \lstinline{break} statement being used to exit a \lstinline{while
 
 \section{Continue Statement}
 \label{c_stmts_continue}
-A {\em continue statement} can be used either to transfer control to the next iteration of the enclosing loop (i.e. \lstinline{do}, \lstinline{for}, \lstinline{while}), or to transfer control to the next case of the enclosing \lstinline{switch} statement.
+A {\em continue statement} can be used either to transfer control to the next iteration of the enclosing loop (i.e. \lstinline{do}, \lstinline{while}), or to transfer control to the next case of the enclosing \lstinline{switch} statement.
 
 \begin{syntax}
   \verb+ContinueStmt+ & $::=$ & \token{continue}\\
@@ -102,7 +102,7 @@ A {\em continue statement} can be used either to transfer control to the next it
 
 \lstinputlisting{../examples/ch5/eg_6.whiley}
 
-Here, a \lstinline{continue} statement is used to ensure the negative numbers are not included in the result of the function.
+Here, a \lstinline{continue} statement is used to ensure that negative numbers are not included in the result of the function.
 
 \paragraph{Notes.} Unlike many other programming languages (e.g. Java), \lstinline{continue} statements are used to transfer control to the next case of a \lstinline{switch} statement (\S\ref{c_stmts_switch}).  This is because \lstinline{switch} statements have {\em explicit}, rather than {\em implicit}, fall-through.
 
@@ -121,7 +121,7 @@ A {\em debug statement} outputs the result of evaluating its expression to the {
 
 \lstinputlisting{../examples/ch5/eg_7.whiley}
 
-Here, we see a recursive implementation of the well-known {\em fibonacci} sequence.  A \lstinline{debug} statement is being used to investigate the parameter values passed to the function.
+Here, we see a recursive implementation of the well-known {\em fibonacci} sequence.  A \lstinline{debug} statement is being used to report when a given function is invoked.
 
 % =======================================================================
 % Do/While Statement
@@ -145,7 +145,7 @@ A do-while statement repeatedly executes a statement block until an expression (
 
 Here, we see a simple do-while statement which sums the elements of variable \lstinline{xs}, storing the result in variable \lstinline{r}.  A loop invariant is given which establishes that variable \lstinline{i} is non-negative.
 
-\paragraph{Notes.}   When multiple \lstinline{where} clauses are given, these are combined using a conjunction to form the loop invariant.  The combined invariant must hold on entry to the loop and after each iteration.  Thus, when the condition evaluates to \lstinline{false}, the loop invariant is guaranteed to hold.  However, the loop invariant need not hold when the loop is exited using a \lstinline{break} (\S\ref{c_stmts_break}) statement.
+\paragraph{Notes.}   When multiple \lstinline{where} clauses are given, these are combined using a conjunction to form the loop invariant.  The combined invariant must hold after each iteration.  Thus, when the condition evaluates to \lstinline{false}, the loop invariant is guaranteed to hold.  However, the loop invariant need not hold when the loop is exited using a \lstinline{break} (\S\ref{c_stmts_break}) statement.
 
 % =======================================================================
 % For Statement
