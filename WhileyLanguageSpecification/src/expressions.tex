@@ -87,7 +87,7 @@ A negation expression accepts one argument of numeric type and produces a result
 % Relational Expressions
 % =======================================================================
 
-\subsubsection{Relational Expressions}
+\subsection{Relational Expressions}
 \label{c_expr_relational}
 Relational expressions are either {\em strict} (where only inequality is tested)  or {\em non-strict} (where both equality and inequality are tested).  The {\em less-than comparator}, \lstinline{<}, and {\em greater-than comparator}, \lstinline{>}, are strict.  Conversely, the {\em less-than-or-equal comparator}, \lstinline{<=}, and {\em greater-than-or-equal comparator}, \lstinline{>}, are non-strict.
 
@@ -307,10 +307,10 @@ This function checks whether a given integer is contained in a list of integers.
 % Logical Binary Expressions
 % =======================================================================
 
-\subsection{Binary Expressions}
+\subsection{Connective Expressions}
 \label{c_expr_logical_binary}
 
-A logical expression operates on values of \lstinline{bool} type (\S\ref{c_types_bool}) to produce another \lstinline{bool} value.  The {\em if-and-only-if (iff)} operator, \lstinline{<==>}, returns \lstinline{true} if either both operands are \lstinline{true} or both are \lstinline{false}.  The {\em implication} operator, \lstinline{==>}, returns \lstinline{true} if either the left operand is \lstinline{false}, or both operands are \lstinline{true}.  The {\em logical OR} operator returns \lstinline{true} if either operand is \lstinline{true}, whilst the {\em logical AND} operator returns \lstinline{true} if both operands are \lstinline{true}.
+A logical connective operates on values of \lstinline{bool} type (\S\ref{c_types_bool}) to produce another \lstinline{bool} value.  The {\em if-and-only-if (iff)} operator, \lstinline{<==>}, returns \lstinline{true} if either both operands are \lstinline{true} or both are \lstinline{false}.  The {\em implication} operator, \lstinline{==>}, returns \lstinline{true} if either the left operand is \lstinline{false}, or both operands are \lstinline{true}.  The {\em logical OR} operator returns \lstinline{true} if either operand is \lstinline{true}, whilst the {\em logical AND} operator returns \lstinline{true} if both operands are \lstinline{true}.
 
 \begin{syntax}
 
@@ -404,7 +404,7 @@ The {\em arrow operator} returns a field of the value referenced by the argument
 \subsection{Append Expressions}
 \label{c_expr_append}
 
-An append expression accepts two lists arguments and produces a value of list type.  The append operator, \lstinline{++}, concatenates the argument lists together, producing a list constructed from those elements of the first argument (in order0 followed by those of the second argument (in order).
+An append expression accepts two lists arguments and produces a value of list type.  The append operator, \lstinline{++}, concatenates the argument lists together, producing a list constructed from those elements of the first argument (in order) followed by those of the second argument (in order).
 
 \begin{syntax}
   \verb+ListAppendExpr+ & $::=$ & \verb+UnitExpr+\ \big(\ \token{++}\
