@@ -81,8 +81,6 @@ A negation expression accepts one argument of numeric type and produces a result
 
 \lstinputlisting{../examples/ch6/eg_13.whiley}
 
-\paragraph{Notes.}
-
 % =======================================================================
 % Relational Expressions
 % =======================================================================
@@ -163,14 +161,15 @@ Bitwise expressions operate on values of \lstinline{byte} type.
 
 \subsection{Complement Expressions}
 \label{c_expr_bitwise_complement}
+A {\em bitwise complement operator} accepts an argument of \lstinline{byte} type (\S\ref{c_types_byte}) and produces a result of matching type.  The operator returns bitwise complement of the argument; that is, where the sign of each bit is reversed.
 
 \begin{syntax}
-\verb+BitwiseComplementExpr+ & $::=$ & \token{~}\ \verb+UnitExpr+\\
+\verb+BitwiseComplementExpr+ & $::=$ & \token{$\sim$}\ \verb+UnitExpr+\\
 \end{syntax}
 
-\paragraph{Example.}
+\paragraph{Example.}  The following example illustrates the bitwise complement operator:
 
-\paragraph{Notes.}
+\lstinputlisting{../examples/ch6/eg_15.whiley}
 
 \subsection{Binary Expressions}
 \label{c_expr_bitwise_binary}
