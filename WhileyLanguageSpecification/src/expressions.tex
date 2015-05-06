@@ -251,14 +251,21 @@ This function checks whether a given integer is contained in a list of integers.
 
 \section{Invoke Expressions}
 \label{c_expr_invoke}
+An {\em function or method invocation} executes a named function or method declared in a given source file.  An invocation passes arguments of appropriate number and type to the executed function or method.  An invocation may also return one or more values which can be subsequently used.
+
+% Could also discuss function or method lookup; this is really part of typing.
 
 \begin{syntax}
-  \verb+InvokeExpr+ & $::=$ &\\
+  \verb+InvokeExpr+ & $::=$ & \verb+Name+ \token{(} \big[ \verb+Expr+ \big( \token{,} \verb+Expr+ \big)$^*$ \big] \token{)}\\
 \end{syntax}
 
 \paragraph{Example.}
 
-\paragraph{Notes.}
+The following example illustrates an equality expression:
+
+\lstinputlisting{../examples/ch6/eg_17.whiley}
+
+This example illustrates one function being called from another.  Both functions have the same name and are said to {\em overload} one another.  Function resolution identifies the appropriate function based on the number and type of arguments supplied.  
 
 % =======================================================================
 % Lambda Expression
