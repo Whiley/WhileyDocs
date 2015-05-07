@@ -268,7 +268,7 @@ The following example illustrates an equality expression:
 This example illustrates one function being called from another.  Both functions have the same name and are said to {\em overload} one another.  Function resolution identifies the appropriate function based on the number and type of arguments supplied.  
 
 % =======================================================================
-% Lambda Expression
+% LambdaExpression
 % =======================================================================
 
 \section{Lambda Expressions}
@@ -289,6 +289,8 @@ This example illustrates one function being called from another.  Both functions
 \section{Logical Expressions}
 \label{c_expr_logical}
 
+Logical expressions operate on values of \lstinline{bool} type.
+
 \begin{syntax}
   \verb+LogicalExpr+ & $::=$ &\\
   & $|$ & \verb+LogicalNotExpr+\\
@@ -304,13 +306,19 @@ This example illustrates one function being called from another.  Both functions
 \subsection{Not Expressions}
 \label{c_expr_logical_not}
 
+The {\em logical not} operator accepts an argument of \lstinline{bool} type and produces a value of \lstinline{bool}.  The value returned is the logical opposite of the argument.  
+
 \begin{syntax}
 \verb+LogicalNotExpr+ & $::=$ & \token{!}\ \verb+UnitExpr+\\
 \end{syntax}
 
 \paragraph{Example.}
 
-\paragraph{Notes.}
+The following example illustrates an equality expression:
+
+\lstinputlisting{../examples/ch6/eg_18.whiley}
+
+This function computes the maximum of two \lstinline{int} values.  The expression \lstinline{!(a < b)} is equivalent to \lstinline{a >= b} and is used purely to illustrate the logical not operator.
 
 % =======================================================================
 % Logical Binary Expressions
