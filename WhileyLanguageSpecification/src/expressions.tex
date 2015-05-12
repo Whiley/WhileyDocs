@@ -347,6 +347,8 @@ The function \lstinline{implies()} implements the well-known equivalence between
 \subsection{Quantifier Expressions}
 \label{c_expr_quantifier}
 
+A quantifier operates over a list of values and produces a value of \lstinline{bool} type.  The {\em universal quantifier}, \lstinline{all}, returns \lstinline{true} if the given expression evaluates to \lstinline{true} for every element in the list, and \lstinline{false} otherwise.  The {\em existential quantifier}, \lstinline{exists}, returns \lstinline{false} if the given expression evaluates to \lstinline{false} for every element in the list, and \lstinline{true} otherwise.  The {\em inverted universal quantifier}, \lstinline{no}, returns \lstinline{true} if the given expression evaluates to \lstinline{false} for every element in the list, and \lstinline{false} otherwise
+
 \begin{syntax}
 \verb+LogicalQuantExpr+ & $::=$ & \big(\ \token{no} $|$ \token{some} $|$
 \token{all}\ \big)\ \token{\{}\\
@@ -355,11 +357,11 @@ The function \lstinline{implies()} implements the well-known equivalence between
 &&  \token{|}\ \verb+Expr+\ \token{\}}\\
 \end{syntax}
 
-\paragraph{Description.}
+\paragraph{Examples.}  The following examples illustrate the universal quantifier:
 
-\paragraph{Examples.}
+\lstinputlisting{../examples/ch6/eg_18.whiley}
 
-\paragraph{Notes.} 
+Here, the type \lstinline{natlist} represents those integer lists for which every element is a natural number (i.e. greater-or-equal to zero).
 
 % =======================================================================
 % List Expressions
