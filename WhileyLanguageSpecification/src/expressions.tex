@@ -370,6 +370,9 @@ Here, the type \lstinline{natlist} represents those integer lists for which ever
 \section{List Expressions}
 \label{c_expr_list}
 
+List expressions operate on values of list type (e.g. \lstinline{[int]}, \lstinline{[bool|real]}, etc).
+
+
 \begin{syntax}
   \verb+ListExpr+ & $::=$ &\\
   & $|$ & \verb+ListLengthOfExpr+\\
@@ -386,13 +389,17 @@ Here, the type \lstinline{natlist} represents those integer lists for which ever
 \subsection{LengthOf Expressions}
 \label{c_expr_lengthof}
 
+The {\em lengthof operator} accepts a value of list type, and produces a value of \lstinline{int} type which equals the number of elements in the list.
+
 \begin{syntax}
 \verb+ListLengthOfExpr+ & $::=$ & \token{|}\ \verb+Expr+\ \token{|}\\
 \end{syntax}
 
-\paragraph{Example.}
+\paragraph{Example.} The following examples illustrate the length of operator:
 
-\paragraph{Notes.}
+\lstinputlisting{../examples/ch6/eg_19.whiley}
+
+The above function iterates through all elements in a list looking for the first which is above a given item.  The lengthof operator is used to ensure this iteration remains within bounds.
 
 % =======================================================================
 % List Access Expressions
