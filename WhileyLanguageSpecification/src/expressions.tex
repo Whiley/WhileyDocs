@@ -257,6 +257,8 @@ An {\em function or method invocation} executes a named function or method decla
 
 \begin{syntax}
   \verb+InvokeExpr+ & $::=$ & \verb+Name+ \token{(} \verb+ArgsList+ \token{)}\\
+&&\\
+\verb+ArgsList+ & $::=$ & \big[\ \verb+UnitExpr+\ \big(\ \token{,}\ \verb+UnitExpr+\ \big)$^*$\ \big]\\
 \end{syntax}
 
 \paragraph{Example.}
@@ -503,8 +505,6 @@ Record expressions operate on values of record type (e.g. \lstinline|{int x, int
    &  \big( &\token{.}\ \verb+Ident+\ \big[\ \token{(}\ \verb+ArgsList+\ \token{)}\ \big]\\
    & $|$ & \token{->}\ \verb+Ident+\ \big[\ \token{(}\ \verb+ArgsList+\ \token{)}\ \big]\\
    & \big)$^+$&\\
-&&\\
-\verb+ArgsList+ & $::=$ & \big[\ \verb+UnitExpr+\ \big(\ \token{,}\ \verb+UnitExpr+\ \big)$^*$\ \big]\\
 \end{syntax}
 
 \paragraph{Description.}
@@ -522,13 +522,19 @@ The {\em arrow operator} returns a field of the value referenced by the argument
 
 \subsection{Record Constructors}
 \label{c_expr_record_constructor}
+A {\em record constructor} accepts one or more operands and produces a value of record type.  Record constructors are used to construct records from their constituent elements.  
 
 \begin{syntax}
+  \verb+RecordConstructorExpr+ & $::=$ & \token{\{}\ \verb+FieldArgsList+\ \token{\}}\\
+&&\\
+  \verb+FieldArgsList+ & $::=$ & \verb+Ident+ \token{:} \verb+UnitExpr+ \big(\ \token{,} \verb+Ident+ \token{:} \verb+UnitExpr+\ \big)$^*$\\
 \end{syntax}
 
-\paragraph{Example.}
+\paragraph{Example.} The following example illustrates a record constructor:
 
-\paragraph{Notes.}
+\lstinputlisting{../examples/ch6/eg_22.whiley}
+
+The above function simply translates a \lstinline{Point} from one position to another based on a shift in \lstinline{x} and in \lstinline{y}.  The record constructor is used to construct the new \lstinline{Point}.
 
 % =======================================================================
 % Reference Expressions
