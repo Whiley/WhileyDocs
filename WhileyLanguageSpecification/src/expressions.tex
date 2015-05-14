@@ -251,12 +251,13 @@ This function checks whether a given integer is contained in a list of integers.
 
 \section{Invoke Expressions}
 \label{c_expr_invoke}
-An {\em function or method invocation} executes a named function or method declared in a given source file.  An invocation passes arguments of appropriate number and type to the executed function or method.  An invocation may also return one or more values which can be subsequently used.
+An {\em function or method invocation} executes a named function or method declared in a given source file.  An {\em indirection function or method invocation} executes a function determined by a given expression.  An invocation passes arguments of appropriate number and type to the executed function or method.  An invocation may also return one or more values which can be subsequently used.
 
 % Could also discuss function or method lookup; this is really part of typing.
 
 \begin{syntax}
   \verb+InvokeExpr+ & $::=$ & \verb+Name+ \token{(} \verb+ArgsList+ \token{)}\\
+  \verb+IndirectInvokeExpr+ & $::=$ & \verb+UnitExpr+\ \token{(}\ \verb+ArgsList+\ \token{)}\\
 &&\\
 \verb+ArgsList+ & $::=$ & \big[\ \verb+UnitExpr+\ \big(\ \token{,}\ \verb+UnitExpr+\ \big)$^*$\ \big]\\
 \end{syntax}
@@ -490,7 +491,6 @@ The above function converts an integer value into its string representation.  A 
 \section{Record Expressions}
 \label{c_expr_record}
 
-
 Record expressions operate on values of record type (e.g. \lstinline|{int x, int y}|, etc).
 
 % =======================================================================
@@ -500,21 +500,17 @@ Record expressions operate on values of record type (e.g. \lstinline|{int x, int
 \subsection{Field Access Expressions}
 \label{c_expr_field_access}
 
+The field access operator accepts a value of record type and returns the value held in a given field.
+
 \begin{syntax}
-  \verb+FieldAccessExpr+ & $::=$ & \verb+UnitExpr+\\
-   &  \big( &\token{.}\ \verb+Ident+\ \big[\ \token{(}\ \verb+ArgsList+\ \token{)}\ \big]\\
-   & $|$ & \token{->}\ \verb+Ident+\ \big[\ \token{(}\ \verb+ArgsList+\ \token{)}\ \big]\\
-   & \big)$^+$&\\
+  \verb+FieldAccessExpr+ & $::=$ & \verb+UnitExpr+\ \token{.}\ \verb+Ident+\\
 \end{syntax}
 
-\paragraph{Description.}
+\paragraph{Examples.}  The following example illustrates a field access expression constructor:
 
-The {\em arrow operator} returns a field of the value referenced by the argument.
+\lstinputlisting{../examples/ch6/eg_23.whiley}
 
-\paragraph{Examples.}
-
-\paragraph{Notes.} The arrow operation ``\lstinline{e->f}'' is a short-hand notation for ``\lstinline{(*e).f}'' and can be used when \lstinline{e} has effective record type (\S\ref{c_types_effective_records}).
-
+The above function computes the so-called {\em dot product} of two vectors.  The field access operator is used to access the three fields of each vector. 
 
 % =======================================================================
 % Record Expression
@@ -563,11 +559,11 @@ The above function simply translates a \lstinline{Point} from one position to an
 \subsection{Dereference Expressions}
 \label{c_expr_dereference}
 
-A {\em dereference expression} accepts an argument of reference type and returns a value (or element) of the reference's target type.  The {\em dereference operator} returns the value referenced by the argument.  
+A dereference expression accepts an argument of reference type and returns a value (or element) of the reference's target type.  The {\em dereference operator} returns the value referenced by the argument.  The {\em arrow operator} returns a field of the value referenced by the argument.
 
 \begin{syntax}
-  \verb+DereferenceExpr+ & $::=$ & \token{*}\ \verb+TermExpr+\\\
-  & $|$ & \verb+TermExpr+\ \token{->}\ \verb+Identifier+\\
+  \verb+DereferenceExpr+ & $::=$ & \token{*}\ \verb+TermExpr+\\
+  & $|$ & \verb+UnitExpr+\ \token{->}\ \verb+Ident+\\
 \end{syntax}
 
 \paragraph{Example.} The following illustrates the dereference operator:
@@ -576,7 +572,8 @@ A {\em dereference expression} accepts an argument of reference type and returns
 
 This function traverses a linked list counting the number of links it contains.  The arrow operator is used to access the next link in the chain.
 
-\paragraph{Notes.}
+\paragraph{Notes.} The arrow operation ``\lstinline{e->f}'' is a short-hand notation for ``\lstinline{(*e).f}'' and can be used when \lstinline{*e} has effective record type (\S\ref{c_types_effective_records}).
+
 
 % =======================================================================
 % Term Expressions
