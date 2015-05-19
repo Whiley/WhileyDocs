@@ -537,6 +537,8 @@ The above function simply translates a \lstinline{Point} from one position to an
 % =======================================================================
 \section{Reference Expressions}
 
+Reference expressions operate on values of reference type (e.g. \lstinline{&int}).
+
 % =======================================================================
 % New Expression
 % =======================================================================
@@ -544,13 +546,17 @@ The above function simply translates a \lstinline{Point} from one position to an
 \subsection{New Expressions}
 \label{c_expr_new}
 
+A new expression accepts an argument of any type and produces a reference to that type.  The {\em new operator} allocates sufficient space on the heap and initialises it with the given value.  It then returns a reference to this heap object.
+
 \begin{syntax}
 \verb+NewExpr+ & $::=$ & \token{new}\ \verb+UnitExpr+\\
 \end{syntax}
 
-\paragraph{Example.}
+\paragraph{Example.} The following example illustrates the new operator:
 
-\paragraph{Notes.}
+\lstinputlisting{../examples/ch6/eg_24.whiley}
+
+This example illustrates an operation for adding an item onto the front of a classical linked list.  Here, a \lstinline{LinkedList} is either \lstinline{null} or a reference to a node containing a \lstinline{next} reference and \lstinline{data} item.  The add operation simply allocates a new node and places it on the front of the list.
 
 % =======================================================================
 % Dereference Expressions
