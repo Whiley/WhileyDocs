@@ -9,6 +9,16 @@ Having specified our program, we want to establish that it meets its specificati
 
 {\em Clarify that there are different levels of specification, ranging from the minimum to illustrate lack of runtime error to the complete specification that a function is correct.}
 
+\section{Specifications as Contracts}
+{\em Illustrate the basic idea of what a contract is using English language}.
+A specification is a contract between two parties: the {\em client} and {\em supplier}.  The client represents the person(s) using the given program, whilst the supplier is the person(s) implementing the program.  The specification ties the {\em inputs} of the program to its {\em outputs} in two ways:
+\begin{itemize}
+\item {\bf Inputs.} The specification states what is {\em required} of the inputs for the program to behave correctly.  The client is responsible for ensuring the correct inputs are always given.  If an incorrect input is given, the contract is broken and the program may do something unexpected.
+\item {\bf Outputs.} The specification states what output values must be {\em ensured} by a correctly behaving program.  The supplier is responsible for ensuring all outputs meet the specification, assuming that correct inputs were provided.
+\end{itemize}
+
+{\em Provide English specification of say indexOf function?}
+
 \section{Function Specifications}
 To specify a function or method in Whiley we must provide an appropriate {\em precondition} and {\em postcondition}.  A precondition is a condition over the parameters of a function that is required to be true when the function is called.  The body of the function can then use this to make assumptions about the possible values of the parameters.  Likewise, a postcondition is a condition over the return values of a function which is required to be true after the function is called.  
 
@@ -26,7 +36,8 @@ Here, the \lstinline{ensures} clauses declares the function's postcondition.  {\
 
 Multiple requires / ensures permitted.  Discuss that these things may be used in pre-condition and post-condition.  Requires may refer to parameters; Ensures may refer to returns as well. Variables used in ensures refer to their value on entry, not afterwards
 
-\subsection{Meeting the Specification}
+\subsection{Meeting the Contract}
+
 {\em Illustrate with body of above example which doesn't meet it's specification.}
 
 At this point, it is worth considering in more detail what this really means.   Since the Whiley compiler performs verification at {\em compile-time}, it does not consider specific values when reasoning about a function's implementation.  Instead, it considers all possible input values for the function which satisfy its precondition.  In other words, when the Whiley compiler verifies a function's implementation meets its specification, this means it does so {\em for all possible input values}.  
@@ -56,8 +67,6 @@ The Whiley compiler verifies that the implementation of this function meets its 
 \item Bodies of called functions ignored
 \item Pre/Post-conditions must be true before being called
 \end{itemize}
-
-\subsection{Quantification}
 
 \section{Data Type Invariants}
 
@@ -105,15 +114,6 @@ definitions for a natural number (we can see that \lstinline{bnat} is
 equivalent to \lstinline{anat} by subtracting \lstinline{x} from both sides).
 The Whiley compiler is able to reason that these types are equivalent
 and statically verifies that this function is correct.
-
-\section{Language of Specifications}
-\subsection{Basics}
-\begin{itemize}
-\item Logic connectives: implication, and, or, etc.
-\item Invariants can only use pure functions
-\end{itemize}
-\subsection{Functions}
-
 
 \section{Weak vs Strong Specifications}
 \section{Static vs Dynamic Checking}
