@@ -14,10 +14,22 @@ Having specified our program, we want to establish that it meets its specificati
 A specification is a contract between two parties: the {\em client} and {\em supplier}.  The client represents the person(s) using the given program, whilst the supplier is the person(s) implementing the program.  The specification ties the {\em inputs} of the program to its {\em outputs} in two ways:
 \begin{itemize}
 \item {\bf Inputs.} The specification states what is {\em required} of the inputs for the program to behave correctly.  The client is responsible for ensuring the correct inputs are always given.  If an incorrect input is given, the contract is broken and the program may do something unexpected.
-\item {\bf Outputs.} The specification states what output values must be {\em ensured} by a correctly behaving program.  The supplier is responsible for ensuring all outputs meet the specification, assuming that correct inputs were provided.
+\item {\bf Outputs.} The specification states what outputs must be {\em ensured} by a correctly behaving program.  The supplier is responsible for ensuring all outputs meet the specification, assuming that correct inputs were provided.
 \end{itemize}
+From this, we can see that both parties in the contract have obligations they must meet.  This also allows us to think about {\em blame}.  That is when something goes wrong {\em who is responsible?}  If the inputs to our program we incorrect according to the specification, we can blame the client.  On the other hand if the inputs were correct, but the outputs were not, then we can blame the supplier.
 
-{\em Provide English specification of say indexOf function?}
+\begin{eg}
+As a simple example, let us consider a function for finding the maximum values from an array of integer values.  The following provides an {\em informal} specification for this function:
+\begin{lstlisting}
+// REQUIRES: At least one item in items array
+//
+// ENSURES: Item returned was largest item in items array
+function max([int] items) -> (int item)
+\end{lstlisting}
+We have specified our function above using comments to document: firstly, the requirements needed for the inputs (i.e. that the array must have at least one element); and, secondly, the expectations placed on the outputs (i.e. that it returns the largest element in the array).  Thus, we could not expect the call \lstinline{max([])} to operate correctly; likewise, if the call \lstinline{max([1,2])} returned \lstinline{3} we would rightly say the implementation was incorrect.
+\end{eg}
+
+{\em Could talk about limitations of english language comments}
 
 \section{Specifying Functions}
 To specify a function or method in Whiley we must provide an appropriate {\em precondition} and {\em postcondition}.  A precondition is a condition over the parameters of a function that is required to be true when the function is called.  The body of the function can then use this to make assumptions about the possible values of the parameters.  Likewise, a postcondition is a condition over the return values of a function which is required to be true after the function is called.  
@@ -33,33 +45,59 @@ ensures all { i in 0 .. |items| | items[i] <= item }
 // Value returns was in items array
 ensures exists { i in 0 .. |items| | items[i] == item }
 \end{lstlisting}
-Here, the \lstinline{ensures} clauses declares the function's postcondition.  {\em Outline what this means in terms of permitted return values.  Better example would include requires as well, and support multiple different returns}
+Here, the \lstinline{requires} clause declares the function's precondition, whilst the \lstinline{ensures} clauses declare its postcondition.  This specification is largely the same as that given informally using comments before.  However, we regard this specification as being {\em formal} because, for any set of inputs and outputs, we can calculate precisely whether the inputs or outputs were malformed.  For example, consider the call \lstinline{max([])}.  We can say that the inputs to this call are incorrect, because \lstinline{|[]| < 0} evaluates to \lstinline{false}.  For the informal version given above, we cannot easily evaluate the English comments to determine whether they were met or not.  Instead, we rely on our human judgement for this --- but, unfortunately, this can easily be wrong!
 \end{eg}
 
-Multiple requires / ensures permitted.  Discuss that these things may be used in pre-condition and post-condition.  Requires may refer to parameters; Ensures may refer to returns as well. Variables used in ensures refer to their value on entry, not afterwards
+When specifying a function in Whiley, the \lstinline{requires} clause(s) may only refer to the parameters, whilst the \lstinline{ensures} clause(s) may also refer to the returns.  Note, however, that the \lstinline{ensures} clause(s) always consider those values of the parameters that held on entry to the function, not those which might hold at the end.
 
 \subsection{Meeting the Contract (Supplier)}
 
-{\em Illustrate with body of above example which doesn't meet it's specification.}
+We will now consider more precisely what it means for the supplier to meet the contract set out in a function's specification.  {\em For all possible inputs}.
 
-At this point, it is worth considering in more detail what this really means.   Since the Whiley compiler performs verification at {\em compile-time}, it does not consider specific values when reasoning about a function's implementation.  Instead, it considers all possible input values for the function which satisfy its precondition.  In other words, when the Whiley compiler verifies a function's implementation meets its specification, this means it does so {\em for all possible input values}.  
-
-The Whiley compiler reasons about functions by exploring the different control-flow paths through their bodies.  Furthermore, as it learns
-more about the variables used in the function, it automatically takes this into account.  
-
-\begin{eg}For example:
+\begin{eg}
+To illustrate a function which does not meet its specification, consider the following incorrect implementation of our \lstinline{max()} function:
 \begin{lstlisting}
-function abs(int x) => (int y)
-// Return value cannot be negative
-ensures y >= 0:
-    //
-    if x >= 0:
-        return x
-    else:
-        return -x
+function max([int] items) => (int item) 
+// Must have one or more items
+requires |items| > 0
+// Value returned not smaller than anything in items
+ensures all {i in 0 .. |items| | items[i] <= item}
+// Value returns was in items array
+ensures exists {i in 0 .. |items| | items[i] == item}:
+   //
+   return items[0]
 \end{lstlisting}
-The Whiley compiler verifies that the implementation of this function meets its specification.  
+By looking at the function, we can see that it does not do what we expect.  But, let's think about this more formally.  If the implementation is to be considered incorrect, {\em there must be at least one valid input which yields an incorrect output}.  So, to show out implementation is incorrect, we must find such an input.  Let us consider the input \lstinline{[5]}, for which our implementation returns \lstinline{5}.  In this case, both \lstinline!all {i in 0..|[5]| | [5][i] <= 5}! and \lstinline!exists{i in 0..|[5]| | [5][i] == 5}! evaluate to \lstinline{true} and, hence, this input does not illustrate the problem.  In contrast, for the input \lstinline{[1,4]}, our implementation returns \lstinline{1}.  In this case, \lstinline!all{ i in 0..|[1,4]| | [1,4][i] <= 1}! evaluates to \lstinline{false}.  Hence, this input provides evidence that our implementation does not meet its contract.
 \end{eg}
+
+{\em Talk about challenge in proving a function is correct and how need to use Whiley for this.}
+
+\begin{eg} We can now illustrate a correct implementation of our \lstinline{max()} function as follows:
+
+\begin{lstlisting}
+function max([int] items) => (int item) 
+// Must have one or more items
+requires |items| > 0
+// Value returned not smaller than anything in items
+ensures all {i in 0 .. |items| | items[i] <= item}
+// Value returns was in items array
+ensures exists {i in 0 .. |items| | items[i] == item}:
+   //
+   int i = 0
+   int r = items[0]
+   //
+   while i < |items:
+      if r < items[i]:
+          r = items[i]
+      i = i + 1
+   //
+   return r
+\end{lstlisting}
+
+Understanding that this function does indeed meet is specification is not easy.  Perhaps, intuitively, we can convinced ourselves that it is using a number of arguments.  For example, the variable \lstinline{r} is only ever assigned values from the \lstinline{items} array and, hence, the implementation must meet the second \lstinline{ensures} clause of the specification.  Similarly, since the loop iterates through and compares all elements in \lstinline{items}, we believe the first \lstinline{ensures} clause is met as well.  But, again, {\em we are relying on our error-prone human judgement here}.  
+\end{eg}
+
+{\em Briefly outline need for tools to do calculations for us, and how Whiley is one such example}.
 
 \subsection{Meeting the Contract (Client)}
 
