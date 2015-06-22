@@ -5,7 +5,7 @@ all: $(TARGET).pdf
 
 %.pdf : %.tex $(DEPS)
 	@for X in 1 2 3 ; do \
-        ( echo "---------------- Latex ($$X) ----------------" && pdflatex $< && bibtex $*) \
+        ( echo "---------------- Latex ($$X) ----------------" && pdflatex $< ) #&& bibtex $*) \
 	done
 
 clean:
