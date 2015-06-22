@@ -1,4 +1,4 @@
-\chapter{Specifying Functions and Data}
+\chapter{Specifying Programs}
 In this chapter, we embark upon the first step in the process of establishing that a program is (in some sense) correct.  That is, to determine exactly what our program is supposed to do.  To this end, we will learn how to write {\em specifications} for our programs which precisely describe their behaviour.  
 
 
@@ -19,7 +19,7 @@ A specification is a contract between two parties: the {\em client} and {\em sup
 
 {\em Provide English specification of say indexOf function?}
 
-\section{Function Specifications}
+\section{Specifying Functions}
 To specify a function or method in Whiley we must provide an appropriate {\em precondition} and {\em postcondition}.  A precondition is a condition over the parameters of a function that is required to be true when the function is called.  The body of the function can then use this to make assumptions about the possible values of the parameters.  Likewise, a postcondition is a condition over the return values of a function which is required to be true after the function is called.  
 
 \begin{eg}
@@ -36,7 +36,7 @@ Here, the \lstinline{ensures} clauses declares the function's postcondition.  {\
 
 Multiple requires / ensures permitted.  Discuss that these things may be used in pre-condition and post-condition.  Requires may refer to parameters; Ensures may refer to returns as well. Variables used in ensures refer to their value on entry, not afterwards
 
-\subsection{Meeting the Contract}
+\subsection{Meeting the Contract (Supplier)}
 
 {\em Illustrate with body of above example which doesn't meet it's specification.}
 
@@ -59,7 +59,7 @@ ensures y >= 0:
 The Whiley compiler verifies that the implementation of this function meets its specification.  
 \end{eg}
 
-\subsection{Meeting the Specification (Client Side)}
+\subsection{Meeting the Contract (Client)}
 
 \begin{itemize}
 
@@ -68,7 +68,7 @@ The Whiley compiler verifies that the implementation of this function meets its 
 \item Pre/Post-conditions must be true before being called
 \end{itemize}
 
-\section{Data Type Invariants}
+\section{Specifying Data}
 
 The above illustrates a function specification given through explicit pre- and
 post-conditions.  However, we may also employ {\em constrained types}
