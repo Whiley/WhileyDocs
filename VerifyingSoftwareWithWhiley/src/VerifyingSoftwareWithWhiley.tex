@@ -1,8 +1,8 @@
 \documentclass[10pt]{book}
 
-%\usepackage[T1]{fontenc}
+\usepackage[T1]{fontenc}
 %\usepackage[lighttt]{lmodern}
-\usepackage{times}
+\usepackage{palatino}
 
 \usepackage{graphicx}
 \usepackage{url} % for typesetting urls
@@ -19,6 +19,9 @@
 
 % ------------------------------------------------------------------------
 \definecolor{lightgray}{RGB}{225,225,225}
+\definecolor{verylightgray}{RGB}{245,245,245}
+\definecolor{whileybrown}{RGB}{213,195,151}
+\newcommand{\lstinlinec}[1]{\fcolorbox{lightgray}{verylightgray}{\lstinline{#1}}}
 
 \newtheorem{ex}{Exercise}
 \newenvironment{eg}{\par\noindent{\bf Example.}}{\hfill$\blacksquare$}
@@ -40,8 +43,8 @@
 \author{David J. Pearce}
 
 \begin{document}
-\maketitle
-%\input{abstract}
+%\maketitle
+\input{title}
 \tableofcontents
 \clearpage
 \input{introduction}
