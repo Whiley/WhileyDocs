@@ -1,17 +1,13 @@
 \chapter{Specifying Programs}
 In this chapter, we embark upon the first step in the process of establishing that a program is (in some sense) correct.  That is, to determine exactly what our program is supposed to do.  To this end, we will learn how to write {\em specifications} for our programs which precisely describe their behaviour.  
 
-
 Specifying a program in Whiley consists of at least two separate activities;  firstly, we provide appropriate specifications (called
 {\em invariants}) for any data types we have defined;  secondly, we provide specifications in the form of {\em pre-} and {\em post-conditions} for any functions or methods defined.  In doing this, we must acknowledge that precisely describing a program's behaviour is extremely challenging and, oftentimes, we want only to specify some {\em important aspect} of its permitted behaviour.  This can give us many of the benefits from specification without all of the costs.  
 
-Having specified our program, we want to establish that it meets its specification.  Or, in other words, that every function and method meets its specification.  This is itself quite a challenge and, furthermore, will often uncover critical flaws in our program.  While we will consider how to write specifications in this chapter, we will largely ignore the issue of determining whether our programs meet their specifications.  Although this is an important part of the process, it is also challenging and we will require several chapters to fully explore how this is done.
-
-{\em Clarify that there are different levels of specification, ranging from the minimum to illustrate lack of runtime error to the complete specification that a function is correct.}
+Having specified our program, we want to establish that it meets its specification.  Or, in other words, that every function and method meets its own specification.  This is itself quite a challenge and, furthermore, will often uncover critical flaws in our program.  While we will consider how to write specifications in this chapter, we will largely ignore the issue of determining whether our programs meet their specifications.  Although this is an important part of the process, it is also challenging and we will require several chapters to fully explore how this is done.
 
 \section{Specifications as Contracts}
-{\em Illustrate the basic idea of what a contract is using English language}.
-A specification is a contract between two parties: the {\em client} and {\em supplier}.  The client represents the person(s) using the given program, whilst the supplier is the person(s) implementing the program.  The specification ties the {\em inputs} of the program to its {\em outputs} in two ways:
+A specification is a contract between two parties: the {\em client} and {\em supplier}.  The client represents the person(s) using the given program, whilst the supplier is the person(s) who implemented it.  The specification ties the {\em inputs} of the program to its {\em outputs} in two ways:
 \begin{itemize}
 \item {\bf Inputs.} The specification states what is {\em required} of the inputs for the program to behave correctly.  The client is responsible for ensuring the correct inputs are always given.  If an incorrect input is given, the contract is broken and the program may do something unexpected.
 \item {\bf Outputs.} The specification states what outputs must be {\em ensured} by a correctly behaving program.  The supplier is responsible for ensuring all outputs meet the specification, assuming that correct inputs were provided.
@@ -52,7 +48,7 @@ When specifying a function in Whiley, the \lstinlinec{requires} clause(s) may on
 
 \subsection{Meeting the Contract (Supplier)}
 
-We will now consider more precisely what it means for the supplier to meet the contract set out in a function's specification.  {\em For all possible inputs}.
+We will now consider more precisely what it means for the supplier to meet the contract set out in a function's specification.  
 
 \begin{eg}
 To illustrate a function which does not meet its specification, consider the following incorrect implementation of our \lstinlinec{max()} function:
@@ -67,10 +63,16 @@ ensures exists {i in 0 .. |items| | items[i] == item}:
    //
    return items[0]
 \end{lstlisting}
-By looking at the function, we can see that it does not do what we expect.  But, let's think about this more formally.  If the implementation is to be considered incorrect, {\em there must be at least one valid input which yields an incorrect output}.  So, to show out implementation is incorrect, we must find such an input.  Let us consider the input \lstinlinec{[5]}, for which our implementation returns \lstinlinec{5}.  In this case, both \lstinlinec{all \{i in 0..|[5]| | [5][i] <= 5\}} and \lstinlinec{exists\{i in 0..|[5]| | [5][i] == 5\}} evaluate to \lstinlinec{true} and, hence, this input does not illustrate the problem.  In contrast, for the input \lstinlinec{[1,4]}, our implementation returns \lstinlinec{1}.  In this case, \lstinlinec{all\{ i in 0..|[1,4]| | [1,4][i] <= 1\}} evaluates to \lstinlinec{false}.  Hence, this input provides evidence that our implementation does not meet its contract.
+Hopefully, we can see this function does not do what we expect.  But, let's think about this more formally.  If the implementation is to be considered incorrect, {\em there must be at least one valid input which yields an incorrect output}.  To show our implementation is incorrect, we must find such an input.  Let us consider the input \lstinlinec{[5]}, for which our implementation returns \lstinlinec{5}.  In this case, both \lstinlinec{all \{i in 0..|[5]| | [5][i] <= 5\}} and \lstinlinec{exists \{i in 0..|[5]| | [5][i] == 5\}} evaluate to \lstinlinec{true} and, hence, {\em this input does not illustrate the problem}.  In contrast, for the input \lstinlinec{[1,4]} our implementation returns \lstinlinec{1}.  In this case, \lstinlinec{all\{ i in 0..|[1,4]| | [1,4][i] <= 1\}} evaluates to \lstinlinec{false} and, hence, {\em this input provides evidence that our implementation does not meet its contract}.
 \end{eg}
 
-{\em Talk about challenge in proving a function is correct and how need to use Whiley for this.}
+We say that a function {\em meets its specification} if it returns a valid output for all possible valid inputs.  The challenge lies in knowing whether or not this is actually true.  For example, we could test some valid inputs to see whether they produce valid outputs.  However, as Dijkstra said~\cite{EWD249}:
+
+\begin{quote}
+ ``{\em Program testing can be used to show the presence of bugs, but never to show their absence}''
+\end{quote}
+
+What Dijkstra means here is that a single valid input is sufficient to show that a program does not meet its specification (as in our example above).  However, to show that a function always meets its specification through testing requires testing {\em all possible inputs}.  For some functions, this is actually possible in a feasible amount of time.  Unfortunately, for most, it is not.  For example, in a programming language like Java, a simple function accepting \lstinline{int} parameter has $2^32$ possible input values.
 
 \begin{eg} We can now illustrate a correct implementation of our \lstinlinec{max()} function as follows:
 
@@ -94,8 +96,13 @@ ensures exists {i in 0 .. |items| | items[i] == item}:
    return r
 \end{lstlisting}
 
-Understanding that this function does indeed meet is specification is not easy.  Perhaps, intuitively, we can convinced ourselves that it is using a number of arguments.  For example, the variable \lstinlinec{r} is only ever assigned values from the \lstinlinec{items} array and, hence, the implementation must meet the second \lstinlinec{ensures} clause of the specification.  Similarly, since the loop iterates through and compares all elements in \lstinlinec{items}, we believe the first \lstinlinec{ensures} clause is met as well.  But, again, {\em we are relying on our error-prone human judgement here}.  
+Understanding that this function does indeed meet is specification is not easy.  Perhaps, intuitively, we can convince ourselves that it is using a number of arguments.  For example, the variable \lstinlinec{r} is only ever assigned values from the \lstinlinec{items} array and, hence, the implementation must meet the second \lstinlinec{ensures} clause of the specification.  Similarly, since the loop iterates through and compares all elements in \lstinlinec{items}, we believe the first \lstinlinec{ensures} clause is met as well.  But, again, {\em we are relying on our error-prone human judgement here}.  
 \end{eg}
+
+
+To be sure that a program meets its specification we must {\em prove} that it does.  This means applying a mathematically rigorous mechanism which considers all possible input values.
+
+{\em Talk about challenge in proving a function is correct and how need to use Whiley for this.}
 
 {\em Briefly outline need for tools to do calculations for us, and how Whiley is one such example}.
 
