@@ -116,15 +116,10 @@ ensures r >= x && r >= y:
    //
    return max([x,y])
 \end{lstlisting}
-When \lstinline{largest()} calls \lstinline{max()} it is acting as the client and, at that point, it must meet the contract set out in \lstinline{max()}'s specification.  By inspecting the code, we see that it always passes an input list which has exactly two values.  Therefore, it meets the precondition required for the \lstinline{max()} function (namely, that the list has at least one element).  
+When \lstinline{largest()} calls \lstinline{max()} it is acting as the client and, at that point, it must meet the contract set out in \lstinline{max()}'s specification.  By inspecting the code, we see that it always passes an input list which has exactly two values.  Therefore, it meets the precondition required for the \lstinline{max()} function (namely, that the list has at least one element).  Furthermore, the postcondition of \lstinline{max()} ensures that the value returned from \lstinline{largest()} meets its postcondition.
 \end{eg}
 
-\begin{itemize}
-
-\item Multiple requires / ensures permitted
-\item Bodies of called functions ignored
-\item Pre/Post-conditions must be true before being called
-\end{itemize}
+From our example above, we take away two observations from the clients perspective:  firstly, when calling a function, client code must ensure that function's precondition is met; secondly, for the value returned, the client code may assume that the function's postcondition holds.
 
 \section{Specifying Data}
 
