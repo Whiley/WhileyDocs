@@ -72,7 +72,7 @@ We say that a function {\em meets its specification} if it returns a valid outpu
  ``{\em Program testing can be used to show the presence of bugs, but never to show their absence}''
 \end{quote}
 
-What Dijkstra means here is that a single valid input is sufficient to show that a program does not meet its specification (as in our example above).  However, to show that a function always meets its specification through testing requires testing {\em all possible inputs}.  For some functions, this is actually possible in a feasible amount of time.  Unfortunately, for most, it is not.  For example, in a programming language like Java, a simple function accepting \lstinline{int} parameter has $2^32$ possible input values.
+What Dijkstra means here is that a single valid input is sufficient to show that a program does not meet its specification (as in our example above).  However, to show that a function always meets its specification through testing requires testing {\em all possible inputs}.  For some functions, this is actually possible in a feasible amount of time.  Unfortunately, for most, it is not.  For example, in a programming language like Java, a simple function accepting \lstinline{int} parameter has $2^{32}$ possible input values!
 
 \begin{eg} We can now illustrate a correct implementation of our \lstinlinec{max()} function as follows:
 
@@ -99,14 +99,25 @@ ensures exists {i in 0 .. |items| | items[i] == item}:
 Understanding that this function does indeed meet is specification is not easy.  Perhaps, intuitively, we can convince ourselves that it is using a number of arguments.  For example, the variable \lstinlinec{r} is only ever assigned values from the \lstinlinec{items} array and, hence, the implementation must meet the second \lstinlinec{ensures} clause of the specification.  Similarly, since the loop iterates through and compares all elements in \lstinlinec{items}, we believe the first \lstinlinec{ensures} clause is met as well.  But, again, {\em we are relying on our error-prone human judgement here}.  
 \end{eg}
 
-
-To be sure that a program meets its specification we must {\em prove} that it does.  This means applying a mathematically rigorous mechanism which considers all possible input values.
-
-{\em Talk about challenge in proving a function is correct and how need to use Whiley for this.}
-
-{\em Briefly outline need for tools to do calculations for us, and how Whiley is one such example}.
+To be sure that a program meets its specification we must {\em prove} that it does.  This means reasoning about the program in mathematically rigorous manner for all input values.  Such reasoning can be done by hand.  However, it is best done with a tool which can simplify much of the tedious calculation and protect against human error.  In this book, we are adopting the Whiley tool for this purpose and, in following chapters, we will illustrate how it can be used for this.
 
 \subsection{Meeting the Contract (Client)}
+
+We will now consider what it means for the client to meet the contract set out in a function's specification and what the client can then assume about its outputs. 
+
+\begin{eg}
+To illustrate, we will construct a simple client function which uses our \lstinline{max()} function above.  This is the \lstinline{largest()} function which accepts two parameters:
+\begin{lstlisting}
+function largest(int x, int y) -> (int r)
+// Value returned is either x or y
+ensures r == x || r == y
+// Value return is largest of x and y
+ensures r >= x && r >= y:
+   //
+   return max([x,y])
+\end{lstlisting}
+When \lstinline{largest()} calls \lstinline{max()} it is acting as the client and, at that point, it must meet the contract set out in \lstinline{max()}'s specification.  By inspecting the code, we see that it always passes an input list which has exactly two values.  Therefore, it meets the precondition required for the \lstinline{max()} function (namely, that the list has at least one element).  
+\end{eg}
 
 \begin{itemize}
 
