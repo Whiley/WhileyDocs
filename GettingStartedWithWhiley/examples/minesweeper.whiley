@@ -50,9 +50,11 @@ export
 // where all squares are hidden.
 function Board(int width, int height) -> Board:
     [Square] squares = []
-    //
-    for i in 0 .. width * height:
+    int i = 0
+    //   
+    while i < width * height:
       squares = squares ++ [HiddenSquare(false,false)]
+      i = i + 1
     //
     return {
         squares: squares,

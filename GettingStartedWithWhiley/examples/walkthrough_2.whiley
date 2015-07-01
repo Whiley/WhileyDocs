@@ -1,5 +1,7 @@
 function vectorMultiply([real] vector, real scalar) -> [real]:
     //
-    for i in 0 .. |vector|:
+    int i = 0
+    while i < |vector|:
         vector[i] = vector[i] * scalar
+        i = i + 1
     return vector

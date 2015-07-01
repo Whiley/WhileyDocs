@@ -71,44 +71,15 @@ values which cannot be represented using \lstinline{float}
 % \end{lstlisting}
 
 \newpage
-\subsection{Sets, Lists and Maps}
+\subsection{Lists}
 \label{walkthrough_collections}
-Like many modern programming languages, Whiley provides built-in types
-for representing collections.  The following illustrates a short
-function which multiplies a vector by a scalar:
+Like many modern programming languages, Whiley provides a built-in list type for representing collections of data.  The following illustrates a short function which multiplies a vector by a scalar:
 
 \lstinputlisting{../examples/walkthrough_2.whiley}
 
-This illustrates a few of the common collection operations.  Firstly,
-the size of a collection is obtained using the {\em length} operator
-(i.e. \lstinline{|vector|} returns the length of \lstinline{vector}).
-Secondly, the \lstinline{for} loop is useful for iterating over the
-elements of a collection.  In this case, \lstinline{0 .. |vector|}
-returns a {\em list} of consecutive integers from \lstinline{0} up to
-(but not including) \lstinline{|vector|}.  Finally, the {\em list
-  access} operator, \lstinline{vector[i]}, returns the element at
-index \lstinline{i}.  The three different kinds of collections
-supported in Whiley are:
-\begin{itemize}
-\item {\bf Sets} (e.g. \lstinline|{int}|) provide the simplest form of collection, and are constructing using a {\em set constructor} (e.g. \lstinline|{1,2,3}|).  They support the {\em set union} (e.g. \lstinline{xs + ys}), {\em set intersection} (e.g. \lstinline{xs & ys}) and {\em set difference} (e.g. \lstinline{xs - ys}) operators.  One can test for inclusion using the {\em element of} operator (e.g. \lstinline{x in xs}), or the {\em subset} (e.g. \lstinline{xs $\subset$ ys}) and {\em subset or equal} (e.g. \lstinline{xs $\subseteq$ ys}) operators.
-  
-\item {\bf Maps} (e.g. \lstinline|{int=>[int]}|) provide a halfway point between sets and lists.  They are similar to dictionaries in Python or the \lstinline{Map} interface in Java.  They can be viewed as a set of {\em key$\times$ value} pairs, where every key maps to exactly one value.  Maps are constructed using a {\em map constructor} (e.g. \lstinline|{1=>"hello",2=>"world"}|), and elements are accessed using the {\em map access} operator (e.g. \lstinline{map[i]}).  
+This illustrates a few of the common list operations.  Firstly, the size of a list is obtained using the {\em length} operator (i.e. \lstinline{|vector|} returns the length of \lstinline{vector}).  Secondly, the \lstinline{for} loop is useful for iterating over the elements of a collection.  In this case, \lstinline{0 .. |vector|} returns a {\em list} of consecutive integers from \lstinline{0} up to (but not including) \lstinline{|vector|}.  Finally, the {\em list access} operator, \lstinline{vector[i]}, returns the element at index \lstinline{i}.  
 
-\item {\bf Lists} (e.g. \lstinline{[int]}) are similar to arrays
-  (e.g. in Java), but they can also be resized.  As can be seen above,
-  they support the {\em list access} operator
-  (e.g. \lstinline{vector[i]}).  They also support the {\em list
-    append} operator (e.g. \lstinline{[1,2,3] ++ [4,5,6]}) and {\em
-    sublist} operator (e.g. \lstinline{vector[0..2]}).  Finally, lists are constructed using a {\em list constructor} (e.g. \lstinline{[1,2,3]}).
-
-\end{itemize}
-
-All collection kinds can be iterated using the built-in
-\lstinline{for} loop construct.  For example, here is a function to iterate a map looking for a particular value:
-
-\lstinputlisting{../examples/walkthrough_3.whiley}
-
-\noindent This function iterates over each key$\times$value pair (i.e. \lstinline{k,v}) in a from integers to integer lists (i.e. \lstinline|{int=>[int]}|) using the \lstinline{for} statement.
+Lists are similar to arrays (e.g. in Java), but they can also be resized.  In addition to the above, they also support the {\em list append} operator (e.g. \lstinline{[1,2,3] ++ [4,5,6]}) and {\em sublist} operator (e.g. \lstinline{vector[0..2]}).  Finally, lists are constructed using a {\em list constructor} (e.g. \lstinline{[1,2,3]}).
 
 \subsection{Records and Tuples}
 Aside from collection types, Whiley also allows provides {\em records} and {\em tuples} for grouping items together.  Records are similar to \lstinline{struct}s (as found in C) and objects (as found in JavaScript).  A record is constructed from one or more {\em fields}, each of which has a unique name and type.  For example, the following defines a simple record type for representing 2D points and a function for translating their position:
