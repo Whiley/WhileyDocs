@@ -317,13 +317,19 @@ This example illustrates one function being called from another.  Both functions
 \section{Lambda Expressions}
 \label{c_expr_lambda}
 
+A {\em lambda expression} creates an anonymous function or method which can accept zero or more arguments and whose return type is inferred from the body of the lambda.
+
 \begin{syntax}
-  \verb+LambdaExpr+ & $::=$ &\\
+  \verb+LambdaExpr+ & $::=$ & \token{\&} \token{(} \big( \verb+Type+ \verb+Ident+ \big)$^*$ \token{->} \verb+Expr+ \token{)}\\
 \end{syntax}
 
 \paragraph{Example.}
 
-\paragraph{Notes.}
+The following example illustrates a lambda expression:
+
+\lstinputlisting{../examples/ch6/eg_25.whiley}
+
+This function illustrates the classical {\em map} function which applies a function to all elements of a collection.  In this case, a lambda is used to create a function which adds a constant value to its argument.  This lambda is used to implement \lstinline{addAll()} in terms of \lstinline{map()}.
 
 % =======================================================================
 % Logical Expressions
