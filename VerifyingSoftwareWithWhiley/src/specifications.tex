@@ -123,39 +123,27 @@ From our example above, we take away two observations from the clients perspecti
 
 \section{Specifying Data}
 
-We have now looked at the issue of specifying functions.  However, we can also specify {\em data}.  That is, place requirements on what values our data types can hold.  These restrictions are called {\em invariants} because they must be true (i.e. invariant) for the life the of program.  
-
-The above illustrates a function specification given through explicit pre- and
-post-conditions.  However, we may also employ {\em constrained types}
-to simplify it as follows:
+We have now looked at the issue of specifying functions.  However, we can also specify {\em data}.  That is, place requirements on what values our data types can hold.  These restrictions are called {\em invariants} because they must be true (i.e. invariant) for the life the of program.  As a very simple example, consider the following data type for describing natural numbers:
 
 \begin{lstlisting}
 type nat is (int n) where n >= 0
-type pos is (int p) where p > 0
-
-function f(pos x) => (nat n)
-// Return must differ from parameter
-ensures n != x:
-    //
-    return x-1
 \end{lstlisting}
 
-Here, the \lstinlinec{type} declaration includes a \lstinlinec{where}
-clause constraining the permissible values for the type ($\$$
-represents the variable whose type this will be).  Thus,
-\lstinlinec{nat} defines the type of non-negative integers (i.e. the
-natural numbers).  Likewise, \lstinlinec{pos} gives the type of
-positive integers and is implicitly a subtype of \lstinlinec{nat}
-(since the constraint on \lstinlinec{pos} implies that of
-\lstinlinec{nat}).  We consider that good use of constrained types is
-critical to ensuring that function specifications remain as readable
-as possible.
+Here, the \lstinlinec{type} declaration includes a \lstinlinec{where} clause constraining the permissible values for the type (referred to as the {\em invariant}).  In the declaration, variable \lstinline{n} represents an arbitrary value of the given type.  Thus, \lstinlinec{nat} defines the type of non-negative integers (i.e. the natural numbers).
 
-The notion of type in Whiley is more fluid than found in typical
-languages.  In particular, if two types ${\tt T_1}$ and ${\tt T_2}$
-have the same {\em underlying} type, then ${\tt T_1}$ is a subtype of
-${\tt T_2}$ iff the constraint on ${\tt T_1}$ implies that of ${\tt
-  T_2}$.  Consider the following:
+We can then use our new data-type to simplify the specifications of our functions.  For example, consider the following implementation of the well-known absolute function:
+
+\begin{lstlisting}
+function abs(int x) -> nat:
+   if x >= 0:
+      return x
+   else:
+      return -x
+\end{lstlisting}
+
+Here, \lstinline{nat} is the declared return for \lstinline{abs()} and, hence, the invariant on \lstinline{nat} forms part of its post-condition.  We can see that, although variable \lstinline{x} is initially declared as having type \lstinline{int}, it is later consider to have type \lstinline{nat} in the true branch of the conditional.  In general, we consider that good use of constrained types is critical to ensuring that function specifications remain as readable as possible.
+
+The notion of type in Whiley is more fluid than found in typical languages.  In particular, if two type ${\tt T_1}$ and ${\tt T_2}$ have the same {\em underlying} type, then ${\tt T_1}$ is a subtype of ${\tt T_2}$ iff the constraint on ${\tt T_1}$ implies that of ${\tt T_2}$.  Consider the following:
 
 \begin{lstlisting}
  type anat is (int x) where x >= 0
@@ -164,11 +152,8 @@ ${\tt T_2}$ iff the constraint on ${\tt T_1}$ implies that of ${\tt
  function f(anat x) => bnat:
      return x
 \end{lstlisting}
-In this case, we have two alternate (and completely equivalent)
-definitions for a natural number (we can see that \lstinlinec{bnat} is
-equivalent to \lstinlinec{anat} by subtracting \lstinlinec{x} from both sides).
-The Whiley compiler is able to reason that these types are equivalent
-and statically verifies that this function is correct.
+
+In this case, we have two alternate (and completely equivalent) definitions for a natural number (we can see that \lstinlinec{bnat} is equivalent to \lstinlinec{anat} by subtracting \lstinlinec{x} from both sides). 
 
 \section{Weak vs Strong Specifications}
 \section{Static vs Dynamic Checking}
