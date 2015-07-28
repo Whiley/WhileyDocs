@@ -1,10 +1,10 @@
 \chapter{Specifying Programs}
-In this chapter, we embark upon the first step in the process of establishing that a program is (in some sense) correct.  That is, to determine exactly what our program is supposed to do.  To this end, we will learn how to write {\em specifications} for our programs which precisely describe their behaviour.  
+In this chapter, we embark upon the first step in the process of establishing that a program is (in some sense) correct.  That is, to determine exactly what our program is supposed to do.  To this end, we will learn how to write {\em specifications} for our programs which precisely describe some or all of their behaviour.  
 
 Specifying a program in Whiley consists of at least two separate activities;  firstly, we provide appropriate specifications (called
 {\em invariants}) for any data types we have defined;  secondly, we provide specifications in the form of {\em pre-} and {\em post-conditions} for any functions or methods defined.  In doing this, we must acknowledge that precisely describing a program's behaviour is extremely challenging and, oftentimes, we want only to specify some {\em important aspect} of its permitted behaviour.  This can give us many of the benefits from specification without all of the costs.  
 
-Having specified our program, we want to establish that it meets its specification.  Or, in other words, that every function and method meets its own specification.  This is itself quite a challenge and, furthermore, will often uncover critical flaws in our program.  While we will consider how to write specifications in this chapter, we will largely ignore the issue of determining whether our programs meet their specifications.  Although this is an important part of the process, it is also challenging and we will require several chapters to fully explore how this is done.
+Having specified our program, we want to establish that it meets its specification.  Or, in other words, that every function and method meets its own specification.  This is itself quite a challenge and, furthermore, will often uncover critical flaws in our program.  While we will consider how to write specifications in this chapter, we will largely ignore the issue of determining whether our programs meet their specifications.  Although this is an important part of the process, it is also challenging and we will continue exploring this over the coming chapters.
 
 \section{Specifications as Contracts}
 A specification is a contract between two parties: the {\em client} and {\em supplier}.  The client represents the person(s) using the given program, whilst the supplier is the person(s) who implemented it.  The specification ties the {\em inputs} of the program to its {\em outputs} in two ways:
@@ -28,17 +28,17 @@ We have specified our function above using comments to document: firstly, the re
 {\em Could talk about limitations of english language comments}
 
 \section{Specifying Functions}
-To specify a function or method in Whiley we must provide an appropriate {\em precondition} and {\em postcondition}.  A precondition is a condition over the parameters of a function that is required to be true when the function is called.  The body of the function can then use this to make assumptions about the possible values of the parameters.  Likewise, a postcondition is a condition over the return values of a function which is required to be true after the function is called.  
+To specify a function or method in Whiley we must provide an appropriate {\em precondition} and {\em postcondition}.  A precondition is a condition over the parameters of a function that is required to be true when the function is called.  The body of the function can use this to make assumptions about the possible values of the parameters.  Likewise, a postcondition is a condition over the return values of a function which is required to be true after the function is called.  
 
 \begin{eg}
 As a very simple example, consider the following specification for our function which finds the maximum value from an array integers:
 \begin{lstlisting}
 function max([int] items) => (int item) 
-// Must have one or more items
+// At least one item in items array
 requires |items| > 0
-// Value returned not smaller than anything in items
+// Item returned as large as largest in items array
 ensures all { i in 0 .. |items| | items[i] <= item }
-// Value returns was in items array
+// Item returned was in items array
 ensures exists { i in 0 .. |items| | items[i] == item }
 \end{lstlisting}
 Here, the \lstinlinec{requires} clause declares the function's precondition, whilst the \lstinlinec{ensures} clauses declare its postcondition.  This specification is largely the same as that given informally using comments before.  However, we regard this specification as being {\em formal} because, for any set of inputs and outputs, we can calculate precisely whether the inputs or outputs were malformed.  For example, consider the call \lstinlinec{max([])}.  We can say that the inputs to this call are incorrect, because \lstinlinec{|[]| < 0} evaluates to \lstinlinec{false}.  For the informal version given above, we cannot easily evaluate the English comments to determine whether they were met or not.  Instead, we rely on our human judgement for this --- but, unfortunately, this can easily be wrong!
@@ -72,7 +72,7 @@ We say that a function {\em meets its specification} if it returns a valid outpu
  ``{\em Program testing can be used to show the presence of bugs, but never to show their absence}''
 \end{quote}
 
-What Dijkstra means here is that a single valid input is sufficient to show that a program does not meet its specification (as in our example above).  However, to show that a function always meets its specification through testing requires testing {\em all possible inputs}.  For some functions, this is actually possible in a feasible amount of time.  Unfortunately, for most, it is not.  For example, in a programming language like Java, a simple function accepting \lstinline{int} parameter has $2^{32}$ possible input values!
+What Dijkstra means here is that a single valid input is sufficient to show that a program does not meet its specification (as in our example above).  However, to show that a function always meets its specification through testing requires testing {\em all possible inputs}.  For some functions, this is actually possible in a feasible amount of time.  Unfortunately, for most, it is not.  For example, in a programming language like Java, a simple function accepting an \lstinline{int} parameter has $2^{32}$ possible input values!
 
 \begin{eg} We can now illustrate a correct implementation of our \lstinlinec{max()} function as follows:
 
@@ -96,10 +96,10 @@ ensures exists {i in 0 .. |items| | items[i] == item}:
    return r
 \end{lstlisting}
 
-Understanding that this function does indeed meet is specification is not easy.  Perhaps, intuitively, we can convince ourselves that it is using a number of arguments.  For example, the variable \lstinlinec{r} is only ever assigned values from the \lstinlinec{items} array and, hence, the implementation must meet the second \lstinlinec{ensures} clause of the specification.  Similarly, since the loop iterates through and compares all elements in \lstinlinec{items}, we believe the first \lstinlinec{ensures} clause is met as well.  But, again, {\em we are relying on our error-prone human judgement here}.  
+Understanding that this function does indeed meet is specification is not easy.  Perhaps, intuitively, we can convince ourselves of this using a number of arguments.  For example, the variable \lstinlinec{r} is only ever assigned values from the \lstinlinec{items} array and, hence, the implementation must meet the second \lstinlinec{ensures} clause of the specification.  Similarly, since the loop iterates through and compares all elements in \lstinlinec{items}, we believe the first \lstinlinec{ensures} clause is met as well.  But, again, {\em we are relying on our error-prone human judgement here}.  
 \end{eg}
 
-To be sure that a program meets its specification we must {\em prove} that it does.  This means reasoning about the program in mathematically rigorous manner for all input values.  Such reasoning can be done by hand.  However, it is best done with a tool which can simplify much of the tedious calculation and protect against human error.  In this book, we are adopting the Whiley tool for this purpose and, in following chapters, we will illustrate how it can be used for this.
+\marginpar{Include 224 examples?}{To} be sure that a program meets its specification we must {\em prove} that it does.  This means reasoning about the program in a mathematically rigorous manner for all input values.  Such reasoning can be done by hand.  However, it is best done with a tool which can simplify much of the tedious calculation and protect against human error.  In this book, we are adopting the Whiley tool for this purpose and, in following chapters, we will illustrate how it can be used for this.
 
 \subsection{Meeting the Contract (Client)}
 
