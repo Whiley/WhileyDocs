@@ -166,11 +166,15 @@ function sort([int] items) -> (sorted result):
 
 We can see that using the \lstinlinec{sorted} datatype helps to simplify the specification of our \lstinlinec{sort()} function above.  In general, we believe that good use of data type invariants is critical to ensuring specifications are succinct and easy to read.
 
-\section{Weak vs Strong Specifications}
-\section{Static vs Dynamic Checking}
-\section{Partial vs Total Correctness}
+\section{Writing Specifications}
 
-\section{Exercises}
+When writing the specification for a function there are different levels we can strive for.  For example, we could provide a {\em partial} specification which only covers some aspects of the permitted function's behaviour.  Or, we can try to specify every aspect of the function's behaviour in minute detail.  
+
+Typically, the more detailed our specification the less freedom is possible with the implementation.  A risk here is that one can easily {\em over specify} a function.  This means the specification is so detailed that many useful implementations of our function are excluded.  In the early stages of a program's development, we want to avoid over specification to ensure there is scope for changing the implementation later.  
+
+As an interesting example, consider the following two specifications for the same function: 
+
+\section*{Exercises}
 
 \begin{ex}
 The function \lstinlinec{neg()} returns the arithmetic negation of a value.
