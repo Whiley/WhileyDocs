@@ -50,12 +50,12 @@ Lower ranked operators bind more tightly (i.e. take higher precedence) thank hig
 % Multi Expression
 % =======================================================================
 
-\section{Multi Expressions}
+\section{Expressions}
 \label{c_expr_tuple}
 A multi-expression is an expression composed of two or more unit expressions and which returns a tuple value (\S\ref{c_types_tuple}).  The operands of a multi-expression are evaluated in a strict left-to-right order.
 
 \begin{syntax}
-  \verb+Expr+ & $::=$ & \verb+UnitExpr+ \big(\ \token{,}\ \verb+UnitExpr+\ \big)$^+$ \\
+  \verb+Expr+ & $::=$ & \verb+UnitExpr+ \big(\ \token{,}\ \verb+UnitExpr+\ \big)$^\star$ \\
 \end{syntax}
 
 \paragraph{Example.}  The following example illustrates the use of a multi-expression:
@@ -95,7 +95,7 @@ A unit expression is an expression which returns exactly one value.  There is a 
 \section{Arithmetic Expressions}
 \label{c_expr_arithmetic}
 
-Arithmetic expressions operate on values of numerical type (either \lstinline{int} or \lstinline{real}).
+Arithmetic expressions operate on values of numeric type (either \lstinline{int} or \lstinline{real}).
 
 \begin{syntax}
   \verb+ArithmeticExpr+ & $::=$ & \verb+ArithmeticNegationExpr+\\
@@ -221,9 +221,9 @@ A bitwise binary expression operates on values of \lstinline{byte} type (\S\ref{
 
 \paragraph{Example.}  The following example illustrates the bitwise OR operator:
 
-\lstinputlisting[firstline=3]{../examples/ch6/eg_3.whiley}
+\lstinputlisting[firstline=3]{../examples/ch6/eg_3b.whiley}
 
-This function converts an unsigned integer in the range \lstinline{0} ... \lstinline{255} to a \lstinline{byte}.  The bitwise OR operator is used to construct the resulting \lstinline{byte} by setting individual bits via the \lstinline{mask}.  This example also illustrates the left-shift operator (\S\ref{c_expr_shift}).
+These functions provide mechanisms for manipulating a byte of ``flags'', as determined by the constant identifiers.  The bitwise OR operator is used to ensure a given bit is set, whilst the bitwise AND operator is used to check whether one is set or not.  This example also illustrates the left-shift operator (\S\ref{c_expr_shift}).
 
 % =======================================================================
 % Shift Expressions
@@ -291,7 +291,7 @@ This function checks whether a given integer is contained in a list of integers.
 
 \section{Invoke Expressions}
 \label{c_expr_invoke}
-An {\em function or method invocation} executes a named function or method declared in a given source file.  An {\em indirection function or method invocation} executes a function determined by a given expression.  An invocation passes arguments of appropriate number and type to the executed function or method.  An invocation may also return one or more values which can be subsequently used.
+A {\em function or method invocation} executes a named function or method declared in a given source file.  An {\em indirect function or method invocation} executes a function determined by a given expression.  An invocation passes arguments of appropriate number and type to the executed function or method.  An invocation may also return one or more values which can be subsequently used.
 
 % Could also discuss function or method lookup; this is really part of typing.
 
@@ -304,7 +304,7 @@ An {\em function or method invocation} executes a named function or method decla
 
 \paragraph{Example.}
 
-The following example illustrates an equality expression:
+The following example illustrates a function invocation:
 
 \lstinputlisting{../examples/ch6/eg_17.whiley}
 
@@ -363,9 +363,9 @@ The {\em logical not} operator accepts an argument of \lstinline{bool} type and 
 
 \paragraph{Example.}
 
-The following example illustrates an equality expression:
+The following example illustrates the logical not operator:
 
-\lstinputlisting{../examples/ch6/eg_18.whiley}
+\lstinputlisting{../examples/ch6/eg_26.whiley}
 
 This function computes the maximum of two \lstinline{int} values.  The expression \lstinline{!(a < b)} is equivalent to \lstinline{a >= b} and is used purely to illustrate the logical not operator.
 
@@ -426,7 +426,6 @@ List expressions operate on values of list type (e.g. \lstinline{[int]}, \lstinl
   & $|$ & \verb+ListLengthOfExpr+\\
   & $|$ & \verb+ListAccessExpr+\\
   & $|$ & \verb+ListAppendExpr+\\
-  & $|$ & \verb+ListRangeExpr+\\
   & $|$ & \verb+ListConstructorExpr+\\
 \end{syntax}
 
@@ -443,7 +442,7 @@ The {\em lengthof operator} accepts a value of list type, and produces a value o
 \verb+ListLengthOfExpr+ & $::=$ & \token{|}\ \verb+Expr+\ \token{|}\\
 \end{syntax}
 
-\paragraph{Example.} The following examples illustrate the length of operator:
+\paragraph{Example.} The following examples illustrate the lengthof operator:
 
 \lstinputlisting{../examples/ch6/eg_19.whiley}
 
@@ -456,13 +455,10 @@ The above function iterates through all elements in a list looking for the first
 \subsection{Access Expressions}
 \label{c_expr_list_access}
 
-A list access expression accepts a list argument along with one or two integer operands and produces one or more value(s) of the list element type.  The {\em index-of operator} returns the element at the given operand position in the list.  The {\em sublist operator} returns the sublist of elements between the first and second operand.
+A list access expression accepts a list argument with one operand and produces a value of the list element type.  The {\em index-of operator} returns the element at the given operand position in the list.  
 
 \begin{syntax}
-  \verb+ListAccessExpr+ & $::=$ & \verb+UnitExpr+\\
-   &  \big( &\token{[}\ \verb+Expr+\ \token{]}\\
-   & $|$ & \token{[}\ \verb+Expr+\ \token{..}\ \verb+Expr+\ \token{]}\\
-   & \big)$^+$&\\
+  \verb+ListAccessExpr+ & $::=$ & \verb+UnitExpr+\ \token{[}\ \verb+Expr+\ \token{]}\\
 \end{syntax}
 
 \paragraph{Examples.} The following example illustrates the index-of and sublist operators:
@@ -490,27 +486,6 @@ An append expression accepts two lists arguments and produces a value of list ty
 \lstinputlisting{../examples/ch6/eg_8.whiley}
 
 This function constructs a list containing the integer values from \lstinline{start} up to (but not including) \lstinline{end}.  The list append operator is used to construct the list, starting initially from the empty list.
-
-% =======================================================================
-% Range Expressions
-% =======================================================================
-
-\subsection{Range Expressions}
-\label{c_expr_range}
-
-A range expression accepts two integer arguments and produces a value of integer list type.  The {\em range operator} constructs the list of integer values from the first argument up to (but not including) the last.
-
-\begin{syntax}
-  \verb+ListRangeExpr+ & $::=$ & \verb+UnitExpr+\ \token{..}\ \verb+UnitExpr+\\
-\end{syntax}
-
-\paragraph{Examples.}  The following illustrates the range operator:
-
-\lstinputlisting{../examples/ch6/eg_9.whiley}
-
-This function sums the integers between \lstinline{start} and \lstinline{end}.  The range operator is used to construct the list to be iterated over.
-
-\paragraph{Notes.}  If the start of a range expression is greater than its end, the empty list is returned.
 
 % =======================================================================
 % List Expression
@@ -622,7 +597,7 @@ A dereference expression accepts an argument of reference type and returns a val
 
 \lstinputlisting{../examples/ch6/eg_14.whiley}
 
-This function traverses a linked list counting the number of links it contains.  The arrow operator is used to access the next link in the chain.
+This method traverses a linked list counting the number of links it contains.  The arrow operator is used to access the next link in the chain.
 
 \paragraph{Notes.} The arrow operation ``\lstinline{e->f}'' is a short-hand notation for ``\lstinline{(*e).f}'' and can be used when \lstinline{*e} has effective record type (\S\ref{c_types_effective_records}).
 
