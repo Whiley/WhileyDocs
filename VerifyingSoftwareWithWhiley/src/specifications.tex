@@ -116,14 +116,14 @@ ensures r >= x && r >= y:
    //
    return max([x,y])
 \end{lstlisting}
-When \lstinline{largest()} calls \lstinline{max()} it is acting as the client and, at that point, it must meet the contract set out in \lstinline{max()}'s specification.  By inspecting the code, we see that it always passes an input list which has exactly two values.  Therefore, it meets the precondition required for the \lstinline{max()} function (namely, that the list has at least one element).  Furthermore, the postcondition of \lstinline{max()} ensures that the value returned from \lstinline{largest()} meets its postcondition.
+When \lstinline{largest()} calls \lstinline{max()} it is acting as the client and, at that point, it must meet the contract set out in \lstinline{max()}'s specification.  By inspecting the code, we see that it always passes an input array which has exactly two values.  Therefore, it meets the precondition required for the \lstinline{max()} function (namely, that the list has at least one element).  Furthermore, the postcondition of \lstinline{max()} ensures that the value returned from \lstinline{largest()} meets its postcondition.
 \end{eg}
 
 From our example above, we take away two observations from the clients perspective:  firstly, when calling a function, client code must ensure that function's precondition is met; secondly, for the value returned, the client code may assume that the function's postcondition holds.
 
 \section{Specifying Data}
 
-We have now looked at the issue of specifying functions.  However, we can also specify {\em data}.  That is, place requirements on what values our data types can hold.  These restrictions are called {\em invariants} because they must be true (i.e. invariant) for the life the of program.  As a very simple example, consider the following data type for describing natural numbers:
+We have now looked at the issue of specifying functions.  However, we can also specify {\em data}.  That is, place requirements on what values our data types can hold.  These restrictions are called {\em invariants} because they must be true (i.e. invariant) for the life of the program.  As a very simple example, consider the following data type for describing natural numbers:
 
 \begin{lstlisting}
 type nat is (int n) where n >= 0
@@ -141,19 +141,30 @@ function abs(int x) -> nat:
       return -x
 \end{lstlisting}
 
-Here, \lstinline{nat} is the declared return for \lstinline{abs()} and, hence, the invariant on \lstinline{nat} forms part of its post-condition.  We can see that, although variable \lstinline{x} is initially declared as having type \lstinline{int}, it is later consider to have type \lstinline{nat} in the true branch of the conditional.  In general, we consider that good use of constrained types is critical to ensuring that function specifications remain as readable as possible.
+Here, \lstinlinec{nat} is the declared return for \lstinlinec{abs()} and, hence, the invariant on \lstinline{nat} forms part of its post-condition.  We can see that, although variable \lstinlinec{x} is initially declared as having type \lstinlinec{int}, it is later consider to have type \lstinlinec{nat} in the true branch of the conditional.  In general, we consider that good use of constrained types is critical to ensuring that function specifications remain as readable as possible.
 
-The notion of type in Whiley is more fluid than found in typical languages.  In particular, if two type ${\tt T_1}$ and ${\tt T_2}$ have the same {\em underlying} type, then ${\tt T_1}$ is a subtype of ${\tt T_2}$ iff the constraint on ${\tt T_1}$ implies that of ${\tt T_2}$.  Consider the following:
+As another example, let us consider the following declaration of a set as an array of unique values:
 
 \begin{lstlisting}
- type anat is (int x) where x >= 0
- type bnat is (int x) where 2*x >= x
-
- function f(anat x) => bnat:
-     return x
+type set is ([int] xs) where 
+  all { i in 0..|xs|, j in 0..|xs| | i != j ==> xs[i] != xs[j] }
 \end{lstlisting}
 
-In this case, we have two alternate (and completely equivalent) definitions for a natural number (we can see that \lstinlinec{bnat} is equivalent to \lstinlinec{anat} by subtracting \lstinlinec{x} from both sides). 
+The invariant for type \lstinlinec{set} simply states that any two different elements have different values.  In a similar way, we can define the notion of a {\em sorted} array as follows:
+
+\begin{lstlisting}
+type sorted is ([int] xs) where 
+  |xs| >= 1 ==> all { i in 0 .. |xs|-1 | xs[i] <= xs[i+1] }
+\end{lstlisting} 
+
+The invariant for type \lstinlinec{sorted} says that, for any two adjacent elements, the first has a lower value than the second.  Using a type such as this, we can easily give the specification for a function which {\em sorts} an array as follows:
+
+\begin{lstlisting}
+function sort([int] items) -> (sorted result):
+   ...
+\end{lstlisting}
+
+We can see that using the \lstinlinec{sorted} datatype helps to simplify the specification of our \lstinlinec{sort()} function above.  In general, we believe that good use of data type invariants is critical to ensuring specifications are succinct and easy to read.
 
 \section{Weak vs Strong Specifications}
 \section{Static vs Dynamic Checking}
