@@ -6,6 +6,7 @@ In this chapter, we begin the process of understanding how to check that our pro
 {\em Also, introduce basic concept of a weakest precondition versus a strongest postcondition.  Introduce control-flow graph and the path sensitive traversal?}
 
 \section{Functions}
+\label{r_functions}
 
 As a very simple example, consider the following function which accepts a positive integer and returns a
 non-negative integer (i.e. a natural number):
@@ -34,24 +35,45 @@ Here, we know \lstinlinec{y<0} is true before the assignment and that \lstinline
 
 \section{Conditionals}
 
-Conditionals introduce information about variables into the program.  Consider the following function for calculating the {\em absolute} value of an integer:
+Conditionals introduce information about variables into the program.  Consider the following snippet:
 
 \begin{lstlisting}
-function abs(int x) -> (int r)
-ensures r >= 0:
-   //
-   if x >= 0:
-      // x >= 0
-      return x
-   else:
-      // x < 0
-      return -x
+if x >= 0:
+   // x >= 0
+   ...
+else:
+   // x < 0
+   ...
 \end{lstlisting}
 
-Here, the conditional provides more information about the variable \lstinlinec{x}.  On the true branch, we have that \lstinlinec{x >= 0} and this must imply the post-condition \lstinline{r >= 0} where \lstinline{r == x} (which it does).  On the false branch, we have that \lstinline{x < 0} and this must imply the post-condition \lstinline{r >= 0} where \lstinline{r == -x} (which it does).
+Here, we know nothing about variable \lstinlinec{x} before the statement.  However,, the conditional provides gives us more information.  On the true branch, we have that \lstinlinec{x >= 0} which follows immediately from the condition itself.  On the false branch, we have \lstinline{x < 0} which follows from the negated condition.
+
+In the above example, information about variable \lstinlinec{x} is determined directly from the conditional itself.  However, information can also be determined about variables which are {\em not even used in the conditional}.  The following illustrates:
+
+\begin{lstlisting}
+int y = x + 1
+// y == x + 1
+if x >= 0:
+   // x >= 0 and y == x + 1
+   ...
+else:
+   // x < 0 and y == x + 1
+   ...
+\end{lstlisting}
+
+Again, in this example we know nothing about either variable \lstinlinec{x} or \lstinlinec{y} beforehand.  After the assignment, we know the relationship between variable \lstinlinec{x} and \lstinlinec{y}.  Hence, on the true branch, we can conclude, for example, that \lstinlinec{y > 0}.  Similarly, on the false branch, we can conclude that \lstinlinec{y <= 0}.
 
 \section{Function Calls}
-Examine involving function calls
+
+To reason about a function call, we must first establish that its precondition is met.  Once we know this, we can then assume that its postcondition holds true for any value returned.  Consider the following example:
+
+\begin{lstlisting}
+// x > 0
+x = decrement(x)
+// x >= 0
+\end{lstlisting}
+
+Recall the definition of the \lstinlinec{decrement()} function from \S\ref{r_functions}.  Since we know \lstinlinec{x > 0} is true before the function call, we know: firstly, that the precondition of \lstinlinec{decrement()} is satisfied; hence, secondly, that the postcondition of \lstinlinec{decrement()} implies \lstinlinec{x >= 0} after the statement.
 
 \section{Compound Data Types}
 Examine examples with updating lists, records, etc.
