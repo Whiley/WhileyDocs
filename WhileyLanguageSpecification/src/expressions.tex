@@ -425,6 +425,7 @@ List expressions operate on values of list type (e.g. \lstinline{[int]}, \lstinl
   \verb+ListExpr+ & $::=$ &\\
   & $|$ & \verb+ListLengthOfExpr+\\
   & $|$ & \verb+ListAccessExpr+\\
+  & $|$ & \verb+ListGeneratorExpr+\\
   & $|$ & \verb+ListConstructorExpr+\\
 \end{syntax}
 
@@ -465,6 +466,25 @@ A list access expression accepts a list argument with one operand and produces a
 \lstinputlisting{../examples/ch6/eg_20.whiley}
 
 The above function computes the sum of a list by recursively breaking it down in successively smaller lists.  The index-of operator is used to get the first item in the list at each stage, whilst the sublist operator is used to strip off that first element. 
+
+% =======================================================================
+% Generator Expressions
+% =======================================================================
+
+\subsection{Generator Expressions}
+\label{c_expr_generator}
+
+A {\em list generator} accepts two arguments and produces a value of list type.  The second argument must be of \lstinline{int} type and the list produced contains exactly this many occurrences of the first argument.
+
+\begin{syntax}
+  \verb+ListGeneratorExpr+ & $::=$ & \token{[}\ \verb+UnitExpr+\ \token{;}\ \verb+UnitExpr+\ \token{]}\\
+\end{syntax}
+
+\paragraph{Examples.} The following example illustrates a list generator:
+
+\lstinputlisting{../examples/ch6/eg_8.whiley}
+
+This function constructs a list by prepending a given element onto the front of a given list.  The list generator is used to construct the initial list of values whose size is one larger than the given list.
 
 % =======================================================================
 % List Expression
