@@ -14,8 +14,8 @@ To determine the evaluation order for mixed-operator expressions without explici
 \item {\bf Unary Expressions.} This operator class represents operators which take exactly one operand.  This class takes highest precedence, and includes operators such as arithmetic negation (\S\ref{c_expr_negation}) and logical not (\S\ref{c_expr_logical_not}).
 \item {\bf Binary (Infix) Expressions.}  This operator class represents operators which accept two operands with an infix syntax.  This class includes the usual range of common binary operators, such as arithmetic operators (\S\ref{c_expr_additive},\S\ref{c_expr_multiplicative}), logical connectives (\S\ref{c_expr_logical_connectives}), etc.
 
-\item {\bf Binary (Mixfix) Expressions.}  This operator class represents operators which accept two operands but which are non-infix operators and, hence, precedence is not ambiguous.  This class includes the list access (\S\ref{c_expr_list_access}) and range operators (\S\ref{c_expr_range}).
-\item {\bf N-Ary Expressions.}  This operator class represents operators which accept an arbitrary number of operands.  This class includes list constructors (\S\ref{c_expr_list_constructor}), record constructors (\S\ref{c_expr_record_constructor}), etc.
+\item {\bf Binary (Mixfix) Expressions.}  This operator class represents operators which accept two operands but which are non-infix operators and, hence, precedence is not ambiguous.  This class includes the array access (\S\ref{c_expr_array_access}) and range operators (\S\ref{c_expr_range}).
+\item {\bf N-Ary Expressions.}  This operator class represents operators which accept an arbitrary number of operands.  This class includes array constructors (\S\ref{c_expr_array_constructor}), record constructors (\S\ref{c_expr_record_constructor}), etc.
 \end{enumerate}
 
 Within the class of binary infix expressions, an explicit precedence rank is given for each operator:
@@ -81,7 +81,7 @@ A unit expression is an expression which returns exactly one value.  There is a 
                   &  $|$  & \verb+InvokeExpr+\\
                   &  $|$  & \verb+LambdaExpr+\\
                   &  $|$  & \verb+LogicalExpr+\\
-                  &  $|$  & \verb+ListExpr+\\
+                  &  $|$  & \verb+ArrayExpr+\\
                   &  $|$  & \verb+RecordExpr+\\
                   &  $|$  & \verb+ReferenceExpr+\\
                   &  $|$  & \verb+TermExpr+\\
@@ -176,7 +176,7 @@ A multiplicative expression accepts two arguments of identical type (either \lst
 
 \lstinputlisting{../examples/ch6/eg_12.whiley}
 
-This function accepts a non-negative integer and uses this to index into a list.  To ensure the list access is within bounds, the remainder operator is used.  Furthermore, the function requires the list is non-empty to prevent a fault with the remainder operator.
+This function accepts a non-negative integer and uses this to index into an array.  To ensure the array access is within bounds, the remainder operator is used.  Furthermore, the function requires the array is non-empty to prevent a fault with the remainder operator.
 
 \paragraph{Notes.}  For division, the right operator must be non-zero otherwise a \gls{fault} is raised, and likewise for remainder.  For integer division, the result is rounded towards zero.  For a remainder operation, the result may be negative (e.g. \lstinline{-4 % 3 == -1}).
 
@@ -283,7 +283,7 @@ The following example illustrates an equality expression:
 
 \lstinputlisting{../examples/ch6/eg_4.whiley}
 
-This function checks whether a given integer is contained in a list of integers.  This is done by iterating each element of the list and comparing it against the given item.
+This function checks whether a given integer is contained in an array of integers.  This is done by iterating each element of the array and comparing it against the given item.
 
 % =======================================================================
 % Invocation Expression
@@ -396,7 +396,7 @@ The function \lstinline{implies()} implements the well-known equivalence between
 \subsection{Quantifier Expressions}
 \label{c_expr_quantifier}
 
-A quantifier operates over a list of values and produces a value of \lstinline{bool} type.  The {\em universal quantifier}, \lstinline{all}, returns \lstinline{true} if the given expression evaluates to \lstinline{true} for every element in the list, and \lstinline{false} otherwise.  The {\em existential quantifier}, \lstinline{exists}, returns \lstinline{false} if the given expression evaluates to \lstinline{false} for every element in the list, and \lstinline{true} otherwise.  The {\em inverted universal quantifier}, \lstinline{no}, returns \lstinline{true} if the given expression evaluates to \lstinline{false} for every element in the list, and \lstinline{false} otherwise
+A quantifier operates over an array of values and produces a value of \lstinline{bool} type.  The {\em universal quantifier}, \lstinline{all}, returns \lstinline{true} if the given expression evaluates to \lstinline{true} for every element in the array, and \lstinline{false} otherwise.  The {\em existential quantifier}, \lstinline{exists}, returns \lstinline{false} if the given expression evaluates to \lstinline{false} for every element in the array, and \lstinline{true} otherwise.  The {\em inverted universal quantifier}, \lstinline{no}, returns \lstinline{true} if the given expression evaluates to \lstinline{false} for every element in the array, and \lstinline{false} otherwise
 
 \begin{syntax}
 \verb+LogicalQuantExpr+ & $::=$ & \big(\ \token{no} $|$ \token{some} $|$
@@ -410,62 +410,62 @@ A quantifier operates over a list of values and produces a value of \lstinline{b
 
 \lstinputlisting{../examples/ch6/eg_18.whiley}
 
-Here, the type \lstinline{natlist} represents those integer lists for which every element is a natural number (i.e. greater-or-equal to zero).
+Here, the type \lstinline{natlist} represents those integer arrays for which every element is a natural number (i.e. greater-or-equal to zero).
 
 % =======================================================================
-% List Expressions
+% Array Expressions
 % =======================================================================
 
-\section{List Expressions}
-\label{c_expr_list}
+\section{Array Expressions}
+\label{c_expr_array}
 
-List expressions operate on values of list type (e.g. \lstinline{[int]}, \lstinline{[bool|real]}, etc).
+Array expressions operate on values of array type (e.g. \lstinline{int[]}, \lstinline{(bool|real)[]}, etc).
 
 \begin{syntax}
-  \verb+ListExpr+ & $::=$ &\\
-  & $|$ & \verb+ListLengthOfExpr+\\
-  & $|$ & \verb+ListAccessExpr+\\
-  & $|$ & \verb+ListGeneratorExpr+\\
-  & $|$ & \verb+ListConstructorExpr+\\
+  \verb+ArrayExpr+ & $::=$ &\\
+  & $|$ & \verb+ArrayLengthExpr+\\
+  & $|$ & \verb+ArrayAccessExpr+\\
+  & $|$ & \verb+ArrayGeneratorExpr+\\
+  & $|$ & \verb+ArrayInitialiserExpr+\\
 \end{syntax}
 
 % =======================================================================
 % LengthOf Expression
 % =======================================================================
 
-\subsection{LengthOf Expressions}
-\label{c_expr_lengthof}
+\subsection{Length Expressions}
+\label{c_expr_length}
 
-The {\em lengthof operator} accepts a value of list type, and produces a value of \lstinline{int} type which equals the number of elements in the list.
+The {\em lengthof operator} accepts a value of array type, and produces a value of \lstinline{int} type which equals the number of elements in the array.
 
 \begin{syntax}
-\verb+ListLengthOfExpr+ & $::=$ & \token{|}\ \verb+Expr+\ \token{|}\\
+\verb+ArrayLengthExpr+ & $::=$ & \token{|}\ \verb+Expr+\ \token{|}\\
 \end{syntax}
 
 \paragraph{Example.} The following examples illustrate the lengthof operator:
 
 \lstinputlisting{../examples/ch6/eg_19.whiley}
 
-The above function iterates through all elements in a list looking for the first which is above a given item.  The lengthof operator is used to ensure this iteration remains within bounds.
+The above function iterates through all elements in an array looking for the first which is above a given item.  The length operator is used to ensure this iteration remains within bounds.
 
 % =======================================================================
-% List Access Expressions
+% Array Access Expressions
 % =======================================================================
 
 \subsection{Access Expressions}
-\label{c_expr_list_access}
+\label{c_expr_array_access}
 
-A list access expression accepts a list argument with one operand and produces a value of the list element type.  The {\em index-of operator} returns the element at the given operand position in the list.  
+An array access expression accepts a array argument with one operand and produces a value of the array element type.  The {\em index-of operator} returns the element at the given operand position in the array.  
 
 \begin{syntax}
-  \verb+ListAccessExpr+ & $::=$ & \verb+UnitExpr+\ \token{[}\ \verb+Expr+\ \token{]}\\
+  \verb+ArrayAccessExpr+ & $::=$ & \verb+UnitExpr+\ \token{[}\ \verb+Expr+\ \token{]}\\
 \end{syntax}
 
-\paragraph{Examples.} The following example illustrates the index-of and sublist operators:
+\paragraph{Examples.} The following example illustrates the array access operator:
 
 \lstinputlisting{../examples/ch6/eg_20.whiley}
 
-The above function computes the sum of a list by recursively breaking it down in successively smaller lists.  The index-of operator is used to get the first item in the list at each stage, whilst the sublist operator is used to strip off that first element. 
+{\bf Broken?} The above function computes the sum of an array by recursively breaking it down in successively smaller arrays.  The access operator is used to get the first item in the array at each stage. 
 
 % =======================================================================
 % Generator Expressions
@@ -474,35 +474,35 @@ The above function computes the sum of a list by recursively breaking it down in
 \subsection{Generator Expressions}
 \label{c_expr_generator}
 
-A {\em list generator} accepts two arguments and produces a value of list type.  The second argument must be of \lstinline{int} type and the list produced contains exactly this many occurrences of the first argument.
+An {\em array generator} accepts two arguments and produces a value of array type.  The second argument must be of \lstinline{int} type and the array produced contains exactly this many occurrences of the first argument.
 
 \begin{syntax}
-  \verb+ListGeneratorExpr+ & $::=$ & \token{[}\ \verb+UnitExpr+\ \token{;}\ \verb+UnitExpr+\ \token{]}\\
+  \verb+ArrayGeneratorExpr+ & $::=$ & \token{[}\ \verb+UnitExpr+\ \token{;}\ \verb+UnitExpr+\ \token{]}\\
 \end{syntax}
 
-\paragraph{Examples.} The following example illustrates a list generator:
+\paragraph{Examples.} The following example illustrates an array generator:
 
 \lstinputlisting{../examples/ch6/eg_8.whiley}
 
-This function constructs a list by prepending a given element onto the front of a given list.  The list generator is used to construct the initial list of values whose size is one larger than the given list.
+This function constructs a array by prepending a given element onto the front of a given array.  The array generator is used to construct the initial array of values whose size is one larger than the given array.
 
 % =======================================================================
-% List Expression
+% Array Initialiser
 % =======================================================================
 
-\subsection{List Constructors}
-\label{c_expr_list_constructor}
-A {\em list constructor} accepts zero or more operands and produces a value of list type.  List constructors are used to construct lists from their constituent elements.  
+\subsection{Array Initialiser}
+\label{c_expr_array_initialiser}
+An {\em array initialiser} accepts zero or more operands and produces a value of array type.  Array initialisers are used to construct arrays from their constituent elements.  
 
 \begin{syntax}
-  \verb+ListConstructorExpr+ & $::=$ & \token{[}\ \verb+ArgsList+ \token{]}\\
+  \verb+ArrayInitialiserExpr+ & $::=$ & \token{[}\ \verb+ArgsList+ \token{]}\\
 \end{syntax}
 
-\paragraph{Example.}  The following example illustrates a list constructor:
+\paragraph{Example.}  The following example illustrates an array initialiser:
 
 \lstinputlisting{../examples/ch6/eg_21.whiley}
 
-The above function converts an integer value into its string representation.  A list constructor is used to map integer values to their corresponding digits.  An empty list constructor is also used to initialise the string.
+The above function converts an integer value into its string representation.  An array initialiser is used to map integer values to their corresponding digits.  An empty array initialiser is also used to initialise the string.
 
 % =======================================================================
 % Record Expressions
@@ -517,7 +517,7 @@ Record expressions operate on values of record type (e.g. \lstinline|{int x, int
 % Field Access Expressions
 % =======================================================================
 
-\subsection{Field Access Expressions}
+\subsection{Access Expressions}
 \label{c_expr_field_access}
 
 The field access operator accepts a value of record type and returns the value held in a given field.
@@ -536,21 +536,21 @@ The above function computes the so-called {\em dot product} of two vectors.  The
 % Record Expression
 % =======================================================================
 
-\subsection{Record Constructors}
+\subsection{Record Initialisers}
 \label{c_expr_record_constructor}
-A {\em record constructor} accepts one or more operands and produces a value of record type.  Record constructors are used to construct records from their constituent elements.  
+A {\em record initialiser} accepts one or more operands and produces a value of record type.  Record constructors are used to construct records from their constituent elements.  
 
 \begin{syntax}
-  \verb+RecordConstructorExpr+ & $::=$ & \token{\{}\ \verb+FieldArgsList+\ \token{\}}\\
+  \verb+RecordInitialiserExpr+ & $::=$ & \token{\{}\ \verb+FieldArgsList+\ \token{\}}\\
 &&\\
   \verb+FieldArgsList+ & $::=$ & \verb+Ident+ \token{:} \verb+UnitExpr+ \big(\ \token{,} \verb+Ident+ \token{:} \verb+UnitExpr+\ \big)$^*$\\
 \end{syntax}
 
-\paragraph{Example.} The following example illustrates a record constructor:
+\paragraph{Example.} The following example illustrates a record initialiser:
 
 \lstinputlisting{../examples/ch6/eg_22.whiley}
 
-The above function simply translates a \lstinline{Point} from one position to another based on a shift in \lstinline{x} and in \lstinline{y}.  The record constructor is used to construct the new \lstinline{Point}.
+The above function simply translates a \lstinline{Point} from one position to another based on a shift in \lstinline{x} and in \lstinline{y}.  The record initialiser is used to construct the new \lstinline{Point}.
 
 % =======================================================================
 % Reference Expressions

@@ -28,7 +28,7 @@ Type descriptors provide syntax for describing types and, in the remaining secti
   & $|$ & \verb+RecordType+ \\
   & $|$ & \verb+ReferenceType+ \\
   & $|$ & \verb+NominalType+ \\
-  & $|$ & \verb+ListType+ \\
+  & $|$ & \verb+ArrayType+ \\
   & $|$ & \verb+NegationType+ \\
   & $|$ & \verb+FunctionType+ \\
   & $|$ & \verb+MethodType+ \\
@@ -101,7 +101,7 @@ The \lstinline{bool} type represents the set of boolean values (i.e. \lstinline{
 
 \lstinputlisting{../examples/ch4/eg_3.whiley}
 
-This function determines whether or not a given integer value is contained within a list of integers.  If so, it returns \lstinline{true}, otherwise it returns \lstinline{false}.
+This function determines whether or not a given integer value is contained within an array of integers.  If so, it returns \lstinline{true}, otherwise it returns \lstinline{false}.
 
 % =======================================================================
 % Byte
@@ -193,7 +193,7 @@ Here, the function \lstinline{toInt} accepts {\em any valid Whiley value}, which
 \subsection{Void}
 \label{c_types_void}
 
-The \lstinline{void} type represents the type whose variables cannot exist (i.e. because they cannot hold any possible value).  Thus, \lstinline{void} is the {\em bottom type} (i.e. $\bot$) in the lattice of types and, hence, is the {\em subtype} of all other types.  Void is used to represent the return type of a method which does not return anything.  Furthermore, it is also used to represent the element type of an empty list.  Finally, unlike the majority of other types, there are no {\em values} of type \lstinline{void}.
+The \lstinline{void} type represents the type whose variables cannot exist (i.e. because they cannot hold any possible value).  Thus, \lstinline{void} is the {\em bottom type} (i.e. $\bot$) in the lattice of types and, hence, is the {\em subtype} of all other types.  Void is used to represent the return type of a method which does not return anything.  Furthermore, it is also used to represent the element type of an empty array.  Finally, unlike the majority of other types, there are no {\em values} of type \lstinline{void}.
 
 \begin{syntax}
    \verb+VoidType+ & $::=$ & \token{void} \\
@@ -203,7 +203,7 @@ The \lstinline{void} type represents the type whose variables cannot exist (i.e.
 
 \lstinputlisting{../examples/ch4/eg_9.whiley}
 
-Here, the method \lstinline{update1st} is declared to return \lstinline{void} --- meaning it does not return a value.  Instead, this method updates some existing state accessible through the reference \lstinline{list}.  Within the method body, the value accessible via this reference is compared against \lstinline{[]} (i.e. the {\em empty list}).
+Here, the method \lstinline{update1st} is declared to return \lstinline{void} --- meaning it does not return a value.  Instead, this method updates some existing state accessible through the reference \lstinline{list}.  Within the method body, the value accessible via this reference is compared against \lstinline{[]} (i.e. the {\em empty array}).
 
 % =======================================================================
 % Tuples
@@ -343,23 +343,23 @@ The type \lstinline{LinkedList} is declared using a reference to itself to defin
 % The above illustrates a function for evaluating simple expressions which are either integer constants or variable names.  To evaluate an expression which is an integer constant, we simply return that constant.  To evaluate an expression which is a variable name, we look up the current value of that variable in an environment which maps variable names to integer constants.
 
 % =======================================================================
-% List
+% Array
 % =======================================================================
 
-\section{Lists}
-\label{c_types_list}
+\section{Arrays}
+\label{c_types_array}
 
-A list type describes list values whose elements are subtypes of the element type. For example, \lstinline{[1,2,3]} is an instance of list type \lstinline{[int]}; however, \lstinline{[1.345]} is not.  Variables of list type support equality comparators (\S\ref{c_expr_equality}), append (\S\ref{c_expr_append}) and sublist (\S\ref{c_expr_sublist}).
+An array type describes an array of values whose elements are subtypes of the element type. For example, \lstinline{[1,2,3]} is an instance of array type \lstinline{int[]}; however, \lstinline{[1.345]} is not.  Variables of array type support equality comparators (\S\ref{c_expr_equality}) an access expressions (\S\ref{c_expr_array_access}).
 
 \begin{syntax}
-  \verb+ListType+ & $::=$ & \token{[} \ \verb+Type+ \ \token{]}\\
+  \verb+ArrayType+ & $::=$ & \verb+Type+ \ \token{[}\ \token{]}\\
 \end{syntax}
 
-\paragraph{Example.} The following example illustrates list types:
+\paragraph{Example.} The following example illustrates array types:
 
 \lstinputlisting{../examples/ch4/eg_15.whiley}
 
-The above illustrates a simple function which adds two integer lists together.  The function's \gls{precondition} requires that both input list have the same length, whilst its \gls{postcondition}s ensures that this matches the length of the output.
+The above illustrates a simple function which adds each corresponding element from two integer array together.  The function's \gls{precondition} requires that both input arrays have the same length, whilst its \gls{postcondition}s ensures that this matches the length of the output.
 
 % =======================================================================
 % Functions & Methods
@@ -380,7 +380,7 @@ A function or method type describes the signature of a function or method.  Thes
 
 \lstinputlisting{../examples/ch4/eg_16.whiley}
 
-The above illustrates the well-known {\em map} function, which maps all elements of a list according to a given function.
+The above illustrates the well-known {\em map} function, which maps all elements of an array according to a given function.
 
 % =======================================================================
 % Unions
@@ -409,7 +409,7 @@ Here, a union type is used to construct a more expressive return value.  If no m
 \section{Intersections}
 \label{c_types_intersections}
 
-An intersection type is constructed from two or more component types and contains any value held in all of its components.  For example, the type \lstinline{[int]&[bool]} is an intersection which holds any value which is both an instance of \lstinline{[int]} and \lstinline{[bool]} (in fact, only the empty list meets this criteria).  Intersections are used, for example, to type variables on the true branch of a runtime type test.  The set of values defined by an intersection type \lstinline{T1&T2} is exactly the intersection of the sets defined by \lstinline{T1} and \lstinline{T2}.  In general, variables of intersection type support only equality comparators (\S\ref{c_expr_equality}) and type tests (\S\ref{c_expr_type_tests}). See \S\ref{c_types_effective} for exceptions to this.
+An intersection type is constructed from two or more component types and contains any value held in all of its components.  For example, the type \lstinline{[int]&[bool]} is an intersection which holds any value which is both an instance of \lstinline{[int]} and \lstinline{[bool]} (in fact, only the empty array meets this criteria).  Intersections are used, for example, to type variables on the true branch of a runtime type test.  The set of values defined by an intersection type \lstinline{T1&T2} is exactly the intersection of the sets defined by \lstinline{T1} and \lstinline{T2}.  In general, variables of intersection type support only equality comparators (\S\ref{c_expr_equality}) and type tests (\S\ref{c_expr_type_tests}). See \S\ref{c_types_effective} for exceptions to this.
 
 \begin{syntax}
   \verb+IntersectionType+ & $::=$ & \verb+TermType+\ \big(\ \token{\&}\ \verb+TermType+\
@@ -454,7 +454,7 @@ Here, the type \lstinline{Tree} is recursive because it is defined in terms of i
 
 \section{Effective Types}
 \label{c_types_effective}
-An effective type is a union of types which all contain some property (e.g. a union of lists).  This common property allows the effective type to support more operations than possible for an arbitrary union~(\S\ref{c_types_unions}).
+An effective type is a union of types which all contain some property (e.g. a union of arrays).  This common property allows the effective type to support more operations than possible for an arbitrary union~(\S\ref{c_types_unions}).
 
 \subsection{Effective Tuples}
 
@@ -467,8 +467,8 @@ An effective record is a union of two or more record types with at least one fie
 % \subsection{Effective Collections}
 % An effective collection is a union of collection types.  For example, \lstinline{[int]|[real]} is an effective list.  An effective collection supports all operations valid for a collection type~(\S\ref{c_types_collection}).  For example, the type \lstinline|[int]$|$[real]| can be viewed as having an effective type of \lstinline|[int$|$real]| and, hence, read access to its length and elements is given.
 
-\subsection{Effective List}
-An effective list is a union of list types.  For example, \lstinline{[int]|[real]} is an effective list.  An effective collection supports all operations valid for a list type~(\S\ref{c_types_list}).  For example, the type \lstinline|[int]$|$[real]| can be viewed as having an effective type of \lstinline|[int$|$real]| and, hence, read access to its length and elements is given.
+\subsection{Effective Array}
+An effective array is a union of array types.  For example, \lstinline{int[]|real[]} is an effective array.  An effective collection supports all operations valid for a array type~(\S\ref{c_types_array}).  For example, the type \lstinline|int[]$|$real[]| can be viewed as having an effective type of \lstinline|(int$|$real)[]| and, hence, read access to its length and elements is given.
 
 \section{Semantics}
 \label{c_types_type_semantics}
