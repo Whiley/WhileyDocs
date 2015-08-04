@@ -1,6 +1,10 @@
-// Recursively compute the sum of a list
-function sum([int] items) -> int:
-    if |items| == 0:
-        return 0
-    else:
-        return items[0] + sum(items[1..|items|])
+// Check whether an array is sorted or not
+function isSorted([int] items) -> bool:
+    int i = 1
+    //
+    while i < |items|:
+        if items[i-1] > items[i]:
+            return false
+        i = i + 1
+    //
+    return true
