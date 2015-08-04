@@ -20,11 +20,11 @@ Here, all three constant declarations are cyclic.  The declaration for \lstinlin
 
 \section{Expressions}
 
-\subsection{``Invalid File Access'' (000)}
+%\subsection{``Invalid File Access'' (000)}
 
-\subsection{``Invalid Package Access'' (000)}
+%\subsection{``Invalid Package Access'' (000)}
 
-\subsection{``Resolution Error'' (000)}
+%\subsection{``Resolution Error'' (000)}
 
 \subsection{``Variable Possibly Uninitialised'' (000)}
 \label{c_err_var_uninitialised}
@@ -40,14 +40,36 @@ function f(int x) => int:
 
 Here, variable \lstinline{y} is definitely uninitialised in the expression ``\lstinline{x + y}''.  For more examples of variables which are possibly uninitialised, see~\S\ref{c_definite_assignment}.
 
-
-
 \subsection{``Ambiguous Coercion'' (000)}
 
+An {\em ambiguous coercion} occurs when the target of a cast expression is uncertain.  That is, when attempting to cast a value to a given type \lstinline{T}, but there is more than one way this can be achieved.  This error is reported as part of the {\em coercion check} performed during compilation.
 
-\section{Control Flow (000)}
+\paragraph{Example.}  The following illustrates an ambiguous coercion:
+
+\begin{lstlisting}
+type Ambiguous is { int f1, real f2} | { real f1, int f2 }
+
+function f(int x, int y) -> Ambiguous:
+   return (Ammbiguous) {f1: x, f2: y}
+\end{lstlisting}
+
+The cast is ambiguous here because it's unclear whether, for example, \lstinline|{f1: 1, f2: 2}| should become \lstinline|{f1: 1.0, f2: 2}| or \lstinline|{f1: 1, f2: 2.0}|.
+
+\section{Control Flow}
 
 \subsection{``Invalid LVal'' (000)}
+
+An {\em invalid lval} error occurs when an invalid expression is use on the left-hand side of an assignment.  Only expressions which are also lval's maybe used in such a situation  (see~\S\ref{c_stmts_lval}).
+
+\paragraph{Example.}  The following illustrates two invalid lval's:
+
+\begin{lstlisting}
+function f(int x):
+   1 = x   // constant not valid lval
+   x+1 = x // arithmetic expression not valid    
+\end{lstlisting}
+
+The first assignment statement is invalid because one cannot assign to a constant.  The second is invalid because one cannot assign to an arithmetic expression.
 
 \subsection{``Invalid Tuple LVal'' (000)}
 
