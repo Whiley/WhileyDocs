@@ -24,39 +24,38 @@
 \section*{Values}
 Values are the fundamental units of execution in Whiley and have value semantics, rather than reference semantics (as in many object-oriented languages).
 
-\noindent \begin{tabular}{l r}
+\noindent \begin{tabular}{l@{\hspace*{0.1cm}}r}
 \token{\lstinline+null+} & {\em Null value}\\
 \token{\lstinline+true+} \token{\lstinline+false+} & {\em Boolean values}\\
 \token{\lstinline+123+} \token{\lstinline+-99+} \token{\lstinline+0xFF+} & {\em Integer values}\\
 \token{\lstinline+1.23+} \token{\lstinline+-0.02+} & {\em Real values}\\
 \token{\lstinline+"Hello"+} \token{\lstinline+"new\\n line"+} & {\em String values}\\
 \token{\lstinline+(1,2,3)+} \token{\lstinline+(true,null)+} & {\em Tuple values}\\
-\token{\lstinline+[]+} \token{\lstinline+[1,2,3]+} \token{\lstinline+[1,"hello",2.0]+} & {\em List values}\\
+\token{\lstinline+[1,2,3]+} \token{\lstinline+[1,"xyz"]+} & {\em Array values}\\
 \token{\lstinline+\{name: "dave"\}+}, \token{\lstinline+\{x: 1, y: 0\}+} & {\em Record values}\\
 \end{tabular}
 \section*{Types}
 The Whiley programming language is {\em statically typed}, meaning that every expression has a type determined at compile time.  Furthermore, evaluating an expression is guaranteed to yield a value of its type.\\\\ 
-\begin{tabular}{l r}
+\begin{tabular}{l@{\hspace*{0.1cm}}r}
 \token{\lstinline+null+} \token{\lstinline+bool+} \token{\lstinline+int+} \token{\lstinline+real+} & {\em Primitive types}\\
 \token{\lstinline+int|null+} \token{\lstinline+bool|int|real+} & {\em Union types}\\
 \token{\lstinline+(int,int)+} \token{\lstinline+(int,null,bool)+} & {\em Tuple types}\\
-\token{\lstinline+[int]+} \token{\lstinline+[[bool]]+} \token{\lstinline+[int|null]+} & {\em List types}\\
-\token{\lstinline+\{bool f\}+} \token{\lstinline+\{int len, [int] is\}+} & {\em Record types}\\
+\token{\lstinline+int[]+} \token{\lstinline+bool[][]+} \token{\lstinline+(int|null)[]+} & {\em Array types}\\
+\token{\lstinline+\{bool f\}+} \token{\lstinline+\{int len, int[] is\}+} & {\em Record types}\\
 \end{tabular}
 
 \section*{Expressions}
 The majority of work performed by a Whiley program is through the execution of {\em expressions}.  Every expression produces a value and may have additional side effects.\\\\
-\begin{tabular}{l@{\hspace*{-0.9cm}}r}
+\begin{tabular}{l@{\hspace*{-0.2cm}}r}
 \token{\lstinline|x + 1|} \token{\lstinline|2 * y|} \token{\lstinline|z - 1|} \token{\lstinline|(x + y)/2|}& {\em Arithmetic}\\
 \token{\lstinline|x < y|} \token{\lstinline|0 >= z|} \token{\lstinline|x == y|} \token{\lstinline|x != y|}& {\em Comparisons}\\
 \token{\lstinline+!x+} \token{\lstinline+x&&y+} \token{\lstinline+x||y+} \token{\lstinline+x==>y+} \token{\lstinline+x<==>y+} & {\em Boolean}\\
-\token{\lstinline+0..2+} \token{\lstinline+x..y+}  & {\em Ranges}\\
-\token{\lstinline+|ls|+} \token{\lstinline+ls[0]+} \token{\lstinline|xs++ys|} \token{\lstinline|xs++[1]|} \token{\lstinline|xs[0..2]|}& {\em Lists}\\
+\token{\lstinline+|ls|+} \token{\lstinline+ls[0]+} \token{\lstinline+[true; n]+} & {\em Arrays}\\
 \token{\lstinline|[1,x+y]|} \token{\lstinline+x in xs+} & \\
 \token{\lstinline|\{x: 1+y\}|} \token{\lstinline+xr.f+} \token{\lstinline+xr.f.g+} & {\em Records}\\
-\token{\lstinline+all \{ x in xs | x >= 0 \}+}& {\em Quantifiers}\\
-\token{\lstinline+no \{ x in xs | x < 0 \}+}& \\
-\token{\lstinline+some \{ x in xs | x >= 0 \}+}&\\
+\token{\lstinline+all \{ i in 0..|xs| | xs[i]>= 0\}+}& {\em Quantifiers}\\
+\token{\lstinline+no \{ i in 0..|xs| | xs[i]<0 \}+}& \\
+\token{\lstinline+some \{ i in 0..|xs| | xs[i]>=0 \}+}&\\
 \token{\lstinline+x is null+} \token{\lstinline+x is int+} & {\em Type Tests}
 \end{tabular}
 \newpage
@@ -147,8 +146,8 @@ else if x > 0:
 
 {\em Looping statements} control the flow of execution by repeating some sequence of statements zero or more times.
 
-\noindent\begin{tabular*}{\columnwidth}{c @{\extracolsep{\fill}} c @{\extracolsep{\fill}} c}
-\begin{minipage}[t]{2.5cm}
+\noindent\begin{tabular*}{\columnwidth}{c @{\extracolsep{\fill}} c}
+\begin{minipage}[t]{3.75cm}
 \begin{lstlisting}
 while x<0:
    ...
@@ -156,7 +155,7 @@ while x<0:
 \end{lstlisting}
 \end{minipage}
 &
-\begin{minipage}[t]{2.25cm}
+\begin{minipage}[t]{3.75cm}
 \begin{lstlisting}
 do:
    ...
@@ -164,14 +163,6 @@ while x<0
 ...
 \end{lstlisting}
 \end{minipage}
-&
-\begin{minipage}[t]{2.75cm}
-\begin{lstlisting}
-for x in xs:
-   ...
-...
-\end{lstlisting}
-\end{minipage}\\
 \end{tabular*}
 
 {\em Switch statements} control execution flow by matching the result of an expression.
@@ -306,7 +297,7 @@ type LinkedList is null | Link
 {\em Function declarations} define functions which are {\em pure} and may not have side-effects.  They are guaranteed to return the same result given the same arguments, and are permitted within specifications. 
 
 \begin{lstlisting}
-function find([int] xs, int x) -> int:
+function find(int[] xs, int x) -> int:
    ...
 \end{lstlisting}
 
@@ -369,7 +360,7 @@ The following function computes the maximum value of two integer parameters.
 
 The following function uses a \lstinline{break} to exit a \lstinline{while} loop when the first element matching parameter \lstinline{x} is found.  
 
-\lstinputlisting{../examples/remove.whiley}
+\lstinputlisting{../examples/indexOf.whiley}
 
 The following function computes the length of a linked list.  
 
