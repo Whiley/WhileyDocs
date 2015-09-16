@@ -1,5 +1,7 @@
 \chapter{Error Messages}
 
+{\bf Note:} need to distinguish the different kinds of error; e.g. type errors versus other errors?
+
 \section{Parse Errors}
 
 \section{Declarations}
@@ -59,7 +61,7 @@ The cast is ambiguous here because it's unclear whether, for example, \lstinline
 
 \subsection{``Invalid LVal'' (000)}
 
-An {\em invalid lval} error occurs when an invalid expression is use on the left-hand side of an assignment.  Only expressions which are also lval's maybe used in such a situation  (see~\S\ref{c_stmts_lval}).
+An {\em invalid lval} error occurs when an invalid expression is used on the left-hand side of an assignment.  Only expressions which are also lval's maybe used in such a situation  (see~\S\ref{c_stmts_lval}).
 
 \paragraph{Example.}  The following illustrates two invalid lval's:
 
@@ -71,11 +73,49 @@ function f(int x):
 
 The first assignment statement is invalid because one cannot assign to a constant.  The second is invalid because one cannot assign to an arithmetic expression.
 
-\subsection{``Invalid Tuple LVal'' (000)}
+\subsection{``Invalid Destructuring LVal'' (000)}
+
+An {\em invalid destructuring lval} occurs when a destructuring assignment is used on the left-hand side, but the right-hand side returns an incorrect number of values.
+
+\paragraph{Example.}  The following illustrates an invalid destructuring LVal:
+
+\begin{lstlisting}
+function f(int x, int y) -> int:
+    return x+y
+
+function g(int x, int y) -> int:
+    x,y = f(x,y)
+    return x - y
+\end{lstlisting}
+
+Here, the invocation of \lstinline{f()} in \lstinline{g()} uses an invalid destructuring assignment because \lstinline{f()} returns one value, the assignment expects two.
 
 \subsection{``Break Outside of Loop'' (000)}
 
+A {\em break outside loop} occurs when a \lstinline{break} statement is given which is not contained within one or more loops.  This is an error because the break statement is used specifically to exit a loop early, and must be contained within the loop to be exited.  
+
+\paragraph{Example.}  The following illustrates a break outside of a loop:
+
+\begin{lstlisting}
+function f(int x) -> int:
+   break
+   return x
+\end{lstlisting}
+
+Here, the \lstinline{break} statement is meaningless as it is not associated with a loop.
+
 \subsection{``Unknown Variable'' (000)}
+
+An {\em unknown variable} occurs when an attempt is made to access a variable which has not been declared in the current scope.  All variables must be declared before they can be used.
+
+\paragraph{Example.}  The following illustrates an unknown variable:
+
+\begin{lstlisting}
+function f(int x) -> int:
+   return x+y
+\end{lstlisting}
+
+Here, the \lstinline{return} statements refers to an unknown variable \lstinline{y}.  In contrast, the reference to variable \lstinline{x} is valid because \lstinline{x} has been declared within scope.
 
 \subsection{``Unknown Function or Method'' (000)}
 
