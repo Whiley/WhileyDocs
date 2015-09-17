@@ -63,7 +63,7 @@ else:
 
 Again, in this example we know nothing about either variable \lstinlinec{x} or \lstinlinec{y} beforehand.  After the assignment, we know the relationship between variable \lstinlinec{x} and \lstinlinec{y}.  Hence, on the true branch, we can conclude, for example, that \lstinlinec{y > 0}.  Similarly, on the false branch, we can conclude that \lstinlinec{y <= 0}.
 
-\section{Function Calls}
+\section{Invocations}
 
 To reason about a function call, we must first establish that its precondition is met.  Once we know this, we can then assume that its postcondition holds true for any value returned.  Consider the following example:
 
@@ -75,7 +75,37 @@ x = decrement(x)
 
 Recall the definition of the \lstinlinec{decrement()} function from \S\ref{r_functions}.  Since we know \lstinlinec{x > 0} is true before the function call, we know: firstly, that the precondition of \lstinlinec{decrement()} is satisfied; hence, secondly, that the postcondition of \lstinlinec{decrement()} implies \lstinlinec{x >= 0} after the statement.
 
-\section{Compound Data Types}
+\section{Records}
+Records are compound data types made up from one or more fields.  The fields of a record can be individually assigned, and this makes it easier to manage complex data.  As with general assignments, we can reason about assignments to records by considering the effect of the assignment on the given field:
+
+\begin{lstlisting}
+// point.x > 0 and point.y > 0
+point.x = 0
+// point.x == 0 and point.y >= 0
+\end{lstlisting}
+
+Here, we can see that the assignment to the field \lstinline{x} does not affect what is known about the other fields stored in the record (i.e. \lstinline{y}).
+
+\section{Arrays}
+As with records, arrays are compound data types made up from zero or more elements.  The elements of an array can be individually assigned and arrays make for a powerful building block for more complex data structures.  When dealing with arrays we can reason about the effect of an assignment to a specific element, if we know what that element was:
+
+\begin{lstlisting}
+// all \{ i in 0..|xs| | xs[i] > 0 \} and |xs| > 0
+xs[0] = 0
+// xs[0] == 0 and all \{ i in 1..|xs| | xs[i] > 0 \} and |xs| > 0
+\end{lstlisting}
+
+Here, we initially have some knowledge about the entire array but, after the assignment, we have split this into two regions.  In general, we do not often know which specific element has been updated and, hene, we must assume that any could have been:
+
+\begin{lstlisting}
+// all \{ i in 0..|xs| | xs[i] > 0 \} and n >= 0 and n < |xs|
+xs[n] = 0
+// all \{ i in 1..|xs| | xs[i] >= 0 \} and n >= 0 and n < |xs|
+\end{lstlisting}
+
+Here, our reasoning is a little coarse as we have conservatively updated our knowledge by assuming that any possible element of the array could be updated.
+
+{\bf PRECONDITIONS}
 Examine examples with updating lists, records, etc.
 
 \section{Complex Reasoning}
