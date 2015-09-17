@@ -6,7 +6,7 @@
 
 \section{Declarations}
 
-\subsection{``Cyclic Constant Declaration'' (301)}
+\subsection{``Cyclic Constant Declaration'' (E301)}
 
 A {\em cyclic constant declaration} occurs when a \gls{constant_declaration} refers to itself, either {\em directly} or {\em indirectly}.  This is an error because constants must be evaluated at \gls{compile_time}.
 
@@ -28,7 +28,7 @@ Here, all three constant declarations are cyclic.  The declaration for \lstinlin
 
 %\subsection{``Resolution Error'' (000)}
 
-\subsection{``Variable Possibly Uninitialised'' (000)}
+\subsection{``Variable Possibly Uninitialised'' (E401)}
 \label{c_err_var_uninitialised}
 A {\em variable possibly uninitialised} occurs when a variable may be used without being defined.  That is, when a simple path exists through the control-flow graph of a function or method from that variable's declaration to a use which contains no definition for that variable.  This error is reported as part of the {\em definite assignment} checking performed during compilation (see~\S\ref{c_definite_assignment}).
 
@@ -42,7 +42,32 @@ function f(int x) => int:
 
 Here, variable \lstinline{y} is definitely uninitialised in the expression ``\lstinline{x + y}''.  For more examples of variables which are possibly uninitialised, see~\S\ref{c_definite_assignment}.
 
-\subsection{``Ambiguous Coercion'' (000)}
+\subsection{``Unknown Variable'' (E402)}
+
+An {\em unknown variable} occurs when an attempt is made to access a variable which has not been declared in the current scope.  All variables must be declared before they can be used.
+
+\paragraph{Example.}  The following illustrates an unknown variable:
+
+\begin{lstlisting}
+function f(int x) -> int:
+   return x+y
+\end{lstlisting}
+
+Here, the \lstinline{return} statements refers to an unknown variable \lstinline{y}.  In contrast, the reference to variable \lstinline{x} is valid because \lstinline{x} has been declared within scope.
+
+\subsection{``Unknown Function or Method'' (E403)}
+
+An {\em unknown function or method} occurs when an attempt is made to access a function or method which is not visible in the current scope.  Functions and methods which are not declared in the same file as the invocation can be brought into the current scope using \lstinline{import} statements.  
+\paragraph{Example.}  The following illustrates an invocation of an unknown function or method:
+
+\begin{lstlisting}
+function f(int x) -> int:
+   return g(x)
+\end{lstlisting}
+
+Here, function \lstinline{g()} is not defined in the current source file and has not been brought into scope through an \lstinline{import} statement.
+
+\subsection{``Ambiguous Coercion'' (E404)}
 
 An {\em ambiguous coercion} occurs when the target of a cast expression is uncertain.  That is, when attempting to cast a value to a given type \lstinline{T}, but there is more than one way this can be achieved.  This error is reported as part of the {\em coercion check} performed during compilation.
 
@@ -57,9 +82,10 @@ function f(int x, int y) -> Ambiguous:
 
 The cast is ambiguous here because it's unclear whether, for example, \lstinline|{f1: 1, f2: 2}| should become \lstinline|{f1: 1.0, f2: 2}| or \lstinline|{f1: 1, f2: 2.0}|.
 
-\section{Control Flow}
 
-\subsection{``Invalid LVal'' (000)}
+\section{Statements}
+
+\subsection{``Invalid LVal'' (E501)}
 
 An {\em invalid lval} error occurs when an invalid expression is used on the left-hand side of an assignment.  Only expressions which are also lval's maybe used in such a situation  (see~\S\ref{c_stmts_lval}).
 
@@ -73,7 +99,7 @@ function f(int x):
 
 The first assignment statement is invalid because one cannot assign to a constant.  The second is invalid because one cannot assign to an arithmetic expression.
 
-\subsection{``Invalid Destructuring LVal'' (000)}
+\subsection{``Invalid Destructuring LVal'' (E502)}
 
 An {\em invalid destructuring lval} occurs when a destructuring assignment is used on the left-hand side, but the right-hand side returns an incorrect number of values.
 
@@ -90,7 +116,80 @@ function g(int x, int y) -> int:
 
 Here, the invocation of \lstinline{f()} in \lstinline{g()} uses an invalid destructuring assignment because \lstinline{f()} returns one value, the assignment expects two.
 
-\subsection{``Break Outside of Loop'' (000)}
+\subsection{``Variable Already Defined'' (E503)}
+
+A {\em variable redefinition} occurs when a variable is declared with a name matching another variable already in scope.  This is an error because it is not permitted for one variable to shadow another.
+
+\paragraph{Example.}  The following illustrates an example of a variable redefinition:
+
+\begin{lstlisting}
+function sum(int[] items) => int[]:
+    int i = 0
+    int r = 0
+    //
+    while i < |items|:
+       //
+       int r = items[i]
+       i = i + 1
+    //
+    return r
+\end{lstlisting}
+
+Here, the \lstinline{while} loop attempts to declare a variable \lstinline{r}, but another variable \lstinline{r} was already declared beforehand.
+
+\subsection{``Unreachable Code'' (E504)}
+
+In a function or method, {\em unreachable code} arises when no possible execution path could reach them.  
+
+\paragraph{Example.} The following illustrates some unreachable code:
+
+\begin{lstlisting}
+function abs(int x) -> int:
+    //
+    if x < 0:
+        return -x
+    else:
+        return x
+    //
+    return 0 // unreachable
+\end{lstlisting}
+
+Here, the final \lstinline{return} statement can never be reached by any execution path through the \lstinline{abs()} function.  This is considered an error because it indicates something undesirable which may not have been intended.
+
+\subsection{``Missing Return Value'' (E505)}
+
+A {\em missing return value} occurs when a \lstinline{return} statement which does not return a value occurs within a function or method declared to return one or more values.  
+
+\paragraph{Example.} The following illustrates a missing return value:
+
+\begin{lstlisting}
+function abs(int x) -> int:
+    //
+    if x < 0:
+        return -x
+    //
+    return
+\end{lstlisting}
+
+The last \lstinline{return} statement in this function does not return a value, but the function is declared to return an \lstinline{int}.
+
+\subsection{``Branch Always Taken'' (E506)}
+
+A {\em branch always taken} occurs when a conditional branch is determine to always evaluate to either \lstinline{true} or \lstinline{false}.  
+
+\paragraph{Example.} The following illustrates a branch always taken:
+
+\begin{lstlisting}
+function f(int x) -> int:
+   if x is int:
+       return x
+   else:
+       return -1
+\end{lstlisting}
+
+Here, the condition \lstinline{x is int} always evaluates to \lstinline{true} and, hence, the true branch of this conditional is always taken, whilst the false branch is never taken.
+
+\subsection{``Break Outside of Loop'' (E507)}
 
 A {\em break outside loop} occurs when a \lstinline{break} statement is given which is not contained within one or more loops.  This is an error because the break statement is used specifically to exit a loop early, and must be contained within the loop to be exited.  
 
@@ -104,37 +203,7 @@ function f(int x) -> int:
 
 Here, the \lstinline{break} statement is meaningless as it is not associated with a loop.
 
-\subsection{``Unknown Variable'' (000)}
-
-An {\em unknown variable} occurs when an attempt is made to access a variable which has not been declared in the current scope.  All variables must be declared before they can be used.
-
-\paragraph{Example.}  The following illustrates an unknown variable:
-
-\begin{lstlisting}
-function f(int x) -> int:
-   return x+y
-\end{lstlisting}
-
-Here, the \lstinline{return} statements refers to an unknown variable \lstinline{y}.  In contrast, the reference to variable \lstinline{x} is valid because \lstinline{x} has been declared within scope.
-
-\subsection{``Unknown Function or Method'' (000)}
-
-\subsection{``Variable Already Defined'' (000)}
-
-A {\em variable redefinition} occurs when a variable is declared with a name matching another variable already in scope.  This is an error because it is not permitted for one variable to shadow another.
-
-\paragraph{Example.}  The following illustrates an example of a variable redefinition:
-
-\begin{lstlisting}
-function add([int] xs, int v) => [int]:
-    for k,v in xs:
-        xs[k] = xs[k] + v
-    return xs
-\end{lstlisting}
-
-Here, the \lstinline{for} loop attempts to declare a variable \lstinline{v}, but another variable \lstinline{v} was already declared as a parameter.
-
-\subsection{``Duplicate Default Label'' (000)}
+\subsection{``Duplicate Default Label'' (E508)}
 A {\em duplicate default label} occurs when a \lstinline{switch} statement includes more than one \lstinline{default} label.  This is an error because at most one \lstinline{default} is permitted.
 
 \paragraph{Example.}  The following illustrates an example of a duplicate \lstinline{default} label:
@@ -152,7 +221,7 @@ function f(int x):
 
 Here, the \lstinline{switch} statement has two \lstinline{default} labels.  This must be an error as, otherwise, it would be ambiguous as to which executed.
 
-\subsection{``Duplicate Case Label'' (000)}
+\subsection{``Duplicate Case Label'' (E509)}
 A {\em duplicate case label} occurs when a \lstinline{switch} statement includes more than one \lstinline{case} label matching the same value.  This is an error because at most one \lstinline{case} matching a given value is permitted.
 
 \paragraph{Example.}  The following illustrates an example of a duplicate \lstinline{case} label:
@@ -169,29 +238,6 @@ function f(int x):
 \end{lstlisting}
 
 Here, the \lstinline{switch} statement has two \lstinline{case} labels, both of which match the value \lstinline{0}.  This must be an error as, otherwise, it would be ambiguous as to which executed.
-
-\subsection{``Unreachable Code'' (000)}
-
-In a function or method, {\em unreachable code} arises when no possible execution path could reach them.  
-
-\paragraph{Example.} The following illustrates some unreachable code:
-
-\begin{lstlisting}
-function abs(int x):
-    //
-    if x < 0:
-        return -x
-    else:
-        return x
-    //
-    return 0 // unreachable
-\end{lstlisting}
-
-Here, the final \lstinline{return} statement can never be reached by any execution path through the \lstinline{abs()} function.  This is considered an error because it indicates something undesirable which may not have been intended.
-
-\subsection{``Missing Return Value'' (000)}
-
-\subsection{``Branch Always Taken'' (000)}
 
 \section{Functions (000)}
 
