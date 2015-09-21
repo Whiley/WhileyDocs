@@ -99,7 +99,7 @@ A {\em type declaration} declares a named type within a Whiley \gls{source_file}
 
 \begin{syntax}
   \verb+TypeDecl+ & $::=$ & \token{type}\ \verb+Ident+\ \token{is}\
-  \Big[\ \verb+Type+\ $|$\ \token{(}\ \verb+Type+\ \verb+Ident+\ \token{)}\ \big]\ \big(\ \token{where}\ \verb+Expr+\ \big)$^*$\\
+  \big[\ \verb+Type+\ $|$\ \token{(}\ \verb+Type+\ \verb+Ident+\ \token{)}\ \big]\ \big(\ \token{where}\ \verb+Expr+\ \big)$^*$\\
 \end{syntax}
 
 The optional \lstinline{where} clause defines a \gls{boolean_expression} which holds for any instance of this type.  This is often referred to as the type {\em invariant} or {\em constraint}.  Variables declared within the {\em type pattern} may be referred to within the optional \lstinline{where} clause.  

@@ -197,21 +197,21 @@ Here, the method \lstinline{update1st} is declared to return \lstinline{void} --
 % Tuples
 % =======================================================================
 
-\section{Tuples}
-\label{c_types_tuple}
+% \section{Tuples}
+% \label{c_types_tuple}
 
-A tuple type describes a compound type made up of two or more elements in sequence, whose values are expressed as sequences of values separated by a comma (e.g. \lstinline{1,2}, \lstinline{2.0,3.32,3.45}, etc).  Tuples are similar to records, except that fields are effectively anonymous.  Variables of tuple type support equality comparators (\S\ref{c_expr_equality}), as well the {\em tuple destructuring assignment} to extract elements (illustrated below).
+% A tuple type describes a compound type made up of two or more elements in sequence, whose values are expressed as sequences of values separated by a comma (e.g. \lstinline{1,2}, \lstinline{2.0,3.32,3.45}, etc).  Tuples are similar to records, except that fields are effectively anonymous.  Variables of tuple type support equality comparators (\S\ref{c_expr_equality}), as well the {\em tuple destructuring assignment} to extract elements (illustrated below).
 
-\begin{syntax}
-  \verb+TupleType+ & $::=$ & \token{(}\ \verb+Type+\ \big(\ \token{,}\
-  \verb+Type+\ \big)$^+$\ \token{)}\\
-\end{syntax}
+% \begin{syntax}
+%   \verb+TupleType+ & $::=$ & \token{(}\ \verb+Type+\ \big(\ \token{,}\
+%   \verb+Type+\ \big)$^+$\ \token{)}\\
+% \end{syntax}
 
-\paragraph{Example.} The following example illustrates several uses of tuples:
+% \paragraph{Example.} The following example illustrates several uses of tuples:
 
-\lstinputlisting{../examples/ch4/eg_10.whiley}
+% \lstinputlisting{../examples/ch4/eg_10.whiley}
 
-This function accepts two integer parameters, and returns a tuple type containing two integers.  The function reverses the order that the values occur in the tuple passed as a parameter.
+% This function accepts two integer parameters, and returns a tuple type containing two integers.  The function reverses the order that the values occur in the tuple passed as a parameter.
  
 % =======================================================================
 % Records
@@ -441,9 +441,9 @@ Here, the type \lstinline{Tree} is recursive because it is defined in terms of i
 \label{c_types_effective}
 An effective type is a union of types which all contain some property (e.g. a union of arrays).  This common property allows the effective type to support more operations than possible for an arbitrary union~(\S\ref{c_types_unions}).
 
-\subsection{Effective Tuples}
+% \subsection{Effective Tuples}
 
-An effective tuple is a union of two or more tuple types.  For example, the type \lstinline{(int,int)|(real,real)} is an effective tuple.  An effective tuple type supports all operations valid for a tuple type~(\S\ref{c_types_tuple}).
+% An effective tuple is a union of two or more tuple types.  For example, the type \lstinline{(int,int)|(real,real)} is an effective tuple.  An effective tuple type supports all operations valid for a tuple type~(\S\ref{c_types_tuple}).
 
 \subsection{Effective Records}
 \label{c_types_effective_records}

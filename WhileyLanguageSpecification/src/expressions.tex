@@ -47,34 +47,16 @@ Within the class of binary infix expressions, an explicit precedence rank is giv
 Lower ranked operators bind more tightly (i.e. take higher precedence) thank higher ranked operators.
 
 % =======================================================================
-% Multi Expression
-% =======================================================================
-
-\section{Expressions}
-\label{c_expr_tuple}
-A multi-expression is an expression composed of two or more unit expressions and which returns a tuple value (\S\ref{c_types_tuple}).  The operands of a multi-expression are evaluated in a strict left-to-right order.
-
-\begin{syntax}
-  \verb+Expr+ & $::=$ & \verb+UnitExpr+ \big(\ \token{,}\ \verb+UnitExpr+\ \big)$^\star$ \\
-\end{syntax}
-
-\paragraph{Example.}  The following example illustrates the use of a multi-expression:
-
-\lstinputlisting{../examples/ch6/eg_1.whiley}
-
-This function accepts three \lstinline{real} values and returns two.  In the body, the \lstinline{return} statement contains a multi-expression which produces a tuple composed of two \lstinline{real} values.
-
-% =======================================================================
 % Unit Expression
 % =======================================================================
 
 \section{Unit Expressions}
 \label{c_expr_unit}
 
-A unit expression is an expression which returns exactly one value.  There is a large range of possible unit expressions, including comparators, arithmetic operators, logical operators, etc.
+An expression returns exactly one value.  There is a large range of possible unit expressions, including comparators, arithmetic operators, logical operators, etc.
 
 \begin{syntax}
-  \verb+UnitExpr+ & $::=$ & \verb+ArithmeticExpr+\\
+  \verb+Expr+ & $::=$ & \verb+ArithmeticExpr+\\
                   &  $|$  & \verb+BitwiseExpr+\\
                   &  $|$  & \verb+CastExpr+\\
                   &  $|$  & \verb+EqualityExpr+\\
@@ -114,7 +96,7 @@ Arithmetic expressions operate on values of numeric type (either \lstinline{int}
 A negation expression accepts one argument of numeric type and produces a result of matching type.  Specifically, the {\em negation operator} mathematically negates the given value, which is always equivalent to subtracting the operand from zero.
 
 \begin{syntax}
-\verb+ArithmeticNegationExpr+ & $::=$ & \token{-}\ \verb+UnitExpr+\\
+\verb+ArithmeticNegationExpr+ & $::=$ & \token{-}\ \verb+Expr+\\
 \end{syntax}
 
 \paragraph{Example.} The following illustrates the negation operator:
@@ -131,10 +113,10 @@ Relational expressions are either {\em strict} (where only inequality is tested)
 
 \begin{syntax}
   \verb+ArithmeticRelationalExpr+ & $::=$ &\\
-  & $|$ & \verb+UnitExpr+ \token{<} \verb+UnitExpr+\\
-  & $|$ & \verb+UnitExpr+ \token{<=} \verb+UnitExpr+\\
-  & $|$ & \verb+UnitExpr+ \token{=>} \verb+UnitExpr+\\
-  & $|$ & \verb+UnitExpr+ \token{>} \verb+UnitExpr+\\
+  & $|$ & \verb+Expr+ \token{<} \verb+Expr+\\
+  & $|$ & \verb+Expr+ \token{<=} \verb+Expr+\\
+  & $|$ & \verb+Expr+ \token{=>} \verb+Expr+\\
+  & $|$ & \verb+Expr+ \token{>} \verb+Expr+\\
 \end{syntax}
 
 \paragraph{Example.} The following example illustrates the strict inequality comparators:
@@ -153,7 +135,7 @@ This function compares two integer arguments and returns the ``sign'' of their c
 An additive expression accepts two arguments of identical type (either \lstinline{int} or \lstinline{real}) and produces a result of matching type.  The {\em addition operator}, \lstinline{+}, adds both arguments together whilst the {\em subtraction operator}, \lstinline{-}, subtracts its right argument from its left argument.
 
 \begin{syntax}
-  \verb+ArithmeticAdditiveExpr+ & $::=$ & \verb+UnitExpr+ \big(\ \token{+} $|$ \token{-}\ \big) \verb+UnitExpr+\\
+  \verb+ArithmeticAdditiveExpr+ & $::=$ & \verb+Expr+ \big(\ \token{+} $|$ \token{-}\ \big) \verb+Expr+\\
 \end{syntax}
 
 \paragraph{Example.}  The following illustrates the additive operators:
@@ -169,7 +151,7 @@ This function simply computes the difference between its two arguments using the
 A multiplicative expression accepts two arguments of identical type (either \lstinline{int} or \lstinline{real}) and produces a result of matching type.  The {\em multiplication operator}, \lstinline{*}, multiplies both arguments together whilst the {\em division operator}, \lstinline{/}, divides its left argument by its right argument.  Finally, the {\em remainder operator} returns the remainder of its operands from an implied division.  
 
 \begin{syntax}
-  \verb+ArithmeticMultiplicativeExpr+ & $::=$ & \verb+UnitExpr+ \big(\ \token{*} $|$ \token{/} $|$ \token{\%}\ \big) \verb+UnitExpr+\\
+  \verb+ArithmeticMultiplicativeExpr+ & $::=$ & \verb+Expr+ \big(\ \token{*} $|$ \token{/} $|$ \token{\%}\ \big) \verb+Expr+\\
 \end{syntax}
 
 \paragraph{Example.} The following illustrates the remainder operator:
@@ -204,7 +186,7 @@ Bitwise expressions operate on values of \lstinline{byte} type.
 The {\em bitwise complement operator} accepts an argument of \lstinline{byte} type (\S\ref{c_types_byte}) and produces a result of matching type.  The operator returns bitwise complement of the argument; that is, where the sign of each bit is reversed.
 
 \begin{syntax}
-\verb+BitwiseComplementExpr+ & $::=$ & \token{$\sim$}\ \verb+UnitExpr+\\
+\verb+BitwiseComplementExpr+ & $::=$ & \token{$\sim$}\ \verb+Expr+\\
 \end{syntax}
 
 \paragraph{Example.}  The following example illustrates the bitwise complement operator:
@@ -216,7 +198,7 @@ The {\em bitwise complement operator} accepts an argument of \lstinline{byte} ty
 A bitwise binary expression operates on values of \lstinline{byte} type (\S\ref{c_types_byte}).  The {\em bitwise AND} operator, \lstinline{&}, performs a logical AND between the respective bits of each operand, and produces a \lstinline{byte}.   The {\em bitwise OR} operator, \lstinline{|}, performs a logical OR between the respective bits of each operand, and produces a \lstinline{byte}.  The {\em bitwise exclusive-OR} operator, \lstinline{^}, performs a logical exclusive-OR between the respective bits of each operand, and produces a \lstinline{byte}.
 
 \begin{syntax}
-  \verb+BitwiseBinaryExpr+ & $::=$ & \verb+UnitExpr+ \big(\ \token{\&} $|$ \token{|}\ $|$ \token{\^}\ \big) \verb+UnitExpr+\\
+  \verb+BitwiseBinaryExpr+ & $::=$ & \verb+Expr+ \big(\ \token{\&} $|$ \token{|}\ $|$ \token{\^}\ \big) \verb+Expr+\\
 \end{syntax}
 
 \paragraph{Example.}  The following example illustrates the bitwise OR operator:
@@ -235,8 +217,8 @@ These functions provide mechanisms for manipulating a byte of ``flags'', as dete
 A bitwise shift expression accepts an argument of \lstinline{byte} type (left) and one of \lstinline{int} type (right) and produces a value of \lstinline{byte} type.  The {\em left shift operator}, \lstinline{<<}, shifts the bits of a \lstinline{byte} in an upwards direction, such that the most significant bit is discarded and the least significant bit assigned \lstinline{0}.  The {\em right shift operator}, \lstinline{>>}, shifts bits in a downwards direction, such that the least significant bit is discarded and the most significant bit assigned \lstinline{0}.  
 
 \begin{syntax}
-  \verb+BitwiseShiftExpr+ & $::=$ & \verb+UnitExpr+\ \big[\ \big(\
-  \token{<<} $|$ \token{>>}\ \big)\ \verb+UnitExpr+ \big]
+  \verb+BitwiseShiftExpr+ & $::=$ & \verb+Expr+\ \big[\ \big(\
+  \token{<<} $|$ \token{>>}\ \big)\ \verb+Expr+ \big]
 \end{syntax}
 
 \paragraph{Examples.} The following illustrates the left shift operator:
@@ -297,9 +279,9 @@ A {\em function or method invocation} executes a named function or method declar
 
 \begin{syntax}
   \verb+InvokeExpr+ & $::=$ & \verb+Name+ \token{(} \verb+ArgsList+ \token{)}\\
-  \verb+IndirectInvokeExpr+ & $::=$ & \verb+UnitExpr+\ \token{(}\ \verb+ArgsList+\ \token{)}\\
+  \verb+IndirectInvokeExpr+ & $::=$ & \verb+Expr+\ \token{(}\ \verb+ArgsList+\ \token{)}\\
 &&\\
-\verb+ArgsList+ & $::=$ & \big[\ \verb+UnitExpr+\ \big(\ \token{,}\ \verb+UnitExpr+\ \big)$^*$\ \big]\\
+\verb+ArgsList+ & $::=$ & \big[\ \verb+Expr+\ \big(\ \token{,}\ \verb+Expr+\ \big)$^*$\ \big]\\
 \end{syntax}
 
 \paragraph{Example.}
@@ -358,7 +340,7 @@ Logical expressions operate on values of \lstinline{bool} type.
 The {\em logical not} operator accepts an argument of \lstinline{bool} type and produces a value of \lstinline{bool}.  The value returned is the logical opposite of the argument.  
 
 \begin{syntax}
-\verb+LogicalNotExpr+ & $::=$ & \token{!}\ \verb+UnitExpr+\\
+\verb+LogicalNotExpr+ & $::=$ & \token{!}\ \verb+Expr+\\
 \end{syntax}
 
 \paragraph{Example.}
@@ -380,7 +362,7 @@ A logical connective operates on values of \lstinline{bool} type (\S\ref{c_types
 
 \begin{syntax}
 
-  \verb+LogicalBinaryExpr+ & $::=$ & \verb+UnitExpr+ \big(\ \token{<==>} $|$ \token{==>} $|$ \token{\&\&} $|$ \token{||}\ \big) \verb+UnitExpr+\\
+  \verb+LogicalBinaryExpr+ & $::=$ & \verb+Expr+ \big(\ \token{<==>} $|$ \token{==>} $|$ \token{\&\&} $|$ \token{||}\ \big) \verb+Expr+\\
 \end{syntax}
 
 \paragraph{Example.}  The following examples illustrate some of the logical operators:
@@ -401,8 +383,8 @@ A quantifier operates over an array of values and produces a value of \lstinline
 \begin{syntax}
 \verb+LogicalQuantExpr+ & $::=$ & \big(\ \token{no} $|$ \token{some} $|$
 \token{all}\ \big)\ \token{\{}\\
-&&\ \verb+Ident+ \token{in} \verb+UnitExpr+ \big( \token{,}\ \verb+Ident+\
-\token{in}\ \verb+UnitExpr+\ \big)$^*$\\
+&&\ \verb+Ident+ \token{in} \verb+Expr+ \big( \token{,}\ \verb+Ident+\
+\token{in}\ \verb+Expr+\ \big)$^*$\\
 &&  \token{|}\ \verb+Expr+\ \token{\}}\\
 \end{syntax}
 
@@ -458,7 +440,7 @@ The above function iterates through all elements in an array looking for the fir
 An array access expression accepts a array argument with one operand and produces a value of the array element type.  The {\em index-of operator} returns the element at the given operand position in the array.  
 
 \begin{syntax}
-  \verb+ArrayAccessExpr+ & $::=$ & \verb+UnitExpr+\ \token{[}\ \verb+Expr+\ \token{]}\\
+  \verb+ArrayAccessExpr+ & $::=$ & \verb+Expr+\ \token{[}\ \verb+Expr+\ \token{]}\\
 \end{syntax}
 
 \paragraph{Examples.} The following example illustrates the array access operator:
@@ -477,7 +459,7 @@ The above function determines whether a given array of integers is sorted from s
 An {\em array generator} accepts two arguments and produces a value of array type.  The second argument must be of \lstinline{int} type and the array produced contains exactly this many occurrences of the first argument.
 
 \begin{syntax}
-  \verb+ArrayGeneratorExpr+ & $::=$ & \token{[}\ \verb+UnitExpr+\ \token{;}\ \verb+UnitExpr+\ \token{]}\\
+  \verb+ArrayGeneratorExpr+ & $::=$ & \token{[}\ \verb+Expr+\ \token{;}\ \verb+Expr+\ \token{]}\\
 \end{syntax}
 
 \paragraph{Examples.} The following example illustrates an array generator:
@@ -523,7 +505,7 @@ Record expressions operate on values of record type (e.g. \lstinline|{int x, int
 The field access operator accepts a value of record type and returns the value held in a given field.
 
 \begin{syntax}
-  \verb+FieldAccessExpr+ & $::=$ & \verb+UnitExpr+\ \token{.}\ \verb+Ident+\\
+  \verb+FieldAccessExpr+ & $::=$ & \verb+Expr+\ \token{.}\ \verb+Ident+\\
 \end{syntax}
 
 \paragraph{Examples.}  The following example illustrates a field access expression constructor:
@@ -543,7 +525,7 @@ A {\em record initialiser} accepts one or more operands and produces a value of 
 \begin{syntax}
   \verb+RecordInitialiserExpr+ & $::=$ & \token{\{}\ \verb+FieldArgsList+\ \token{\}}\\
 &&\\
-  \verb+FieldArgsList+ & $::=$ & \verb+Ident+ \token{:} \verb+UnitExpr+ \big(\ \token{,} \verb+Ident+ \token{:} \verb+UnitExpr+\ \big)$^*$\\
+  \verb+FieldArgsList+ & $::=$ & \verb+Ident+ \token{:} \verb+Expr+ \big(\ \token{,} \verb+Ident+ \token{:} \verb+Expr+\ \big)$^*$\\
 \end{syntax}
 
 \paragraph{Example.} The following example illustrates a record initialiser:
@@ -569,7 +551,7 @@ Reference expressions operate on values of reference type (e.g. \lstinline{&int}
 A new expression accepts an argument of any type and produces a reference to that type.  The {\em new operator} allocates sufficient space on the heap and initialises it with the given value.  It then returns a reference to this heap object.
 
 \begin{syntax}
-\verb+NewExpr+ & $::=$ & \token{new}\ \verb+UnitExpr+\\
+\verb+NewExpr+ & $::=$ & \token{new}\ \verb+Expr+\\
 \end{syntax}
 
 \paragraph{Example.} The following example illustrates the new operator:
@@ -589,7 +571,7 @@ A dereference expression accepts an argument of reference type and returns a val
 
 \begin{syntax}
   \verb+DereferenceExpr+ & $::=$ & \token{*}\ \verb+TermExpr+\\
-  & $|$ & \verb+UnitExpr+\ \token{->}\ \verb+Ident+\\
+  & $|$ & \verb+Expr+\ \token{->}\ \verb+Ident+\\
 \end{syntax}
 
 \paragraph{Example.} The following illustrates the dereference operator:
