@@ -119,8 +119,8 @@ Here, we see a \lstinline{skip} statement being used to represent an empty state
 A \gls{variable_declaration} statement has an optional expression assignment referred to as a \gls{variable_initialiser}.  If an initialiser is given, this will be evaluated and assigned to the declared variables when the declaration is executed.  
 
 \begin{syntax}
-  \verb+VarDecl+ & $::=$ & \verb+TypePattern+\ \big[\
-  \token{=}\ \verb+Expr+\ \big]\\
+  \verb+VarDecl+ & $::=$ & \verb+Type+\ \verb+Ident+\ \big(\ \token{,}\ \verb+Type+\ \verb+Ident+\ \big)$^*$\ \big[\
+  \token{=}\ \verb+Expr+\ \big(\ \token{,}\ \verb+Expr+\ \big)$^*$\ \big]\\
 \end{syntax}
 
 \paragraph{Example.} Some example variable declarations are:

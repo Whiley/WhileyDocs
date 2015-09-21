@@ -99,7 +99,7 @@ A {\em type declaration} declares a named type within a Whiley \gls{source_file}
 
 \begin{syntax}
   \verb+TypeDecl+ & $::=$ & \token{type}\ \verb+Ident+\ \token{is}\
-  \verb+TypePattern+\ \big(\ \token{where}\ \verb+Expr+\ \big)$^*$\\
+  \Big[\ \verb+Type+\ $|$\ \token{(}\ \verb+Type+\ \verb+Ident+\ \token{)}\ \big]\ \big(\ \token{where}\ \verb+Expr+\ \big)$^*$\\
 \end{syntax}
 
 The optional \lstinline{where} clause defines a \gls{boolean_expression} which holds for any instance of this type.  This is often referred to as the type {\em invariant} or {\em constraint}.  Variables declared within the {\em type pattern} may be referred to within the optional \lstinline{where} clause.  
@@ -157,10 +157,10 @@ above).
 A {\em function declaration} defines a function within a Whiley \gls{source_file}.  Functions are {\em pure} and may not have side-effects.  This means they are guaranteed to return the same result given the same arguments, and are permitted within specifications (i.e. in type invariants, \gls{loop_invariant}s, and function/method \gls{precondition}s or \gls{postcondition}s).  Functions may call other functions, but may not call other methods.  Functions may not explicitly allocate memory on the heap and/or instigate concurrent computation.
 
 \begin{syntax}
-  \verb+FunctionDecl+ & $::=$ & \token{function}\ \verb+Ident+\
-  \verb+TypePattern+\ \token{->}\ \verb+TypePattern+\ \big(\\
-  && \ \ \token{requires}\ \verb+Expr+\ $|$\ \token{ensures}\ \verb+Expr+\\
-  && \big)$^*$\ \token{:}\ \verb+Block+\\
+  \verb+FunctionDecl+ & $::=$ & \token{function}\ \verb+Ident+\ \token{(}\ \verb+Parameters+\ \token{)}\ \token{->}\ \token{(}\ \verb+Parameters+\ \token{)}\\
+  && \big(\ \token{requires}\ \verb+Expr+\ $|$\ \token{ensures}\ \verb+Expr+\ \big)$^*$\ \token{:}\ \verb+Block+\\
+  &&\\
+  \verb+Parameters+ & $::=$ & \big( \verb+Type+ \verb+Ident+ \big)$^*$
 \end{syntax}
 
 The first type pattern (i.e. before ``\lstinline{->}'') is referred to as the {\em parameter}, whilst the second is referred to as the {\em return}.  There are three kinds of optional clause which follow:
@@ -190,10 +190,8 @@ This defines the specification and implementation of the well-known \lstinline{m
 A {\em method declaration} defines a method within a Whiley \gls{source_file}.  Methods are {\em impure} and may have side-effects.  Thus, they cannot be used within specifications (i.e. in type invariants, \gls{loop_invariant}s, and function/method \gls{precondition}s or \gls{postcondition}s).  However, unlike functions, methods may call other functions and/or methods (including \lstinline{native} methods).  They may also explicitly allocate memory on the heap, and/or instigate concurrent computation.
 
 \begin{syntax}
-  \verb+MethodDecl+ & $::=$ & \token{method}\ \verb+Ident+\
-  \verb+TypePattern+\ \token{->}\ \verb+TypePattern+\ \big(\\
-  && \ \ \token{requires}\ \verb+Expr+\ $|$\ \token{ensures}\ \verb+Expr+\\
-  && \big)$^*$\ \token{:}\ \verb+Block+\\
+  \verb+MethodDecl+ & $::=$ & \token{method}\ \verb+Ident+\ \token{(}\ \verb+Parameters+\ \token{)}\ \token{->}\ \token{(}\ \verb+Parameters+\ \token{)}\\
+  && \big(\ \token{requires}\ \verb+Expr+\ $|$\ \token{ensures}\ \verb+Expr+\ \big)$^*$\ \token{:}\ \verb+Block+\\
 \end{syntax}
 
 The first type pattern (i.e. before ``\lstinline{->}'') is referred to as the {\em parameter}, whilst the second is referred to as the {\em   return}.  The three optional clauses are defined identically as for function declarations~(\S\ref{c_source_files_function_decl}).

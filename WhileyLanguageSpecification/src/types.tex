@@ -35,18 +35,6 @@ Type descriptors provide syntax for describing types and, in the remaining secti
   & $|$ & \token{(}\ \verb+Type+\ \token{)}\\
 \end{syntax}
 
-\section{Type Patterns}
-\label{c_types_type_patterns}
-
-\Gls{type_pattern}s associate variables with types and their subcomponents and can be used to declare variables and/or for {\em destructuring} types into variables.  Type patterns are a source-level entity which are similar to type descriptors.  The top-level grammar for type patterns is:
-
-\begin{syntax}
-  \verb+TypePattern+ & $::=$ & \verb+Type+ \big[\ \verb+Ident+\ \big]\\
-              & $|$ & \verb+TuplePattern+ \\
-              & $|$ & \verb+RecordPattern+ \\
-              & $|$ & \verb+RationalPattern+ \\
-\end{syntax}
-
 \section{Primitive Types}
 \label{c_types_primitive_types}
 
@@ -217,9 +205,6 @@ A tuple type describes a compound type made up of two or more elements in sequen
 \begin{syntax}
   \verb+TupleType+ & $::=$ & \token{(}\ \verb+Type+\ \big(\ \token{,}\
   \verb+Type+\ \big)$^+$\ \token{)}\\
-  &&\\
-  \verb+TuplePattern+ & $::=$ & \token{(}\ \verb+TypePattern+\ \big(\ \token{,}\
-  \verb+TypePattern+\ \big)$^+$\ \token{)}\ \big[\ \verb+Ident+\ \big]\\
 \end{syntax}
 
 \paragraph{Example.} The following example illustrates several uses of tuples:
