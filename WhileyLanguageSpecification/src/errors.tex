@@ -1,10 +1,14 @@
-\chapter{Error Messages}
+\chapter{Errors and Warnings}
 
-{\bf Note:} need to distinguish the different kinds of error; e.g. type errors versus other errors?
+When the Whiley compiler encounters an invalid program it will report an {\em error}.  In contrast, when it encounters something undesirable in an otherwise valid program, it may report a {\em warning}.  This chapters details the complete list of error messages and warnings which can be reported for a Whiley program.
+
+\section{Overview}
 
 \section{Parse Errors}
 
 \section{Declarations}
+
+Declarations are top-level entities in a \gls{source_file}, and their syntax is defined in \S\ref{c_source_files}.
 
 \subsection{``Cyclic Constant Declaration'' (E301)}
 
@@ -20,70 +24,29 @@ constant const3 is 1 + const2
 \end{lstlisting}
 Here, all three constant declarations are cyclic.  The declaration for \lstinline{const1} has a {\em direct} cycle, because its definition refers to itself.  The declaration for \lstinline{const2} has an indirect cycle, because its definition refers to \lstinline{const3} which, in turn, refers back to \lstinline{const2}.
 
-\section{Expressions}
+\subsection{``Reference Not Permitted in Function'' (E302)}
 
-%\subsection{``Invalid File Access'' (000)}
+\subsection{``Method Invocation Not Permitted In Function'' (E303)}
 
-%\subsection{``Invalid Package Access'' (000)}
+\subsection{``Reference Access Not Permitted in Function'' (E304)}
 
-%\subsection{``Resolution Error'' (000)}
+\subsection{``Return from Void'' (E305)}
+	
+\section{Types}
+\label{c_err_types}
 
-\subsection{``Variable Possibly Uninitialised'' (E401)}
-\label{c_err_var_uninitialised}
-A {\em variable possibly uninitialised} occurs when a variable may be used without being defined.  That is, when a simple path exists through the control-flow graph of a function or method from that variable's declaration to a use which contains no definition for that variable.  This error is reported as part of the {\em definite assignment} checking performed during compilation (see~\S\ref{c_definite_assignment}).
+\subsection{``Subtype Error'' (401)}
 
-\paragraph{Example.}  The following illustrates a variable which is possibly uninitialised:
+\subsection{``Incomparable Operands'' (402)}
 
-\begin{lstlisting}
-function f(int x) => int:
-   int y
-   return x + y
-\end{lstlisting}
+\subsection{``Record Type Required'' (403)}
 
-Here, variable \lstinline{y} is definitely uninitialised in the expression ``\lstinline{x + y}''.  For more examples of variables which are possibly uninitialised, see~\S\ref{c_definite_assignment}.
-
-\subsection{``Unknown Variable'' (E402)}
-
-An {\em unknown variable} occurs when an attempt is made to access a variable which has not been declared in the current scope.  All variables must be declared before they can be used.
-
-\paragraph{Example.}  The following illustrates an unknown variable:
-
-\begin{lstlisting}
-function f(int x) -> int:
-   return x+y
-\end{lstlisting}
-
-Here, the \lstinline{return} statements refers to an unknown variable \lstinline{y}.  In contrast, the reference to variable \lstinline{x} is valid because \lstinline{x} has been declared within scope.
-
-\subsection{``Unknown Function or Method'' (E403)}
-
-An {\em unknown function or method} occurs when an attempt is made to access a function or method which is not visible in the current scope.  Functions and methods which are not declared in the same file as the invocation can be brought into the current scope using \lstinline{import} statements.  
-\paragraph{Example.}  The following illustrates an invocation of an unknown function or method:
-
-\begin{lstlisting}
-function f(int x) -> int:
-   return g(x)
-\end{lstlisting}
-
-Here, function \lstinline{g()} is not defined in the current source file and has not been brought into scope through an \lstinline{import} statement.
-
-\subsection{``Ambiguous Coercion'' (E404)}
-
-An {\em ambiguous coercion} occurs when the target of a cast expression is uncertain.  That is, when attempting to cast a value to a given type \lstinline{T}, but there is more than one way this can be achieved.  This error is reported as part of the {\em coercion check} performed during compilation.
-
-\paragraph{Example.}  The following illustrates an ambiguous coercion:
-
-\begin{lstlisting}
-type Ambiguous is { int f1, real f2} | { real f1, int f2 }
-
-function f(int x, int y) -> Ambiguous:
-   return (Ammbiguous) {f1: x, f2: y}
-\end{lstlisting}
-
-The cast is ambiguous here because it's unclear whether, for example, \lstinline|{f1: 1, f2: 2}| should become \lstinline|{f1: 1.0, f2: 2}| or \lstinline|{f1: 1, f2: 2.0}|.
+\subsection{``Record Missing Field'' (404)}
 
 
 \section{Statements}
+
+Statements are used frequently in a Whiley program, and their syntax is defined in \S\ref{c_statements}.  The error messages reported in this section are those related to specific statement forms.  Other, more general, errors can also be reported for a statement (e.g. {\em type errors}, \S\ref{c_err_types}).
 
 \subsection{``Invalid LVal'' (E501)}
 
@@ -239,23 +202,68 @@ function f(int x):
 
 Here, the \lstinline{switch} statement has two \lstinline{case} labels, both of which match the value \lstinline{0}.  This must be an error as, otherwise, it would be ambiguous as to which executed.
 
-\section{Functions (000)}
 
-\subsection{``Reference Not Permitted in Function'' (000)}
+\section{Expressions}
 
-\subsection{``Method Invocation Not Permitted In Function'' (000)}
+%\subsection{``Invalid File Access'' (000)}
 
-\subsection{``Reference Access Not Permitted in Function'' (000)}
+%\subsection{``Invalid Package Access'' (000)}
 
-\subsection{``Return from Void'' (000)}
-	
-\section{Types (000)}
+%\subsection{``Resolution Error'' (000)}
 
-\subsection{``Subtype Error'' (000)}
+Expressions typically form the bulk of a Whiley program, and their syntax is defined in \S\ref{c_expressions}.  The error messages reported in this section are those related to specific expression forms.  Other, more general, errors can also be reported for an expression (e.g. {\em type errors}, \S\ref{c_err_types}).
 
-\subsection{``Incomparable Operands'' (000)}
+\subsection{``Variable Possibly Uninitialised'' (E601)}
+\label{c_err_var_uninitialised}
+A {\em variable possibly uninitialised} occurs when a variable may be used without being defined.  That is, when a simple path exists through the control-flow graph of a function or method from that variable's declaration to a use which contains no definition for that variable.  This error is reported as part of the {\em definite assignment} checking performed during compilation (see~\S\ref{c_definite_assignment}).
 
-\subsection{``Record Type Required'' (000)}
+\paragraph{Example.}  The following illustrates a variable which is possibly uninitialised:
 
-\subsection{``Record Missing Field'' (000)}
+\begin{lstlisting}
+function f(int x) => int:
+   int y
+   return x + y
+\end{lstlisting}
+
+Here, variable \lstinline{y} is definitely uninitialised in the expression ``\lstinline{x + y}''.  For more examples of variables which are possibly uninitialised, see~\S\ref{c_definite_assignment}.
+
+\subsection{``Unknown Variable'' (E602)}
+
+An {\em unknown variable} occurs when an attempt is made to access a variable which has not been declared in the current scope.  All variables must be declared before they can be used.
+
+\paragraph{Example.}  The following illustrates an unknown variable:
+
+\begin{lstlisting}
+function f(int x) -> int:
+   return x+y
+\end{lstlisting}
+
+Here, the \lstinline{return} statements refers to an unknown variable \lstinline{y}.  In contrast, the reference to variable \lstinline{x} is valid because \lstinline{x} has been declared within scope.
+
+\subsection{``Unknown Function or Method'' (E603)}
+
+An {\em unknown function or method} occurs when an attempt is made to access a function or method which is not visible in the current scope.  Functions and methods which are not declared in the same file as the invocation can be brought into the current scope using \lstinline{import} statements.  
+\paragraph{Example.}  The following illustrates an invocation of an unknown function or method:
+
+\begin{lstlisting}
+function f(int x) -> int:
+   return g(x)
+\end{lstlisting}
+
+Here, function \lstinline{g()} is not defined in the current source file and has not been brought into scope through an \lstinline{import} statement.
+
+\subsection{``Ambiguous Coercion'' (E604)}
+
+An {\em ambiguous coercion} occurs when the target of a cast expression is uncertain.  That is, when attempting to cast a value to a given type \lstinline{T}, but there is more than one way this can be achieved.  This error is reported as part of the {\em coercion check} performed during compilation.
+
+\paragraph{Example.}  The following illustrates an ambiguous coercion:
+
+\begin{lstlisting}
+type Ambiguous is { int f1, real f2} | { real f1, int f2 }
+
+function f(int x, int y) -> Ambiguous:
+   return (Ammbiguous) {f1: x, f2: y}
+\end{lstlisting}
+
+The cast is ambiguous here because it's unclear whether, for example, \lstinline|{f1: 1, f2: 2}| should become \lstinline|{f1: 1.0, f2: 2}| or \lstinline|{f1: 1, f2: 2.0}|.
 
