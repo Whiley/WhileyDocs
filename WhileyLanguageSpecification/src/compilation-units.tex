@@ -154,7 +154,7 @@ above).
 \subsection{Function Declarations}
 \label{c_source_files_function_decl}
 
-A {\em function declaration} defines a function within a Whiley \gls{source_file}.  Functions are {\em pure} and may not have side-effects.  This means they are guaranteed to return the same result given the same arguments, and are permitted within specifications (i.e. in type invariants, \gls{loop_invariant}s, and function/method \gls{precondition}s or \gls{postcondition}s).  Functions may call other functions, but may not call other methods.  Functions may not explicitly allocate memory on the heap and/or instigate concurrent computation.
+A {\em function declaration} defines a function within a Whiley \gls{source_file}.  Functions are {\em pure} and may not have \glspl{side_effect}.  This means they are guaranteed to return the same result given the same arguments, and are permitted within specifications (i.e. in type invariants, \gls{loop_invariant}s, and function/method \gls{precondition}s or \gls{postcondition}s).  Functions may call other functions, but may not call other methods.  Functions may not explicitly allocate memory on the heap and/or instigate concurrent computation.
 
 \begin{syntax}
   \verb+FunctionDecl+ & $::=$ & \token{function}\ \verb+Ident+\ \token{(}\ \verb+Parameters+\ \token{)}\ \token{->}\ \token{(}\ \verb+Parameters+\ \token{)}\\

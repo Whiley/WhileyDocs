@@ -26,6 +26,17 @@ Here, all three constant declarations are cyclic.  The declaration for \lstinlin
 
 \subsection{``Reference Not Permitted in Function'' (E302)}
 
+A {\em reference not permitted in function} error occurs when an attempt is made to declare or use a variable of reference type in a function (as opposed to a method).  Functions in Whiley must be free from \glspl{side_effect} --- i.e. they must be {\em pure}.  This, the potential side-effects made possible through the use of references is not permitted.
+
+\paragraph{Example.}  The following illustrates a very simple example:
+
+\begin{lstlisting}
+function f(&int x) -> (int r):
+   return *x
+\end{lstlisting}
+
+Here, function \lstinline{f()} accepts a parameter \lstinline{x} of reference type \lstinline{&int}, which is not permitted.  In this case the function does not, in fact, exhibit any side-effects; nevertheless, the function will currently be rejected.
+
 \subsection{``Method Invocation Not Permitted In Function'' (E303)}
 
 \subsection{``Reference Access Not Permitted in Function'' (E304)}
