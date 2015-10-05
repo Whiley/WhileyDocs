@@ -68,7 +68,21 @@ function f(int x) -> (int r):
 Here, function \lstinline{f()} accepts a parameter \lstinline{x} and passes it through a call to method \lstinline{g()}.  In this case method \lstinline{g()} does not, in fact, exhibit any side-effects; nevertheless, the method call will be rejected.
 
 \subsection{``Return from Void'' (E305)}
-	
+
+A {\em return from void} error occurs when an attempt is made to return a value from a function or method either explicitly declared as returning \lstinline{void} or where no return type is given (and, hence, is implicitly declared as returning \lstinline{void}).
+
+\paragraph{Example.}  The following illustrates two simple examples:
+
+\begin{lstlisting}
+method g(int x):
+   return x+1
+
+function f(int x) -> void:
+   return x
+\end{lstlisting}
+
+Here, method \lstinline{g()} is {\em implicitly} declared as returning \lstinline{void} whilst function \lstinline{f()} is {\em explicitly} declared as returning \lstinline{void}.  Since \lstinline{void} indicates the {\em absence} of a return value, neither \lstinline{g()} nor \lstinline{f()} are permitted to return a value.
+
 \section{Types}
 \label{c_err_types}
 
