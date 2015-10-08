@@ -88,6 +88,27 @@ Here, method \lstinline{g()} is {\em implicitly} declared as returning \lstinlin
 
 \subsection{``Subtype Error'' (401)}
 
+A {\em subtype error} arises when an attempt is made to use an expression of type \lstinline{T} in a position where an expression of type \lstinline{S} is expected, and \lstinline{T} is not a subtype of \lstinline{S}.  This is a common error precisely because it can occur in a large number of different situations.
+
+\paragraph{Example.}  The following illustrates an example:
+
+\begin{lstlisting}
+function f(int x) -> (int r):
+    if x:
+        return 0
+    else:
+        return 1
+\end{lstlisting}
+
+Here, variable \lstinline{x} has type \lstinline{int} but is being used in a position (i.e. as the condition of the \lstinline{if}-statement) which expects a type \lstinline{bool}.  Another example is as follows:
+
+\begin{lstlisting}
+function g(int[] items) -> (int r):
+    return items
+\end{lstlisting}
+
+Here, variable \lstinline{items} has type \lstinline{int[]} but is being used in a position (i.e. as the return value) which expects a type \lstinline{int}.
+
 \subsection{``Incomparable Operands'' (402)}
 
 \subsection{``Record Type Required'' (403)}
