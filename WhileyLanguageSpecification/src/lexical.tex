@@ -35,9 +35,11 @@ The above illustrates a line comment, which is all of the text from \token{//} u
 \section{Identifiers}
 An identifier is a sequence of one or more {\em letters} or {\em digits} which starts with a letter.
 \begin{syntax}
-\verb+Ident+ & $::=$ & \verb+Letter+\ \big(\ \verb+Letter+\ $|$\ \verb+Digit+\ \big)*\\
+\verb+Ident+ & $::=$ & \verb+_Letter+\ \big(\ \verb+_Letter+\ $|$\ \verb+Digit+\ \big)*\\
 &&\\
-\verb+Letter+ & $::=$ & \token{\_} $|$ \token{a} $|$ \ldots $|$ \token{z} $|$ \token{A} $|$ \ldots $|$ \token{Z}\\
+\verb+_Letter+ & $::=$ & \token{\_} $|$ \verb+Letter+\\
+&&\\
+\verb+Letter+ & $::=$ & \token{a} $|$ \ldots $|$ \token{z} $|$ \token{A} $|$ \ldots $|$ \token{Z}\\
 &&\\
 \verb+Digit+ & $::=$ & \token{0} $|$ \token{1} $|$ \token{2} $|$ \token{3} $|$ \token{4} $|$ \token{5} $|$ \token{6} $|$ \token{7} $|$ \token{8} $|$ \token{9}\\
 \end{syntax}
@@ -78,8 +80,8 @@ A \gls{literal} is a source-level entity which describes a value of primitive ty
   & $|$ & \verb+BoolLiteral+ \\
   & $|$ & \verb+ByteLiteral+ \\
   & $|$ & \verb+IntLiteral+ \\
-  & $|$ & \verb+RealLiteral+ \\
-  & $|$ & \verb+CharLiteral+ \\
+  & $|$ & \verb+DecimalLiteral+ \\
+  & $|$ & \verb+CharacterLiteral+ \\
   & $|$ & \verb+StringLiteral+ \\
 \\
 \end{syntax}
@@ -130,7 +132,7 @@ Since integer values in Whiley are of arbitrary size (\S\ref{c_types_int}), ther
 A {\em decimal literal} is a sequence of numeric digits separated by a period (e.g. \lstinline{1.0}, \lstinline{0.223}, \lstinline{12.55}, etc) corresponding to a value of \lstinline{real} type (\S\ref{c_types_real}).
 
 \begin{syntax}
-  \verb+RealLiteral+ & $::=$ & \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ \big)$^+$\ \token{.}\ \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ \big)$^+$ \\
+  \verb+DecimalLiteral+ & $::=$ & \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ \big)$^+$\ \token{.}\ \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ \big)$^+$ \\
 \end{syntax}
 
 \subsection{Character Literals}
@@ -138,7 +140,12 @@ A {\em decimal literal} is a sequence of numeric digits separated by a period (e
 A {\em character literal} is expressed as a single character or an escape sequence enclosed in single quotes (e.g. \lstinline{'c'}).  Character literals generate integer constants corresponding to Unicode code points, which is necessary because there is no native character type.
 
 \begin{syntax}
-  \verb+CharLiteral+ & $::=$ & \token{'}\ \big(\ \verb+Character+\ $|$ \verb+Escape+\ \big)\ \token{'} \\
+  \verb+CharacterLiteral+ & $::=$ & \token{'}\ \Big(\ \verb+Character+\ --\ \big(\ \token{\textbackslash}\ |\ \token{'}\ \big)\ $|$ \verb+CharacterEscape+\ \Big)\ \token{'} \\
+  &&\\
+  \verb+CharacterEscape+ & $::=$ & \token{\textbackslash}\ \big(\ \token{\textbackslash}\ |\ \token{t}\ |\ \token{n}\ |\ \token{'}\ \big)\\
+  &&\\
+  \verb+Character+ & $::=$ & \verb+Letter+\ $|$\ \verb+Digit+\ $|$\ \verb+Symbol+\\
+
 \end{syntax}
 
 \subsection{String Literals}
@@ -146,5 +153,8 @@ A {\em character literal} is expressed as a single character or an escape sequen
 A {\em string literal} is expressed as a sequence of zero or more characters or escape sequences enclosed in double quotes (e.g. \lstinline{"Hello World"}).  String literals generate lists of integers corresponding to Unicode code points, which is necessary as there is no native string type.
 
 \begin{syntax}
-  \verb+StringLiteral+ & $::=$ & \token{"}\ \big(\ \verb+Character+\ $|$ \verb+Escape+\ \big)$^*$\ \token{"} \\
+  \verb+StringLiteral+ & $::=$ & \token{"}\ \big(\ \verb+Character+--\ \big(\ \token{\textbackslash}\ |\ \token{"}\ \big)\ $|$ \verb+StringEscape+\ \big)$^*$\ \token{"} \\
+  &&\\
+  \verb+StringEscape+ & $::=$ & \token{\textbackslash}\ \big(\ \token{\textbackslash}\ |\ \token{t}\ |\ \token{n}\ |\ \token{"}\ \big)\\
+
 \end{syntax}
