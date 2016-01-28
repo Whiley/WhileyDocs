@@ -1,6 +1,6 @@
 type Fun is function(int) -> int
 
-function map([int] items, Fun fn) -> [int]:
+function map(int[] items, Fun fn) -> int[]:
     //
     int i = 0
     while i < |items|:

@@ -1,4 +1,4 @@
-function add([int] v1, [int] v2) -> ([int] v3)
+function add(int[] v1, int[] v2) -> (int[] v3)
 requires |v1| == |v2|
 ensures |v1| == |v3|:
     //

@@ -1,3 +1,5 @@
+import whiley.lang.Math
+
 type Tree is null | { int data, Tree left, Tree right }
 
 function height(Tree t) -> int:

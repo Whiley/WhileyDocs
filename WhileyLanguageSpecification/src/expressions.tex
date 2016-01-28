@@ -72,7 +72,7 @@ An expression returns exactly one value.  There is a large range of possible uni
 \end{syntax}
 
 % =======================================================================
-% Binary Expressions
+% Arithmetic Expressions
 % =======================================================================
 
 \section{Arithmetic Expressions}
@@ -162,6 +162,98 @@ A multiplicative expression accepts two arguments of identical type (either \lst
 This function accepts a non-negative integer and uses this to index into an array.  To ensure the array access is within bounds, the remainder operator is used.  Furthermore, the function requires the array is non-empty to prevent a fault with the remainder operator.
 
 \paragraph{Notes.}  For division, the right operator must be non-zero otherwise a \gls{fault} is raised, and likewise for remainder.  For integer division, the result is rounded towards zero.  For a remainder operation, the result may be negative (e.g. \lstinline{-4 % 3 == -1}).
+
+% =======================================================================
+% Array Expressions
+% =======================================================================
+
+\section{Array Expressions}
+\label{c_expr_array}
+
+Array expressions operate on values of array type (e.g. \lstinline{int[]}, \lstinline{(bool|real)[]}, etc).
+
+\begin{syntax}
+  \verb+ArrayExpr+ & $::=$ &\\
+  & $|$ & \verb+ArrayLengthExpr+\\
+  & $|$ & \verb+ArrayAccessExpr+\\
+  & $|$ & \verb+ArrayGeneratorExpr+\\
+  & $|$ & \verb+ArrayInitialiserExpr+\\
+\end{syntax}
+
+% =======================================================================
+% LengthOf Expression
+% =======================================================================
+
+\subsection{Length Expressions}
+\label{c_expr_length}
+
+The {\em lengthof operator} accepts a value of array type, and produces a value of \lstinline{int} type which equals the number of elements in the array.
+
+\begin{syntax}
+\verb+ArrayLengthExpr+ & $::=$ & \token{|}\ \verb+Expr+\ \token{|}\\
+\end{syntax}
+
+\paragraph{Example.} The following examples illustrate the lengthof operator:
+
+\lstinputlisting{../examples/ch6/eg_19.whiley}
+
+The above function iterates through all elements in an array looking for the first which is above a given item.  The length operator is used to ensure this iteration remains within bounds.
+
+% =======================================================================
+% Array Access Expressions
+% =======================================================================
+
+\subsection{Access Expressions}
+\label{c_expr_array_access}
+
+An array access expression accepts a array argument with one operand and produces a value of the array element type.  The {\em index-of operator} returns the element at the given operand position in the array.  
+
+\begin{syntax}
+  \verb+ArrayAccessExpr+ & $::=$ & \verb+Expr+\ \token{[}\ \verb+Expr+\ \token{]}\\
+\end{syntax}
+
+\paragraph{Examples.} The following example illustrates the array access operator:
+
+\lstinputlisting{../examples/ch6/eg_20.whiley}
+
+The above function determines whether a given array of integers is sorted from smallest to largest.  The array access operator is used to access successive elements in the array. 
+
+% =======================================================================
+% Generator Expressions
+% =======================================================================
+
+\subsection{Generator Expressions}
+\label{c_expr_generator}
+
+An {\em array generator} accepts two arguments and produces a value of array type.  The second argument must be of \lstinline{int} type and the array produced contains exactly this many occurrences of the first argument.
+
+\begin{syntax}
+  \verb+ArrayGeneratorExpr+ & $::=$ & \token{[}\ \verb+Expr+\ \token{;}\ \verb+Expr+\ \token{]}\\
+\end{syntax}
+
+\paragraph{Examples.} The following example illustrates an array generator:
+
+\lstinputlisting{../examples/ch6/eg_8.whiley}
+
+This function constructs a array by prepending a given element onto the front of a given array.  The array generator is used to construct the initial array of values whose size is one larger than the given array.
+
+% =======================================================================
+% Array Initialiser
+% =======================================================================
+
+\subsection{Array Initialiser}
+\label{c_expr_array_initialiser}
+An {\em array initialiser} accepts zero or more operands and produces a value of array type.  Array initialisers are used to construct arrays from their constituent elements.  
+
+\begin{syntax}
+  \verb+ArrayInitialiserExpr+ & $::=$ & \token{[}\ \verb+ArgsList+ \token{]}\\
+\end{syntax}
+
+\paragraph{Example.}  The following example illustrates an array initialiser:
+
+\lstinputlisting{../examples/ch6/eg_21.whiley}
+
+The above function converts an integer value into its string representation.  An array initialiser is used to map integer values to their corresponding digits.  An empty array initialiser is also used to initialise the string.
 
 % =======================================================================
 % Bitwise Expressions
@@ -396,98 +488,6 @@ A quantifier operates over an array of values and produces a value of \lstinline
 Here, the type \lstinline{natlist} represents those integer arrays for which every element is a natural number (i.e. greater-or-equal to zero).
 
 % =======================================================================
-% Array Expressions
-% =======================================================================
-
-\section{Array Expressions}
-\label{c_expr_array}
-
-Array expressions operate on values of array type (e.g. \lstinline{int[]}, \lstinline{(bool|real)[]}, etc).
-
-\begin{syntax}
-  \verb+ArrayExpr+ & $::=$ &\\
-  & $|$ & \verb+ArrayLengthExpr+\\
-  & $|$ & \verb+ArrayAccessExpr+\\
-  & $|$ & \verb+ArrayGeneratorExpr+\\
-  & $|$ & \verb+ArrayInitialiserExpr+\\
-\end{syntax}
-
-% =======================================================================
-% LengthOf Expression
-% =======================================================================
-
-\subsection{Length Expressions}
-\label{c_expr_length}
-
-The {\em lengthof operator} accepts a value of array type, and produces a value of \lstinline{int} type which equals the number of elements in the array.
-
-\begin{syntax}
-\verb+ArrayLengthExpr+ & $::=$ & \token{|}\ \verb+Expr+\ \token{|}\\
-\end{syntax}
-
-\paragraph{Example.} The following examples illustrate the lengthof operator:
-
-\lstinputlisting{../examples/ch6/eg_19.whiley}
-
-The above function iterates through all elements in an array looking for the first which is above a given item.  The length operator is used to ensure this iteration remains within bounds.
-
-% =======================================================================
-% Array Access Expressions
-% =======================================================================
-
-\subsection{Access Expressions}
-\label{c_expr_array_access}
-
-An array access expression accepts a array argument with one operand and produces a value of the array element type.  The {\em index-of operator} returns the element at the given operand position in the array.  
-
-\begin{syntax}
-  \verb+ArrayAccessExpr+ & $::=$ & \verb+Expr+\ \token{[}\ \verb+Expr+\ \token{]}\\
-\end{syntax}
-
-\paragraph{Examples.} The following example illustrates the array access operator:
-
-\lstinputlisting{../examples/ch6/eg_20.whiley}
-
-The above function determines whether a given array of integers is sorted from smallest to largest.  The array access operator is used to access successive elements in the array. 
-
-% =======================================================================
-% Generator Expressions
-% =======================================================================
-
-\subsection{Generator Expressions}
-\label{c_expr_generator}
-
-An {\em array generator} accepts two arguments and produces a value of array type.  The second argument must be of \lstinline{int} type and the array produced contains exactly this many occurrences of the first argument.
-
-\begin{syntax}
-  \verb+ArrayGeneratorExpr+ & $::=$ & \token{[}\ \verb+Expr+\ \token{;}\ \verb+Expr+\ \token{]}\\
-\end{syntax}
-
-\paragraph{Examples.} The following example illustrates an array generator:
-
-\lstinputlisting{../examples/ch6/eg_8.whiley}
-
-This function constructs a array by prepending a given element onto the front of a given array.  The array generator is used to construct the initial array of values whose size is one larger than the given array.
-
-% =======================================================================
-% Array Initialiser
-% =======================================================================
-
-\subsection{Array Initialiser}
-\label{c_expr_array_initialiser}
-An {\em array initialiser} accepts zero or more operands and produces a value of array type.  Array initialisers are used to construct arrays from their constituent elements.  
-
-\begin{syntax}
-  \verb+ArrayInitialiserExpr+ & $::=$ & \token{[}\ \verb+ArgsList+ \token{]}\\
-\end{syntax}
-
-\paragraph{Example.}  The following example illustrates an array initialiser:
-
-\lstinputlisting{../examples/ch6/eg_21.whiley}
-
-The above function converts an integer value into its string representation.  An array initialiser is used to map integer values to their corresponding digits.  An empty array initialiser is also used to initialise the string.
-
-% =======================================================================
 % Record Expressions
 % =======================================================================
 
@@ -501,7 +501,7 @@ Record expressions operate on values of record type (e.g. \lstinline|{int x, int
 % =======================================================================
 
 \subsection{Access Expressions}
-\label{c_expr_field_access}
+\label{c_expr_access}
 
 The field access operator accepts a value of record type and returns the value held in a given field.
 
@@ -597,5 +597,16 @@ A {\em terminal expression} is one which can terminate an expression tree (thoug
   \verb+TermExpr+ & $::=$ & \verb+Ident+\\
   & $|$ & \verb+Literal+\\
   & $|$ & \token{(}\ \verb+Expr+\ \token{)}\\
+\end{syntax}
+
+% =======================================================================
+% Term Expressions
+% =======================================================================
+
+\section{Type Test Expressions}
+\label{c_expr_type_tests}
+
+\begin{syntax}
+  \verb+TypeTestExpr+ & $::=$ & \verb+Expr+\;\token{is}\;\verb+Type+\\
 \end{syntax}
 

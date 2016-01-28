@@ -1,2 +1,2 @@
-function swap(int x, int y) -> (int,int):
+function swap(int x, int y) -> (int a,int b):
     return y,x

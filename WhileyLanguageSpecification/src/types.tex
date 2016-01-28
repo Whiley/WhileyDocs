@@ -17,9 +17,7 @@ In this function we see two distinct \gls{type_descriptor}s expressed in the pro
 Type descriptors provide syntax for describing types and, in the remaining sections of this chapter, we explore the range of types supported in Whiley.  The top-level grammar for type descriptors is:
 
 \begin{syntax}
-  \verb+Type+ & $::=$ & \verb+UnitType+\ \big(\ \token{,}\ \verb+UnitType+\ \big)$^*$\\
-  &&\\
-  \verb+UnitType+ & $::=$ & \verb+UnionType+ \\
+  \verb+Type+ & $::=$ & \verb+UnionType+ \\
               & $|$ & \verb+IntersectionType+ \\
               & $|$ & \verb+TermType+ \\
               &&\\
@@ -120,7 +118,7 @@ This illustrates the conversion from a \lstinline{byte} into a \lstinline{string
 \subsection{Integers}
 \label{c_types_int}
 
-The type \lstinline{int} represents the set of arbitrary-sized integers, whose values are expressed as a sequence of one or more numerical or hexadecimal digits (e.g. \lstinline{123456}, \lstinline{0xffaf}, etc).  Variables of \lstinline{int} type support equality comparators (\S\ref{c_expr_equality}), inequality comparators (\S\ref{c_expr_inequality}), additive (\S\ref{c_expr_additive}), multiplicative (\S\ref{c_expr_multiplicative}) and negation (\S\ref{c_expr_negation}) operations.
+The type \lstinline{int} represents the set of arbitrary-sized integers, whose values are expressed as a sequence of one or more numerical or hexadecimal digits (e.g. \lstinline{123456}, \lstinline{0xffaf}, etc).  Variables of \lstinline{int} type support equality comparators (\S\ref{c_expr_equality}), relational comparators (\S\ref{c_expr_relational}), additive (\S\ref{c_expr_additive}), multiplicative (\S\ref{c_expr_multiplicative}) and negation (\S\ref{c_expr_negation}) operations.
 
 
 \begin{syntax}
@@ -131,27 +129,9 @@ The type \lstinline{int} represents the set of arbitrary-sized integers, whose v
 
 \lstinputlisting{../examples/ch4/eg_5.whiley}
 
-This illustrates the well-known recursive method for computing numbers in the {\em fibonacci} sequence.
+This illustrates the well-known recursive function for computing numbers in the {\em fibonacci} sequence.
 
 \paragraph{Notes.}  Since integers in Whiley are of arbitrary size, {\em integer overflow} is not possible.  This contrasts with other languages (e.g. Java) that used {\em fixed-width} number representations (e.g. 32bit two's complement).  Furthermore, there is nothing equivalent to the constants found in such languages for representing the uppermost and least integers expressible (e.g. \lstinline{Integer.MIN_VALUE} and \lstinline{Integer.MAX_VALUE}, as found in Java).
-% =======================================================================
-% Real
-% =======================================================================
-
-\subsection{Rationals}
-\label{c_types_real}
-
-The type \lstinline{real} represents the set of arbitrary-sized rationals, whose values are expressed as a sequence of one or more numerical digits separated by a period (e.g. \lstinline{1.0}, \lstinline{0.223}, \lstinline{12.55}, etc).  The set of values defined by the type \lstinline{real} is the (infinite) set of all integer pairs, where the first element is designated the numerator, and the second designated the denominator.  Variables of \lstinline{real} type support equality comparators (\S\ref{c_expr_equality}), inequality comparators (\S\ref{c_expr_inequality}), additive (\S\ref{c_expr_additive}), multiplicative (\S\ref{c_expr_multiplicative}) and negation (\S\ref{c_expr_negation}) operations.  Variables of type \lstinline{real} also support the {\em rational destructuring assignment} to extract the numerator and denominator (illustrated below).
-
-\begin{syntax}
-  \verb+RealType+ & $::=$ & \token{real} \\
-\end{syntax}
-
-\paragraph{Example.} The following illustrates a simple example of the \lstinline{real} type:
-
-\lstinputlisting{../examples/ch4/eg_6.whiley}
-
-This illustrates the well-known function for computing the {\em floor} of a \lstinline{real} variable \lstinline{x} (i.e. the greatest integer not larger than \lstinline{x}).  The rational destructuring assignment is used to extract the numerator and denominator of the parameter \lstinline{x}.
 
 % =======================================================================
 % Any
@@ -191,7 +171,7 @@ The \lstinline{void} type represents the type whose variables cannot exist (i.e.
 
 \lstinputlisting{../examples/ch4/eg_9.whiley}
 
-Here, the method \lstinline{update1st} is declared to return \lstinline{void} --- meaning it does not return a value.  Instead, this method updates some existing state accessible through the reference \lstinline{list}.  Within the method body, the value accessible via this reference is compared against \lstinline{[]} (i.e. the {\em empty array}).
+Here, the method \lstinline{update1st} is declared to return \lstinline{void} --- meaning it does not return a value.  Instead, this method updates some existing state accessible through the reference \lstinline{list}.  Within the method body, the value accessible via this reference is compared against \lstinline{[0;0]} (i.e. the {\em empty array}).
 
 % =======================================================================
 % Tuples
@@ -220,15 +200,17 @@ Here, the method \lstinline{update1st} is declared to return \lstinline{void} --
 \section{Records}
 \label{c_types_record}
 
-A record type describes a compound made of one or more {\em fields}, each of which has a unique name and a corresponding type.  Variables of record type support equality comparators (\S\ref{c_expr_equality}) and field access (\S\ref{c_expr_access}) operations, as well as field assignment (\S\ref{c_stmts_field_lval}).
+A record type describes a compound made of one or more {\em fields}, each of which has a unique name and a corresponding type.  Variables of record type support equality comparators (\S\ref{c_expr_equality}) and field access (\S\ref{c_expr_access}) operations, as well as field assignment (\S\ref{c_stmt_assign}).
 
 \begin{syntax}
-  \verb+RecordType+ & $::=$ & \token{\{}\ \verb+MixedType+\
-  \big(\ \token{,}\ \verb+MixedType+\
-  \big)$^*$ \big[\ \token{,}\ \token{...}\ \big]\ \token{\}}\\
+  \verb+RecordType+ & $::=$ & \token{\{}\ \verb+MixedType+\ \big(\ \token{,}\ \verb+MixedType+\ \big)$^*$ \big[\ \token{,}\ \token{...}\ \big]\ \token{\}}\\
+  &&\\
+  \verb+MixedType+ & $::=$ & \verb+Type+\ \verb+Ident+\\
+                       &  $|$  & \token{function}\ \verb+Ident+\ \verb+ParameterTypes+\ \token{->}\ \verb+ParameterTypes+\\
+                       &  $|$  & \token{method}\ \verb+Ident+\ \verb+ParameterTypes+\ \big[\ \token{->}\ \verb+ParameterTypes+\ \big]\\
 \end{syntax}
 
-Records use {\em mixed types} for defining fields (see \S\ref{c_types_mixed}), meaning that field names may be mixed within their type.  This is primarily useful for fields of function or method type (see below).  Records using the \token{...} notation are referred to as {\em open records} (e.g. \lstinline|{int x, ...}|), otherwise they are referred to as {\em closed records} (e.g. \lstinline|{int x, int y}|).  Open records represent all records containing {\em at least} the given fields, whilst closed records represent those containing {\em exactly} the given fields.   
+Records use {\em mixed types} for defining fields, meaning that field names may be mixed within their type.  This is primarily useful for fields of function or method type (see below).  Records using the \token{...} notation are referred to as {\em open records} (e.g. \lstinline|{int x, ...}|), otherwise they are referred to as {\em closed records} (e.g. \lstinline|{int x, int y}|).  Open records represent all records containing {\em at least} the given fields, whilst closed records represent those containing {\em exactly} the given fields.   
 \paragraph{Example.} The following example illustrates an open record type: 
 
 \lstinputlisting[firstline=3]{../examples/ch4/eg_11.whiley}
@@ -241,7 +223,7 @@ The above illustrates two open records \lstinline{Writer} and \lstinline{PrintWr
 
 \section{References}
 
-Reference types in Whiley represent references to variables, such as those allocated in the heap.  They are similar to references or pointers found in many imperative and object-oriented languages (e.g. C/C++, Java, C\#, etc).  A type \lstinline{&T} represents a reference to a variable of type \lstinline{T}.  Variables of reference type support equality comparators (\S\ref{c_expr_equality}) and dereference (\S\ref{c_expr_dereference}) operations, as well as dereference assignment (\S\ref{c_stmts_deref_lval}).
+Reference types in Whiley represent references to variables, such as those allocated in the heap.  They are similar to references or pointers found in many imperative and object-oriented languages (e.g. C/C++, Java, C\#, etc).  A type \lstinline{&T} represents a reference to a variable of type \lstinline{T}.  Variables of reference type support equality comparators (\S\ref{c_expr_equality}) and dereference (\S\ref{c_expr_dereference}) operations, as well as dereference assignment (\S\ref{c_stmt_assign}).
 
 \begin{syntax}
   \verb+ReferenceType+ & $::=$ & \token{\&}\ \ \verb+Type+\\
@@ -274,67 +256,13 @@ type LinkedList is null | { int data, LinkedList next }
 The type \lstinline{LinkedList} is declared using a reference to itself to define a recursive type (\S\ref{c_types_recursive}).  
 
 % =======================================================================
-% Collections
-% =======================================================================
-
-% \section{Collections}
-% \label{c_types_collection}
-%
-% Collection types in Whiley describe compound values constructed from arbitrarily many values.
-%
-% \begin{syntax}
-%   \verb+CollectionType+ & $::=$ & \verb+SetType+\\
-%                         & $|$ & \verb+MapType+\\
-%                         & $|$ & \verb+ListType+\\
-% \end{syntax}
-
-
-% =======================================================================
-% set
-% =======================================================================
-
-% \subsection{Sets}
-% \label{c_types_set}
-%
-% A set type describes set values whose elements are subtypes of the element type. For example, \lstinline|{1,2,3}| is an instance of set type \lstinline|{int}|; however, \lstinline|{1.345}| is not.  Variables of set type support equality comparators (\S\ref{c_expr_equality}), union (\S\ref{c_expr_union}), intersection (\S\ref{c_expr_intersection}), difference (\S\ref{c_expr_difference}) and element-of (\S\ref{c_expr_element_of}) operations.
-%
-% \begin{syntax}
-%   \verb+SetType+ & $::=$ & \token{\{} \ \verb+Type+ \ \token{\}} \\
-% \end{syntax}
-%
-% \paragraph{Example.} The following example illustrates set types:
-%
-% \lstinputlisting{../examples/ch4/eg_13.whiley}
-%
-% The above illustrates a simple implementation of the well-known {\em depth-first search} algorithm.  In the example, a \lstinline{Graph} is a list of sets of edge targets, where any \lstinline{w in g[v]} describes an edge from \lstinline{v} to \lstinline{w} in the graph.  The \lstinline{visited} set is used to maintain a list of previously seen vertices, in order to prevent the same vertex from being visited more than once.  
-
-% =======================================================================
-% Map
-% =======================================================================
-
-% \subsection{Maps}
-% \label{c_types_map}
-
-% A map represents a one-many mapping from variables of one type to variables of another type. For example, the map type \lstinline|{int=>real}| represents a map from integers to real values. A valid instance of this type might be \lstinline|{1=>1.2,2=>3.0}|.  Variables of map type support equality comparators (\S\ref{c_expr_equality}), access (\S\ref{c_expr_access}), union (\S\ref{c_expr_union}), intersection (\S\ref{c_expr_intersection}), difference (\S\ref{c_expr_difference}) and element-of (\S\ref{c_expr_element_of}) operations.
-%
-% \begin{syntax}
-%   \verb+MapType+ & $::=$ & \token{\{} \ \verb+Type+ \ \token{=>} \ \verb+Type+ \ \token{\}} \\
-% \end{syntax}
-%
-% \paragraph{Example.} The following example illustrates map types:
-%
-% \lstinputlisting[firstline=3]{../examples/ch4/eg_14.whiley}
-%
-% The above illustrates a function for evaluating simple expressions which are either integer constants or variable names.  To evaluate an expression which is an integer constant, we simply return that constant.  To evaluate an expression which is a variable name, we look up the current value of that variable in an environment which maps variable names to integer constants.
-
-% =======================================================================
 % Array
 % =======================================================================
 
 \section{Arrays}
 \label{c_types_array}
 
-An array type describes an array of values whose elements are subtypes of the element type. For example, \lstinline{[1,2,3]} is an instance of array type \lstinline{int[]}; however, \lstinline{[1.345]} is not.  Variables of array type support equality comparators (\S\ref{c_expr_equality}) an access expressions (\S\ref{c_expr_array_access}).
+An array type describes an array of values whose elements are subtypes of the element type. For example, \lstinline{[1,2,3]} is an instance of array type \lstinline{int[]}; however, \lstinline{[1.345]} is not.  Variables of array type support equality comparators (\S\ref{c_expr_equality}) and access expressions (\S\ref{c_expr_array_access}).
 
 \begin{syntax}
   \verb+ArrayType+ & $::=$ & \verb+Type+ \ \token{[}\ \token{]}\\
@@ -354,11 +282,11 @@ The above illustrates a simple function which adds each corresponding element fr
 A function or method type describes the signature of a function or method.  These types enable functions or methods to be passed around as values in Whiley and are often referred to as {\em functors}.  This enables a degree of polymorphism in the language, where the exact function or method to be called is unknown.   Variables of function or method type support equality comparators (\S\ref{c_expr_equality}) only.
 
 \begin{syntax}
-  \verb+FunctionType+ & $::=$ & \token{function}\ \token{(}\
-  \big[\ \verb+Type+\ \big(\ \token{,}\ \verb+Type+\ \big)$^*$\ \big]\ \token{)}\ \token{->}\ \verb+UnitType+\\
+  \verb+FunctionType+ & $::=$ & \token{function}\ \verb+ParameterTypes+\ \token{->}\ \verb+ParameterTypes+\\
   &&\\
-  \verb+MethodType+ & $::=$ & \token{method}\ \token{(}\
-  \big[\ \verb+Type+\ \big(\ \token{,}\ \verb+Type+\ \big)$^*$\ \big]\ \token{)}\ \token{->}\ \verb+UnitType+\\
+  \verb+MethodType+ & $::=$ & \token{method}\ \verb+ParameterTypes+\ \big[\ \token{->}\ \verb+ParameterTypes+\ \big]\\
+  &&\\
+  \verb+ParameterTypes+ & $::=$ & \token{(}\ \big[\ \verb+Type+\ \big(\ \token{,}\ \verb+Type+\ \big)$^*$\ \big]\ \token{)}\\
 \end{syntax}
 
 \paragraph{Example.} The following example illustrates function types:
@@ -394,7 +322,7 @@ Here, a union type is used to construct a more expressive return value.  If no m
 \section{Intersections}
 \label{c_types_intersections}
 
-An intersection type is constructed from two or more component types and contains any value held in all of its components.  For example, the type \lstinline{[int]&[bool]} is an intersection which holds any value which is both an instance of \lstinline{[int]} and \lstinline{[bool]} (in fact, only the empty array meets this criteria).  Intersections are used, for example, to type variables on the true branch of a runtime type test.  The set of values defined by an intersection type \lstinline{T1&T2} is exactly the intersection of the sets defined by \lstinline{T1} and \lstinline{T2}.  In general, variables of intersection type support only equality comparators (\S\ref{c_expr_equality}) and type tests (\S\ref{c_expr_type_tests}). See \S\ref{c_types_effective} for exceptions to this.
+An intersection type is constructed from two or more component types and contains any value held in all of its components.  For example, the type \lstinline{int[]&bool[]} is an intersection which holds any value which is both an instance of \lstinline{int[]} and \lstinline{bool[]} (in fact, no value meets this criteria).  Intersections are used, for example, to type variables on the true branch of a runtime type test (\S\ref{c_expr_type_tests}).  The set of values defined by an intersection type \lstinline{T1&T2} is exactly the intersection of the sets defined by \lstinline{T1} and \lstinline{T2}.  In general, variables of intersection type support only equality comparators (\S\ref{c_expr_equality}) and type tests (\S\ref{c_expr_type_tests}). See \S\ref{c_types_effective} for exceptions to this.
 
 \begin{syntax}
   \verb+IntersectionType+ & $::=$ & \verb+TermType+\ \big(\ \token{\&}\ \verb+TermType+\

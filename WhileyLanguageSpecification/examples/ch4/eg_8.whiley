@@ -1,3 +1,5 @@
+import whiley.lang.Math
+
 function toInt(any val) -> int:
     if val is int:
         return val
