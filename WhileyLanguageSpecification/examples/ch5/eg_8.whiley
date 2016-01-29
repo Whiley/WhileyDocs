@@ -1,4 +1,4 @@
-function sum([int] xs) -> int
+function sum(int[] xs) -> int
 // Input must not be empty list
 requires |xs| > 0:
   //

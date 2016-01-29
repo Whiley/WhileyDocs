@@ -1,5 +1,5 @@
-// Define the well-known mathematical constant to 10 decimal places.
-constant PI is 3.141592654
+// Define a well-known mathematical constant!
+constant TEN is 10
 
-// Define a constant expression which is twice PI
-constant TWO_PI is PI * 2.0
+// Define a constant expression which is twice TEN
+constant TWENTY is TEN * 2

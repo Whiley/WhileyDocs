@@ -150,7 +150,7 @@ The type \lstinline{any} represents the type whose variables may hold any possib
 
 \lstinputlisting{../examples/ch4/eg_8.whiley}
 
-Here, the function \lstinline{toInt} accepts {\em any valid Whiley value}, which includes all values of type \lstinline{int}, \lstinline{real}, collections, records, etc.  The function then inspects the value that it has been passed and, in the case of values of type \lstinline{int} and \lstinline{real}, returns an integer approximation; for all other values, it returns \lstinline{0}.
+Here, the function \lstinline{toInt} accepts {\em any valid Whiley value}, which includes all values of type \lstinline{int}, collections, records, etc.  The function then inspects the value that it has been passed and, in the case of values of type \lstinline{int}, just returns their value; for all other values, it returns \lstinline{0}.
 
 \paragraph{Notes.}  The any type is roughly comparable to the \lstinline{Object} type found in pure object-oriented languages.  However, in impure object-oriented languages which support primitive types, such as Java, this comparison often falls short because \lstinline{Object} is not a supertype of primitives such as \lstinline{int} or \lstinline{long}.
 

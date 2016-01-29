@@ -1,4 +1,4 @@
-function sum([int] items) -> int:
+function sum(int[] items) -> int:
     // outer block begins
     int r = 0
     int i = 0

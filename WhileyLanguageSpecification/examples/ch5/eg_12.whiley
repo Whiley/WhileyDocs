@@ -1,4 +1,4 @@
-function sum([int] xs) -> int:
+function sum(int[] xs) -> int:
   int r = 0
   int i = 0
   while i < |xs| where i >= 0:

@@ -1,5 +1,5 @@
 // Remove lowest element holding x from xs
-function remove([int] xs, int x) -> [int]:
+function remove(int[] xs, int x) -> int[]:
     int i = 0
     while i < |xs|:
         if xs[i] == x:

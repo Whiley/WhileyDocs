@@ -1,4 +1,4 @@
-function sumNonNegative([int] xs) -> int:
+function sumNonNegative(int[] xs) -> int:
     int i = 0
     int r = 0
     while i < |xs|:
