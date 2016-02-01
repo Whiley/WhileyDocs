@@ -48,6 +48,11 @@ An {\em assignment statement} is of the form \lstinline{leftHandSide = rightHand
 
 \begin{syntax}
   \verb+AssignStmt+ & $::=$ & \verb+LVal+\ \big(\ \token{,}\ \verb+LVal+\ \big)$^*$\ \token{=}\ \verb+Expr+\ \big(\ \token{,}\ \verb+Expr+\ \big)$^*$\\
+  &&\\
+  \verb+LVal+ & $::=$ & \verb+Ident+\\
+  & $|$ & \verb+LVal+\ \token{.}\ \verb+Ident+\\
+  & $|$ & \verb+LVal+\ \token{[}\ \verb+Expr+\ \token{]}\\
+  & $|$ & \token{*}\ \verb+Expr+\\
 \end{syntax}
 
 
@@ -299,7 +304,7 @@ Here, we see a simple simple function which returns the increment of its paramet
 
 \subsection{Switch Statement}
 \label{c_stmts_switch}
-A {\em switch statement} transfers control to one of several statement blocks, referred to as {\em switch cases}, depending on the value obtained from evaluating a given expresion.  Each case is associated with one or more values which are used to match against.  If no match is made, control either falls through to the next statement following the \lstinline{switch} or is transferred to a \lstinline{default} block if one is given.
+A {\em switch statement} transfers control to one of several statement blocks, referred to as {\em switch cases}, depending on the value obtained from evaluating a given expression.  Each case is associated with one or more values which are used to match against.  If no match is made, control either falls through to the next statement following the \lstinline{switch} or is transferred to a \lstinline{default} block if one is given.
 
 \begin{syntax}
   \verb+SwitchStmt+$^\ell$ & $::=$ & \token{switch}\ \verb+Expr+\ \token{:}\ \big(\ \verb+CaseBlock+$^\gamma$\ $|$\ \verb+DefaultBlock+$^\gamma$\ \big)\ $^+$\\
