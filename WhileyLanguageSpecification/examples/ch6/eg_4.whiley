@@ -1,4 +1,4 @@
-function contains([int] items, int item) -> bool:
+function contains(int[] items, int item) -> bool:
     //
     int i = 0
     while i < |items|:

@@ -1,5 +1,5 @@
 // Check whether an array is sorted or not
-function isSorted([int] items) -> bool:
+function isSorted(int[] items) -> bool:
     int i = 1
     //
     while i < |items|:

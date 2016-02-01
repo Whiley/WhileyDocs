@@ -15,8 +15,8 @@ To determine the evaluation order for mixed-operator expressions without explici
 \item {\bf Unary Expressions.} This operator class represents operators which take exactly one operand.  This class takes highest precedence, and includes operators such as arithmetic negation (\S\ref{c_expr_negation}) and logical not (\S\ref{c_expr_logical_not}).
 \item {\bf Binary (Infix) Expressions.}  This operator class represents operators which accept two operands with an infix syntax.  This class includes the usual range of common binary operators, such as arithmetic operators (\S\ref{c_expr_additive},\S\ref{c_expr_multiplicative}), logical connectives (\S\ref{c_expr_logical_connectives}), etc.
 
-\item {\bf Binary (Mixfix) Expressions.}  This operator class represents operators which accept two operands but which are non-infix operators and, hence, precedence is not ambiguous.  This class includes the array access (\S\ref{c_expr_array_access}) and range operators (\S\ref{c_expr_range}).
-\item {\bf N-Ary Expressions.}  This operator class represents operators which accept an arbitrary number of operands.  This class includes array constructors (\S\ref{c_expr_array_constructor}), record constructors (\S\ref{c_expr_record_constructor}), etc.
+\item {\bf Binary (Mixfix) Expressions.}  This operator class represents operators which accept two operands but which are non-infix operators and, hence, precedence is not ambiguous.  This class includes the array access (\S\ref{c_expr_array_access}) and operator.
+\item {\bf N-Ary Expressions.}  This operator class represents operators which accept an arbitrary number of operands.  This class includes array constructors (\S\ref{c_expr_array_initialiser}), record constructors (\S\ref{c_expr_record_initialiser}), etc.
 \end{enumerate}
 
 Within the class of binary infix expressions, an explicit precedence rank is given for each operator:
@@ -45,7 +45,7 @@ Within the class of binary infix expressions, an explicit precedence rank is giv
 \end{tabular}
 \end{syntax}
 
-Lower ranked operators bind more tightly (i.e. take higher precedence) thank higher ranked operators.
+Lower ranked operators bind more tightly (i.e. take higher precedence) than higher ranked operators.
 
 % =======================================================================
 % Unit Expression
@@ -110,11 +110,10 @@ A negation expression accepts one argument of numeric type and produces a result
 
 \subsection{Relational Expressions}
 \label{c_expr_relational}
-Relational expressions are either {\em strict} (where only inequality is tested)  or {\em non-strict} (where both equality and inequality are tested).  The {\em less-than comparator}, \lstinline{<}, and {\em greater-than comparator}, \lstinline{>}, are strict.  Conversely, the {\em less-than-or-equal comparator}, \lstinline{<=}, and {\em greater-than-or-equal comparator}, \lstinline{>}, are non-strict.
+Relational expressions are either {\em strict} (where only inequality is tested)  or {\em non-strict} (where both equality and inequality are tested).  The {\em less-than comparator}, \lstinline{<}, and {\em greater-than comparator}, \lstinline{>}, are strict.  Conversely, the {\em less-than-or-equal comparator}, \lstinline{<=}, and {\em greater-than-or-equal comparator}, \lstinline{>=}, are non-strict.
 
 \begin{syntax}
-  \verb+ArithmeticRelationalExpr+ & $::=$ &\\
-  & $|$ & \verb+Expr+ \token{<} \verb+Expr+\\
+  \verb+ArithmeticRelationalExpr+ & $::=$ & \verb+Expr+ \token{<} \verb+Expr+\\
   & $|$ & \verb+Expr+ \token{<=} \verb+Expr+\\
   & $|$ & \verb+Expr+ \token{=>} \verb+Expr+\\
   & $|$ & \verb+Expr+ \token{>} \verb+Expr+\\
@@ -193,7 +192,7 @@ The {\em lengthof operator} accepts a value of array type, and produces a value 
 \verb+ArrayLengthExpr+ & $::=$ & \token{|}\ \verb+Expr+\ \token{|}\\
 \end{syntax}
 
-\paragraph{Example.} The following examples illustrate the lengthof operator:
+\paragraph{Example.} The following example illustrates the lengthof operator:
 
 \lstinputlisting{../examples/ch6/eg_19.whiley}
 
@@ -235,7 +234,7 @@ An {\em array generator} accepts two arguments and produces a value of array typ
 
 \lstinputlisting{../examples/ch6/eg_8.whiley}
 
-This function constructs a array by prepending a given element onto the front of a given array.  The array generator is used to construct the initial array of values whose size is one larger than the given array.
+This function constructs a array by prepending a given element onto the front of a given array.  The array generator is used to construct the initial array of values whose size is one larger than the original array.
 
 % =======================================================================
 % Array Initialiser
@@ -336,7 +335,7 @@ A {\em cast operator} accepts a value of one type and returns a value of a diffe
 
 \lstinputlisting[firstline=3]{../examples/ch6/eg_16.whiley}
 
-This function converts a record containing two {\em int} fields into one containing two \lstinline{real} fields using a cast.
+This function converts a record containing three {\em int} fields into one containing two {\em int} fields.  This requires that each field in the latter is a valid field in the former.
 
 % =======================================================================
 % Equality Expression
@@ -471,7 +470,7 @@ The function \lstinline{implies()} implements the well-known equivalence between
 \subsection{Quantifier Expressions}
 \label{c_expr_quantifier}
 
-A quantifier operates over an array of values and produces a value of \lstinline{bool} type.  The {\em universal quantifier}, \lstinline{all}, returns \lstinline{true} if the given expression evaluates to \lstinline{true} for every element in the array, and \lstinline{false} otherwise.  The {\em existential quantifier}, \lstinline{exists}, returns \lstinline{false} if the given expression evaluates to \lstinline{false} for every element in the array, and \lstinline{true} otherwise.  The {\em inverted universal quantifier}, \lstinline{no}, returns \lstinline{true} if the given expression evaluates to \lstinline{false} for every element in the array, and \lstinline{false} otherwise
+A quantifier operates over an array of values and produces a value of \lstinline{bool} type.  The {\em universal quantifier}, \lstinline{all}, returns \lstinline{true} if the given expression evaluates to \lstinline{true} for every element in the array, and \lstinline{false} otherwise.  The {\em existential quantifier}, \lstinline{some}, returns \lstinline{false} if the given expression evaluates to \lstinline{false} for every element in the array, and \lstinline{true} otherwise.  The {\em inverted universal quantifier}, \lstinline{no}, returns \lstinline{true} if the given expression evaluates to \lstinline{false} for every element in the array, and \lstinline{false} otherwise
 
 \begin{syntax}
 \verb+LogicalQuantExpr+ & $::=$ & \big(\ \token{no} $|$ \token{some} $|$
@@ -481,7 +480,7 @@ A quantifier operates over an array of values and produces a value of \lstinline
 &&  \token{|}\ \verb+Expr+\ \token{\}}\\
 \end{syntax}
 
-\paragraph{Examples.}  The following examples illustrate the universal quantifier:
+\paragraph{Examples.}  The following example illustrates the universal quantifier:
 
 \lstinputlisting{../examples/ch6/eg_18.whiley}
 
@@ -520,7 +519,7 @@ The above function computes the so-called {\em dot product} of two vectors.  The
 % =======================================================================
 
 \subsection{Record Initialisers}
-\label{c_expr_record_constructor}
+\label{c_expr_record_initialiser}
 A {\em record initialiser} accepts one or more operands and produces a value of record type.  Record constructors are used to construct records from their constituent elements.  
 
 \begin{syntax}

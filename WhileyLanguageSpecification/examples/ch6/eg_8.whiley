@@ -1,5 +1,5 @@
-function cons(int head, [int] tail) -> [int]:
-    [int] r = [head; |tail| + 1]
+function cons(int head, int[] tail) -> int[]:
+    int[] r = [head; |tail| + 1]
     int i = 0
     //
     while i < |tail|:

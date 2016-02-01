@@ -6,11 +6,11 @@ function max(int x, int y) -> int:
         return y
 
 // Determine the max of 1 or more values
-function max([int] items) -> int
+function max(int[] items) -> int
 requires |items| > 0:
     //
     int r = 0
-    nat i = 0
+    int i = 0
     while i < |items|:
         r = max(r,items[i])
         i = i + 1

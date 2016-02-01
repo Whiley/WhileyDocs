@@ -1,4 +1,4 @@
-function negAccess(int i, [int] items) -> int
+function negAccess(int i, int[] items) -> int
 requires -|items| <= i && i < |items|:
    //
    if i < 0:

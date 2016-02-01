@@ -1,5 +1,5 @@
-type IntPoint is {int x, int y}
-type RealPoint is {real x, real y}
+type Point2D is {int x, int y}
+type Point3D is {int x, int y, int z}
 
-function f(IntPoint p) -> RealPoint:
-    return (RealPoint) p
+function f(Point3D p) -> Point2D:
+    return (Point2D) p
