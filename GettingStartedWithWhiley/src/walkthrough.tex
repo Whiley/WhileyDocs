@@ -6,26 +6,14 @@ we'll introduce the basic building blocks of the language.
 
 \subsection{Booleans and Numbers}
 
-As found in many languages, Whiley supports a range of primitive
-datatypes for representing boolean, integers, real numbers, bytes,
-etc.  Of these, the most commonly used are:
+As found in many languages, Whiley supports a range of primitive datatypes for representing boolean, integers, bytes, etc.  Of these, the most commonly used are:
 
 \begin{itemize}
-\item {\bf Booleans} are denoted by the type \lstinline{bool}.  This is the
-  simplest of the primitive datatypes, and has only two possible
-  values: \lstinline{true} or \lstinline{false}.
-\item {\bf Integers} are denoted by the type \lstinline{int}.  Integers in
-  Whiley are {\em unbounded}. This means that, in theory at least, a
-  variable of type int can take on {\em any possible integer value};
-  this differs from many other languages (e.g. Java), which limit the
-  number of possible values (e.g. following 32-bit two's complement).
-\item {\bf Real Numbers} are denoted by the type
-  \lstinline{real}. Reals in Whiley are {\em unbounded
-    rationals}. This means that, in theory at least, a variable of
-  type real can take on {\em any possible rational value}. Again, this
-  offers significantly better precision than, for example,
-  \lstinline{float} or \lstinline{double} types based on IEEE754 as
-  found in other languages (e.g. Java).
+
+\item {\bf Booleans} are denoted by the type \lstinline{bool}.  This is the simplest of the primitive datatypes, and has only two possible values: \lstinline{true} or \lstinline{false}.
+
+\item {\bf Integers} are denoted by the type \lstinline{int}.  Integers in Whiley are {\em unbounded}. This means that, in theory at least, a variable of type int can take on {\em any possible integer value}; this differs from many other languages (e.g. Java), which limit the number of possible values (e.g. following 32-bit two's complement).
+
 \end{itemize}
 
 
@@ -49,40 +37,22 @@ first parameter, \lstinline{x}, is less than the second,
   statements with the same indentation are included.
 \end{insight}
 
-\begin{insight}{Ints versus Reals.}
-Unlike many other languages, Whiley provides a strong relationship
-between values of type \lstinline{int} and those of type
-\lstinline{real}.  Specifically, every \lstinline{int} value can be
-represented precisely as a \lstinline{real} value.  Although it may
-seem surprising, this is not true for many other languages
-(e.g. Java), where there are \lstinline{int} (resp. \lstinline{long})
-values which cannot be represented using \lstinline{float}
-(resp. \lstinline{double})~\cite{GJSB05}.
-\end{insight}
-
-% \begin{lstlisting}
-% function floor(real x) => int:
-%     int num / int den = x    // extract numerator and denominator
-%     int r = num / den        // integer division
-%     if x < 0.0 && den != 1: 	 
-%         return r - 1 
-%     else:
-%         return r 
-% \end{lstlisting}
-
 \newpage
-\subsection{Lists}
+\subsection{Arrays}
 \label{walkthrough_collections}
-Like many modern programming languages, Whiley provides a built-in list type for representing collections of data.  The following illustrates a short function which multiplies a vector by a scalar:
+Like many modern programming languages, Whiley provides a built-in array type for representing collections of data.  The following illustrates a short function which multiplies a vector by a scalar:
 
-\lstinputlisting{../examples/walkthrough_2.whiley}
+\lstinputlisting[lastline=7]{../examples/walkthrough_2.whiley}
 
-This illustrates a few of the common list operations.  Firstly, the size of a list is obtained using the {\em length} operator (i.e. \lstinline{|vector|} returns the length of \lstinline{vector}).  Secondly, the \lstinline{for} loop is useful for iterating over the elements of a collection.  In this case, \lstinline{0 .. |vector|} returns a {\em list} of consecutive integers from \lstinline{0} up to (but not including) \lstinline{|vector|}.  Finally, the {\em list access} operator, \lstinline{vector[i]}, returns the element at index \lstinline{i}.  
+This illustrates a few of the common array operations.  Firstly, the size of a array is obtained using the {\em length} operator (i.e. \lstinline{|vector|} returns the length of \lstinline{vector}).  Secondly, the \lstinline{while} loop is used to iterate over the elements of the array, whilst the {\em array access} operator, \lstinline{vector[i]}, returns the element at index \lstinline{i}.  
 
-Lists are similar to arrays (e.g. in Java), but they can also be resized.  In addition to the above, they also support the {\em list append} operator (e.g. \lstinline{[1,2,3] ++ [4,5,6]}) and {\em sublist} operator (e.g. \lstinline{vector[0..2]}).  Finally, lists are constructed using a {\em list constructor} (e.g. \lstinline{[1,2,3]}).
+Arrays can be constructed using either {\em array initialisers} or {\em array generators}.  The following illustrates both syntaxes being used to call the function above:
 
-\subsection{Records and Tuples}
-Aside from collection types, Whiley also allows provides {\em records} and {\em tuples} for grouping items together.  Records are similar to \lstinline{struct}s (as found in C) and objects (as found in JavaScript).  A record is constructed from one or more {\em fields}, each of which has a unique name and type.  For example, the following defines a simple record type for representing 2D points and a function for translating their position:
+\lstinputlisting[firstline=10]{../examples/walkthrough_2.whiley}
+
+The array initialiser syntax simply constructs an array using the values as provided.  The array generator syntax, \lstinline{[e; n]}, constructs an array containing \lstinline{n} elements whose value is given by \lstinline{e}.
+\subsection{Records}
+Aside from collection types, Whiley also allows provides {\em records} for grouping items together.  Records are similar to \lstinline{struct}s (as found in C) and objects (as found in JavaScript).  A record is constructed from one or more {\em fields}, each of which has a unique name and type.  For example, the following defines a simple record type for representing 2D points and a function for translating their position:
 
 \lstinputlisting{../examples/walkthrough_4.whiley}
 
@@ -94,11 +64,9 @@ Records are an important mechanism for giving meaning to data in Whiley.  For ex
 
 Here, we see that a rectangle has a position, a width and a height.  The names of the fields are important for conveying their meaning in the real-world.
 
-Sometimes, using a record type is a little more than necessary because the data being described is really quite simple.  In such cases we can use a {\em tuple} in Whiley, which provide a lightweight mechanism for grouping data.  For example, we might consider that using a record to defined our \lstinline{Point} is a little verbose.  Instead, we could rework the example to use a tuple as follows:
+\subsection{Multiple Returns}
 
-\lstinputlisting[firstline=4]{../examples/walkthrough_6.whiley}
-
-Since there is a widely used notation for describing 2D points --- namely $(x,y)$ --- it makes sense in this case to use a tuple over a record.  Tuples are also useful for describing functions which return multiple values.  For example, the following illustrates a simple function which swaps the order of its parameters:
+Unlike many programming languages, Whiley supports {\em multiple} return values.  This can be useful as a lightweight mechanism for grouping data.  For example, the following illustrates a simple function which swaps the order of its parameters:
 
 \lstinputlisting{../examples/walkthrough_7.whiley}
 
