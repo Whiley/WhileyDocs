@@ -26,7 +26,7 @@ Here, all three constant declarations are cyclic.  The declaration for \lstinlin
 
 \subsection{``Reference Not Permitted in Function'' (E302)}
 
-A {\em reference not permitted in function} error occurs when an attempt is made to declare or use a variable of reference type in a function (as opposed to a method).  Functions in Whiley must be free from \glspl{side_effect} --- i.e. they must be {\em pure}.  This, the potential side-effects made possible through the use of references is not permitted.
+A {\em reference not permitted in function} error occurs when an attempt is made to declare or use a variable of reference type in a function (as opposed to a method).  Functions in Whiley must be free from \glspl{side_effect} --- i.e. they must be {\em pure}.  Thus, the potential side-effects made possible through the use of references is not permitted.
 
 \paragraph{Example.}  The following illustrates a very simple example:
 
@@ -39,7 +39,7 @@ Here, function \lstinline{f()} accepts a parameter \lstinline{x} of reference ty
 
 \subsection{``Reference Operation Not Permitted in Function'' (E303)}
 
-A {\em reference operation not permitted in function} error occurs when an attempt is made to operate on a variable of reference type in a function (as opposed to a method).  Functions in Whiley must be free from \glspl{side_effect} --- i.e. they must be {\em pure}.  This, the potential side-effects made possible through the use of references is not permitted.
+A {\em reference operation not permitted in function} error occurs when an attempt is made to operate on a variable of reference type in a function (as opposed to a method).  Functions in Whiley must be free from \glspl{side_effect} --- i.e. they must be {\em pure}.  Thus, the potential side-effects made possible through the use of references is not permitted.
 
 \paragraph{Example.}  The following illustrates a very simple example:
 
@@ -53,7 +53,7 @@ Here, function \lstinline{f()} obtains a reference to local variable \lstinline{
 
 \subsection{``Method Invocation Not Permitted In Function'' (E304)}
 
-A {\em method invocation not permitted in function} error occurs when an attempt is made to call a method from a function (as opposed to another method).  Functions in Whiley must be free from \glspl{side_effect} --- i.e. they must be {\em pure}.  This, the potential side-effects made possible through the method call are not permitted.
+A {\em method invocation not permitted in function} error occurs when an attempt is made to call a method from a function (as opposed to another method).  Functions in Whiley must be free from \glspl{side_effect} --- i.e. they must be {\em pure}.  Thus, the potential side-effects made possible through the method call are not permitted.
 
 \paragraph{Example.}  The following illustrates a very simple example:
 
@@ -67,28 +67,42 @@ function f(int x) -> (int r):
 
 Here, function \lstinline{f()} accepts a parameter \lstinline{x} and passes it through a call to method \lstinline{g()}.  In this case method \lstinline{g()} does not, in fact, exhibit any side-effects; nevertheless, the method call will be rejected.
 
-\subsection{``Return from Void'' (E305)}
+\subsection{``Insufficient Return Values'' (E305)}
+An {\em insufficient return values} error occurs when a \lstinline{return} statement is encountered which does not provide as many return values as declared by the enclosing function or method.  
 
-A {\em return from void} error occurs when an attempt is made to return a value from a function or method either explicitly declared as returning \lstinline{void} or where no return type is given (and, hence, is implicitly declared as returning \lstinline{void}).
+\paragraph{Example.}  The following illustrates two simple examples:
+
+\begin{lstlisting}
+method g(int x) -> (int y, int z):
+   return x+1
+
+function f(int x) -> int:
+   return
+\end{lstlisting}
+
+Here, method \lstinline{g()} is required to return {\em two} values but only one is actually being returned.  Likewise, function \lstinline{f()} is required to return one value but none are actually being returned.
+
+\subsection{``Too Many Return Values'' (E306)}
+A {\em too many return values} error occurs when a \lstinline{return} statement is encountered which provides more return values than declared by the enclosing function or method.  
 
 \paragraph{Example.}  The following illustrates two simple examples:
 
 \begin{lstlisting}
 method g(int x):
-   return x+1
-
-function f(int x) -> void:
    return x
+
+function f(int x) -> int:
+   return x,x+1
 \end{lstlisting}
 
-Here, method \lstinline{g()} is {\em implicitly} declared as returning \lstinline{void} whilst function \lstinline{f()} is {\em explicitly} declared as returning \lstinline{void}.  Since \lstinline{void} indicates the {\em absence} of a return value, neither \lstinline{g()} nor \lstinline{f()} are permitted to return a value.
+Here, method \lstinline{g()} is required to return {\em zero} values but one is actually being returned.  Likewise, function \lstinline{f()} is required to return one value but two are actually being returned.
 
 \section{Types}
 \label{c_err_types}
 
 \subsection{``Subtype Error'' (401)}
 
-A {\em subtype error} arises when an attempt is made to use an expression of type \lstinline{T} in a position where an expression of type \lstinline{S} is expected, and \lstinline{T} is not a subtype of \lstinline{S}.  This is a common error precisely because it can occur in a large number of different situations.
+A {\em subtype} error arises when an attempt is made to use an expression of type \lstinline{T} in a position where an expression of type \lstinline{S} is expected, and \lstinline{T} is not a subtype of \lstinline{S}.  This is a common error precisely because it can occur in a large number of different situations.
 
 \paragraph{Example.}  The following illustrates an example:
 
@@ -118,25 +132,24 @@ Here, variable \lstinline{items} has type \lstinline{int[]} but is being used in
 
 \section{Statements}
 
-Statements are used frequently in a Whiley program, and their syntax is defined in \S\ref{c_statements}.  The error messages reported in this section are those related to specific statement forms.  Other, more general, errors can also be reported for a statement (e.g. {\em type errors}, \S\ref{c_err_types}).
+Statements are used frequently in a Whiley program, and their syntax is defined elsewhere (see~\ref{c_statements}).  The error messages reported in this section are those related to specific statement forms.  Other, more general, errors can also be reported for a statement (e.g. {\em type errors}, \S\ref{c_err_types}) and are discussed elsewhere.
 
 \subsection{``Invalid LVal'' (E501)}
 
-An {\em invalid lval} error occurs when an invalid expression is used on the left-hand side of an assignment.  Only expressions which are also lval's maybe used in such a situation  (see~\S\ref{c_stmts_lval}).
+An {\em invalid lval} error occurs when an invalid expression is used on the left-hand side of an assignment.  Only expressions which are also lval's maybe used in such a situation  (see~\S\ref{c_stmt_assign}).
 
 \paragraph{Example.}  The following illustrates two invalid lval's:
 
 \begin{lstlisting}
 function f(int x):
    1 = x   // constant not valid lval
-   x+1 = x // arithmetic expression not valid    
-\end{lstlisting}
+   x+1 = x // arithmetic expression not valid lval\end{lstlisting}
 
 The first assignment statement is invalid because one cannot assign to a constant.  The second is invalid because one cannot assign to an arithmetic expression.
 
 \subsection{``Invalid Destructuring LVal'' (E502)}
 
-An {\em invalid destructuring lval} occurs when a destructuring assignment is used on the left-hand side, but the right-hand side returns an incorrect number of values.
+An {\em invalid destructuring lval} error occurs when a destructuring assignment is used on the left-hand side, but the right-hand side returns an incorrect number of values.
 
 \paragraph{Example.}  The following illustrates an invalid destructuring LVal:
 
@@ -149,11 +162,11 @@ function g(int x, int y) -> int:
     return x - y
 \end{lstlisting}
 
-Here, the invocation of \lstinline{f()} in \lstinline{g()} uses an invalid destructuring assignment because \lstinline{f()} returns one value, the assignment expects two.
+Here, the invocation of \lstinline{f()} in \lstinline{g()} uses an invalid destructuring assignment because \lstinline{f()} returns one value, but the assignment expects two.
 
 \subsection{``Variable Already Defined'' (E503)}
 
-A {\em variable redefinition} occurs when a variable is declared with a name matching another variable already in scope.  This is an error because it is not permitted for one variable to shadow another.
+A {\em variable redefinition} error occurs when a variable is declared with a name matching another variable already in scope.  This is an error because it is not permitted for one variable to shadow another.
 
 \paragraph{Example.}  The following illustrates an example of a variable redefinition:
 
@@ -174,7 +187,7 @@ Here, the \lstinline{while} loop attempts to declare a variable \lstinline{r}, b
 
 \subsection{``Unreachable Code'' (E504)}
 
-In a function or method, {\em unreachable code} arises when no possible execution path could reach them.  
+An {\em unreachable statement} error arises in a function or method when no possible execution path could reach them.  
 
 \paragraph{Example.} The following illustrates some unreachable code:
 
@@ -191,26 +204,9 @@ function abs(int x) -> int:
 
 Here, the final \lstinline{return} statement can never be reached by any execution path through the \lstinline{abs()} function.  This is considered an error because it indicates something undesirable which may not have been intended.
 
-\subsection{``Missing Return Value'' (E505)}
-
-A {\em missing return value} occurs when a \lstinline{return} statement which does not return a value occurs within a function or method declared to return one or more values.  
-
-\paragraph{Example.} The following illustrates a missing return value:
-
-\begin{lstlisting}
-function abs(int x) -> int:
-    //
-    if x < 0:
-        return -x
-    //
-    return
-\end{lstlisting}
-
-The last \lstinline{return} statement in this function does not return a value, but the function is declared to return an \lstinline{int}.
-
 \subsection{``Branch Always Taken'' (E506)}
 
-A {\em branch always taken} occurs when a conditional branch is determine to always evaluate to either \lstinline{true} or \lstinline{false}.  
+A {\em branch always taken} error occurs when a conditional branch is determine to always evaluate to either \lstinline{true} or \lstinline{false}.  
 
 \paragraph{Example.} The following illustrates a branch always taken:
 
@@ -226,7 +222,7 @@ Here, the condition \lstinline{x is int} always evaluates to \lstinline{true} an
 
 \subsection{``Break Outside of Loop'' (E507)}
 
-A {\em break outside loop} occurs when a \lstinline{break} statement is given which is not contained within one or more loops.  This is an error because the break statement is used specifically to exit a loop early, and must be contained within the loop to be exited.  
+A {\em break outside loop} error occurs when a \lstinline{break} statement is given which is not contained within one or more loops.  This is an error because the break statement is used specifically to exit a loop early, and must be contained within the loop to be exited.  
 
 \paragraph{Example.}  The following illustrates a break outside of a loop:
 
@@ -239,7 +235,7 @@ function f(int x) -> int:
 Here, the \lstinline{break} statement is meaningless as it is not associated with a loop.
 
 \subsection{``Duplicate Default Label'' (E508)}
-A {\em duplicate default label} occurs when a \lstinline{switch} statement includes more than one \lstinline{default} label.  This is an error because at most one \lstinline{default} is permitted.
+A {\em duplicate default label} error occurs when a \lstinline{switch} statement includes more than one \lstinline{default} label.  This is an error because at most one \lstinline{default} is permitted.
 
 \paragraph{Example.}  The following illustrates an example of a duplicate \lstinline{default} label:
 
@@ -257,7 +253,7 @@ function f(int x):
 Here, the \lstinline{switch} statement has two \lstinline{default} labels.  This must be an error as, otherwise, it would be ambiguous as to which executed.
 
 \subsection{``Duplicate Case Label'' (E509)}
-A {\em duplicate case label} occurs when a \lstinline{switch} statement includes more than one \lstinline{case} label matching the same value.  This is an error because at most one \lstinline{case} matching a given value is permitted.
+A {\em duplicate case label} error occurs when a \lstinline{switch} statement includes more than one \lstinline{case} label matching the same value.  This is an error because at most one \lstinline{case} matching a given value is permitted.
 
 \paragraph{Example.}  The following illustrates an example of a duplicate \lstinline{case} label:
 
@@ -283,11 +279,11 @@ Here, the \lstinline{switch} statement has two \lstinline{case} labels, both of 
 
 %\subsection{``Resolution Error'' (000)}
 
-Expressions typically form the bulk of a Whiley program, and their syntax is defined in \S\ref{c_expressions}.  The error messages reported in this section are those related to specific expression forms.  Other, more general, errors can also be reported for an expression (e.g. {\em type errors}, \S\ref{c_err_types}).
+Expressions typically form the bulk of a Whiley program, and their syntax is defined elsewhere (see~\S\ref{c_expressions}).  The error messages reported in this section are those related to specific expression forms.  More general errors can also be reported for an expression, such as {\em type errors} (see~\S\ref{c_err_types}).
 
 \subsection{``Variable Possibly Uninitialised'' (E601)}
 \label{c_err_var_uninitialised}
-A {\em variable possibly uninitialised} occurs when a variable may be used without being defined.  That is, when a simple path exists through the control-flow graph of a function or method from that variable's declaration to a use which contains no definition for that variable.  This error is reported as part of the {\em definite assignment} checking performed during compilation (see~\S\ref{c_definite_assignment}).
+A {\em variable possibly uninitialised} error occurs when a variable may be used without being defined.  That is, when a simple path exists through the control-flow graph of a function or method from that variable's declaration to a use which contains no definition for that variable.  This error is reported as part of the {\em definite assignment} checking performed during compilation (see~\S\ref{c_definite_assignment}).
 
 \paragraph{Example.}  The following illustrates a variable which is possibly uninitialised:
 
@@ -301,7 +297,7 @@ Here, variable \lstinline{y} is definitely uninitialised in the expression ``\ls
 
 \subsection{``Unknown Variable'' (E602)}
 
-An {\em unknown variable} occurs when an attempt is made to access a variable which has not been declared in the current scope.  All variables must be declared before they can be used.
+An {\em unknown variable} error occurs when an attempt is made to access a variable which has not been declared in the current scope.  All variables must be declared before they can be used.
 
 \paragraph{Example.}  The following illustrates an unknown variable:
 
@@ -314,7 +310,7 @@ Here, the \lstinline{return} statements refers to an unknown variable \lstinline
 
 \subsection{``Unknown Function or Method'' (E603)}
 
-An {\em unknown function or method} occurs when an attempt is made to access a function or method which is not visible in the current scope.  Functions and methods which are not declared in the same file as the invocation can be brought into the current scope using \lstinline{import} statements.  
+An {\em unknown function or method} error occurs when an attempt is made to access a function or method which is not visible in the current scope.  Functions and methods which are not declared in the same file as the invocation can be brought into the current scope using \lstinline{import} statements.  
 \paragraph{Example.}  The following illustrates an invocation of an unknown function or method:
 
 \begin{lstlisting}
@@ -326,7 +322,7 @@ Here, function \lstinline{g()} is not defined in the current source file and has
 
 \subsection{``Ambiguous Coercion'' (E604)}
 
-An {\em ambiguous coercion} occurs when the target of a cast expression is uncertain.  That is, when attempting to cast a value to a given type \lstinline{T}, but there is more than one way this can be achieved.  This error is reported as part of the {\em coercion check} performed during compilation.
+An {\em ambiguous coercion} error occurs when the target of a cast expression is uncertain.  That is, when attempting to cast a value to a given type \lstinline{T}, but there is more than one way this can be achieved.  This error is reported as part of the {\em coercion check} performed during compilation.
 
 \paragraph{Example.}  The following illustrates an ambiguous coercion:
 
