@@ -28,7 +28,6 @@ Values are the fundamental units of execution in Whiley and have value semantics
 \token{\lstinline+null+} & {\em Null value}\\
 \token{\lstinline+true+} \token{\lstinline+false+} & {\em Boolean values}\\
 \token{\lstinline+123+} \token{\lstinline+-99+} \token{\lstinline+0xFF+} & {\em Integer values}\\
-\token{\lstinline+1.23+} \token{\lstinline+-0.02+} & {\em Real values}\\
 \token{\lstinline+"Hello"+} \token{\lstinline+"new\\n line"+} & {\em String values}\\
 \token{\lstinline+(1,2,3)+} \token{\lstinline+(true,null)+} & {\em Tuple values}\\
 \token{\lstinline+[1,2,3]+} \token{\lstinline+[1,"xyz"]+} & {\em Array values}\\
@@ -37,8 +36,8 @@ Values are the fundamental units of execution in Whiley and have value semantics
 \section*{Types}
 The Whiley programming language is {\em statically typed}, meaning that every expression has a type determined at compile time.  Furthermore, evaluating an expression is guaranteed to yield a value of its type.\\\\ 
 \begin{tabular}{l@{\hspace*{0.1cm}}r}
-\token{\lstinline+null+} \token{\lstinline+bool+} \token{\lstinline+int+} \token{\lstinline+real+} & {\em Primitive types}\\
-\token{\lstinline+int|null+} \token{\lstinline+bool|int|real+} & {\em Union types}\\
+\token{\lstinline+null+} \token{\lstinline+bool+} \token{\lstinline+int+} & {\em Primitive types}\\
+\token{\lstinline+int|null+} \token{\lstinline+bool|int+} & {\em Union types}\\
 \token{\lstinline+(int,int)+} \token{\lstinline+(int,null,bool)+} & {\em Tuple types}\\
 \token{\lstinline+int[]+} \token{\lstinline+bool[][]+} \token{\lstinline+(int|null)[]+} & {\em Array types}\\
 \token{\lstinline+\{bool f\}+} \token{\lstinline+\{int len, int[] is\}+} & {\em Record types}\\
@@ -279,8 +278,8 @@ A {\em declaration} declares a named entity within a source file and may refer t
 {\em Constant declarations} define constants with known values at compile-time (they cannot be recursively defined).
 
 \begin{lstlisting}
-constant PI is 3.1459265359
-constant TWO_PI is 2*3.1459265359
+constant TEN is 10
+constant TWENTY is TEN * 2
 \end{lstlisting}
 
 {\em Type declarations} define named types composed from other types (they may be recursively defined).
