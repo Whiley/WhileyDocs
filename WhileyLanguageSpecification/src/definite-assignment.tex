@@ -1,6 +1,30 @@
 \chapter{Definite Assignment}
 \label{c_definite_assignment}
 
+The Whiley programming language requires that variables are known at \gls{compile_time} to be {\em definitely assigned} (i.e. that they are defined before used).  A conservative approach is taken to determining whether or not this is the case.  This ensures the language can be compiled efficiently, but also means that some provably correct programs are not valid Whiley programs.  In this chapter, we specify the process by which definite assignment is determined.
+
+\section{Overview}
+
+Some examples.  Clarify definitely assigned versus maybe assigned.  Clarify examples which are provably correct but not valid Whiley programs.  This includes loops and unfeasible paths.
+
+\section{Execution Paths}
+
+Depth first search over control-flow graph.  What is an infeasible path?
+
+\section{Parameters}
+
+Parameters are defined on entry to a function or method.  However, returns are not.
+
+\section{Variable Definitions}
+
+Discussion of what are definite assignment statements.  In particular, update operations are not definitely assignments, neither are assignments through references.
+
+\section{Variable Uses}
+
+Discussion of parameters as being considered definitely assigned on entry to a function or method.
+
+\section{Other}
+
 See error reported for this check~\S\ref{c_err_var_uninitialised}.
 
 \begin{lstlisting}
