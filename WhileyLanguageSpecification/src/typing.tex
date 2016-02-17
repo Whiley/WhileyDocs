@@ -1,9 +1,30 @@
-\chapter{Flow Typing}
+\chapter{Type Checking}
 The Whiley programming language is {\em statically typed}, meaning that every expression has a type determined at compile time.  Furthermore, evaluating an expression is guaranteed to yield a value of its type.  Whiley's {\em type system} governs how the type of any variable or expression is determined.  Whiley's type system is unusual in that it operates in a {\em flow-sensitive} manner allowing variables to have different types at different program points.
 
+
+\section{Overview}
 
 % \section{Type Environment}
 % \subsection{Declared Type}
 % \subsection{Current Type}
-% \section{Variable Retyping}
-% \section{Definition Assignment}
+
+\section{Static and Dynamic Types}
+
+Describe the meaning of these concepts.  That every value has a {\em precise} dynamic type.  
+
+\section{Function and Method Resolution}
+Look at the rules for determining which function or method is being selected.
+
+\section{Variable Retyping}
+
+Look at use of intersection and negation to calculate updated types.  Observe that aliased variables are not updated, and neither are references.  And, compound types are not either.  Look at the scope of retyping and how that works.
+
+\begin{lstlisting}
+if x is int || x is bool:
+   //
+else:
+   //
+\end{lstlisting}
+
+\section{Coercions}
+Look at the rules for when a coercion is permitted or not.
