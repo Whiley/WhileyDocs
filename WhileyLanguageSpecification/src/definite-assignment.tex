@@ -5,28 +5,69 @@ The Whiley programming language requires that variables are known at \gls{compil
 
 \section{Overview}
 
-The following illustrates a simple function which will be rejected by the compiler because it cannot determine definite assignment for all variables:
+The following illustrates a simple function which will be rejected by the compiler because it cannot determine definite assignment for all variables.  The function is said to {\em fail definite assignment}:
 
 \begin{lstlisting}
 function f(int x) -> (int r):
    int y
+   //
    if x < 0:
        y = 1
+   //
    return x + y
 \end{lstlisting}
 
 In the above program, variable \lstinline{y} is {\em not} definitely assigned before its use in the \lstinline{return} statement.  This is because there is an \gls{execution_path} through the function which reaches the \lstinline{return} statement and on which variable \lstinline{y} is not defined.  In fact, there are {\em two} possible execution paths through this function, but variable \lstinline{y} is only defined on one of them.  Observe that, since it is a parameter, variable \lstinline{x} is automatically considered to have been defined on entry to the function.
 
+\subsection{Loops}
+
+The treatment of loops with respect to definite assignment warrants special attention.  Recall that the mechanism for determining definite assignment is conservative.  In the context of loops, the effect of this is that it simply assumes {\em every loop can be executed zero or more times} (i.e. even if this is not correct).  The following illustrates a simple example:
+
 \begin{lstlisting}
-function f(int x) => int:
+function f(int x) -> int:
    int y
+   //
    while x < 0:
        y = 1
        x = x + 1
+   //
    return x + y
 \end{lstlisting}
 
-Some examples.  Clarify definitely assigned versus maybe assigned. Clarify examples which are provably correct but not valid Whiley programs.  This includes loops and unfeasible paths.
+The above function fails definite assignment because variable \lstinline{y} is not defined when zero iterations of the loop are executed (e.g. when \lstinline{x==0} on entry).  To illustrate the conservative nature of the definite assignment mechanism, we can refined the above example as follows:
+
+\begin{lstlisting}
+function ten() -> int:
+   int x = 0
+   int y
+   //
+   while x < 10:
+       y = 1
+       x = x + 1
+   //
+   return y
+\end{lstlisting}
+
+In this case, it can be shown that \lstinline{y==1} must hold when the \lstinline{return} statement is reached.  Nevertheless, this function fails definite assignment because the mechanism naively assumes that the loop will execute {\em zero} or more iterations when, in fact, it will never execute zero iterations.
+
+\subsection{Infeasible Paths}
+
+Functions and methods may contain \glslink{infeasible_path}{infeasible paths} which are valid execution paths that, in practice, cannot be executed in practice.  The mechanism for checking definite assignment simply assumes that any valid path can be executed.  This means that some programs will fail definite assignment, even though they can be shown as correct.   The following illustrates such a program:
+
+\begin{lstlisting}
+function abs(int x) -> int:
+    int y
+    //
+    if x >= 0:
+        y = x
+    //
+    if x < 0:
+        y = -x
+    //
+    return y
+\end{lstlisting}
+
+This function contains four valid execution paths which can be denoted by \lstinline{ff}, \lstinline{tf}, \lstinline{ft}, \lstinline{tt} where, for example, \lstinline{tf} represents the path where the first condition evaluates to \lstinline{true} and the second to \lstinline{false}.  However, it is easy to see that the execution paths \lstinline{ff} and \lstinline{tt} are infeasible.  Furthermore, we can see that on the other two paths, \lstinline{tf} and \lstinline{ft}, the variable \lstinline{y} is definitely assigned when the \lstinline{return} statement is reached.  Despite this, the above function fails definite assignment because the mechanism considers all valid paths whilst ignoring infeasible execution paths.
 
 \section{Execution Paths}
 
