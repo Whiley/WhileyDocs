@@ -56,7 +56,7 @@ Primitive types are the atomic building blocks of all types in Whiley.
 \subsection{Null}
 \label{c_types_null}
 
-The null type is typically used to show the absence of something. It is distinct from void, since variables can hold the special \lstinline{null} value (where as there is no special ``\lstinline{void}'' value).  The set of values defined by the type \lstinline{null} is the singleton set containing exactly the \lstinline{null} value.  Variables of \lstinline{null} type support only equality comparators (\S\ref{c_expr_equality}).  The \lstinline{null} value is particularly useful for representing optional values and terminating recursive types.
+The null type is typically used to show the absence of something. It is distinct from void, since variables can hold the special \lstinline{null} value (where as there is no special ``\lstinline{void}'' value).  The set of values defined by the type \lstinline{null} is the singleton set containing exactly the \lstinline{null} value.  Values of \lstinline{null} type support only equality comparators (\S\ref{c_expr_equality}).  The \lstinline{null} value is particularly useful for representing optional values and terminating recursive types.
 
 \begin{syntax}
   \verb+NullType+ & $::=$ & \token{null} \\
@@ -77,7 +77,7 @@ This defines \lstinline{Tree} --- a {\em recursive type} --- which is either emp
 \subsection{Booleans}
 \label{c_types_bool}
 
-The \lstinline{bool} type represents the set of boolean values (i.e. \lstinline{true} and \lstinline{false}).  Variables of \lstinline{bool} type support equality comparators (\S\ref{c_expr_equality}), binary logical operators (\S\ref{c_expr_logical}) and logical not (\S\ref{c_expr_logical_not}).
+The \lstinline{bool} type represents the set of boolean values (i.e. \lstinline{true} and \lstinline{false}).  Values of \lstinline{bool} type support equality comparators (\S\ref{c_expr_equality}), binary logical operators (\S\ref{c_expr_logical}) and logical not (\S\ref{c_expr_logical_not}).
 
 \begin{syntax}
  \verb+BoolType+ & $::=$ & \token{bool} \\
@@ -96,7 +96,7 @@ This function determines whether or not a given integer value is contained withi
 \subsection{Bytes}
 \label{c_types_byte}
 
-The type \lstinline{byte} represents the set of eight-bit sequences, whose values are expressed numerically using \lstinline{0} and \lstinline{1} followed by \lstinline{b} (e.g. 00101b).  The set of values defined by the \lstinline{byte} type is the set of all 256 possible combinations of eight-bit sequences.   Variables of \lstinline{byte} type support equality comparators (\S\ref{c_expr_equality}), bitwise operators (\S\ref{c_expr_bitwise}), bitwise complement (\S\ref{c_expr_bitwise_complement}) and shift operators (\S\ref{c_expr_shift}).
+The type \lstinline{byte} represents the set of all eight-bit sequences, whose values are expressed numerically using \lstinline{0} and \lstinline{1} followed by \lstinline{b} (e.g. 00101b).  The set of values defined by the \lstinline{byte} type is the set of all 256 possible combinations of eight-bit sequences.   Values of \lstinline{byte} type support equality comparators (\S\ref{c_expr_equality}), bitwise operators (\S\ref{c_expr_bitwise}), bitwise complement (\S\ref{c_expr_bitwise_complement}) and shift operators (\S\ref{c_expr_shift}).
 
 \begin{syntax}
  \verb+ByteType+ & $::=$ & \token{byte}\\
@@ -118,7 +118,7 @@ This illustrates the conversion from a \lstinline{byte} into a \lstinline{string
 \subsection{Integers}
 \label{c_types_int}
 
-The type \lstinline{int} represents the set of arbitrary-sized integers, whose values are expressed as a sequence of one or more numerical or hexadecimal digits (e.g. \lstinline{123456}, \lstinline{0xffaf}, etc).  Variables of \lstinline{int} type support equality comparators (\S\ref{c_expr_equality}), relational comparators (\S\ref{c_expr_relational}), additive (\S\ref{c_expr_additive}), multiplicative (\S\ref{c_expr_multiplicative}) and negation (\S\ref{c_expr_negation}) operations.
+The type \lstinline{int} represents the set of all arbitrary-sized integers, whose values are expressed as a sequence of one or more numerical or hexadecimal digits (e.g. \lstinline{123456}, \lstinline{0xffaf}, etc).  Values of \lstinline{int} type support equality comparators (\S\ref{c_expr_equality}), relational comparators (\S\ref{c_expr_relational}), additive (\S\ref{c_expr_additive}), multiplicative (\S\ref{c_expr_multiplicative}) and negation (\S\ref{c_expr_negation}) operations.
 
 
 \begin{syntax}
@@ -140,7 +140,7 @@ This illustrates the well-known recursive function for computing numbers in the 
 \subsection{Any}
 \label{c_types_any}
 
-The type \lstinline{any} represents the type whose variables may hold any possible value.  Thus, \lstinline{any} is the {\em top type} (i.e. $\top$) in the lattice of types and, hence, is the supertype of all other types.  Variables of \lstinline{any} type support equality comparators (\S\ref{c_expr_equality}) and type tests (\S\ref{c_expr_type_tests}).
+The type \lstinline{any} represents the set of all possible values.  Thus, \lstinline{any} is the {\em top type} (i.e. $\top$) in the lattice of types and, hence, is the supertype of all other types.  Values of \lstinline{any} type support equality comparators (\S\ref{c_expr_equality}) and type tests (\S\ref{c_expr_type_tests}).
 
 \begin{syntax}
   \verb+AnyType+ & $::=$ & \token{any} \\
@@ -161,7 +161,7 @@ Here, the function \lstinline{toInt} accepts {\em any valid Whiley value}, which
 \subsection{Void}
 \label{c_types_void}
 
-The \lstinline{void} type represents the type whose variables cannot exist (i.e. because they cannot hold any possible value).  Thus, \lstinline{void} is the {\em bottom type} (i.e. $\bot$) in the lattice of types and, hence, is the {\em subtype} of all other types.  Void is used to represent the return type of a method which does not return anything.  Furthermore, it is also used to represent the element type of an empty array.  Finally, unlike the majority of other types, there are no {\em values} of type \lstinline{void}.
+The \lstinline{void} type represents the empty set of values.  Thus, \lstinline{void} is the {\em bottom type} (i.e. $\bot$) in the lattice of types and, hence, is the {\em subtype} of all other types.  Void is used to represent the return type of a method which does not return anything.  Furthermore, it is also used to represent the element type of an empty array.  Finally, unlike the majority of other types, there are no {\em values} of type \lstinline{void}.
 
 \begin{syntax}
    \verb+VoidType+ & $::=$ & \token{void} \\
@@ -174,33 +174,13 @@ The \lstinline{void} type represents the type whose variables cannot exist (i.e.
 Here, the method \lstinline{update1st} is declared to return \lstinline{void} --- meaning it does not return a value.  Instead, this method updates some existing state accessible through the reference \lstinline{list}.  Within the method body, the value accessible via this reference is compared against \lstinline{[0;0]} (i.e. the {\em empty array}).
 
 % =======================================================================
-% Tuples
-% =======================================================================
-
-% \section{Tuples}
-% \label{c_types_tuple}
-
-% A tuple type describes a compound type made up of two or more elements in sequence, whose values are expressed as sequences of values separated by a comma (e.g. \lstinline{1,2}, \lstinline{2.0,3.32,3.45}, etc).  Tuples are similar to records, except that fields are effectively anonymous.  Variables of tuple type support equality comparators (\S\ref{c_expr_equality}), as well the {\em tuple destructuring assignment} to extract elements (illustrated below).
-
-% \begin{syntax}
-%   \verb+TupleType+ & $::=$ & \token{(}\ \verb+Type+\ \big(\ \token{,}\
-%   \verb+Type+\ \big)$^+$\ \token{)}\\
-% \end{syntax}
-
-% \paragraph{Example.} The following example illustrates several uses of tuples:
-
-% \lstinputlisting{../examples/ch4/eg_10.whiley}
-
-% This function accepts two integer parameters, and returns a tuple type containing two integers.  The function reverses the order that the values occur in the tuple passed as a parameter.
- 
-% =======================================================================
 % Records
 % =======================================================================
 
 \section{Records}
 \label{c_types_record}
 
-A record type describes a compound made of one or more {\em fields}, each of which has a unique name and a corresponding type.  Variables of record type support equality comparators (\S\ref{c_expr_equality}) and field access (\S\ref{c_expr_access}) operations, as well as field assignment (\S\ref{c_stmt_assign}).
+A record type describes the set of all compound values made from one or more {\em fields}, each of which has a unique name and a corresponding type.  Values of record type support equality comparators (\S\ref{c_expr_equality}) and field access (\S\ref{c_expr_access}) operations, as well as field assignment (\S\ref{c_stmt_assign}).
 
 \begin{syntax}
   \verb+RecordType+ & $::=$ & \token{\{}\ \verb+MixedType+\ \big(\ \token{,}\ \verb+MixedType+\ \big)$^*$ \big[\ \token{,}\ \token{...}\ \big]\ \token{\}}\\
@@ -223,7 +203,7 @@ The above illustrates two open records \lstinline{Writer} and \lstinline{PrintWr
 
 \section{References}
 
-Reference types in Whiley represent references to variables, such as those allocated in the heap.  They are similar to references or pointers found in many imperative and object-oriented languages (e.g. C/C++, Java, C\#, etc).  A type \lstinline{&T} represents a reference to a variable of type \lstinline{T}.  Variables of reference type support equality comparators (\S\ref{c_expr_equality}) and dereference (\S\ref{c_expr_dereference}) operations, as well as dereference assignment (\S\ref{c_stmt_assign}).
+A reference types represents the set of all references to values of a type given, such as those allocated in the heap.  They are similar to references or pointers found in many imperative and object-oriented languages (e.g. C/C++, Java, C\#, etc).  A type \lstinline{&T} represents a reference to a value of type \lstinline{T}.  Values of reference type support equality comparators (\S\ref{c_expr_equality}) and dereference (\S\ref{c_expr_dereference}) operations, as well as dereference assignment (\S\ref{c_stmt_assign}).
 
 \begin{syntax}
   \verb+ReferenceType+ & $::=$ & \token{\&}\ \ \verb+Type+\\
@@ -262,7 +242,7 @@ The type \lstinline{LinkedList} is declared using a reference to itself to defin
 \section{Arrays}
 \label{c_types_array}
 
-An array type describes an array of values whose elements are subtypes of the element type. For example, \lstinline{[1,2,3]} is an instance of array type \lstinline{int[]}; however, \lstinline{[1.345]} is not.  Variables of array type support equality comparators (\S\ref{c_expr_equality}) and access expressions (\S\ref{c_expr_array_access}).
+An array type represents the set of all arrays holding values of a given element type. For example, \lstinline{[1,2,3]} is an instance of array type \lstinline{int[]}; however, \lstinline{[1.345]} is not.  Values of array type support equality comparators (\S\ref{c_expr_equality}) and access expressions (\S\ref{c_expr_array_access}).
 
 \begin{syntax}
   \verb+ArrayType+ & $::=$ & \verb+Type+ \ \token{[}\ \token{]}\\
@@ -279,7 +259,7 @@ The above illustrates a simple function which adds each corresponding element fr
 % =======================================================================
 
 \section{Functions and Methods}
-A function or method type describes the signature of a function or method.  These types enable functions or methods to be passed around as values in Whiley and are often referred to as {\em functors}.  This enables a degree of polymorphism in the language, where the exact function or method to be called is unknown.   Variables of function or method type support equality comparators (\S\ref{c_expr_equality}) only.
+A function or method type describes the signature of a function or method.  These types enable functions or methods to be passed around as values in Whiley and are often referred to as {\em functors}.  This enables a degree of polymorphism in the language, where the exact function or method to be called is unknown.   Values of function or method type support equality comparators (\S\ref{c_expr_equality}) only.
 
 \begin{syntax}
   \verb+FunctionType+ & $::=$ & \token{function}\ \verb+ParameterTypes+\ \token{->}\ \verb+ParameterTypes+\\
@@ -369,16 +349,9 @@ Here, the type \lstinline{Tree} is recursive because it is defined in terms of i
 \label{c_types_effective}
 An effective type is a union of types which all contain some property (e.g. a union of arrays).  This common property allows the effective type to support more operations than possible for an arbitrary union~(\S\ref{c_types_unions}).
 
-% \subsection{Effective Tuples}
-
-% An effective tuple is a union of two or more tuple types.  For example, the type \lstinline{(int,int)|(real,real)} is an effective tuple.  An effective tuple type supports all operations valid for a tuple type~(\S\ref{c_types_tuple}).
-
 \subsection{Effective Records}
 \label{c_types_effective_records}
 An effective record is a union of two or more record types with at least one field in common.  For example, \lstinline|{int f, int g}$|${real f, int h}| is an effective record.  An effective record provides access to fields common to all records in the union.  For example, the type \lstinline|{int f, int g}$|${real f, int h}| can be viewed as having an effective type of \lstinline|{int$|$real f, ...}| and, hence, read access to field \lstinline{f} is given.
-
-% \subsection{Effective Collections}
-% An effective collection is a union of collection types.  For example, \lstinline{[int]|[real]} is an effective list.  An effective collection supports all operations valid for a collection type~(\S\ref{c_types_collection}).  For example, the type \lstinline|[int]$|$[real]| can be viewed as having an effective type of \lstinline|[int$|$real]| and, hence, read access to its length and elements is given.
 
 \subsection{Effective Array}
 An effective array is a union of array types.  For example, \lstinline{int[]|real[]} is an effective array.  An effective collection supports all operations valid for a array type~(\S\ref{c_types_array}).  For example, the type \lstinline|int[]$|$real[]| can be viewed as having an effective type of \lstinline|(int$|$real)[]| and, hence, read access to its length and elements is given.
