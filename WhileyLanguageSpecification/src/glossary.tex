@@ -45,6 +45,11 @@
 % C
 % ===============================================
 
+\newglossaryentry{control_flow_graph}{
+  name={control-flow graph},
+  description={A directed graph representation of a block of code (e.g. a function or method body) with which one can reason about the set of possible \glspl{execution_path}}
+}
+
 \newglossaryentry{contractive}{
   name={contractive},
   description={A type is contractive if it does not describe an infinite series of self applications.}
@@ -155,7 +160,7 @@
 
 \newglossaryentry{infeasible_path}{
   name={infeasible path},
-  description={A valid path through the control-flow graph of a function or method for which no valid parameter values exist which will let it be executed}
+  description={A valid path through the \gls{control_flow_graph} of a function or method for which no valid parameter values exist which will let it be executed}
 }
 
 % ===============================================

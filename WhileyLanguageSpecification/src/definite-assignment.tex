@@ -52,7 +52,7 @@ In this case, it can be shown that \lstinline{y==1} must hold when the \lstinlin
 
 \subsection{Infeasible Paths}
 
-Functions and methods may contain \glslink{infeasible_path}{infeasible paths} which are valid execution paths that, in practice, cannot be executed in practice.  The mechanism for checking definite assignment simply assumes that any valid path can be executed.  This means that some programs will fail definite assignment, even though they can be shown as correct.   The following illustrates such a program:
+Functions and methods may contain \glslink{infeasible_path}{infeasible paths} which are valid execution paths that, in practice, cannot be executed.  The mechanism for checking definite assignment assumes for simplicity that any valid path can be executed.  This means that some programs will fail definite assignment, even though they can be shown as correct.   The following illustrates such a program:
 
 \begin{lstlisting}
 function abs(int x) -> int:
@@ -69,20 +69,21 @@ function abs(int x) -> int:
 
 This function contains four valid execution paths which can be denoted by \lstinline{ff}, \lstinline{tf}, \lstinline{ft}, \lstinline{tt} where, for example, \lstinline{tf} represents the path where the first condition evaluates to \lstinline{true} and the second to \lstinline{false}.  However, it is easy to see that the execution paths \lstinline{ff} and \lstinline{tt} are infeasible.  Furthermore, we can see that on the other two paths, \lstinline{tf} and \lstinline{ft}, the variable \lstinline{y} is definitely assigned when the \lstinline{return} statement is reached.  Despite this, the above function fails definite assignment because the mechanism considers all valid paths whilst ignoring infeasible execution paths.
 
-\section{Execution Paths}
+\subsection{Compound Assignments}
 
-Depth first search over control-flow graph.  What is an infeasible path?
+Describe how an updated to a compound value does not constitute a definition, even if we can show that the variable is fully defined before hand.
 
+\section{Description}
 
-\section{Parameters}
+Definite assignment is defined over the \gls{control_flow_graph} over a block of code, such as a \lstinline{requires} or \lstinline{ensures} clause, or the body of a function or method.  Appendix~\S\ref{c_cfg} details the process for constructing a control-flow graph from a block of code.
 
-Parameters are defined on entry to a function or method.  However, returns are not.
+Definite assignment is defined over the set of all {\em valid paths} through a \gls{control_flow_graph}.  A valid path is a path through the graph starting from its root.  Every vertex in the graph is associated with a set of variables which are {\em defined} at that vertex, as well as those which are {\em used} at that vertex.  A variable $x$ is said to be {\em definitely assigned} on entry to a vertex $v$ if, for every valid path which includes $v$, some ancestor vertex $u$ exists on which $x$ is defined.
 
-\section{Variable Definitions}
+\subsection{Variable Definitions and Uses}
 
 Discussion of what are definite assignment statements.  In particular, update operations are not definitely assignments, neither are assignments through references.
 
-\section{Variable Uses}
+Parameters are defined on entry to a function or method.  However, returns are not.
 
 Discussion of parameters as being considered definitely assigned on entry to a function or method.
 
