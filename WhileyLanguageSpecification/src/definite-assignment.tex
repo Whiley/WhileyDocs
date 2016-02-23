@@ -1,7 +1,7 @@
 \chapter{Definite Assignment}
 \label{c_definite_assignment}
 
-The Whiley programming language requires that variables are known at \gls{compile_time} to be {\em definitely assigned} (i.e. that they are defined before used).  A conservative approach is taken to determining whether or not this is the case.  This ensures the language can be compiled efficiently, but also means that some provably correct programs are not valid Whiley programs.  In this chapter, we specify the process by which definite assignment is determined.
+The Whiley programming language requires that variables are known at \gls{compile_time} to be {\em definitely assigned} (i.e. that they are defined before used).  A conservative approach is taken to determining whether or not this is the case.  This ensures the language can be compiled efficiently, but also means that some provably safe programs are not valid Whiley programs.  In this chapter, we specify the process by which definite assignment is determined.
 
 \section{Overview}
 
@@ -52,7 +52,7 @@ In this case, it can be shown that \lstinline{y==1} must hold when the \lstinlin
 
 \subsection{Infeasible Paths}
 
-Functions and methods may contain \glslink{infeasible_path}{infeasible paths} which are valid execution paths that, in practice, cannot be executed.  The mechanism for checking definite assignment assumes for simplicity that any valid path can be executed.  This means that some programs will fail definite assignment, even though they can be shown as correct.   The following illustrates such a program:
+Functions and methods may contain \glslink{infeasible_path}{infeasible paths} which are valid execution paths that, in practice, cannot be executed.  The mechanism for checking definite assignment assumes for simplicity that any valid path can be executed.  This means that some programs will fail definite assignment, even though they can be shown as safe.   The following illustrates such a program:
 
 \begin{lstlisting}
 function abs(int x) -> int:
@@ -69,9 +69,21 @@ function abs(int x) -> int:
 
 This function contains four valid execution paths which can be denoted by \lstinline{ff}, \lstinline{tf}, \lstinline{ft}, \lstinline{tt} where, for example, \lstinline{tf} represents the path where the first condition evaluates to \lstinline{true} and the second to \lstinline{false}.  However, it is easy to see that the execution paths \lstinline{ff} and \lstinline{tt} are infeasible.  Furthermore, we can see that on the other two paths, \lstinline{tf} and \lstinline{ft}, the variable \lstinline{y} is definitely assigned when the \lstinline{return} statement is reached.  Despite this, the above function fails definite assignment because the mechanism considers all valid paths whilst ignoring infeasible execution paths.
 
-\subsection{Compound Assignments}
+\subsection{Partial Assignments}
 
-Describe how an updated to a compound value does not constitute a definition, even if we can show that the variable is fully defined before hand.
+A variable will never be considered definitely assigned after the application of one or more {\em partial assignments}.  The following illustrates a program which fails definite assignment even though it can be shown as safe:
+
+\begin{lstlisting}
+type Point is {int x, int y}
+
+function Point(int x, int y) -> Point:
+    Point p
+    p.x = x
+    p.y = y
+    return p
+\end{lstlisting}
+
+In the above program, the variable \lstinline{p} can be shown as definitely assigned at the \lstinline{return} statement.  Nevertheless, the conservative mechanism for checking definite assignment will reject this program because variable \lstinline{p} is initialised via partial assignments.  
 
 \section{Description}
 
