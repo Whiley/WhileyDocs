@@ -86,8 +86,15 @@ point.x = 0
 
 Here, we can see that the assignment to the field \lstinline{x} does not affect what is known about the other fields stored in the record (i.e. \lstinline{y}).
 
-\subsection{Arrays}
-As with records, arrays are compound data types made up from zero or more elements.  The elements of an array can be individually assigned and arrays make for a powerful building block for more complex data structures.  When dealing with arrays we can reason about the effect of an assignment to a specific element, if we know what that element was:
+\subsection{Reading Arrays}
+\label{c_reasoning_reading_arrays}
+As with records, arrays are compound data types made up from zero or more elements.    {\bf PRECONDITIONS}
+
+To reason about this array access, we must first show that the array index is {\em within bounds} --- that is non-negative and less than the size of the array.  In this case, the index is \lstinline{0} and, since $|xs| > 0$ holds, it follows that the index is within bounds.
+
+
+\subsection{Writing Arrays}
+The elements of an array can be individually assigned and arrays make for a powerful building block for more complex data structures.  When dealing with arrays we can reason about the effect of an assignment to a specific element, if we know what that element was:
 
 \begin{lstlisting}
 // $|xs| > 0\land\forall i.(0 \le i < |xs|\implies xs[i] > 0)$
@@ -95,7 +102,9 @@ xs[0] = 0
 // $xs[0] == 0\land |xs| > 0\land\forall i.(0 \le i < |xs|\implies xs[i] > 0)$
 \end{lstlisting}
 
-Here, we initially have some knowledge about the entire array but, after the assignment, we have split this into two regions.  In general, we do not often know which specific element has been updated and, hene, we must assume that any could have been:
+To reason about this assignment, we must first show the array index is within bounds (recall \S\ref{c_reasoning_reading_arrays}).  This follows because the index is \lstinline{0} and $|xs| > 0$ holds beforehand.  Now, before the assignment above we know that every element in the array is positive.  After the assignment, we have split our knowledge into two regions to reflect the most precise information we have at this point.  This was possible because we knew exactly which array index was being updated.
+
+In general, we do not often know which specific array element has been updated and, hence, we must assume that {\em any element} could have been updated:
 
 \begin{lstlisting}
 // $n >= 0 \land n < |xs|\land\forall i.(0 \le i < |xs|\implies xs[i] > 0)$
@@ -105,13 +114,8 @@ xs[n] = 0
 
 Here, our reasoning is a little coarse as we have conservatively updated our knowledge by assuming that any possible element of the array could be updated.
 
-\subsection{Assignments Reconsidered}
-
-{\bf PRECONDITIONS}
-Examine examples with updating lists, records, etc.
-
 \section{Complex Reasoning}
-Examine problem with our simplistic way of thinking about assignments.
+Examine problem with our simplistic way of thinking about assignments.  
 
 \section{Forwards versus Backward Reasoning}
 Discuss the so-called weakest precondition transformer.
