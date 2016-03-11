@@ -87,17 +87,15 @@ In the above program, the variable \lstinline{p} can be shown as definitely assi
 
 \section{Description}
 
-Definite assignment is defined over the \gls{control_flow_graph} over a block of code, such as a \lstinline{requires} or \lstinline{ensures} clause, or the body of a function or method.  Appendix~\S\ref{c_cfg} details the process for constructing a control-flow graph from a block of code.
+Definite assignment is defined over the \gls{control_flow_graph} of a code block, such as a \lstinline{requires} or \lstinline{ensures} clause, or the body of a function or method.  Appendix~\S\ref{c_cfg} details the process for constructing a control-flow graph from a block of code.  
 
-Definite assignment is defined over the set of all {\em valid paths} through a \gls{control_flow_graph}.  A valid path is a path through the graph starting from its root.  Every vertex in the graph is associated with a set of variables which are {\em defined} at that vertex, as well as those which are {\em used} at that vertex.  A variable $x$ is said to be {\em definitely assigned} on entry to a vertex $v$ if, for every valid path which includes $v$, some ancestor vertex $u$ exists on which $x$ is defined.
+Definite assignment considers the set of all {\em valid paths} in a \gls{control_flow_graph}.  A valid path is a path through the graph starting from its root.  Every vertex in the graph is associated with a set of variables which are {\em defined} at that vertex, as well as those which are {\em used} at that vertex.  A variable $x$ is said to be {\em definitely assigned} on entry to a vertex $v$ if, for every valid path which includes $v$, some ancestor vertex $u$ exists on which $x$ is defined.
 
-\subsection{Variable Definitions and Uses}
+\subsection{Definitions and Uses}
 
-Discussion of what are definite assignment statements.  In particular, update operations are not definitely assignments, neither are assignments through references.
+A \gls{variable_definition} occurs at a vertex $v$ which contains a direct assignment (recall~\S\ref{c_stmt_assign}), or an initialisation of (recall~\S\ref{c_stmts_var_decl}), one or more variables.  Assignments to fields, array elements or dereferenced references are not direct and do not define variables.  A vertex may define multiple variables if it corresponds to a multiple assignment which directly assigns those variables.  Finally, the parameters of a function, method or invariant block are treated as being defined on entry. 
 
-Parameters are defined on entry to a function or method.  However, returns are not.
-
-Discussion of parameters as being considered definitely assigned on entry to a function or method.
+A \gls{variable_use} occurs at a vertex $v$ which directly refers to that variable in some expression other than an \lstinline{LVal}.  However, referring to a variable indirectly through a dereference expression does not constitute a variable use.
 
 \section{Other}
 

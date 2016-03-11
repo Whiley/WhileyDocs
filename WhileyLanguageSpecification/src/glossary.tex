@@ -346,6 +346,11 @@
   description={A statement which declares one or more variable(s) for use in a given scope.  Each variable is given a \gls{type} which limits the possible values it may hold, and may not already be declared in an enclosing scope}
 }
 
+\newglossaryentry{variable_definition}{
+  name={variable definition},
+  description={A statement in which a variable is defined in its entirety, as opposed to a partial assignment of some part (e.g. field or array element).  This concept is important in the process of checking \gls{definite_assignment}}
+}
+
 \newglossaryentry{variable_initialiser}{
   name={variable initialiser},
   description={An optional \gls{expression} used to initialise variable(s) declared as part of a \gls{variable_declaration}}
@@ -355,6 +360,12 @@
   name={verifying compiler},
   description={A compilers which employs automated mathematical and logical reasoning to check the correctness of the programs that it compiles}
 }
+
+\newglossaryentry{variable_use}{
+  name={variable use},
+  description={A statement in which a variable is directly referred to in an expression other than an \lstinline{LVal}.  This concept is important in the process of checking \gls{definite_assignment}}
+}
+
 
 % ===============================================
 % W
