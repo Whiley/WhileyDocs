@@ -78,7 +78,7 @@ An expression returns exactly one value.  There is a large range of possible uni
 \section{Arithmetic Expressions}
 \label{c_expr_arithmetic}
 
-Arithmetic expressions operate on values of numeric type (either \lstinline{int} or \lstinline{real}).
+Arithmetic expressions operate on values of numeric type (currently just \lstinline{int}).
 
 \begin{syntax}
   \verb+ArithmeticExpr+ & $::=$ & \verb+ArithmeticNegationExpr+\\
@@ -132,7 +132,7 @@ This function compares two integer arguments and returns the ``sign'' of their c
 \subsection{Additive Expressions}
 \label{c_expr_additive}
 
-An additive expression accepts two arguments of identical type (either \lstinline{int} or \lstinline{real}) and produces a result of matching type.  The {\em addition operator}, \lstinline{+}, adds both arguments together whilst the {\em subtraction operator}, \lstinline{-}, subtracts its right argument from its left argument.
+An additive expression accepts two arguments of type \lstinline{int} and produces a result of the same type.  The {\em addition operator}, \lstinline{+}, adds both arguments together whilst the {\em subtraction operator}, \lstinline{-}, subtracts its right argument from its left argument.
 
 \begin{syntax}
   \verb+ArithmeticAdditiveExpr+ & $::=$ & \verb+Expr+ \big(\ \token{+} $|$ \token{-}\ \big) \verb+Expr+\\
@@ -148,7 +148,7 @@ This function simply computes the difference between its two arguments using the
 \subsection{Multiplicative Expressions}
 \label{c_expr_multiplicative}
 
-A multiplicative expression accepts two arguments of identical type (either \lstinline{int} or \lstinline{real}) and produces a result of matching type.  The {\em multiplication operator}, \lstinline{*}, multiplies both arguments together whilst the {\em division operator}, \lstinline{/}, divides its left argument by its right argument.  Finally, the {\em remainder operator} returns the remainder of its operands from an implied division.  
+A multiplicative expression accepts two arguments of type \lstinline{int} and produces a result of the same type.  The {\em multiplication operator}, \lstinline{*}, multiplies both arguments together whilst the {\em division operator}, \lstinline{/}, divides its left argument by its right argument.  Finally, the {\em remainder operator} returns the remainder of its operands from an implied division.
 
 \begin{syntax}
   \verb+ArithmeticMultiplicativeExpr+ & $::=$ & \verb+Expr+ \big(\ \token{*} $|$ \token{/} $|$ \token{\%}\ \big) \verb+Expr+\\
@@ -169,7 +169,7 @@ This function accepts a non-negative integer and uses this to index into an arra
 \section{Array Expressions}
 \label{c_expr_array}
 
-Array expressions operate on values of array type (e.g. \lstinline{int[]}, \lstinline{(bool|real)[]}, etc).
+Array expressions operate on values of array type (e.g. \lstinline{int[]}, \lstinline{(bool|byte)[]}, etc).
 
 \begin{syntax}
   \verb+ArrayExpr+ & $::=$ &\\
