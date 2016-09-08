@@ -322,7 +322,7 @@ requires x > 0
 // Return must be greater or equal to zero
 ensures y >= 0
 // Return must be less than input
-ensures y > x:
+ensures y < x:
     //
     return x - 1
 \end{lstlisting}
