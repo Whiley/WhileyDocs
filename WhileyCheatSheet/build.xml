@@ -10,7 +10,7 @@
   <!-- ================================================================== -->
 
   <target name="compile">
-    <wyc whileydir="WhileyCheatSheet/examples/" wyildir="WhileyCheatSheet/examples/"/>
+    <wyc whileydir="examples" wyildir="examples"/>
   </target>
 
   <!-- ================================================================== -->

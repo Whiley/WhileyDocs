@@ -1,4 +1,6 @@
 <project name="BuildConfig" xmlns:maven="urn:maven-ant">
+  <!-- Get the root directory of the project by looking at the directory enclosing this file. -->
+  
   <!-- Load the Maven Ant tasks so that we can work with Maven repositories. -->
   <typedef uri="urn:maven-ant" classpath="../lib/maven-ant-tasks-2.1.3.jar" resource="org/apache/maven/artifact/ant/antlib.xml"/>
   <!-- Set the classpath for Junit and its dependencies -->

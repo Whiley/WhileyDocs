@@ -6,7 +6,7 @@
 
   <target name="build-all">
     <subant failonerror="true" target="build">
-      <fileset dir="WhileyCheatSheet" includes="build.xml"/>
+      <fileset dir="WhileyCheatSheet/" includes="build.xml"/>
     </subant>
   </target>
 
