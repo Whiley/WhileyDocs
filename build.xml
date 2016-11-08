@@ -1,0 +1,22 @@
+<project name="wydocs" default="build-all">
+
+  <!-- ================================================================== -->
+  <!-- Build all -->
+  <!-- ================================================================== -->
+
+  <target name="build-all">
+    <subant failonerror="true" target="build">
+      <fileset dir="WhileyCheatSheet" includes="build.xml"/>
+    </subant>
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- Clean -->
+  <!-- ================================================================== -->
+
+  <target name="clean">
+    <subant failonerror="true" target="build">
+      <fileset dir="WhileyCheatSheet" includes="build.xml"/>
+    </subant>
+  </target>
+</project>
