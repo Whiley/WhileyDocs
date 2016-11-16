@@ -29,7 +29,6 @@ Values are the fundamental units of execution in Whiley and have value semantics
 \token{\lstinline+true+} \token{\lstinline+false+} & {\em Boolean values}\\
 \token{\lstinline+123+} \token{\lstinline+-99+} \token{\lstinline+0xFF+} & {\em Integer values}\\
 \token{\lstinline+"Hello"+} \token{\lstinline+"new\\n line"+} & {\em String values}\\
-\token{\lstinline+(1,2,3)+} \token{\lstinline+(true,null)+} & {\em Tuple values}\\
 \token{\lstinline+[1,2,3]+} \token{\lstinline+[1,"xyz"]+} & {\em Array values}\\
 \token{\lstinline+\{name: "dave"\}+}, \token{\lstinline+\{x: 1, y: 0\}+} & {\em Record values}\\
 \end{tabular}
@@ -41,6 +40,7 @@ The Whiley programming language is {\em statically typed}, meaning that every ex
 \token{\lstinline+(int,int)+} \token{\lstinline+(int,null,bool)+} & {\em Tuple types}\\
 \token{\lstinline+int[]+} \token{\lstinline+bool[][]+} \token{\lstinline+(int|null)[]+} & {\em Array types}\\
 \token{\lstinline+\{bool f\}+} \token{\lstinline+\{int len, int[] is\}+} & {\em Record types}\\
+\token{\lstinline+&int+} \token{\lstinline+&this:List+} \token{\lstinline+&l:\{int f\}+}  & {\em Reference types}\\
 \end{tabular}
 
 \section*{Expressions}
@@ -49,11 +49,11 @@ The majority of work performed by a Whiley program is through the execution of {
 \token{\lstinline|x + 1|} \token{\lstinline|2 * y|} \token{\lstinline|z - 1|} \token{\lstinline|(x + y)/2|}& {\em Arithmetic}\\
 \token{\lstinline|x < y|} \token{\lstinline|0 >= z|} \token{\lstinline|x == y|} \token{\lstinline|x != y|}& {\em Comparisons}\\
 \token{\lstinline+!x+} \token{\lstinline+x&&y+} \token{\lstinline+x||y+} \token{\lstinline+x==>y+} \token{\lstinline+x<==>y+} & {\em Boolean}\\
-\token{\lstinline+|ls|+} \token{\lstinline+ls[0]+} \token{\lstinline+[true; n]+} & {\em Arrays}\\
-\token{\lstinline|[1,x+y]|} \token{\lstinline+x in xs+} & \\
+\token{\lstinline+|ls|+} \token{\lstinline+ls[0]+} \token{\lstinline+[true; n]+} \token{\lstinline|[1,x+y]|} & {\em Arrays}\\
 \token{\lstinline|\{x: 1+y\}|} \token{\lstinline+xr.f+} \token{\lstinline+xr.f.g+} & {\em Records}\\
+\token{\lstinline|new \{x: 1\}|} \token{\lstinline+*ptr+} \token{\lstinline+ptr->f+} & {\em References}\\
 \token{\lstinline+all \{ i in 0..|xs| | xs[i]>= 0\}+}& {\em Quantifiers}\\
-\token{\lstinline+no \{ i in 0..|xs| | xs[i]<0 \}+}& \\
+%\token{\lstinline+no \{ i in 0..|xs| | xs[i]<0 \}+}& \\
 \token{\lstinline+some \{ i in 0..|xs| | xs[i]>=0 \}+}&\\
 \token{\lstinline+x is null+} \token{\lstinline+x is int+} & {\em Type Tests}
 \end{tabular}
