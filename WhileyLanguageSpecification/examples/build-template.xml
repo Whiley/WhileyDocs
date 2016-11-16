@@ -1,9 +1,11 @@
 <project name="BuildTemplate">  
 
+  <import file="../../config.xml"/> 
+
   <target name="compile">
     <echo message="COMPILING: ${ant.project.name}"/>
     <echo message="==================================="/>
-    <wyc wyildir="." whileydir="." includes="**/*.whiley"/>
+    <wyc whileypath="${wyrt.jar}" wyildir="." whileydir="." includes="**/*.whiley"/>
   </target>
 
   <target name="clean">

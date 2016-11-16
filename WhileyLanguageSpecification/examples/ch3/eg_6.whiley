@@ -5,7 +5,7 @@ type LinkedList is null | &{ LinkedList next, int data }
 method insertAfter(LinkedList list, int item) -> LinkedList:
     if list is null:
         // reached the end of the list, so allocate new node
-        return new { next: null, data: item }
+        return new { next: (LinkedList) null, data: item }
     else:
         // continue traversing the list
         list->next = insertAfter(list->next, item)
