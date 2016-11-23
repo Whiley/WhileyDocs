@@ -552,6 +552,7 @@ A new expression accepts an argument of any type and produces a reference to tha
 
 \begin{syntax}
 \verb+NewExpr+ & $::=$ & \token{new}\ \verb+Expr+\\
+               & $|$ & \verb+Lifetime+\ \token{:}\ \token{new}\ \verb+Expr+\\
 \end{syntax}
 
 \paragraph{Example.} The following example illustrates the new operator:
