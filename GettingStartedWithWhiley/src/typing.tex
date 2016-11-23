@@ -1,11 +1,6 @@
 \newpage
 \section{Flexible Types}
-The previous section introduced us to the basic types found in Whiley,
-such as integers (\lstinline{int}), rationals (\lstinline{real}) and
-booleans (\lstinline{bool}).  However, unlike many languages, Whiley
-provides a flexible and powerful approach to typing which go well
-beyond the basic forms.  In this section, we will examine this in more
-detail.
+The previous section introduced us to the basic types found in Whiley, such as integers (\lstinline{int}) and booleans (\lstinline{bool}).  However, unlike many languages, Whiley provides a flexible and powerful approach to typing which go well beyond the basic forms.  In this section, we will examine this in more detail.
 
 \subsection{Flow Typing}
 To improve the programmer experience and reduce unnecessary tedium,
@@ -17,21 +12,20 @@ following example illustrates how this works (where the body of
 
 \lstinputlisting{../examples/typing_1.whiley}
 
-Here, \lstinline{indexOf()} returns the first index of an item in a list of items, or \lstinline{null} if there is none.  The type \lstinline{null|int} is a {\em union type}, meaning it is either an \lstinline{int} or \lstinline{null}.  The \lstinline{split()} function splits a list into two pieces based on the first occurrence of a given \lstinline{item}, or leaves the list as is otherwise.  It calls \lstinline{indexOf()} to determine the first occurrence of \lstinline{item} in \lstinline{items}.  Observe that variable \lstinline{idx} has been declared as type \lstinline{var}, meaning the compiler will automatically infer the best possible type for it.
+Here, \lstinline{indexOf()} returns the first index of an item in an array of items, or \lstinline{null} if there is none.  The type \lstinline{null|int} is a {\em union type}, meaning it is either an \lstinline{int} or \lstinline{null}.  The \lstinline{split()} function splits an array into two pieces based on the first occurrence of a given \lstinline{item}, or leaves the array as is otherwise.  It calls \lstinline{indexOf()} to determine the first occurrence of \lstinline{item} in \lstinline{items}.  %Observe that variable \lstinline{idx} has been declared as type \lstinline{var}, meaning the compiler will automatically infer the best possible type for it.
 
 In the above example, Whiley's flow typing system seamlessly ensures that \lstinline{null} is never dereferenced.  This is because the type \lstinline{null|int} cannot be treated as an \lstinline{int}. Instead, one must first check it is an \lstinline{int} using a type test, such as ``\lstinline{idx is int}''.  Whiley automatically {\em retypes} \lstinline{idx} to \lstinline{int} when this is known to be true, thereby avoiding any awkward and unnecessary syntax (e.g. a cast as required in many languages).
 
 \begin{insight}{Null References.}  In many languages (e.g. C/C++,
   Java, etc) the use of \lstinline{null} is a significant source of
-  error (see e.g.~\cite{Hoa09}).  For example, in Java dereferencing
+  error~\cite{Hoa09}.  For example, in Java dereferencing
   the \lstinline{null} value gives rise to a
   \lstinline{NullPointerException}, which is regarded as the most
   common form of error in Java~\cite{XYZ}.  The issue is that, in such
   languages, one can treat {\em nullable} references as though they
   are {\em non-null} references~\cite{Pier02}.  In the research
   literature, there have been many proposals to solve this problem
-  using static type systems
-  (e.g.~\cite{PQVHV01,FL03,KH07,CFJJ06,CJ07,MPPD08,Hub08,HJP08}).
+  using static type systems~\cite{PQVHV01,FL03,KH07,CFJJ06,CJ07,MPPD08,Hub08,HJP08}.
   Unfortunately, at the time of writing, very few languages have
   incorporated such ideas.
 \end{insight}
@@ -62,7 +56,7 @@ terms of itself (i.e. it is recursive) and describes linked lists of
 arbitrary size.
 
 \begin{insight}{Value Semantics.}
-  As discussed in \S\ref{value_semantics} all compounds structures in
+  All compounds structures in
   Whiley are passed by value, {\em including recursive types}.  This
   differs from common languages (e.g. Java), where linked structures
   are typically composed from {\em references} to link objects.  This
@@ -86,7 +80,7 @@ least, appear to be from the programmer's perspective).
 Statically typed languages, such as Java, employ {\em nominal typing}
 for recursive data types.  This means that two otherwise identical
 types with different names are considered distinct and, for example, a
-variable of one type cannot flow into the other.  In contrast, Whiley employs {\em structural typing} of records~\cite{Card88} to give greater flexibility.  This means that the name of a type is, generally speaking, unimportant.  Instead, identical types (i.e. those with identical {\em structure}) with different names are still considered identical in Whiley.  For example:
+variable of one type cannot flow into the other.  In contrast, Whiley employs {\em structural typing} of records~\cite{Card88} to give greater flexibility.  This means that the name of a type is, generally speaking, not important.  Instead, identical types (i.e. those with identical {\em structure}) with different names are still considered identical in Whiley.  For example:
 
 \lstinputlisting{../examples/typing_3.whiley}
 
@@ -98,7 +92,7 @@ In this example, the types \lstinline{Rectangle} and \lstinline{BoundingBox} are
 
 \subsection{Coercions}
 
-A {\em coercion} converts a value of one type into a corresponding value of another type.  For example, in Whiley, we can coerce the \lstinline{int} value ``\lstinline{0}'' into the \lstinline{real} value ``\lstinline{0.0}''.  Many programming languages permit both {\em implicit} and {\em explicit} coercions, with the latter more commonly referred to as {\em casting}.  Implicit coercions occur without explicit direction from the programmer, and are often considered dangerous because of this.  
+A {\em coercion} converts a value of one type into a corresponding value of another type.  Many programming languages permit both {\em implicit} and {\em explicit} coercions, with the latter more commonly referred to as {\em casting}.  Implicit coercions occur without explicit direction from the programmer, and are often considered dangerous because of this.  
 
 \begin{insight}{Lossless Coercions?}
 The Java programming language attempts to enforce a requirement that implicit coercions are {\em lossless}.  Thus, any coercion which may result in a loss of information must be made explicit through the use of a cast.  Unfortunately, Java does permit implicit lossy coercions by, for example, allowing \lstinline{int} values to be implicitly coerced into \lstinline{float} values --- because not every \lstinline{int} value can be represented by a \lstinline{float} in Java.
@@ -106,22 +100,22 @@ The Java programming language attempts to enforce a requirement that implicit co
 
 To address the issues surrounding implicit coercions, Whiley only permits implicit coercions which are lossless.  That is, which do not result in a loss of information.  In contrast, {\em lossy} coercions require an explicit cast be used to ``force'' the coercion.  The following example illustrates:
 
-\lstinputlisting{../examples/typing_4.whiley}
+\lstinputlisting[firstline=1,lastline=3]{../examples/typing_5.whiley}
 
 Here, we have defined a standard linked list and a specialised
 ``ordered'' list.  The intuition is that \lstinline{order < next.order} for each node in an \lstinline{OrderedList} (although the details of how this is done are unimportant here).   These two types are not considered identical because they have different structure (i.e. \lstinline{OrderedList} has an additional field, \lstinline{order}).  However, there is still a subtyping relationship between them (i.e. \lstinline{OrderedList} subtypes \lstinline{LinkedList}).  Thus, an instance of \lstinline{OrderedList} can be used where a \lstinline{LinkedList} was expected.  For example:
 
-\lstinputlisting[firstline=4]{../examples/typing_5.whiley}
+\lstinputlisting[firstline=5,lastline=9]{../examples/typing_5.whiley}
 
 This defines a simple recursive function for computing the sum of the elements of a \lstinline{LinkedList}.  Instances of \lstinline{OrderedList} can be passed into this function by {\em coercing} them to instances of \lstinline{LinkedList}:
 
-\lstinputlisting[firstline=4]{../examples/typing_6.whiley}
+\lstinputlisting[firstline=11,lastline=12]{../examples/typing_5.whiley}
 
 Here, we have used an explicit coercion (i.e. a cast) from \lstinline{OrderedList} to \lstinline{LinkedList}.  This must be done explicitly because the coercion is lossy because the field \lstinline{order} is discarded during the coercion.
 
-\begin{insight}{Lossless Coercions.}
-Whiley (unlike Java) supports lossless coercion from \lstinline{int} values to \lstinline{real} values.  This is because arithmetic in Whiley is unbounded and, hence, every value of \lstinline{int} type has a corresponding value of \lstinline{real} type (though not vice-versa).
-\end{insight}
+% \begin{insight}{Lossless Coercions.}
+% Whiley (unlike Java) supports lossless coercion from \lstinline{int} values to \lstinline{real} values.  This is because arithmetic in Whiley is unbounded and, hence, every value of \lstinline{int} type has a corresponding value of \lstinline{real} type (though not vice-versa).
+% \end{insight}
 
 \subsection{Subtyping}
 
@@ -141,6 +135,6 @@ Another situation where subtyping occurs in Whiley is with the types \lstinline{
 
 \lstinputlisting{../examples/typing_8.whiley}
 
-In this function, parameter \lstinline{x} can hold {\em any possible value on entry}.  It could be an integer, a real, a list, a set, a record, etc.  In this case, we have picked a few examples which we can easily convert into \lstinline{int} values.  Note that the type \lstinline{[any]} describes all possible lists, including e.g. instances of \lstinline{[int]}, \lstinline{[[int]]}, etc.
+In this function, parameter \lstinline{x} can hold {\em any possible value on entry}.  It could be an integer, an array, a record, etc.  In this case, we have picked a few examples which we can easily convert into \lstinline{int} values.  Note that the type \lstinline{any[]} describes all possible arrays, including e.g. instances of \lstinline{int[]}, \lstinline{int[][]}, etc.
 
 % could talk about subtyping between collections here

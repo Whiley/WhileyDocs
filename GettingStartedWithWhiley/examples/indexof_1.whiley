@@ -1,4 +1,4 @@
-function indexOf([int] items, int item) -> (int|null i)
+function indexOf(int[] items, int item) -> (int|null i)
 // If return value is an int i, then items[i] == item
 ensures i is int ==> items[i] == item:
     //

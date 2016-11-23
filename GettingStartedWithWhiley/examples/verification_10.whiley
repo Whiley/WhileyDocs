@@ -1,6 +1,6 @@
 type nat is (int x) where x >= 0
 
-function sum([nat] items) -> nat:
+function sum(nat[] items) -> nat:
     nat r = 0
     nat i = 0
     //

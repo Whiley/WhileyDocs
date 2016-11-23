@@ -7,11 +7,11 @@
 type nat is (int x) where x >= 0
 
 // First, define the state of the microwave.
-type Microwave is {
+type Microwave is ({
         bool heatOn, // if true, the oven is cooking
         bool doorOpen, // if true, the door is open
         nat timer // timer setting (in seconds)
-} where !doorOpen || !heatOn
+} m) where !m.doorOpen || !m.heatOn
 
 // The clock tick event is signaled by the internal clock
 // circuits of the microwave. It is triggered every second

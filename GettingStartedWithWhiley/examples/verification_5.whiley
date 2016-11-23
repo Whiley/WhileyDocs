@@ -1,3 +1,3 @@
-type ListOfNats is ([int] items)
+type ArrayOfNats is (int[] items)
 // every x in items must be greater-or-equal-to zero
-where all { x in items | x >= 0 }
+where all { i in 0..|items| | items[i] >= 0 }

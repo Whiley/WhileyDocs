@@ -1,9 +1,0 @@
-<project name="BuildConfig">
-  <property environment="env"/>
-  <property name="wyc.verification" value="false"/>
-  <property name="wyjc.jar" value="../../lib/wyjc-all-v0.3.33.jar"/>
-  <property name="wyrt.jar" value="../../lib/wyrt-v0.3.33.jar"/>
-
-  <taskdef name="wyjc" classname="wyjc.util.WyjcAntTask" classpath="${wyjc.jar}"/>
-
-</project>

@@ -6,15 +6,15 @@ specification for a slightly more challenging function.  This is the
 \lstinline{indexOf()} function, described as follows:
 
 \begin{lstlisting}
-// Return the lowest index in the items list which equals the given item.
+// Return the lowest index in the items array which equals the given item.
 // If no such index exists, returns null.
-function indexOf([int] items, int item) -> int|null:
+function indexOf(int[] items, int item) -> int|null:
     ...
 \end{lstlisting}
 
 This is a common function found in the standard libraries of many
 programming languages.  The body of the function examines each element
-of the \lstinline{items} list and check whether or not it equals
+of the \lstinline{items} array and check whether or not it equals
 \lstinline{item}.  To start with, we won't worry too much about the
 body of the \lstinline{indexOf()} function.  Instead, we'll
 progressively build up the specification until we are happy with it.
@@ -56,11 +56,11 @@ specification we have so far although, obviously, this is an
 incomplete implementation of the \lstinline{indexOf} function!
 
 \subsection{Specifying Property 2 --- Return Null if No Match}
-Property (2) from our list above is more difficult to specify, because
+Property (2) from our array above is more difficult to specify, because
 it requires {\em quantification}.  There are several quantifiers
 available in Whiley, including: \lstinline{all}, which allows us to
-say ``for all elements in a list something is true''; and
-\lstinline{no}, which allows us to say ``there is no element in the list
+say ``for all elements in an array something is true''; and
+\lstinline{no}, which allows us to say ``there is no element in the array
 where something is true''. 
 
 In Whiley, we can express property (2) from above in several different
@@ -68,55 +68,26 @@ ways.  The most direct translation would be:
 
 \begin{lstlisting}
 ...
-// If return is null, there is no index j where items[j] == item
-ensures i is null ==> no { j in 0..|items| | items[j] == item }:
-    ...
-\end{lstlisting}
-
-\noindent Here, the expression \lstinline{|items|} gives the length of
-the items list, whilst the range expression \lstinline{0..|items|}
-returns a list of consecutive integers from \lstinline{0} up to, but
-not including, \lstinline{|items|}.  Instead of using the
-\lstinline{no} quantifier, we could have equally used the
-\lstinline{all} quantifier, like so:
-
-\begin{lstlisting}
-...
-// If return is null, there is no index j where items[j] == item
+// If return is null, then for all j we have items[j] != item
 ensures i is null ==> all { j in 0..|items| | items[j] != item }:
     ...
 \end{lstlisting}
 
-The above, however, is perhaps not as clear as the first translation.
-Finally we can, in this case, avoid talking about indices altogether
-like so:
-
-\begin{lstlisting}
-...
-// If return is null, there is no index j where items[j] == item
-ensures i is null ==> no { x in items | x == item }:
-    ...
-\end{lstlisting}
-
-The above simple says ``there is no element \lstinline{x} in
-\lstinline{items} where \lstinline{x == item}''.  Although this is
-also not the most direct translation of the original property, it is a
-rather convenient translation which achieves the same thing.
+\noindent Here, the expression \lstinline{|items|} gives the length of
+the items array, whilst the range expression \lstinline{0..|items|}
+returns an array of consecutive integers from \lstinline{0} up to, but
+not including, \lstinline{|items|}.
 
 \subsection{Specifying Property 3 --- Return Least Index}
 
-Property (3) from our list above is similar to property (2), except
+Property (3) from our array above is similar to property (2), except
 that we not considering all elements of \lstinline{items}:
 
 \begin{lstlisting}
 ...
 // If return is an int i, then no index j where j $<$ i and items[j] == item
-ensures i is int ==> no { j in 0 .. i | items[j] == item }:
+ensures i is int ==> all { j in 0 .. i | items[j] != item }:
 \end{lstlisting}
-
-As before, an \lstinline{all} quantifier could be used.  However,
-we cannot avoid talking about indices this time as not all elements of
-\lstinline{items} are being considered.
 
 \subsection{Working Implementation}
 

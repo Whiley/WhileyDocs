@@ -1,4 +1,6 @@
-function indexOf([int] items, int item) -> null|int:
+import whiley.lang.Array
+
+function indexOf(int[] items, int item) -> null|int:
    int i = 0
    while i < |items|:
       if items[i] == item:
@@ -6,13 +8,13 @@ function indexOf([int] items, int item) -> null|int:
       i = i + 1
    return null
 
-function split([int] items, int item) -> [[int]]:
+function split(int[] items, int item) -> int[][]:
    int|null idx = indexOf(items,item)
    // idx has type null$|$int
    if idx is int:
        // idx now has type int
-       [int] below = items[0..idx]
-       [int] above = items[idx..]
+       int[] below = Array.slice(items,0,idx)
+       int[] above = Array.slice(items,idx,|items|)
        return [below,above]
    else:
        // idx now has type null

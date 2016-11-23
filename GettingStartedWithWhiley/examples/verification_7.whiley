@@ -1,3 +1,3 @@
-type ListOfNats is ([int] items)
+type ArrayOfNats is (int[] items)
 // does not exist an x in items where is less-than zero
-where !some { x in items | x < 0 }
+where !some { i in 0..|items| | items[i] < 0 }

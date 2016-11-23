@@ -3,7 +3,7 @@
   <dirname property="rootdir" file="${ant.file.BuildConfig}"/>
   <!-- Configure helpful stuff -->
   <property environment="env"/>
-  <property name="wyrt.jar" value="lib/wyrt-v0.1.0.jar"/>  
+  <property name="wyrt.jar" value="${rootdir}/lib/wyrt-v0.1.0.jar"/>  
   <!-- Load the Maven Ant tasks so that we can work with Maven repositories. -->
   <typedef uri="urn:maven-ant" classpath="../lib/maven-ant-tasks-2.1.3.jar" resource="org/apache/maven/artifact/ant/antlib.xml"/>
   <!-- Set the classpath for Junit and its dependencies -->

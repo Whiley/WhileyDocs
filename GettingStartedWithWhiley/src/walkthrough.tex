@@ -37,14 +37,13 @@ first parameter, \lstinline{x}, is less than the second,
   statements with the same indentation are included.
 \end{insight}
 
-\newpage
 \subsection{Arrays}
 \label{walkthrough_collections}
 Like many modern programming languages, Whiley provides a built-in array type for representing collections of data.  The following illustrates a short function which multiplies a vector by a scalar:
 
 \lstinputlisting[lastline=7]{../examples/walkthrough_2.whiley}
 
-This illustrates a few of the common array operations.  Firstly, the size of a array is obtained using the {\em length} operator (i.e. \lstinline{|vector|} returns the length of \lstinline{vector}).  Secondly, the \lstinline{while} loop is used to iterate over the elements of the array, whilst the {\em array access} operator, \lstinline{vector[i]}, returns the element at index \lstinline{i}.  
+This illustrates a few of the common array operations.  Firstly, the size of an array is obtained using the {\em length} operator (i.e. \lstinline{|vector|} returns the length of \lstinline{vector}).  Secondly, the \lstinline{while} loop is used to iterate over the elements of the array, whilst the {\em array access} operator, \lstinline{vector[i]}, returns the element at index \lstinline{i}.  
 
 Arrays can be constructed using either {\em array initialisers} or {\em array generators}.  The following illustrates both syntaxes being used to call the function above:
 
@@ -52,17 +51,17 @@ Arrays can be constructed using either {\em array initialisers} or {\em array ge
 
 The array initialiser syntax simply constructs an array using the values as provided.  The array generator syntax, \lstinline{[e; n]}, constructs an array containing \lstinline{n} elements whose value is given by \lstinline{e}.
 \subsection{Records}
-Aside from collection types, Whiley also allows provides {\em records} for grouping items together.  Records are similar to \lstinline{struct}s (as found in C) and objects (as found in JavaScript).  A record is constructed from one or more {\em fields}, each of which has a unique name and type.  For example, the following defines a simple record type for representing 2D points and a function for translating their position:
+Aside from collection types, Whiley also provides {\em records} for grouping items together.  Records are similar to \lstinline{struct}s (as found in C) and objects (as found in JavaScript).  A record is constructed from one or more {\em fields}, each of which has a unique name and type.  For example, the following defines a simple record type for representing 2D points and a function for translating their position:
 
 \lstinputlisting{../examples/walkthrough_4.whiley}
 
-Here, a {\em user-defined type} named \lstinline{Point} has been defined.  This is a record type containing two \lstinline{int} fields, \lstinline{x} and \lstinline{y}.  In the \lstinline{translate()} function, a {\em record literal} is used to construct a new \lstinline{Point} to be returned.
+Here, a {\em user-defined type} named \lstinline{Point} has been declared.  This is a record type containing two \lstinline{int} fields, \lstinline{x} and \lstinline{y}.  In the \lstinline{translate()} function, a {\em record literal} is used to construct a new \lstinline{Point} to be returned.
 
 Records are an important mechanism for giving meaning to data in Whiley.  For example, consider the following declaration of a rectangle:
 
 \lstinputlisting{../examples/walkthrough_5.whiley}
 
-Here, we see that a rectangle has a position, a width and a height.  The names of the fields are important for conveying their meaning in the real-world.
+Here, we see that a rectangle has a position, a width and a height.  The names of the fields are important for conveying their meaning in the real world.
 
 \subsection{Multiple Returns}
 
@@ -70,7 +69,7 @@ Unlike many programming languages, Whiley supports {\em multiple} return values.
 
 \lstinputlisting{../examples/walkthrough_7.whiley}
 
-Here, we see that the return type is a tuple and this provides a convenient and lightweight mechanism for returning multiple values.  Following on from this, Tuple types in Whiley also supports {\em destructuring syntax} (e.g. as found in Python).  The following example illustrates this:
+Here, we see that the return type is a tuple and this provides a convenient and lightweight mechanism for returning multiple values.  Following on from this, Whiley also supports {\em destructuring syntax} for handling multiple return values (e.g. as found in Python).  The following example illustrates this:
 
 \begin{lstlisting}
     int x
@@ -80,7 +79,7 @@ Here, we see that the return type is a tuple and this provides a convenient and 
     ...        
 \end{lstlisting}
 
-Here, we see that variables \lstinline{x} and \lstinline{y} are assigned their respective component of the tuple returned from \lstinline{swap}.  Again, this syntax simplies the use of functions with multiple return values.
+Here, we see that variables \lstinline{x} and \lstinline{y} are assigned their respective component of the return values from \lstinline{swap}.  Again, this syntax simplifies the use of functions with multiple return values.
 
 \subsection{Strings and Characters}
 

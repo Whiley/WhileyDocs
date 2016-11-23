@@ -1,10 +1,10 @@
-function indexOf([int] items, int item) -> (int|null i)
+function indexOf(int[] items, int item) -> (int|null r)
 // If return is an int r, then items[r] == item
-ensures i is int ==> items[i] == item
-// If return is null, then no element x in items where x == item
-ensures i is null ==> no { x in items | x == item }
+ensures r is int ==> items[r] == item
+// If return is null, then no element in items matches item
+ensures r is null ==> all { j in 0..|items| | items[j] != item }
 // If return is an int i, then no index j where j $<$ i and items[j] == item
-ensures i is int ==> no { j in 0 .. i | items[j] == item }:
+ensures r is int ==> all { j in 0 .. r | items[j] != item }:
     //
     int i = 0
     while i < |items|:
