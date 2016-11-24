@@ -202,11 +202,14 @@ The above illustrates two open records \lstinline{Writer} and \lstinline{PrintWr
 % =======================================================================
 
 \section{References}
-
+\label{c_types_reference}
 A reference types represents the set of all references to values of a type given, such as those allocated in the heap.  They are similar to references or pointers found in many imperative and object-oriented languages (e.g. C/C++, Java, C\#, etc).  A type \lstinline{&T} represents a reference to a value of type \lstinline{T}.  Values of reference type support equality comparators (\S\ref{c_expr_equality}) and dereference (\S\ref{c_expr_dereference}) operations, as well as dereference assignment (\S\ref{c_stmt_assign}).
 
 \begin{syntax}
   \verb+ReferenceType+ & $::=$ & \token{\&}\ \ \verb+Type+\\
+                       & $|$   & \token{\&}\ \verb+Lifetime+\ \token{:}\ \verb+Type+\\
+  &&\\
+  \verb+Lifetime+ & $::=$ & \token{*}\ $|$\ \token{this}\ $|$\ \token{Ident}\\
 \end{syntax}
 
 \paragraph{Example.} The following example illustrates reference types:
@@ -264,9 +267,12 @@ A function or method type describes the signature of a function or method.  Thes
 \begin{syntax}
   \verb+FunctionType+ & $::=$ & \token{function}\ \verb+ParameterTypes+\ \token{->}\ \verb+ParameterTypes+\\
   &&\\
-  \verb+MethodType+ & $::=$ & \token{method}\ \verb+ParameterTypes+\ \big[\ \token{->}\ \verb+ParameterTypes+\ \big]\\
+  \verb+MethodType+ & $::=$ & \token{method}\ \big[\ \verb+ContextLifetimes+\ \big]\big[\ \verb+LifetimeParameters+\ \big]\\
+                    &       & \verb+ParameterTypes+\ \big[\ \token{->}\ \verb+ParameterTypes+\ \big]\\
   &&\\
   \verb+ParameterTypes+ & $::=$ & \token{(}\ \big[\ \verb+Type+\ \big(\ \token{,}\ \verb+Type+\ \big)$^*$\ \big]\ \token{)}\\
+  \verb+ContextLifetimes+ & $::=$ & \token{[}\ \verb+ContextLifetime+\ \big(\ \token{,}\ \verb+ContextLifetime+\ \big)$^*$\ \token{]}\\
+  \verb+ContextLifetime+ & $::=$ & \token{this}\ $|$\ \verb+Ident+\\
 \end{syntax}
 
 \paragraph{Example.} The following example illustrates function types:

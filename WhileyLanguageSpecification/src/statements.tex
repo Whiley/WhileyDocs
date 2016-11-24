@@ -11,6 +11,22 @@ A \gls{statement_block} is a sequence of zero or more consecutive statements whi
 
 The above example contains two statement blocks, one nested inside the other.  The outer block demarcates the body of the \lstinline{sum()} function, whilst the inner block demarcates the body of the \lstinline{while} statement.
 
+\subsection{Named Blocks}
+
+A {\em named block} identifies a distinct subregion of a given block.  The primary use for named blocks is in the context of reference lifetimes (\S\ref{c_types_reference}), as these can be associated with an enclosing block.
+
+\begin{syntax}
+  \verb+NamedBlock+$^\ell$ & $::=$ & \token{Ident}\ \token{:}\ \verb+Block+$^\gamma$\ \\
+&&\\
+\multicolumn{3}{r}{(where $\ell < \gamma$)}\\
+\end{syntax}
+
+\paragraph{Example.} The following illustrates a named block:
+
+\lstinputlisting{../examples/ch5/eg_17.whiley}
+
+Here, a named block is used to constrain the lifetime of reference \lstinline{y}.  As a result, the lifetime of reference \lstinline{x} strictly contains that of reference \lstinline{y}.
+
 % =======================================================================
 % Simple Statements
 % =======================================================================

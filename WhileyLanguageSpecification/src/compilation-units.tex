@@ -192,8 +192,11 @@ This defines the specification and implementation of the well-known \lstinline{m
 A {\em method declaration} defines a method within a Whiley \gls{source_file}.  Methods are {\em impure} and may have side-effects.  Thus, they cannot be used within specifications (i.e. in type invariants, \gls{loop_invariant}s, and function/method \gls{precondition}s or \gls{postcondition}s).  However, unlike functions, methods may call other functions and/or methods (including \lstinline{native} methods).  They may also explicitly allocate memory on the heap, and/or instigate concurrent computation.
 
 \begin{syntax}
-  \verb+MethodDecl+ & $::=$ & \token{method}\ \verb+Ident+\ \token{(}\ \verb+Parameters+\ \token{)}\ \big[\ \token{->}\ \token{(}\ \verb+Parameters+\ \token{)}\ \big]\\
+  \verb+MethodDecl+ & $::=$ & \token{method}\ \big[\ \verb+LifetimeParameters+\ \big]\ \verb+Ident+\\
+  && \token{(}\ \verb+Parameters+\ \token{)}\ \big[\ \token{->}\ \token{(}\ \verb+Parameters+\ \token{)}\ \big]\\
   && \big(\ \token{requires}\ \verb+Expr+\ $|$\ \token{ensures}\ \verb+Expr+\ \big)$^*$\ \token{:}\ \verb+Block+\\
+  &&\\
+  \verb+LifetimeParameters+ & $::=$ & \token{<}\ \verb+Ident+ \big(\ \token{,}\ \verb+Ident+\ \big)$^*$\ \token{>}\\
 \end{syntax}
 
 Those variables declared before ``\lstinline{->}'' are referred to as the {\em parameters}, whilst those declared afterwards are referred to as the {\em returns}.  The two optional clauses are defined identically as for function declarations~(\S\ref{c_source_files_function_decl}).
