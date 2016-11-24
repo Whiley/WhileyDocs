@@ -396,7 +396,7 @@ A {\em lambda expression} creates an anonymous function or method which can acce
 
 \begin{syntax}
   \verb+LambdaExpr+ & $::=$ & \token{\&} \big[\ \verb+ContextLifetimes+\ \big]\ \big[\ \verb+LifetimeParameters+\ \big]\\
-                    &       & \token{(} \big( \verb+Type+ \verb+Ident+ \big)$^*$ \token{->} \verb+Expr+ \token{)}\\
+                    &       & \token{(} \big[\ \verb+Type+\ \verb+Ident+\ \big( \token{,}\ \verb+Type+ \verb+Ident+ \big)$^*$\ \big] \token{->} \verb+Expr+ \token{)}\\
 \end{syntax}
 
 \paragraph{Example.}
