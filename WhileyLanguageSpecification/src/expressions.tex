@@ -245,7 +245,7 @@ This function constructs a array by prepending a given element onto the front of
 An {\em array initialiser} accepts zero or more operands and produces a value of array type.  Array initialisers are used to construct arrays from their constituent elements.  
 
 \begin{syntax}
-  \verb+ArrayInitialiserExpr+ & $::=$ & \token{[}\ \verb+ArgsList+ \token{]}\\
+  \verb+ArrayInitialiserExpr+ & $::=$ & \token{[}\ \big[\ \verb+Expr+\ \big(\ \token{,}\ \verb+Expr+\ \big)$^*$\ \big] \token{]}\\
 \end{syntax}
 
 \paragraph{Example.}  The following example illustrates an array initialiser:
@@ -370,10 +370,11 @@ A {\em function or method invocation} executes a named function or method declar
 % Could also discuss function or method lookup; this is really part of typing.
 
 \begin{syntax}
-  \verb+InvokeExpr+ & $::=$ & \verb+Name+ \token{(} \verb+ArgsList+ \token{)}\\
-  \verb+IndirectInvokeExpr+ & $::=$ & \verb+Expr+\ \token{(}\ \verb+ArgsList+\ \token{)}\\
+  \verb+InvokeExpr+ & $::=$ & \verb+Name+ \big[\ \verb+LifetimeArgsList+\ \big]\ \verb+ArgsList+\\
+  \verb+IndirectInvokeExpr+ & $::=$ & \verb+Expr+\ \big[\ \verb+LifetimeArgsList+\ \big]\ \verb+ArgsList+\\
 &&\\
-\verb+ArgsList+ & $::=$ & \big[\ \verb+Expr+\ \big(\ \token{,}\ \verb+Expr+\ \big)$^*$\ \big]\\
+\verb+ArgsList+ & $::=$ & \token{(}\ \big[\ \verb+Expr+\ \big(\ \token{,}\ \verb+Expr+\ \big)$^*$\ \big]\ \token{)}\\
+\verb+LifetimeArgsList+ & $::=$ & \token{<}\ \verb+Lifetime+\ \big(\ \token{,}\ \verb+Lifetime+\ \big)$^*$\ \token{>}\\
 \end{syntax}
 
 \paragraph{Example.}
@@ -394,7 +395,8 @@ This example illustrates one function being called from another.  Both functions
 A {\em lambda expression} creates an anonymous function or method which can accept zero or more arguments and whose return type is inferred from the body of the lambda.
 
 \begin{syntax}
-  \verb+LambdaExpr+ & $::=$ & \token{\&} \token{(} \big( \verb+Type+ \verb+Ident+ \big)$^*$ \token{->} \verb+Expr+ \token{)}\\
+  \verb+LambdaExpr+ & $::=$ & \token{\&} \big[\ \verb+ContextLifetimes+\ \big]\ \big[\ \verb+LifetimeParameters+\ \big]\\
+                    &       & \token{(} \big( \verb+Type+ \verb+Ident+ \big)$^*$ \token{->} \verb+Expr+ \token{)}\\
 \end{syntax}
 
 \paragraph{Example.}

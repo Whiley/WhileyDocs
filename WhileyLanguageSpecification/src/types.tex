@@ -267,9 +267,12 @@ A function or method type describes the signature of a function or method.  Thes
 \begin{syntax}
   \verb+FunctionType+ & $::=$ & \token{function}\ \verb+ParameterTypes+\ \token{->}\ \verb+ParameterTypes+\\
   &&\\
-  \verb+MethodType+ & $::=$ & \token{method}\ \verb+ParameterTypes+\ \big[\ \token{->}\ \verb+ParameterTypes+\ \big]\\
+  \verb+MethodType+ & $::=$ & \token{method}\ \big[\ \verb+ContextLifetimes+\ \big]\big[\ \verb+LifetimeParameters+\ \big]\\
+                    &       & \verb+ParameterTypes+\ \big[\ \token{->}\ \verb+ParameterTypes+\ \big]\\
   &&\\
   \verb+ParameterTypes+ & $::=$ & \token{(}\ \big[\ \verb+Type+\ \big(\ \token{,}\ \verb+Type+\ \big)$^*$\ \big]\ \token{)}\\
+  \verb+ContextLifetimes+ & $::=$ & \token{[}\ \verb+ContextLifetime+\ \big(\ \token{,}\ \verb+ContextLifetime+\ \big)$^*$\ \token{]}\\
+  \verb+ContextLifetime+ & $::=$ & \token{this}\ $|$\ \verb+Ident+\\
 \end{syntax}
 
 \paragraph{Example.} The following example illustrates function types:
