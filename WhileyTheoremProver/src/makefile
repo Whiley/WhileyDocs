@@ -1,12 +1,12 @@
 TARGET = WhileyTheoremProver
-DEPS = title.tex introduction.tex lexical.tex compilation-units.tex types.tex expressions.tex glossary.tex references.bib
+DEPS = listings.tex title.tex introduction.tex
 
 all: $(TARGET).pdf
 
 %.pdf : %.tex $(DEPS)
 	@for X in 1 2 3 ; do \
-        ( echo "---------------- Latex ($$X) ----------------" && pdflatex $< && makeglossaries $(TARGET) && bibtex $* ) \
+        ( echo "---------------- Latex ($$X) ----------------" && pdflatex $< && bibtex $*) \
 	done
 
 clean:
-	rm *.toc *.bbl *.aux *.dvi *.log *.ps *.pdf *~ *.blg *.glo *.gls *.glg *.idx *.xdy *.out *.ist *.bak
+	rm *.bbl *.aux *.dvi *.log *.ps *.pdf *~ *.blg *.bak

@@ -1,7 +1,9 @@
 \documentclass[10pt]{book}
 
+\linespread{1.1}
 \usepackage[T1]{fontenc}
-\usepackage[lighttt]{lmodern}
+%\usepackage[lighttt]{lmodern}
+\usepackage{palatino}
 
 \usepackage{graphicx}
 \usepackage{url} % for typesetting urls
@@ -12,10 +14,10 @@
 \usepackage[super,square]{natbib}
 \usepackage{amssymb}
 \usepackage{stmaryrd}
-\usepackage[a4paper,lmargin=35mm,tmargin=35mm,bmargin=35mm,rmargin=35mm,twoside=false,marginpar=30mm]{geometry}
+\usepackage[paperwidth=6in, paperheight=9in,lmargin=10mm,tmargin=10mm,bmargin=20mm,rmargin=10mm,twoside=true,marginpar=30mm]{geometry}
 \usepackage{wallpaper}
 
-\input{glossary}
+\input{../../WhileyLanguageSpecification/src/glossary}
 
 \input{listings}
 
@@ -56,6 +58,11 @@
 
 % ======================================================
 
+% increase depth of section numbering to 3 points
+\setcounter{secnumdepth}{3}
+
+% ======================================================
+
 % \newenvironment{syntax}[1]{
 %   \begin{center}
 %     \begin{minipage}{0.8\textwidth}
@@ -64,8 +71,8 @@
 \newenvironment{syntax}{
   \def\FrameCommand{\fboxsep=\FrameSep \fcolorbox {black}{verylightgray}}
     \begin{framed}
-      \noindent\begin{minipage}{0.9\textwidth}
-        \begin{tabular}{rcl}
+      \noindent\small\begin{minipage}{0.9\textwidth}
+        \begin{tabular}{r@{\hspace*{0.2cm}}c@{\hspace*{0.2cm}}l}
         }{\end{tabular}\end{minipage}\end{framed}}
 
 % ======================================================
@@ -83,15 +90,6 @@
 \tableofcontents
 
 \input{introduction}
-\part{Overview}
-
-\part{Syntax}
-\input{lexical}
-\input{compilation-units}
-\input{types}
-\input{expressions}
-
-\part{Deductive Rules}
 
 \printglossaries
 
