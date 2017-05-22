@@ -1,0 +1,161 @@
+\chapter{Assertion Language}
+
+This chapter provides a high-level introduction to the Whiley
+Assertion Language (WyAL) and associated tooling.  The purpose is to
+help the reader understand {\em what} the system is trying to achieve
+without going into details about {\em how} it is achieved.  To that
+end, some discussion of how this relates to the Whiley language is
+provided.
+
+\section{Overview}
+The fundamental construct in WyAL is the \lstinline{assert} statement.
+The following illustrates a very simple example:
+\begin{lstlisting}[language=WyAL]
+assert:
+  forall(int x):
+     if:
+       x > 0
+     then:
+       x >= 0
+\end{lstlisting}
+An assertion is simply a statement whose truth is to be checked by the
+Whiley Theorem Prover (WyTP).  If the above were stored in a file
+\lstinline{test.wyal}, then we could perform this check as follows:
+\begin{verbatim}
+% wy verify test.wyal
+\end{verbatim}
+The tool accepts this without producing an error message, thus
+indicating that it believes this statement to be correct.  To
+understand what happens when an incorrect assertion is given, consider
+the following:
+\begin{lstlisting}[language=WyAL]
+assert:
+  forall(int x):
+     if:
+       x >= 0
+     then:
+       x > 0
+\end{lstlisting}
+
+This assertion is incorrect because if, for example,
+``\lstinline{x==0}'' then it is clearly not the case that
+``\lstinline{x > 0}''.  As such, we have found a {\em counter-example}
+to our assertion.  Running WyTP identifies the problem:
+\begin{lstlisting}
+./test.wyal:1: assertion failure
+assert:
+^^^^^^^
+\end{lstlisting}
+
+Assertions in WyAL are simply formulae written in an extended form of
+first-order logic.  The goal of WyTP is simply to ``decide'' whether
+or not such formulae are {\em satisfiable} or {\em unsatisfiable}.  
+
+
+\section{Syntax}
+\subsection{Macros}
+\subsection{Arrays}
+\subsection{Records}
+\subsection{Unions, Intersections and Negations}
+
+\section{Verification Condition Generation}
+
+The Whiley programming was developed from scratch to simplify the
+process of {\em verifying software correctness}.  The language allows
+one to specify a function's permitted behaviour through the use of
+{\em preconditions} (i.e. constraints in input values) and {\em
+  postconditions} (i.e. constraints on output values).  The Whiley
+compiler is used to check that the implementation of a function meets
+its specification.  As such, the Whiley compiler is referred to as a
+{\em verifying compiler} which ``{\em uses automated mathematical and
+  logical reasoning to check the correctness of the programs that it
+  compiles}''~\cite{Hoare03}.
+
+The Whiley Compiler (WyC) checks the correctness of Whiley programs by
+converting them into WyAL assertions and passing them through WyTP.
+If WyTP believes all of the assertions are correct, then the original
+Whiley program is considered correct.  Otherwise, the original Whiley
+program is considered incorrect.  The assertions created for checking
+a Whiley file are known as {\em verification conditions}, and the
+process of creating them as {\em verification condition generation}.
+
+As an example, consider the following simple Whiley implementation of
+the well-known {\em absolute} function:
+
+\begin{lstlisting}[language=Whiley]
+function abs(int x) -> (int r)
+ensures r >= 0
+ensures (r == x) || (r == -x):
+   //
+   if x >= 0:
+      return x
+   else:
+      return -x
+\end{lstlisting}
+
+
+This has two postconditions denoted by the \lstinline{ensures}
+clauses: the first states that the return value cannot be negative;
+the second states that the return value is either \lstinline{x} or its
+negation.  Both of these conditions must be true of {\em any possible}
+return value for the function to be considered correct.
+
+The Whiley Compiler performs verification condition generation by
+traversing the \gls{control_flow_graph} of the function in a
+path-sensitive fashion.  When a branch is encountered, the generator
+forks and proceeds independently down each path.  In this case, four
+verification conditions will be generated since there are two
+\lstinline{ensures} clauses and two execution paths.  The following
+two verification conditions are generated for the first clause by each
+execution path:
+
+\begin{center}
+\begin{tabular}{c c c}
+\begin{minipage}[t]{0.45\textwidth}
+\begin{lstlisting}[language=WyAL]
+assert:
+  forall(int x):
+    if:
+      x >= 0
+    then:
+      x >= 0
+\end{lstlisting}
+\end{minipage}&&
+\begin{minipage}[t]{0.45\textwidth}
+\begin{lstlisting}[language=WyAL]
+  assert:
+    forall(int x):
+      if:
+        x < 0
+      then:
+        -x >= 0
+\end{lstlisting}
+\end{minipage}\\
+\end{tabular}
+\end{center}
+The left assertion corresponds to the execution path through the false
+branch of the \lstinline{if} statement in the original Whiley
+function; likewise, the right assertion corresponds to the path
+through the true branch.  
+
+\subsection{Arrays}
+\subsection{Loops}
+
+
+\section{Proofs}
+
+We can examine the tools ``proof'' of this as follows:
+\begin{verbatim}
+% wy verify --proof test.wyal
+
+ 36. exists(int x).(((((x + 1) >= ((0 + 1) + 1))) ...    () 
+ 41. exists(int x).((x >= 1) && (0 >= (1 + x)))   (Simp 36) 
+ 40. (x >= 1) && (0 >= (1 + x))               (Exists-E 41) 
+ 37. x >= 1                                      (And-E 40) 
+ 39. 0 >= (1 + x)                                (And-E 40) 
+ 44. -1 >= 1                                  (Ieq-I 39,37) 
+ 20. false                                        (Simp 44) 
+\end{verbatim}
+This proof simplify identifies the rules applied by WyTP in the order
+they were applied.  For now, the details of this are not so important
+and we will return to this later.

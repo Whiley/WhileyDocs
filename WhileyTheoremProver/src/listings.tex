@@ -7,13 +7,6 @@
 \pagestyle{plain}
 \lstloadlanguages{Java}
 \lstset{
-        language=Java,
-        keywords={function, method, type, constant, assert, assume, for, while, switch, is, if, case, return,
-          else, package, define, as, requires, ensures, where, no, new,
-          all, bool, int, byte, char, string, void, real, in, any,
-          null, var, public, protected, private, native, export, skip, break, do,
-          throws, catch, continue, default, try
-        },
         basicstyle=\small\ttfamily,
         commentstyle=\rmfamily\itshape,
         stringstyle=\small\itshape,
@@ -46,4 +39,36 @@
            {-*-}{{$\times$}}1 {||_}{{$\lceilfloor$}}1 {_||}{{$\rceilfloor$}}1
            {/0}{{$\emptyset$}}1 {/bul}{{$\unit$}}1 {:->}{{$\mapsto$}}1
            {~}{$\sim$}1,
+}
+
+% ==========================================
+% Whiley LstListing Mode
+% ==========================================
+\lstdefinelanguage{Whiley}
+{
+  morekeywords={
+    function, method, type, constant, assert, assume,
+    while, switch, is, if, case, return, else, package, 
+    as, requires, ensures, where, no, new,
+    all, bool, int, byte, char, string, void, real, in, any,
+    null, var, public, protected, private, native, export, skip, break, do,
+    throws, catch, continue, default, try
+  },
+  sensitive=false,
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/}
+}
+
+% ==========================================
+% WyAL LstListing Mode
+% ==========================================
+
+\lstdefinelanguage{WyAL}
+{
+  morekeywords={
+    assert,define,exists,forall,if,then
+  },
+  sensitive=false,
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/}
 }

@@ -1,5 +1,5 @@
 TARGET = WhileyTheoremProver
-DEPS = listings.tex title.tex introduction.tex
+DEPS = listings.tex title.tex introduction.tex overview.tex
 
 all: $(TARGET).pdf
 
