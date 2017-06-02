@@ -53,10 +53,69 @@ or not such formulae are {\em satisfiable} or {\em unsatisfiable}.
 
 
 \section{Syntax}
-\subsection{Macros}
-\subsection{Arrays}
-\subsection{Records}
-\subsection{Unions, Intersections and Negations}
+As discussed above, the primary construct in WyAL is the `assert`
+statement.  We now explore the syntax of `assert` statements in an
+informal fashion.
+
+
+\subsection{Types}
+
+The set of types provided in WyAL exactly matches those found in
+Whiley.  This includes: {\em primitive types} (i.e. \lstinline{null},
+\lstinline{bool}, \lstinline{int} and \lstinline{any}; {\em array
+    types} (e.g. \lstinline{int[]}); {\em record types}
+  (e.g. \lstinline|{int x, int y}|); {\em union, intersection and
+    negation connectives} (e.g. \lstinline{int|null}); and,
+  {\em reference types} (e.g. \lstinline{&int}).  We now explore these
+  in more detail.
+
+\paragraph{Array types} have the general form
+  \lstinline{T[]} where \lstinline{T} is the {\em element type}.  They
+  support the {\em array access} (e.g. \lstinline{xs[i]}) and {\em
+    array length} (e.g. \lstinline{|xs|}) operators , and provide the
+  {\em array initialiser} (e.g. \lstinline{[1,2,3]}) and {\em array
+    generator} constructors (e.g. \lstinline{[0;n]}).  The following
+  illustrates a simple assertion involving arrays:
+
+\begin{lstlisting}[language=WyAL]
+assert:
+   forall(int[] xs, int i):
+      if:
+         |xs| == 1
+         xs[i] == 0
+      then:
+         xs == [0]
+\end{lstlisting}
+
+This simple assertion employs both array access and length operators,
+as well as the the array initialiser constructor.
+
+\paragraph{Record types} have the general form ``\lstinline|{T1 f1,...,Tn fn}|'' where \lstinline{f1} ... \lstinline{fn} denote the
+{\em field names}.  They support the {\em record access} operator and provide the {\em
+  record initialiser} constructor.  The following illustrates a simple
+assertion involving records:
+
+\begin{lstlisting}[language=WyAL]
+assert:
+   forall({int x, int y} point):
+      if:
+         point.x == 0
+         point.y == 0
+      then:
+         point == {x:0, y:0}
+\end{lstlisting}
+
+This employs both the record access operator
+(e.g. \lstinline{point.x}) and record initialiser constructor
+(e.g. \lstinline|{x:0, y:0}|).
+
+\paragraph{Unions, Intersections and Negations}
+
+
+\subsection{Quantifiers}
+
+\subsection{User-Defined Types}
+\subsection{Properties}
 
 \section{Verification Condition Generation}
 
