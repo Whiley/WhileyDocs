@@ -1,11 +1,27 @@
 \chapter{Assertion Language}
 
-This chapter provides a high-level introduction to the Whiley
-Assertion Language (WyAL) and associated tooling.  The purpose is to
-help the reader understand {\em what} the system is trying to achieve
-without going into details about {\em how} it is achieved.  To that
-end, some discussion of how this relates to the Whiley language is
-provided.
+The Whiley programming language was developed from scratch to simplify
+the process of {\em verifying software correctness}.  The language
+allows one to specify a function's permitted behaviour through the use
+of {\em preconditions} (i.e. constraints in input values) and {\em
+  postconditions} (i.e. constraints on output values).  The Whiley
+compiler is used to check that the implementation of a function meets
+its specification.  As such, the Whiley compiler is referred to as a
+{\em verifying compiler} which ``{\em uses automated mathematical and
+  logical reasoning to check the correctness of the programs that it
+  compiles}''~\cite{Hoare03}.
+
+The Whiley Compiler (WyC) checks the correctness of Whiley programs by
+converting them into assertions written in the Whiley Assertion
+Language (WyAL) and checking using the Whiley Theorem Prover (WyTP).
+If all of the generated assertions (known as {\em verification
+  conditions}) can be shown as correct, then the original Whiley
+program is considered correct.  This chapter provides a high-level
+introduction to the Whiley Assertion Language (WyAL) and associated
+tooling.  The purpose is to help the reader understand {\em what} the
+system is trying to achieve without going into details about {\em how}
+it is achieved.  To that end, some discussion of how this relates to
+the Whiley language is provided.
 
 \section{Overview}
 The fundamental construct in WyAL is the \lstinline{assert} statement.
@@ -58,7 +74,7 @@ statement.  We now explore the syntax of `assert` statements in an
 informal fashion.
 
 
-\subsection{Types}
+\subsection{Built-In Types}
 
 The set of types provided in WyAL exactly matches those found in
 Whiley.  This includes: {\em primitive types} (i.e. \lstinline{null},
@@ -69,13 +85,13 @@ Whiley.  This includes: {\em primitive types} (i.e. \lstinline{null},
   {\em reference types} (e.g. \lstinline{&int}).  We now explore these
   in more detail.
 
-\paragraph{Array types} have the general form
-  \lstinline{T[]} where \lstinline{T} is the {\em element type}.  They
-  support the {\em array access} (e.g. \lstinline{xs[i]}) and {\em
-    array length} (e.g. \lstinline{|xs|}) operators , and provide the
-  {\em array initialiser} (e.g. \lstinline{[1,2,3]}) and {\em array
-    generator} constructors (e.g. \lstinline{[0;n]}).  The following
-  illustrates a simple assertion involving arrays:
+  \paragraph{Array types.} These have the general form \lstinline{T[]}
+  where \lstinline{T} is the {\em element type}.  They support the
+  {\em array access} (e.g. \lstinline{xs[i]}) and {\em array length}
+  (e.g. \lstinline{|xs|}) operators , and provide the {\em array
+    initialiser} (e.g. \lstinline{[1,2,3]}) and {\em array generator}
+  constructors (e.g. \lstinline{[0;n]}).  The following illustrates a
+  simple assertion involving arrays:
 
 \begin{lstlisting}[language=WyAL]
 assert:
@@ -88,12 +104,12 @@ assert:
 \end{lstlisting}
 
 This simple assertion employs both array access and length operators,
-as well as the the array initialiser constructor.
+as well as the array initialiser constructor.
 
-\paragraph{Record types} have the general form ``\lstinline|{T1 f1,...,Tn fn}|'' where \lstinline{f1} ... \lstinline{fn} denote the
-{\em field names}.  They support the {\em record access} operator and provide the {\em
-  record initialiser} constructor.  The following illustrates a simple
-assertion involving records:
+\paragraph{Record types.} These have the general form ``\lstinline|{T1 f1,...,Tn fn}|'' where \lstinline{f1} ... \lstinline{fn} denote the
+{\em field names}.  They support the {\em record access} operator and
+provide the {\em record initialiser} constructor.  The following
+illustrates a simple assertion involving records:
 
 \begin{lstlisting}[language=WyAL]
 assert:
@@ -109,34 +125,72 @@ This employs both the record access operator
 (e.g. \lstinline{point.x}) and record initialiser constructor
 (e.g. \lstinline|{x:0, y:0}|).
 
-\paragraph{Unions, Intersections and Negations}
+\paragraph{Union Types.}  These have the general form ``\lstinline{T1 | ... | Tn}'' where \lstinline{T1} ... \lstinline{Tn} denote the
+{\em element types}.  A variable of union type may hold any value
+permitted by one of its element types.  Unions support the {\em type
+  test} operator.  The following illustrates a simple assertion
+involving unions:
+\begin{lstlisting}[language=WyAL]
+assert:
+   forall(int|null x, int y):
+      if:
+         x is int
+         x > y
+      then:
+         x != y
+\end{lstlisting}
+The positioning of ``\lstinline{x is int}'' is important here.  For
+example, if ``\lstinline{x > y}'' came before ``\lstinline{x is int}''
+then the above would not compile.  This is because the type checker
+only assumes that \lstinline{x} has type \lstinline{int} after it sees
+``\lstinline{x is int}'', but not before.
 
+\subsection{User-Defined Types}
+ 
+The Whiley Assertion Language supports {\em user-defined types} which
+allow names to be given to types.  The following illustrates a simple
+example:
+\begin{lstlisting}[language=WyAL]
+type nat is (int x) where x >= 0
+
+assert:
+   forall(nat x):
+      x >= 0
+\end{lstlisting}
+Here, a new type \lstinline{nat} has been defined to represent the
+{\em naturals} (i.e. the non-negative integers).  We say that
+\lstinline{nat} is a {\em constrained} type because it includes a type
+invariant (i.e. ``\lstinline{x >= 0}'').  We note that type invariants
+are optional.
+
+In addition to allowing the definition of constrained types, we can
+also define {\em recursive} types.  The following illustrates a simple
+example:
+
+\begin{lstlisting}[language=WyAL]
+type LinkedList is (null | { LinkedList next, nat data } l)
+
+assert:
+   forall(LinkedList x):
+      if:
+         !(x is null)
+      then:
+          x.data >= 0
+\end{lstlisting}
+This defines a linked list where each node holds a field
+\lstinline{data} of type \lstinline{nat}.  Observe how the type test
+operator is used to distinguish between a leaf node
+(i.e. \lstinline{null}) and a non-leaf node.
 
 \subsection{Quantifiers}
 
-\subsection{User-Defined Types}
 \subsection{Properties}
 
 \section{Verification Condition Generation}
 
-The Whiley programming was developed from scratch to simplify the
-process of {\em verifying software correctness}.  The language allows
-one to specify a function's permitted behaviour through the use of
-{\em preconditions} (i.e. constraints in input values) and {\em
-  postconditions} (i.e. constraints on output values).  The Whiley
-compiler is used to check that the implementation of a function meets
-its specification.  As such, the Whiley compiler is referred to as a
-{\em verifying compiler} which ``{\em uses automated mathematical and
-  logical reasoning to check the correctness of the programs that it
-  compiles}''~\cite{Hoare03}.
-
-The Whiley Compiler (WyC) checks the correctness of Whiley programs by
-converting them into WyAL assertions and passing them through WyTP.
-If WyTP believes all of the assertions are correct, then the original
-Whiley program is considered correct.  Otherwise, the original Whiley
-program is considered incorrect.  The assertions created for checking
-a Whiley file are known as {\em verification conditions}, and the
-process of creating them as {\em verification condition generation}.
+The assertions created for checking a Whiley file are known as {\em
+  verification conditions}, and the process of creating them as {\em
+  verification condition generation}.
 
 As an example, consider the following simple Whiley implementation of
 the well-known {\em absolute} function:
