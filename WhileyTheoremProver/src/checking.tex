@@ -156,11 +156,129 @@ is ${\tt\{x\mapsto 1\}}$.
 
 \section{Proof Rules}
 
+The proof rules which can be used within a given proof are a
+fundamental component of WyTP.  There are a finite number of rules
+which can be used and, of course, this limits what can be shown to
+hold.  In this section, we provide a broad overview of the different
+kinds of rules that are supported.
+
+\subsection{Simplifications}
+
+Perhaps the largest class of proof rule is that of the {\em
+  simplifications}.  These are rules which rewriting a given formula
+into an equivalent, but simplified form.  Some examples of
+simplifications:
+
+\begin{itemize}
+\item {\bf Logical}.  There are many well known logical
+  simplifications.  For example, ${\tt f\lor f}$ can be reduced to
+  ${\tt f}$.  Likewise, ${\tt true\land f}$ reduces to ${\tt f}$, etc.
+\item {\bf Arithmetic}.  Simplification of arithmetic expressions is
+  also a well studied area.  For example, ${\tt 1+1}$ can be
+  simplified to ${\tt 2}$, and ${\tt (2*x) - x}$ simplifies to
+  ${\tt x}$, etc.  For (in)equalities we can also perform standard
+  rearrangements so that, for example, ${\tt x < x}$ simplifies to
+  ${\tt 0 < 0}$, etc.
+\item {\bf Arrays}.  Several obvious simplifications for arrays exist
+  as well.  For example, ${\tt [x,y,z][0]}$ simplifies to ${\tt x}$.
+  Likewise, ${\tt |[x,y,z]|}$ simplifies to ${\tt 3}$, and
+  ${\tt |[e;n]|}$ simplifies to ${\tt n}$, etc.
+\end{itemize}
+
 \subsection{Axioms}
+
+Axioms represent fundamental facts of the universe which must be
+enforced.  This is usually achieved by inferring new information
+automatically from a given situation.  The following illustrates a
+simple example:
+
+\begin{lstlisting}[language=WyAL]
+assert:
+  forall(int i, int[] xs):
+     if:
+        xs[i] > 0
+     then:
+        (i >= 0)
+\end{lstlisting}
+
+In this assertion, one must show that ${\tt i \ge 0}$ holds assuming
+that ${\tt xs[i] > 0}$ does.  Since we know that ${\tt xs[i]}$ is {\em
+  defined} (i.e. returns a value) then it follows that ${\tt i}$ must
+be within bounds.  That is, it follows from the {\em axiom of array
+  accesses} that ${\tt (i \ge 0)\land(i < |xs|)}$.  We now illustrate
+some more examples:
+
+\begin{itemize}
+\item {\bf Arithmetic}.  If ${\tt x / y}$ is defined, then it follows
+  that ${\tt y \neq 0}$.
+\item {\bf Arrays}.  If ${\tt xs==[e;n]}$ is defined, then it follows
+  that ${\tt |xs| > 0}$ and ${\tt |xs| == n}$.  Likewise, if
+  ${\tt xs}$ is a variable of array type, then it follows that
+  ${\tt |xs| > 0}$.
+\item {\bf Functions}.  If ${\tt f(x) \neq f(y)}$ then it follows that
+  ${\tt x\neq y}$.
+\end{itemize}
+
 \subsection{Case Analysis}
-\subsection{Congruence}
-\subsection{Arithmetic}
-\subsection{Quantifier Instantiation}
+
+In many situations, there are an infinite number of models to a given
+formula.  For example, ${\tt x == (y + 1)}$ has an infinite number of
+models (e.g. ${\tt\{x\mapsto 1, y\mapsto 0\}}$,
+${\tt\{x\mapsto 2, y\mapsto 1\}}$, ${\tt\{x\mapsto 3, y\mapsto 2\}}$, etc.
+In such cases, it is impossible to enumerate all possible solutions
+for the given variables.  However, there are situations where only a
+finite number of solutions exist.  In such situations, we can
+exhaustively enumerate all solutions, which is referred to as a {\em
+  case analysis}.  For example, consider the following assertion:
+
+\begin{lstlisting}[language=WyAL]
+assert:
+   forall(int i, int[] xs):
+      if:
+         xs == [1,2,3]
+      then:
+         xs[i] >= 0
+\end{lstlisting}
+
+The proof of this assertion will reduce to the problem of showing that
+${\tt [1,2,3][i] < 0}$ for some ${\tt i}$.  This is a classic form of
+case analysis, as there are a finite number of solutions for ${\tt i}$
+(namely, ${\tt i==0}$, ${\tt i==1}$ and ${\tt i==2}$).  Therefore, we
+introduce the formula ${\tt (i==0)\lor(i==1)\lor(i==3)}$ to capture
+this.  Figure~\ref{p:case_analysis} illustrates how such a proof would
+look.  The figure shows the contradiction for only the first case,
+however subsequent cases are essentially identical.
+
+\begin{figure}
+\begin{wyproof}
+(1) & {\tt \exists(int\;i, int[] xs).(xs == [1,2,3]\land xs[i] < 0)}&\\
+&&\\
+\hline
+\hline
+&&\\
+(2) & xs_1 == [1,2,3]\land xs_1[i_1] < 0 & (\exists\textrm{-elimination}, 1)\\
+(3) &  xs_1 == [1,2,3] & (\land\textrm{-elimination}, 2)\\
+(4) &  xs_1[i_1] < 0 & (\land\textrm{-elimination}, 2)\\
+(5) &  [1,2,3][i_1] < 0 & (\textrm{congruence}, 3+4)\\
+(6) &  (i_1==0)\lor(i_1==1)\lor(i_1==2)& (\textrm{case analysis},5)\\
+&&\\
+\multicolumn{3}{c}{
+  \begin{wyproof}
+    (7) & i_1 == 0 & (\lor\textrm{-elimination}, 6)\\
+    (8) & [1,2,3][0] < 0 & (\textrm{congruence}, 5 + 7)\\
+    (9) & 1 < 0 & (\textrm{simplification}, 8)\\
+    (10) & \bot & (\textrm{simplification}, 9)\\
+  \end{wyproof}
+}\\
+\multicolumn{3}{c}{
+  \ldots
+}\\
+\end{wyproof}
+\caption{Illustrating how a proof involving case analysis proceeds.}
+\label{p:case_analysis}
+\end{figure}
+
+\subsection{Quantifiers}
 
 \section{Proof Rewriting}
 
