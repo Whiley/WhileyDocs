@@ -24,7 +24,7 @@ it is achieved.  To that end, some discussion of how this relates to
 the Whiley language is provided.
 
 \section{Overview}
-The fundamental construct in WyAL is the \lstinline{assert} statement.
+The fundamental construct in WyAL is the \clstinline{assert} statement.
 The following illustrates a very simple example:
 \begin{lstlisting}[language=WyAL]
 assert:
@@ -36,7 +36,7 @@ assert:
 \end{lstlisting}
 An assertion is simply a statement whose truth is to be checked by the
 Whiley Theorem Prover (WyTP).  If the above were stored in a file
-\lstinline{test.wyal}, then we could perform this check as follows:
+\clstinline{test.wyal}, then we could perform this check as follows:
 \begin{verbatim}
 % wy verify test.wyal
 \end{verbatim}
@@ -54,8 +54,8 @@ assert:
 \end{lstlisting}
 
 This assertion is incorrect because if, for example,
-``\lstinline{x==0}'' then it is clearly not the case that
-``\lstinline{x > 0}''.  As such, we have found a {\em counter-example}
+\clstinline{x==0} then it is clearly not the case that
+\clstinline{x > 0}.  As such, we have found a {\em counter-example}
 to our assertion.  Running WyTP identifies the problem:
 \begin{lstlisting}
 ./test.wyal:1: assertion failure
@@ -77,20 +77,20 @@ informal fashion.
 \subsection{Built-In Types}
 
 The set of types provided in WyAL exactly matches those found in
-Whiley.  This includes: {\em primitive types} (i.e. \lstinline{null},
-\lstinline{bool}, \lstinline{int} and \lstinline{any}; {\em array
-    types} (e.g. \lstinline{int[]}); {\em record types}
-  (e.g. \lstinline|{int x, int y}|); {\em union, intersection and
-    negation connectives} (e.g. \lstinline{int|null}); and,
-  {\em reference types} (e.g. \lstinline{&int}).  We now explore these
+Whiley.  This includes: {\em primitive types} (i.e. \clstinline{null},
+\clstinline{bool}, \clstinline{int} and \clstinline{any}; {\em array
+    types} (e.g. \clstinline{int[]}); {\em record types}
+  (e.g. \clstinline{\{int x, int y\}}); {\em union, intersection and
+    negation connectives} (e.g. \clstinline{int\|null}); and,
+  {\em reference types} (e.g. \clstinline{&int}).  We now explore these
   in more detail.
 
-  \paragraph{Array types.} These have the general form \lstinline{T[]}
-  where \lstinline{T} is the {\em element type}.  They support the
-  {\em array access} (e.g. \lstinline{xs[i]}) and {\em array length}
-  (e.g. \lstinline{|xs|}) operators , and provide the {\em array
-    initialiser} (e.g. \lstinline{[1,2,3]}) and {\em array generator}
-  constructors (e.g. \lstinline{[0;n]}).  The following illustrates a
+  \paragraph{Array types.} These have the general form \clstinline{T[]}
+  where \clstinline{T} is the {\em element type}.  They support the
+  {\em array access} (e.g. \clstinline{xs[i]}) and {\em array length}
+  (e.g. \clstinline{|xs|}) operators , and provide the {\em array
+    initialiser} (e.g. \clstinline{[1,2,3]}) and {\em array generator}
+  constructors (e.g. \clstinline{[0;n]}).  The following illustrates a
   simple assertion involving arrays:
 
 \begin{lstlisting}[language=WyAL]
@@ -106,7 +106,7 @@ assert:
 This simple assertion employs both array access and length operators,
 as well as the array initialiser constructor.
 
-\paragraph{Record types.} These have the general form ``\lstinline|{T1 f1,...,Tn fn}|'' where \lstinline{f1} ... \lstinline{fn} denote the
+\paragraph{Record types.} These have the general form \clstinline{\{T1 f1,...,Tn fn\}} where \clstinline{f1} ... \clstinline{fn} denote the
 {\em field names}.  They support the {\em record access} operator and
 provide the {\em record initialiser} constructor.  The following
 illustrates a simple assertion involving records:
@@ -122,10 +122,10 @@ assert:
 \end{lstlisting}
 
 This employs both the record access operator
-(e.g. \lstinline{point.x}) and record initialiser constructor
-(e.g. \lstinline|{x:0, y:0}|).
+(e.g. \clstinline{point.x}) and record initialiser constructor
+(e.g. \clstinline{\{x:0, y:0\}}).
 
-\paragraph{Union Types.}  These have the general form ``\lstinline{T1 | ... | Tn}'' where \lstinline{T1} ... \lstinline{Tn} denote the
+\paragraph{Union Types.}  These have the general form \clstinline{T1 \| ... \| Tn} where \clstinline{T1} ... \clstinline{Tn} denote the
 {\em element types}.  A variable of union type may hold any value
 permitted by one of its element types.  Unions support the {\em type
   test} operator.  The following illustrates a simple assertion
@@ -139,11 +139,11 @@ assert:
       then:
          x != y
 \end{lstlisting}
-The positioning of ``\lstinline{x is int}'' is important here.  For
-example, if ``\lstinline{x > y}'' came before ``\lstinline{x is int}''
+The positioning of \clstinline{x is int} is important here.  For
+example, if \clstinline{x > y} came before \clstinline{x is int}
 then the above would not compile.  This is because the type checker
-only assumes that \lstinline{x} has type \lstinline{int} after it sees
-``\lstinline{x is int}'', but not before.
+only assumes that \clstinline{x} has type \clstinline{int} after it sees
+\clstinline{x is int}, but not before.
 
 \subsection{User-Defined Types}
  
@@ -157,10 +157,10 @@ assert:
    forall(nat x):
       x >= 0
 \end{lstlisting}
-Here, a new type \lstinline{nat} has been defined to represent the
+Here, a new type \clstinline{nat} has been defined to represent the
 {\em naturals} (i.e. the non-negative integers).  We say that
-\lstinline{nat} is a {\em constrained} type because it includes a type
-invariant (i.e. ``\lstinline{x >= 0}'').  We note that type invariants
+\clstinline{nat} is a {\em constrained} type because it includes a type
+invariant (i.e. \clstinline{x >= 0}).  We note that type invariants
 are optional.
 
 In addition to allowing the definition of constrained types, we can
@@ -178,13 +178,18 @@ assert:
           x.data >= 0
 \end{lstlisting}
 This defines a linked list where each node holds a field
-\lstinline{data} of type \lstinline{nat}.  Observe how the type test
+\clstinline{data} of type \clstinline{nat}.  Observe how the type test
 operator is used to distinguish between a leaf node
-(i.e. \lstinline{null}) and a non-leaf node.
+(i.e. \clstinline{null}) and a non-leaf node.
 
-\subsection{Quantifiers}
+\subsection{Statements \& Blocks}
+
+% Talk about expression versus block syntax.
+% Talk about different kinds of statements supported.
 
 \subsection{Properties}
+
+\subsection{Uninterpreted Functions}
 
 \section{Verification Condition Generation}
 
@@ -207,9 +212,9 @@ ensures (r == x) || (r == -x):
 \end{lstlisting}
 
 
-This has two postconditions denoted by the \lstinline{ensures}
+This has two postconditions denoted by the \clstinline{ensures}
 clauses: the first states that the return value cannot be negative;
-the second states that the return value is either \lstinline{x} or its
+the second states that the return value is either \clstinline{x} or its
 negation.  Both of these conditions must be true of {\em any possible}
 return value for the function to be considered correct.
 
@@ -218,7 +223,7 @@ traversing the \gls{control_flow_graph} of the function in a
 path-sensitive fashion.  When a branch is encountered, the generator
 forks and proceeds independently down each path.  In this case, four
 verification conditions will be generated since there are two
-\lstinline{ensures} clauses and two execution paths.  The following
+\clstinline{ensures} clauses and two execution paths.  The following
 two verification conditions are generated for the first clause by each
 execution path:
 
@@ -247,7 +252,7 @@ assert:
 \end{tabular}
 \end{center}
 The left assertion corresponds to the execution path through the false
-branch of the \lstinline{if} statement in the original Whiley
+branch of the \clstinline{if} statement in the original Whiley
 function; likewise, the right assertion corresponds to the path
 through the true branch.  
 

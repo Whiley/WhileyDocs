@@ -9,6 +9,7 @@
 \usepackage{url} % for typesetting urls
 \usepackage{color}
 \usepackage{fancybox}
+\usepackage{tcolorbox}
 \usepackage{framed}
 \usepackage{hyperref}
 \usepackage[super,square]{natbib}
@@ -77,6 +78,14 @@
 
 % ======================================================
 
+\newenvironment{wyproof}{
+\begin{tcolorbox}\begin{displaymath}\begin{array}{llr}
+}{
+\end{array}\end{displaymath}\end{tcolorbox}
+}
+
+% ======================================================
+
 \newtheorem{definition}{Definition}
 \newtheorem{lemma}{Lemma}
 \newtheorem{corollary}{Corollary}
@@ -91,6 +100,9 @@
 
 \input{introduction}
 \input{overview}
+\input{checking}
+\input{search}
+\input{models}
 
 \printglossaries
 
