@@ -12,10 +12,10 @@
         stringstyle=\small\itshape,
         moredelim=*[s][commentstyle]{/*}{*/}, % allows keyword highlighting inside comments
         morecomment=[l][commentstyle]{//},      % single line comments are set by...
-        backgroundcolor=\color{lightgray},
-        frame=single, % adds a frame around the code
-        frameround=tttt,
-        framesep=0.25cm,
+        %backgroundcolor=\color{lightgray},
+        %frame=single, % adds a frame around the code
+        %frameround=tttt,
+        framesep=0.0cm,
         texcl,                                                          % ...LaTeX
         moredelim=[is][\ttfamily]{<code>}{</code>}, % allows setting code inside multi-line comments
         moredelim=*[s][\ttfamily]{/*@}{*/}, % JML annotations
@@ -45,7 +45,7 @@
 \definecolor{darkgray}{RGB}{175,175,175}
 
 \newcommand{\clstinline}[1]{\tcbox[tcbox raise
-  base,colback=gray,colframe=darkgray,nobeforeafter,boxrule=0.5pt,left=0mm,right=0mm,top=0mm,bottom=0mm]{\lstinline|#1|}}
+  base,colback=gray!70,colframe=black,nobeforeafter,boxrule=0.5pt,arc=1.5pt,left=0mm,right=0mm,top=0mm,bottom=0mm]{\lstinline|#1|}}
 
 % ==========================================
 % Whiley LstListing Mode
@@ -72,7 +72,7 @@
 \lstdefinelanguage{WyAL}
 {
   morekeywords={
-    assert,define,exists,forall,if,then,is,type
+    assert,define,exists,forall,if,then,is,type,function
   },
   sensitive=false,
   morecomment=[l]{//},

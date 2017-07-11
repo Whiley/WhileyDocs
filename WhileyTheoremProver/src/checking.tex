@@ -21,14 +21,14 @@ proof, every branch will be terminated with a contradiction.
 We begin by illustrating the proofs for some simple assertions.  To
 begin with, let us consider the following assertion:
 
-\begin{lstlisting}[language=WyAL]
+\begin{tcolorbox}\begin{lstlisting}[language=WyAL]
 assert:
    forall(int x):
       if:
          x > 0
       then:
          x >= 0
-\end{lstlisting}
+\end{lstlisting}\end{tcolorbox}
 
 This is a very simple assertion which, with relative ease, we can see
 holds true.  By this, we mean that {\em for all possible} values of
@@ -48,18 +48,20 @@ ${\tt \forall(int\;x).(x>0\implies x\ge 0)}$ and, thus, its negation
 is ${\tt\exists(int\;x).(x < 0\land x\ge 0)}$.  We can now give its
 proof:
 
-\begin{wyproof}
-(1) & \exists(int\;x).(x \ge 0\land x < 0) &\\
+\begin{tcolorbox}
+\begin{tabularx}{\textwidth}{l X r}
+(1) & ${\tt \exists(int\;x).(x\ge 0\land x < 0)}$ &\\
 &&\\
 \hline
 \hline
 &&\\
-(2) & x_1 < 0\land x_1\ge 0 & (\exists\textrm{-elimination}, 1)\\
-(3) & x_1 \ge 0 & (\land\textrm{-elimination}, 2)\\
-(4) & x_1 < 0 & (\land\textrm{-elimination}, 2)\\
-(5) & 0 < 0 & (\le\!\textrm{-closure}, 3 + 4)\\
-(6) & \bot & (\textrm{simplification}, 5)\\
-\end{wyproof}
+(2) & ${\tt x_1 < 0 \land x_1\ge 0}$ & ($\exists$-{\em elimination}, 1)\\
+(3) & ${\tt x_1 \ge 0}$ & ($\land$-{\em elimination}, 2)\\
+(4) & ${\tt x_1 < 0}$ & ($\land$-{\em elimination}, 2)\\
+(5) & ${\tt 0 < 0}$ & ($\le$-{\em closure}, 3 + 4)\\
+(6) & ${\tt \bot}$ & ({\em simplification}, 5)\\
+\end{tabularx}
+\end{tcolorbox}
 
 This begins with the negated formula for a proof-by-contradiction and
 each subsequent line represents some new information derived from
@@ -78,14 +80,14 @@ The presence of disjunctions in the assertion being checked can result
 in the proof diverging down two different paths.  The illustrates a
 minimal example:
 
-\begin{lstlisting}[language=WyAL]
+\begin{tcolorbox}\begin{lstlisting}[language=WyAL]
 assert:
    forall(int x):
       if:
          (x == 0) || (x > 0)
       then:
          x >= 0
-\end{lstlisting}
+\end{lstlisting}\end{tcolorbox}
 
 The disjunction \clstinline{(x == 0) \|\| (x > 0)} generates two cases
 which need to be considered separately.  The proof for this assertion
@@ -95,36 +97,42 @@ information can only be derived in a branch from facts already known
 in that branch and its ancestors.  
 
 The first branch of the proof in Figure~\ref{p:choice} makes use of
-the {\em congruence} rule over atoms $x_1 == 0$ and $x_1 < 0$ to give
+the {\em congruence} rule over atoms $x_1 = 0$ and $x_1 < 0$ to give
 $0 < 0$.  In essence, this rule substitutes $x_1$ for $0$ in the atom
 $x_1 < 0$.
 
 \begin{figure}[!t]
-\begin{wyproof}
-(1) & \exists(int\;x).((x == 0\lor x > 0)\land x < 0) &\\
+\begin{tcolorbox}
+\begin{tabularx}{\textwidth}{l X r}
+(1) & ${\tt\exists(int\;x).((x = 0\lor x > 0)\land x < 0)}$ &\\
 &&\\
 \hline
 \hline
 &&\\
-(2) & (x == 0\lor x > 0)\land x < 0 & (\exists\textrm{-elimination}, 1)\\
-(3) &  (x_1 == 0\lor x_1 > 0) & (\land\textrm{-elimination}, 2)\\
-(4) &  x_1 < 0 & (\land\textrm{-elimination}, 2)\\
+(2) & ${\tt (x = 0\lor x > 0)\land x < 0}$ & ($\exists${\em -elimination}, 1)\\
+(3) & ${\tt (x_1 = 0\lor x_1 > 0)}$ & ($\land${\em -elimination}, 2)\\
+(4) & ${\tt x_1 < 0}$ & ($\land${\em-elimination}, 2)\\
 &&\\
 \multicolumn{3}{c}{
-  \begin{wyproof}
-    (5) & x_1 == 0 & (\lor\textrm{-elimination}, 2)\\
-    (6) & x_1 < x_1 & (\textrm{congruence}, 4 + 5)\\
-    (7) & \bot & (\textrm{simplification}, 6)\\
-  \end{wyproof}
+  \begin{tcolorbox}[colback=gray!0.75]
+    \begin{tabularx}{\textwidth}{l X r}
+      (5) & ${\tt x_1 = 0}$ & ($\lor${\em -elimination}, 2)\\
+      (6) & ${\tt x_1 < x_1}$ & ({\em congruence}, 4 + 5)\\
+      (7) & ${\tt \bot}$ & ({\em simplification}, 6)\\
+    \end{tabularx}
+  \end{tcolorbox}
 }\\
 \multicolumn{3}{c}{
-  \begin{wyproof}
-    (8) & x_1 > 0 & (\lor\textrm{-elimination}, 2)\\
-    (9) & 0 < 0 & (\le\!\textrm{-closure}, 4 + 8)\\
-    (10) & \bot & (\textrm{simplification}, 5)\\
-  \end{wyproof}
+  \begin{tcolorbox}[colback=gray!0.75]
+    \begin{tabularx}{\textwidth}{l X r}
+      (8) & ${\tt x_1 > 0}$ & ($\lor${\em-elimination}, 2)\\
+      (9) & ${\tt 0 < 0}$ & ($\le${\em-closure}, 4 + 8)\\
+      (10) & ${\tt\bot}$ & ({\em simplification}, 5)\\
+    \end{tabularx}
+  \end{tcolorbox}
 }\\
-\end{wyproof}
+\end{tabularx}
+\end{tcolorbox}
 \caption{Illustrates a proof which two branches arising from a disjunction.}
 \label{p:choice}
 \end{figure}
@@ -135,14 +143,14 @@ Whilst the assertions we have looked at so far have all been correct,
 this is not necessarily the case.  For example, consider the following
 assertion:
 
-\begin{lstlisting}[language=WyAL]
+\begin{tcolorbox}\begin{lstlisting}[language=WyAL]
 assert:
    forall(int x):
       if:
           x >= 0
       then:
           x > 1
-\end{lstlisting}
+\end{lstlisting}\end{tcolorbox}
 
 This assert does not hold and, hence, we cannot construct a proof
 which yields a contradiction.  In other words, there is a {\em model}
@@ -192,14 +200,14 @@ enforced.  This is usually achieved by inferring new information
 automatically from a given situation.  The following illustrates a
 simple example:
 
-\begin{lstlisting}[language=WyAL]
+\begin{tcolorbox}\begin{lstlisting}[language=WyAL]
 assert:
   forall(int i, int[] xs):
      if:
         xs[i] > 0
      then:
         (i >= 0)
-\end{lstlisting}
+\end{lstlisting}\end{tcolorbox}
 
 In this assertion, one must show that ${\tt i \ge 0}$ holds assuming
 that ${\tt xs[i] > 0}$ does.  Since we know that ${\tt xs[i]}$ is {\em
@@ -211,8 +219,8 @@ some more examples:
 \begin{itemize}
 \item {\bf Arithmetic}.  If ${\tt x / y}$ is defined, then it follows
   that ${\tt y \neq 0}$.
-\item {\bf Arrays}.  If ${\tt xs==[e;n]}$ is defined, then it follows
-  that ${\tt |xs| > 0}$ and ${\tt |xs| == n}$.  Likewise, if
+\item {\bf Arrays}.  If ${\tt xs=[e;n]}$ is defined, then it follows
+  that ${\tt |xs| > 0}$ and ${\tt |xs| = n}$.  Likewise, if
   ${\tt xs}$ is a variable of array type, then it follows that
   ${\tt |xs| > 0}$.
 \item {\bf Functions}.  If ${\tt f(x) \neq f(y)}$ then it follows that
@@ -222,7 +230,7 @@ some more examples:
 \subsection{Case Analysis}
 
 In many situations, there are an infinite number of models to a given
-formula.  For example, ${\tt x == (y + 1)}$ has an infinite number of
+formula.  For example, ${\tt x = (y + 1)}$ has an infinite number of
 models (e.g. ${\tt\{x\mapsto 1, y\mapsto 0\}}$,
 ${\tt\{x\mapsto 2, y\mapsto 1\}}$, ${\tt\{x\mapsto 3, y\mapsto 2\}}$, etc.
 In such cases, it is impossible to enumerate all possible solutions
@@ -231,49 +239,53 @@ finite number of solutions exist.  In such situations, we can
 exhaustively enumerate all solutions, which is referred to as a {\em
   case analysis}.  For example, consider the following assertion:
 
-\begin{lstlisting}[language=WyAL]
+\begin{tcolorbox}\begin{lstlisting}[language=WyAL]
 assert:
    forall(int i, int[] xs):
       if:
          xs == [1,2,3]
       then:
          xs[i] >= 0
-\end{lstlisting}
+\end{lstlisting}\end{tcolorbox}
 
 The proof of this assertion will reduce to the problem of showing that
 ${\tt [1,2,3][i] < 0}$ for some ${\tt i}$.  This is a classic form of
 case analysis, as there are a finite number of solutions for ${\tt i}$
-(namely, ${\tt i==0}$, ${\tt i==1}$ and ${\tt i==2}$).  Therefore, we
-introduce the formula ${\tt (i==0)\lor(i==1)\lor(i==3)}$ to capture
+(namely, ${\tt i=0}$, ${\tt i=1}$ and ${\tt i=2}$).  Therefore, we
+introduce the formula ${\tt (i=0)\lor(i=1)\lor(i=3)}$ to capture
 this.  Figure~\ref{p:case_analysis} illustrates how such a proof would
 look.  The figure shows the contradiction for only the first case,
 however subsequent cases are essentially identical.
 
-\begin{figure}
-\begin{wyproof}
-(1) & {\tt \exists(int\;i, int[] xs).(xs == [1,2,3]\land xs[i] < 0)}&\\
+\begin{figure}[!t]
+\begin{tcolorbox}
+\begin{tabularx}{\textwidth}{l X r}
+(1) & ${\tt \exists(int\;i, int[] xs).(xs = [1,2,3]\land xs[i] < 0)}$&\\
 &&\\
 \hline
 \hline
 &&\\
-(2) & xs_1 == [1,2,3]\land xs_1[i_1] < 0 & (\exists\textrm{-elimination}, 1)\\
-(3) &  xs_1 == [1,2,3] & (\land\textrm{-elimination}, 2)\\
-(4) &  xs_1[i_1] < 0 & (\land\textrm{-elimination}, 2)\\
-(5) &  [1,2,3][i_1] < 0 & (\textrm{congruence}, 3+4)\\
-(6) &  (i_1==0)\lor(i_1==1)\lor(i_1==2)& (\textrm{case analysis},5)\\
+(2) & ${\tt xs_1 = [1,2,3]\land xs_1[i_1] < 0}$ & ($\exists${\em-elimination}, 1)\\
+(3) & ${\tt xs_1 = [1,2,3]}$ & ($\land${\em-elimination}, 2)\\
+(4) & ${\tt xs_1[i_1] < 0}$ & ($\land${\em-elimination}, 2)\\
+(5) & ${\tt [1,2,3][i_1] < 0}$ & ({\em congruence}, 3+4)\\
+(6) & ${\tt (i_1=0)\lor(i_1=1)\lor(i_1=2)}$ & ({\em case analysis},5)\\
 &&\\
 \multicolumn{3}{c}{
-  \begin{wyproof}
-    (7) & i_1 == 0 & (\lor\textrm{-elimination}, 6)\\
-    (8) & [1,2,3][0] < 0 & (\textrm{congruence}, 5 + 7)\\
-    (9) & 1 < 0 & (\textrm{simplification}, 8)\\
-    (10) & \bot & (\textrm{simplification}, 9)\\
-  \end{wyproof}
+  \begin{tcolorbox}[colback=gray!0.75]
+    \begin{tabularx}{\textwidth}{l X r}
+      (7) & ${\tt i_1 = 0}$ & ($\lor${\em -elimination}, 6)\\
+      (8) & ${\tt [1,2,3][0] < 0}$ & ({\em congruence}, 5 + 7)\\
+      (9) & ${\tt 1 < 0}$ & ({\em simplification}, 8)\\
+      (10) & ${\tt\bot}$ & ({\em simplification}, 9)\\
+    \end{tabularx}
+  \end{tcolorbox}
 }\\
 \multicolumn{3}{c}{
   \ldots
 }\\
-\end{wyproof}
+\end{tabularx}
+\end{tcolorbox}
 \caption{Illustrating how a proof involving case analysis proceeds.}
 \label{p:case_analysis}
 \end{figure}
