@@ -290,13 +290,109 @@ however subsequent cases are essentially identical.
 \label{p:case_analysis}
 \end{figure}
 
-\subsection{Quantifiers}
+\subsection{Quantifier Instantiation}
+
+The presence of universally quantified terms within an assertion
+presents some significant challenges to the theorem prover.  The
+following illustrates such as an assertion:
+
+\begin{tcolorbox}\begin{lstlisting}[language=WyAL]
+assert:
+   forall(int[] xs):
+      if:
+         forall(int i).(xs[i] > 0)
+      then:
+         forall(int j).(xs[j] >= 0)
+\end{lstlisting}\end{tcolorbox}
+
+The proof for this assertion begins as follows:
+
+\begin{tcolorbox}
+\begin{tabularx}{\textwidth}{l X r}
+(1) & ${\tt \exists(int[]\;xs).(\forall(int\;i).(xs[i] >
+  0)\land\exists(int\;j).(xs[j] \le 0))}$&\\
+&&\\
+\hline
+\hline
+&&\\
+(2) & ${\tt \forall(int\;i).(xs_1[i] > 0)\land\exists(int\;j).(xs_1[j] < 0)}$ & ($\exists${\em-elimination}, 1)\\
+(3) & ${\tt \forall(int\;i).(xs_1[i] > 0)}$ & ($\land${\em-elimination}, 2)\\
+(4) & ${\tt \exists(int\;j).(xs_1[j] < 0)}$ & ($\land${\em-elimination}, 2)\\
+(5) & ${\tt xs_1[j_1] < 0}$ & ($\exists${\em-elimination}, 4)\\
+\multicolumn{3}{c}{\ldots}\\
+\end{tabularx}
+\end{tcolorbox}
+
+At this point, we can ourselves see the contradiction.  Since by (3)
+we know that every element in ${\tt xs}$ is positive we know that
+${\tt xs_1[j_1] < 0}$ is a contradiction.  To understand how we
+mechanically show this from the position above, we must consider the
+meaning of ${\tt \forall(int\;i).(xs_1[i] > 0)}$.  Specifically, this
+can be viewed as an {\em infinite conjunction} of the form:
+\begin{displaymath}
+{\tt \ldots\land xs_1[0] > 0\land xs_1[1] > 0\land xs_1[2] > 0\land\ldots}
+\end{displaymath}
+Furthermore, even though the exact value of the constant ${\tt j_1}$
+is unknown, it is certainly a valid integer value.  Thus,
+${\tt xs_1[j_1] > 0}$ is implied by our infinite conjunction.  We say
+that ${\tt xs_1[j_1] > 0}$ is {\em instantiated} from our quantifier
+with the binding ${\tt\{i\mapsto j_1\}}$.  Our proof can now be
+completed as follows:
+
+\begin{tcolorbox}
+\begin{tabularx}{\textwidth}{l X r}
+(1) & ${\tt \exists(int[]\;xs).(\forall(int\;i).(xs[i] >
+  0)\land\exists(int\;j).(xs[j] \le 0))}$&\\
+&&\\
+\hline
+\hline
+&&\\
+(2) & ${\tt \forall(int\;i).(xs_1[i] > 0)\land\exists(int\;j).(xs_1[j] < 0)}$ & ($\exists${\em-elimination}, 1)\\
+(3) & ${\tt \forall(int\;i).(xs_1[i] > 0)}$ & ($\land${\em-elimination}, 2)\\
+(4) & ${\tt \exists(int\;j).(xs_1[j] < 0)}$ & ($\land${\em-elimination}, 2)\\
+(5) & ${\tt xs_1[j_1] < 0}$ & ($\exists${\em-elimination}, 4)\\
+(6) & ${\tt xs_1[j_1] > 0}$ & ($\forall${\em-instantiation}, 3)\\
+(7) & ${\tt 0 > 0}$ & ($\le${\em-closure}, 5+6)\\
+(8) & ${\tt\bot}$ & ({\em simplification}, 7)\\
+\end{tabularx}
+\end{tcolorbox}
+
+In general, a quantifier can be instantiated for any valid binding of
+its variables.  Furthermore, a quantified can be instantiated multiple
+times for different bindings.  However, as we will see in the
+following chapter, determining a good binding with which to
+instantiate a quantifier is a challenging problem.
 
 \section{Proof Rewriting}
 
-\section{Notes}
-\begin{itemize}
-\item {\bf Proof}.  Rules.  Choices.  By contradiction.
-\item {\bf Rules}.  Difference kinds of rules.  Simplification.  Case analysis.  Axioms.  Inference.  Quantifier Instantiation.
-\item {\bf Rewriting History}.  Proof Rewriting, etc.
-\end{itemize}
+Proofs generated using an automated theorem prover, such as WyTP, can
+quickly become quite large.  To make them more readable for the user,
+it is helpful to try and compact them where possible.  This can often
+be done, for example, by simply tracing the dependencies on which a
+contradiction depends.  The following illustrates a simple proof to
+illustrate:
+
+\begin{tcolorbox}
+\begin{tabularx}{\textwidth}{l X r}
+(1) & ${\tt \exists(int i).(i\le 0\land i==0\land i\ge 0)}$&\\
+&&\\
+\hline
+\hline
+&&\\
+(2) & ${\tt i_1 < 0\land i_1==0\land i_1 > 0}$ & ($\exists${\em-elimination}, 1)\\
+(3) & ${\tt i_1 < 0}$ &  ($\land${\em-elimination}, 2)\\
+(4) & ${\tt i_1 == 0}$ &  ($\land${\em-elimination}, 2)\\
+(5) & ${\tt i_1 > 0}$ &  ($\land${\em-elimination}, 2)\\
+(6) & ${\tt 0 < 0}$ &  ({\em congruence}, 3+4)\\
+(7) & ${\tt \bot}$ &  ({\em simplification}, 6)\\
+\end{tabularx}
+\end{tcolorbox}
+
+This proof is slightly longer than it needs to be because inferred
+fact (5) is unnecessary.  We can see this by observing that it is
+never used in any of the subsequent rule applications.  Thus, we can
+simplify this proof by omitting this redundant proof application.
+Note that, although the benefit from simplification was modest here,
+in general it can be quite significant.  In general WyTP will generate
+a potentially large proof and will then prune out all unnecessary rule
+applications before presenting this to the user.
