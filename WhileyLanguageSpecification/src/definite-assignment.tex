@@ -17,11 +17,39 @@ function f(int x) -> (int r):
    return x + y
 \end{lstlisting}
 
-In the above program, variable \lstinline{y} is {\em not} definitely assigned before its use in the \lstinline{return} statement.  This is because there is an \gls{execution_path} through the function which reaches the \lstinline{return} statement and on which variable \lstinline{y} is not defined.  In fact, there are {\em two} possible execution paths through this function, but variable \lstinline{y} is only defined on one of them.  Observe that, since it is a parameter, variable \lstinline{x} is automatically considered to have been defined on entry to the function.
+In the above program, variable \lstinline{y} is {\em not} definitely assigned before its use in the \lstinline{return} statement.  This is because there is an \gls{execution_path} through the function which reaches the \lstinline{return} statement and on which variable \lstinline{y} is not defined (see Figure~\ref{f:c8_cfg_1}).  In fact, there are {\em two} possible execution paths through this function, but variable \lstinline{y} is only defined on one of them.  Observe that, since it is a parameter, variable \lstinline{x} is automatically considered to have been defined on entry to the function.
+
+
+\begin{figure}[!t]
+\centering
+  \begin{tikzpicture}[
+    graynode/.style={
+      rectangle, 
+      draw=gray!100, 
+      fill=gray!20.5, 
+      very thick, 
+      minimum size=5mm,
+      minimum height=1cm,
+      minimum width=3cm,
+      rounded corners=0.25cm
+    }
+    ]
+    \node[graynode] (l1) at (0,4cm) {\lstinline{x < 0}};
+    \node at (1,3.25) {\tiny${\tt true}$};
+    \node at (-1,3.25) {\tiny${\tt false}$};
+    \node[graynode] (l2) at (2.5cm,2cm) {\lstinline{y = 1}};
+    \node[graynode] (l3) at (0,0) {\lstinline{return x + y}};
+    \draw[thick,->] (l1)++(0.5,-0.5) -- (0.5,3) -- (2.5,3) -- (l2);
+    \draw[thick,->] (l2) -- (2.5,1) -- (0.5,1) -- (0.5,0.5);
+    \draw[ultra thick,->] (-0.5,3.5) -- (-0.5,0.5);
+  \end{tikzpicture}
+\caption{Control-Flow Graph for function \lstinline{f()}.  On the bold path, \lstinline{y} is undefined.}
+\label{f:c8_cfg_1}
+\end{figure}
 
 \subsection{Loops}
 
-The treatment of loops with respect to definite assignment warrants special attention.  Recall that the mechanism for determining definite assignment is conservative.  In the context of loops, the effect of this is that it simply assumes {\em every loop can be executed zero or more times} (i.e. even if this is not correct).  The following illustrates a simple example:
+The treatment of loops with respect to definite assignment warrants special attention.  Recall the mechanism for determining definite assignment is conservative.  In the context of loops, it simply assumes {\em every loop can be executed zero or more times} (i.e. even if this is not correct).  The following illustrates:
 
 \begin{lstlisting}
 function f(int x) -> int:
@@ -34,7 +62,7 @@ function f(int x) -> int:
    return x + y
 \end{lstlisting}
 
-The above function fails definite assignment because variable \lstinline{y} is not defined when zero iterations of the loop are executed (e.g. when \lstinline{x==0} on entry).  To illustrate the conservative nature of the definite assignment mechanism, we can refined the above example as follows:
+The above function fails definite assignment because variable \lstinline{y} is not defined when zero iterations of the loop are executed (e.g. when \lstinline{x==0} on entry).  To illustrate the conservative nature of definite assignment, consider this variation:
 
 \begin{lstlisting}
 function ten() -> int:
@@ -48,7 +76,7 @@ function ten() -> int:
    return y
 \end{lstlisting}
 
-In this case, it can be shown that \lstinline{y==1} must hold when the \lstinline{return} statement is reached.  Nevertheless, this function fails definite assignment because the mechanism naively assumes that the loop will execute {\em zero} or more iterations when, in fact, it will never execute zero iterations.
+Here, it can be shown that \lstinline{y==1} must hold when the \lstinline{return} statement is reached.  Nevertheless, this function fails definite assignment because of the assumption that the loop executes {\em zero} or more iterations.
 
 \subsection{Infeasible Paths}
 
@@ -67,7 +95,7 @@ function abs(int x) -> int:
     return y
 \end{lstlisting}
 
-This function contains four valid execution paths which can be denoted by \lstinline{ff}, \lstinline{tf}, \lstinline{ft}, \lstinline{tt} where, for example, \lstinline{tf} represents the path where the first condition evaluates to \lstinline{true} and the second to \lstinline{false}.  However, it is easy to see that the execution paths \lstinline{ff} and \lstinline{tt} are infeasible.  Furthermore, we can see that on the other two paths, \lstinline{tf} and \lstinline{ft}, the variable \lstinline{y} is definitely assigned when the \lstinline{return} statement is reached.  Despite this, the above function fails definite assignment because the mechanism considers all valid paths whilst ignoring infeasible execution paths.
+This function contains four valid execution paths which can be denoted by \lstinline{ff}, \lstinline{tf}, \lstinline{ft}, \lstinline{tt} where, for example, \lstinline{tf} represents the path where the first condition evaluates to \lstinline{true} and the second to \lstinline{false}.  However, it is easy to see that execution paths \lstinline{ff} and \lstinline{tt} are infeasible.  Furthermore, that on the other two paths, \lstinline{tf} and \lstinline{ft}, variable \lstinline{y} is definitely assigned at the \lstinline{return} statement.  Despite this, the above function fails definite assignment because the mechanism considers all valid paths whilst ignoring infeasible execution paths.
 
 \subsection{Partial Assignments}
 
@@ -96,8 +124,3 @@ Definite assignment considers the set of all {\em valid paths} in a \gls{control
 A \gls{variable_definition} occurs at a vertex $v$ which contains a direct assignment (recall~\S\ref{c_stmt_assign}), or an initialisation of (recall~\S\ref{c_stmts_var_decl}), one or more variables.  Assignments to fields, array elements or dereferenced references are not direct and do not define variables.  A vertex may define multiple variables if it corresponds to a multiple assignment which directly assigns those variables.  Finally, the parameters of a function, method or invariant block are treated as being defined on entry. 
 
 A \gls{variable_use} occurs at a vertex $v$ which directly refers to that variable in some expression other than an \lstinline{LVal}.  However, referring to a variable indirectly through a dereference expression does not constitute a variable use.
-
-\section{Other}
-
-See error reported for this check~\S\ref{c_err_var_uninitialised}.
-
