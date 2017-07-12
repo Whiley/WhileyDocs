@@ -13,10 +13,10 @@ have different types at different program points.
 \section{Overview}
 
 A {\em type environment}, ${\tt\tenv}$, binds variables declared in
-the enclosing scope(s) to their {\em effective type}.  The effective
-type of a variable may be its declared type, or a refinement thereof.
-The environment ${\tt\tenv[x\mapsto T]}$ contains all of the bindings
-in ${\tt\tenv}$, except where ${\tt x}$ now binds to ${\tt T}$.  The
+the enclosing scope(s) to their {\em current type}.  The current type
+of a variable may be its declared type, or a refinement thereof.  The
+environment ${\tt\tenv[x\mapsto T]}$ contains all of the bindings in
+${\tt\tenv}$, except where ${\tt x}$ now binds to ${\tt T}$.  The
 initial type environment, ${\tt\tenv_0}$, for the
 \lstinline{requires}, \lstinline{where} clause(s) and body of a
 \lstinline{function}, \lstinline{method} or \lstinline{type}
@@ -31,7 +31,7 @@ function f(int x, bool y) -> (null|int r):
     ...
 \end{lstlisting}
 Here, ${\tt\tenv_0=\{x\mapsto int, y\mapsto bool\}}$ and
-${\tt\tenv_r=\{x\mapsto int, y\mapsto bool, r\mapsto(int|null)\}}$.
+${\tt\tenv_r=\{x\mapsto int, y\mapsto bool, r\mapsto(int\lor null)\}}$.
 
 \subsection{Flow Typing}
 
@@ -75,7 +75,7 @@ carefully constructed from them.  This join operator is defined as
 follows:
 \begin{displaymath}
 \begin{array}{rcl}
-{\tt \tenv_a\sqcup\tenv_b} & = & {\tt \{ x\mapsto(T_a\;|\;T_b)\;|\;x\!\mapsto\!T_a\in\tenv_a\;\land\;x\!\mapsto\!T_b\in\tenv_b\}}\\
+{\tt \tenv_a\sqcup\tenv_b} & = & {\tt \{ x\mapsto(T_a\lor T_b)\;|\;x\!\mapsto\!T_a\in\tenv_a\;\land\;x\!\mapsto\!T_b\in\tenv_b\}}\\
 \end{array}
 \end{displaymath}
 
@@ -102,10 +102,42 @@ ${\tt\{x\mapsto int\}}$.
 
 \section{Type Refinement}
 
-Look at use of intersection and negation to calculate updated types.
-Observe that aliased variables are not updated, and neither are
-references.  And, compound types are not either.  Look at the scope of
-retyping and how that works.
+In certain circumstances a runtime type test may result in {\em type
+  refinement}.  That is, where the type of a variable is refined from
+its current type (e.g. ${\tt T_1}$) to a more precise type (e.g.
+${\tt T_2}$ where ${\tt T_2\le T_1}$).  More specifically when a type
+test ``\lstinline{e is T$_2$}'' holds, the type of \lstinline{e} may
+be refined to ${\tt T_1\land T_2}$.  Likewise, when ``\lstinline{e is T$_2$}'' 
+does not hold, the type of ${\tt e}$ may be refined to
+${\tt T_1\land\neg T_2}$.  Type refinement may only occur when a type
+test is used as the conditional expression for an \lstinline{if},
+\lstinline{while}, \lstinline{do-while}, \lstinline{assert} or
+\lstinline{assume} statement.  Furthermore, an expression
+\lstinline{e} will be refined only if it is a
+\gls{refinable_expression}.  A refinable expression is a variable access or
+a field access acting on a refinable expression.  The following
+illustrates a common scenario:
+
+\begin{lstlisting}
+function f(int|null x) -> (int r):
+   //
+   if x is int:
+      return x
+   else:
+      return 0
+\end{lstlisting}
+
+The initial environment for the body of \lstinline{f()} is given by
+${\tt\tenv_0=\{x\mapsto(int\lor null)\}}$.  In this case, the type of
+variable ${\tt x}$ is refined to ${\tt (int\lor null)\land int}$ in
+the true branch (which is equivalent to ${\tt int}$) and
+${\tt (int\lor null)\land\neg int}$ in the false branch (which is
+equivalent to ${\tt null}$) .
+
+\begin{itemize}
+\item Refinement within expressions (implied by above)
+\item Examples of refinement after complex expressions
+\end{itemize}
 
 \begin{lstlisting}
 if x is int || x is bool:
