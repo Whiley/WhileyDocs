@@ -1,23 +1,111 @@
-\chapter{Type Checking}
-The Whiley programming language is {\em statically typed}, meaning that every expression has a type determined at compile time.  Furthermore, evaluating an expression is guaranteed to yield a value of its type.  Whiley's {\em type system} governs how the type of any variable or expression is determined.  Whiley's type system is unusual in that it operates in a {\em flow-sensitive} manner allowing variables to have different types at different program points.
+\newcommand{\tenv}{\Gamma}
+\newcommand{\ftype}[3]{#1\vdash #2\dashv #3}
 
+\chapter{Type Checking}
+The Whiley programming language is {\em statically typed}, meaning
+that: firstly, every expression has a type determined at compile time;
+second, evaluating an expression is guaranteed to yield a value of its
+type.  Whiley's {\em type system} governs how the type of any variable
+or expression is determined.  Whiley's type system is unusual in that
+it operates in a {\em flow-sensitive} manner allowing variables to
+have different types at different program points.
 
 \section{Overview}
 
-% \section{Type Environment}
-% \subsection{Declared Type}
-% \subsection{Current Type}
+A {\em type environment}, ${\tt\tenv}$, binds variables declared in
+the enclosing scope(s) to their {\em effective type}.  The effective
+type of a variable may be its declared type, or a refinement thereof.
+The environment ${\tt\tenv[x\mapsto T]}$ contains all of the bindings
+in ${\tt\tenv}$, except where ${\tt x}$ now binds to ${\tt T}$.  The
+initial type environment, ${\tt\tenv_0}$, for the
+\lstinline{requires}, \lstinline{where} clause(s) and body of a
+\lstinline{function}, \lstinline{method} or \lstinline{type}
+declaration contains exactly one binding for each parameter to its
+declared type.  The initial type environment, ${\tt\tenv_r}$, for the
+\lstinline{ensures} clause(s) of a \lstinline{function} or
+\lstinline{method} additionally contains exactly one binding for each
+return to its declared type.  For example, consider the following
+partial declaration:
+\begin{lstlisting}
+function f(int x, bool y) -> (null|int r):
+    ...
+\end{lstlisting}
+Here, ${\tt\tenv_0=\{x\mapsto int, y\mapsto bool\}}$ and
+${\tt\tenv_r=\{x\mapsto int, y\mapsto bool, r\mapsto(int|null)\}}$.
 
-\section{Static and Dynamic Types}
+\subsection{Flow Typing}
 
-Describe the meaning of these concepts.  That every value has a {\em precise} dynamic type.  
+Whiley's type system employs flow-sensitive typing --- {\em flow
+  typing} --- for determining the type of each local variable within a
+given statement block.  The {\em pre-environment} gives the type
+environment immediately before a given statement.  Likewise, the {\em
+  post-environment} gives the type environment immediately after a
+given statement.  The flow typing system is responsible for
+calculating, for each statement, the post-environment from the
+pre-environment.  The judgment ${\tt\ftype{\tenv_0}{S}{\tenv_1}}$
+indicates that typing statement ${\tt S}$ with environment
+${\tt\tenv_0}$ produces the (potentially updated) environment
+${\tt\tenv_1}$.  For a given statement block ${\tt S_1\ldots S_n}$, it
+follows that ${\tt\ftype{\tenv_0}{S_1\ldots S_n}{\tenv_n}}$ expands by
+chaining the post-environment for each statement ${\tt S_n}$ into its
+successor ${\tt S_{n+1}}$.  That is,
+${\tt\ftype{\tenv_0}{S_1}{\tenv_1}}$,
+${\tt\ftype{\tenv_1}{S_2}{\tenv_2}}$, and so on.
 
-\section{Function and Method Resolution}
-Look at the rules for determining which function or method is being selected.
 
-\section{Variable Retyping}
+\subsection{Scoping}
 
-Look at use of intersection and negation to calculate updated types.  Observe that aliased variables are not updated, and neither are references.  And, compound types are not either.  Look at the scope of retyping and how that works.
+The {\em lifetime} of a local variable extends from its declaration
+within a given statement block to the end of that block.  For example,
+if statement ${\tt S}$ declared variable ${\tt x}$ to have type
+${\tt T}$, it follows that
+${\tt \ftype{\tenv}{S}{\tenv[x\mapsto T]}}$.  Furthermore, we require
+that ${\tt x}$ was not already declared in ${\tt\tenv}$ (i.e. that
+${\tt x\not\in\tenv}$).  Observe that variables of the same name may
+be declared in different blocks, provided one is not nested within the
+other.
+
+\subsection{Environment Joining}
+
+At meet points in the control-flow graph of a statement block the
+typing environments from each branch must be {\em joined} together. If
+${\tt\tenv_a}$ and ${\tt\tenv_b}$ are type environments then their
+join, denoted ${\tt\tenv_a\sqcup\tenv_b}$, is a single environment
+carefully constructed from them.  This join operator is defined as
+follows:
+\begin{displaymath}
+\begin{array}{rcl}
+{\tt \tenv_a\sqcup\tenv_b} & = & {\tt \{ x\mapsto(T_a\;|\;T_b)\;|\;x\!\mapsto\!T_a\in\tenv_a\;\land\;x\!\mapsto\!T_b\in\tenv_b\}}\\
+\end{array}
+\end{displaymath}
+
+Every variable defined in both environments is bound in their join to
+the union of its type in each environment.  The following illustrates
+a situation where joining is necessary:
+
+\begin{lstlisting}
+function f(int|null x) -> (int r):
+   //
+   if x is null:
+      return 0
+   else:
+      x = x + 1
+   //
+   return x
+\end{lstlisting}
+
+The pre-environment for the \lstinline{return} statement is formed
+from the post-environments of the true- and false-branches of the
+conditional.  The former is ${\tt\{x\mapsto void\}}$ and the latter is
+${\tt\{x\mapsto int\}}$ and the resulting join is
+${\tt\{x\mapsto int\}}$.
+
+\section{Type Refinement}
+
+Look at use of intersection and negation to calculate updated types.
+Observe that aliased variables are not updated, and neither are
+references.  And, compound types are not either.  Look at the scope of
+retyping and how that works.
 
 \begin{lstlisting}
 if x is int || x is bool:
@@ -26,22 +114,15 @@ else:
    //
 \end{lstlisting}
 
+\section{Function and Method Resolution}
+Look at the rules for determining which function or method is being selected.
+
+\begin{itemize}
+\item Most precise type selected
+\item If no unique precise type, then ambiguous
+
+\end{itemize}
+
+
 \section{Coercions}
 Look at the rules for when a coercion is permitted or not.
-
-\section{Questions}
-
-\begin{lstlisting}
-int|null x = null
-// is x null?
-\end{lstlisting}
-
-\begin{lstlisting}
-if x is int:
-  //
-else:
-  //
-  return
-//
-// is x int?
-\end{lstlisting}
