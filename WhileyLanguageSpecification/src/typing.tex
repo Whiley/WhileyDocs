@@ -134,17 +134,26 @@ the true branch (which is equivalent to ${\tt int}$) and
 ${\tt (int\lor null)\land\neg int}$ in the false branch (which is
 equivalent to ${\tt null}$) .
 
-\begin{itemize}
-\item Refinement within expressions (implied by above)
-\item Examples of refinement after complex expressions
-\end{itemize}
+\subsection{Expressions}
+
+Type refinement may occur within expressions when a given type test is
+known to hold or not.  The following illustrates:
 
 \begin{lstlisting}
-if x is int || x is bool:
+if x is int && x >= 0:
    //
 else:
    //
 \end{lstlisting}
+
+Here, the type of variable \lstinline{x} is refined to \lstinline{int}
+within \lstinline{x >= 0}.  Observe, however, that no refinement
+occurs on the \lstinline{else} branch as the given expression does not
+capture all possible integer values.
+
+Since the logical connectives have short-circuiting behaviour, so does
+type refinement within expressions.  That is, the refinement must
+occur before the expression where the refined type is required.
 
 \section{Function and Method Resolution}
 Look at the rules for determining which function or method is being selected.
