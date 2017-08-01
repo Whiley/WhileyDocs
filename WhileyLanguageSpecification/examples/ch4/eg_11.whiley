@@ -1,4 +1,4 @@
-import whiley.lang.ASCII
+import std.ascii
 
 type Writer is { 
    method write(byte[]) -> int,
@@ -6,6 +6,6 @@ type Writer is {
 }
 type PrintWriter is { 
    method write(byte[]) -> int,
-   method println(ASCII.string),
+   method println(ascii.string),
    ...
 }

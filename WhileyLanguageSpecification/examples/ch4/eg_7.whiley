@@ -1,3 +1,3 @@
-import whiley.lang.ASCII
-function isUpperCase(ASCII.char c) -> bool:
+import std.ascii
+function isUpperCase(ascii.char c) -> bool:
     return 'A' <= c && c <= 'Z'

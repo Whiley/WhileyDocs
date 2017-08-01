@@ -1,4 +1,4 @@
-import u8 from whiley.lang.Int
+import u8 from std.integer
 
 function toUnsignedByte(u8 v) -> byte:
     //

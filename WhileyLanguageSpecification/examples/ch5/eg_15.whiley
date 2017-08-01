@@ -1,4 +1,4 @@
-import string from whiley.lang.ASCII
+import string from std.ascii
 
 constant Void is 3
 constant Boolean is 4

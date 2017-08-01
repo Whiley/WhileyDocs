@@ -1,4 +1,4 @@
-import whiley.lang.Math
+import std.math
 
 type Tree is null | { int data, Tree left, Tree right }
 
@@ -8,4 +8,4 @@ function height(Tree t) -> int:
         return 0
     else:
         // height is this node plus maximum height of subtrees
-        return 1 + Math.max(height(t.left), height(t.right))
+        return 1 + math.max(height(t.left), height(t.right))
