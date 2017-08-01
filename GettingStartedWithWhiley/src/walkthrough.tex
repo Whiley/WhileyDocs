@@ -86,8 +86,8 @@ Here, we see that variables \lstinline{x} and \lstinline{y} are assigned their r
 Unlike many programming languages, Whiley does not provide explicit data types representing strings and characters.  The reason for this is that such data types can already be encoded within the language and, by doing so, we can easily support the full range of different encodings (e.g. ASCII versus UTF-8, etc).  In Whiley, a string is simply a list of integers.  The following example illustrates the well-known \lstinline{replace()} function:
 
 \begin{lstlisting}
-import string from whiley.lang.ASCII
-import char from whiley.lang.ASCII
+import string from std.ascii
+import char from std.ascii
 
 function replace(string str, char old, char n) => string:
   //

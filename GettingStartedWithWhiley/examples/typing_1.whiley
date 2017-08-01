@@ -1,4 +1,4 @@
-import whiley.lang.Array
+import std.array
 
 function indexOf(int[] items, int item) -> null|int:
    int i = 0
@@ -13,8 +13,8 @@ function split(int[] items, int item) -> int[][]:
    // idx has type null$|$int
    if idx is int:
        // idx now has type int
-       int[] below = Array.slice(items,0,idx)
-       int[] above = Array.slice(items,idx,|items|)
+       int[] below = array.slice(items,0,idx)
+       int[] above = array.slice(items,idx,|items|)
        return [below,above]
    else:
        // idx now has type null

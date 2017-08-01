@@ -1,4 +1,4 @@
-import whiley.lang.Math
+import std.*
 
 // =================================================================
 // Squares
@@ -95,10 +95,10 @@ function flagSquare(Board b, int col, int row) -> Board:
 function determineRank(Board b, int col, int row) -> int:
     int rank = 0
     // Calculate the rank
-    int r = Math.max(0,row-1)
-    while r != Math.min(b.height,row+2):
-        int c = Math.max(0,col-1)
-        while c != Math.min(b.width,col+2):
+    int r = math.max(0,row-1)
+    while r != math.min(b.height,row+2):
+        int c = math.max(0,col-1)
+        while c != math.min(b.width,col+2):
             Square sq = getSquare(b,c,r)
             if sq.holdsBomb:
                 rank = rank + 1
@@ -125,10 +125,10 @@ function exposeSquare(Board b, int col, int row) -> Board:
 
 // Recursively expose all valid neighbouring squares on the board
 function exposeNeighbours(Board b, int col, int row) -> Board:
-    int r = Math.max(0,row-1)
-    while r != Math.min(b.height,row+2):
-        int c = Math.max(0,col-1)
-        while c != Math.min(b.width,col+2):
+    int r = math.max(0,row-1)
+    while r != math.min(b.height,row+2):
+        int c = math.max(0,col-1)
+        while c != math.min(b.width,col+2):
            b = exposeSquare(b,c,r)
            c = c + 1
         r = r + 1
@@ -159,37 +159,37 @@ function isGameOver(Board b) -> (bool gameOver, bool playerWon):
     //
     return isOver, hasWon
 
-import whiley.lang.System
+import std.io
 
-method printBoard(Board board, System.Console console):
+method printBoard(Board board):
     int row = 0
     while row != board.height:
-        printRow(row,board,console)
+        printRow(row,board)
         row = row + 1
     //
 
-method printRow(int row, Board board, System.Console console):
+method printRow(int row, Board board):
     // Print Side Wall
-    console.out.print("|")
+    io.print("|")
     int col = 0
     while col != board.width:
-        printSquare(getSquare(board,col,row),console)
+        printSquare(getSquare(board,col,row))
         col = col + 1
     // Print Side Wall
-    console.out.println("|")
+    io.println("|")
 
-method printSquare(Square sq, System.Console console):
+method printSquare(Square sq):
     if sq is HiddenSquare:
         if sq.flagged:
-            console.out.print("P")
+            io.print("P")
         else:
-            console.out.print("O")
+            io.print("O")
     else if sq.holdsBomb:
-        console.out.print("*")
+        io.print("*")
     else if sq.rank == 0:
-        console.out.print(" ")
+        io.print(" ")
     else:
-        console.out.print(sq.rank)
+        io.print(sq.rank)
 
 // expose signals the player exposes a square (true) or flags it (false)
 type Move is { bool expose, int col, int row }
@@ -209,21 +209,21 @@ function constructExampleBoard() -> (Board r):
     //
     return board
 
-method applyMove(System.Console console, Board board, Move m) -> (Board r):
+method applyMove(Board board, Move m) -> (Board r):
     if m.expose:
-        console.out.println("Player exposes square")
+        io.println("Player exposes square")
         return exposeSquare(board,m.col,m.row)
     else:
-        console.out.println("Player flags square")
+        io.println("Player flags square")
         return flagSquare(board,m.col,m.row)
 
-method main(System.Console console):
+method main(ascii.string[] args):
     //
     Board board = constructExampleBoard()
     int i = 0
     //
     while i < |MOVES|:
-        board = applyMove(console,board,MOVES[i])
-        printBoard(board,console)
+        board = applyMove(board,MOVES[i])
+        printBoard(board)
         i = i + 1
     
