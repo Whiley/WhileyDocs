@@ -75,7 +75,7 @@ A \gls{declaration} defines a new entity within a Whiley source file and provide
 Several mechanisms for \gls{access_control} are provided through \glspl{declaration_modifier}.
 
 \begin{syntax}
-\verb+Modifier+ & $::=$ & \token{public}\ $|$\ \token{private}\ $|$\ \token{native}\ $|$\ \token{export}\\
+\verb+Modifier+ & $::=$ & \token{public}\ $|$\ \token{private}\ $|$\ \token{native}\ $|$\ \token{export}\ $|$\ \token{final}\\
 \end{syntax}
 
 \begin{itemize}
@@ -83,6 +83,7 @@ Several mechanisms for \gls{access_control} are provided through \glspl{declarat
 \item The \lstinline{private} modifier declares that the \gls{declaration} is visible only within the enclosing Whiley source file.
 \item The \lstinline{native} modifier declares that the \gls{declaration} is provided by the underlying system.
 \item The \lstinline{export} modifier declares that the \gls{declaration} is visible to source files written in other languages.  Declarations with this modifier cannot be overloaded.
+\item The \lstinline{final} modifier declares that the \gls{declaration} is cannot be reassigned.
 \end{itemize}
 
 \noindent When no modifier is given, the default of \lstinline{private} is assumed.  
@@ -122,7 +123,7 @@ The first declaration defines an unconstrained record type named \lstinline{Poin
 % Constant Declarations
 % =======================================================================
 
-\subsection{Constant Declarations}
+\subsection{Variable Declarations}
 \label{c_source_files_constant_decl}
 
 A {\em constant declaration} declares a named constant within a Whiley \gls{source_file}.  The declaration may refer to named constants in this or other source files, although it may not refer to itself (either directly or indirectly).
