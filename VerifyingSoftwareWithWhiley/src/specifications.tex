@@ -16,13 +16,13 @@ From this, we can see that both parties in the contract have obligations they mu
 
 \begin{eg}
 As a simple example, let us consider a function for finding the maximum values from an array of integer values.  The following provides an {\em informal} specification for this function:
-\begin{lstlisting}
+\begin{tcolorbox}\begin{lstlisting}[language=Whiley]
 // REQUIRES: At least one item in items array
 //
 // ENSURES: Item returned was largest item in items array
 function max([int] items) -> (int item)
-\end{lstlisting}
-We have specified our function above using comments to document: firstly, the requirements needed for the inputs (i.e. that the array must have at least one element); and, secondly, the expectations placed on the outputs (i.e. that it returns the largest element in the array).  Thus, we could not expect the call \lstinlinec{max([])} to operate correctly; likewise, if the call \lstinlinec{max([1,2])} returned \lstinlinec{3} we would rightly say the implementation was incorrect.
+\end{lstlisting}\end{tcolorbox}
+We have specified our function above using comments to document: firstly, the requirements needed for the inputs (i.e. that the array must have at least one element); and, secondly, the expectations placed on the outputs (i.e. that it returns the largest element in the array).  Thus, we could not expect the call \clstinline{max([])} to operate correctly; likewise, if the call \clstinline{max([1,2])} returned \clstinline{3} we would rightly say the implementation was incorrect.
 \end{eg}
 
 {\em Could talk about limitations of english language comments}
@@ -32,7 +32,7 @@ To specify a function or method in Whiley we must provide an appropriate {\em pr
 
 \begin{eg}
 As a very simple example, consider the following specification for our function which finds the maximum value from an array integers:
-\begin{lstlisting}
+\begin{tcolorbox}\begin{lstlisting}[language=Whiley]
 function max([int] items) => (int item) 
 // At least one item in items array
 requires |items| > 0
@@ -40,19 +40,19 @@ requires |items| > 0
 ensures all { i in 0 .. |items| | items[i] <= item }
 // Item returned was in items array
 ensures exists { i in 0 .. |items| | items[i] == item }
-\end{lstlisting}
-Here, the \lstinlinec{requires} clause declares the function's precondition, whilst the \lstinlinec{ensures} clauses declare its postcondition.  This specification is largely the same as that given informally using comments before.  However, we regard this specification as being {\em formal} because, for any set of inputs and outputs, we can calculate precisely whether the inputs or outputs were malformed.  For example, consider the call \lstinlinec{max([])}.  We can say that the inputs to this call are incorrect, because \lstinlinec{|[]| < 0} evaluates to \lstinlinec{false}.  For the informal version given above, we cannot easily evaluate the English comments to determine whether they were met or not.  Instead, we rely on our human judgement for this --- but, unfortunately, this can easily be wrong!
+\end{lstlisting}\end{tcolorbox}
+Here, the \clstinline{requires} clause declares the function's precondition, whilst the \clstinline{ensures} clauses declare its postcondition.  This specification is largely the same as that given informally using comments before.  However, we regard this specification as being {\em formal} because, for any set of inputs and outputs, we can calculate precisely whether the inputs or outputs were malformed.  For example, consider the call \clstinline{max([])}.  We can say that the inputs to this call are incorrect, because \clstinline{|[]| < 0} evaluates to \clstinline{false}.  For the informal version given above, we cannot easily evaluate the English comments to determine whether they were met or not.  Instead, we rely on our human judgement for this --- but, unfortunately, this can easily be wrong!
 \end{eg}
 
-When specifying a function in Whiley, the \lstinlinec{requires} clause(s) may only refer to the parameters, whilst the \lstinlinec{ensures} clause(s) may also refer to the returns.  Note, however, that the \lstinlinec{ensures} clause(s) always consider those values of the parameters that held on entry to the function, not those which might hold at the end.
+When specifying a function in Whiley, the \clstinline{requires} clause(s) may only refer to the parameters, whilst the \clstinline{ensures} clause(s) may also refer to the returns.  Note, however, that the \clstinline{ensures} clause(s) always consider those values of the parameters that held on entry to the function, not those which might hold at the end.
 
 \subsection{Meeting the Contract (Supplier)}
 
 We will now consider more precisely what it means for the supplier to meet the contract set out in a function's specification.  
 
 \begin{eg}
-To illustrate a function which does not meet its specification, consider the following incorrect implementation of our \lstinlinec{max()} function:
-\begin{lstlisting}
+To illustrate a function which does not meet its specification, consider the following incorrect implementation of our \clstinline{max()} function:
+\begin{tcolorbox}\begin{lstlisting}[language=Whiley]
 function max([int] items) => (int item) 
 // Must have one or more items
 requires |items| > 0
@@ -62,8 +62,8 @@ ensures all {i in 0 .. |items| | items[i] <= item}
 ensures exists {i in 0 .. |items| | items[i] == item}:
    //
    return items[0]
-\end{lstlisting}
-Hopefully, we can see this function does not do what we expect.  But, let's think about this more formally.  If the implementation is to be considered incorrect, {\em there must be at least one valid input which yields an incorrect output}.  To show our implementation is incorrect, we must find such an input.  Let us consider the input \lstinlinec{[5]}, for which our implementation returns \lstinlinec{5}.  In this case, both \lstinlinec{all \{i in 0..|[5]| | [5][i] <= 5\}} and \lstinlinec{exists \{i in 0..|[5]| | [5][i] == 5\}} evaluate to \lstinlinec{true} and, hence, {\em this input does not illustrate the problem}.  In contrast, for the input \lstinlinec{[1,4]} our implementation returns \lstinlinec{1}.  In this case, \lstinlinec{all\{ i in 0..|[1,4]| | [1,4][i] <= 1\}} evaluates to \lstinlinec{false} and, hence, {\em this input provides evidence that our implementation does not meet its contract}.
+\end{lstlisting}\end{tcolorbox}
+Hopefully, we can see this function does not do what we expect.  But, let's think about this more formally.  If the implementation is to be considered incorrect, {\em there must be at least one valid input which yields an incorrect output}.  To show our implementation is incorrect, we must find such an input.  Let us consider the input \clstinline{[5]}, for which our implementation returns \clstinline{5}.  In this case, both \clstinline{all \{i in 0..|[5]| | [5][i] <= 5\}} and \clstinline{exists \{i in 0..|[5]| | [5][i] == 5\}} evaluate to \clstinline{true} and, hence, {\em this input does not illustrate the problem}.  In contrast, for the input \clstinline{[1,4]} our implementation returns \clstinline{1}.  In this case, \clstinline{all\{ i in 0..|[1,4]| | [1,4][i] <= 1\}} evaluates to \clstinline{false} and, hence, {\em this input provides evidence that our implementation does not meet its contract}.
 \end{eg}
 
 We say that a function {\em meets its specification} if it returns a valid output for all possible valid inputs.  The challenge lies in knowing whether or not this is actually true.  For example, we could test some valid inputs to see whether they produce valid outputs.  However, as Dijkstra said~\cite{EWD249}:
@@ -74,9 +74,9 @@ We say that a function {\em meets its specification} if it returns a valid outpu
 
 What Dijkstra means here is that a single valid input is sufficient to show that a program does not meet its specification (as in our example above).  However, to show that a function always meets its specification through testing requires testing {\em all possible inputs}.  For some functions, this is actually possible in a feasible amount of time.  Unfortunately, for most, it is not.  For example, in a programming language like Java, a simple function accepting an \lstinline{int} parameter has $2^{32}$ possible input values!
 
-\begin{eg} We can now illustrate a correct implementation of our \lstinlinec{max()} function as follows:
+\begin{eg} We can now illustrate a correct implementation of our \clstinline{max()} function as follows:
 
-\begin{lstlisting}
+\begin{tcolorbox}\begin{lstlisting}[language=Whiley]
 function max([int] items) => (int item) 
 // Must have one or more items
 requires |items| > 0
@@ -94,9 +94,9 @@ ensures exists {i in 0 .. |items| | items[i] == item}:
       i = i + 1
    //
    return r
-\end{lstlisting}
+\end{lstlisting}\end{tcolorbox}
 
-Understanding that this function does indeed meet is specification is not easy.  Perhaps, intuitively, we can convince ourselves of this using a number of arguments.  For example, the variable \lstinlinec{r} is only ever assigned values from the \lstinlinec{items} array and, hence, the implementation must meet the second \lstinlinec{ensures} clause of the specification.  Similarly, since the loop iterates through and compares all elements in \lstinlinec{items}, we believe the first \lstinlinec{ensures} clause is met as well.  But, again, {\em we are relying on our error-prone human judgement here}.  
+Understanding that this function does indeed meet is specification is not easy.  Perhaps, intuitively, we can convince ourselves of this using a number of arguments.  For example, the variable \clstinline{r} is only ever assigned values from the \clstinline{items} array and, hence, the implementation must meet the second \clstinline{ensures} clause of the specification.  Similarly, since the loop iterates through and compares all elements in \clstinline{items}, we believe the first \clstinline{ensures} clause is met as well.  But, again, {\em we are relying on our error-prone human judgement here}.  
 \end{eg}
 
 \marginpar{Include 224 examples?}{To} be sure that a program meets its specification we must {\em prove} that it does.  This means reasoning about the program in a mathematically rigorous manner for all input values.  Such reasoning can be done by hand.  However, it is best done with a tool which can simplify much of the tedious calculation and protect against human error.  In this book, we are adopting the Whiley tool for this purpose and, in following chapters, we will illustrate how it can be used for this.
@@ -107,7 +107,7 @@ We will now consider what it means for the client to meet the contract set out i
 
 \begin{eg}
 To illustrate, we will construct a simple client function which uses our \lstinline{max()} function above.  This is the \lstinline{largest()} function which accepts two parameters:
-\begin{lstlisting}
+\begin{tcolorbox}\begin{lstlisting}[language=Whiley]
 function largest(int x, int y) -> (int r)
 // Value returned is either x or y
 ensures r == x || r == y
@@ -115,7 +115,7 @@ ensures r == x || r == y
 ensures r >= x && r >= y:
    //
    return max([x,y])
-\end{lstlisting}
+\end{lstlisting}\end{tcolorbox}
 When \lstinline{largest()} calls \lstinline{max()} it is acting as the client and, at that point, it must meet the contract set out in \lstinline{max()}'s specification.  By inspecting the code, we see that it always passes an input array which has exactly two values.  Therefore, it meets the precondition required for the \lstinline{max()} function (namely, that the list has at least one element).  Furthermore, the postcondition of \lstinline{max()} ensures that the value returned from \lstinline{largest()} meets its postcondition.
 \end{eg}
 
@@ -125,46 +125,46 @@ From our example above, we take away two observations from the clients perspecti
 
 We have now looked at the issue of specifying functions.  However, we can also specify {\em data}.  That is, place requirements on what values our data types can hold.  These restrictions are called {\em invariants} because they must be true (i.e. invariant) for the life of the program.  As a very simple example, consider the following data type for describing natural numbers:
 
-\begin{lstlisting}
+\begin{tcolorbox}\begin{lstlisting}[language=Whiley]
 type nat is (int n) where n >= 0
-\end{lstlisting}
+\end{lstlisting}\end{tcolorbox}
 
-Here, the \lstinlinec{type} declaration includes a \lstinlinec{where} clause constraining the permissible values for the type (referred to as the {\em invariant}).  In the declaration, variable \lstinline{n} represents an arbitrary value of the given type.  Thus, \lstinlinec{nat} defines the type of non-negative integers (i.e. the natural numbers).
+Here, the \clstinline{type} declaration includes a \clstinline{where} clause constraining the permissible values for the type (referred to as the {\em invariant}).  In the declaration, variable \lstinline{n} represents an arbitrary value of the given type.  Thus, \clstinline{nat} defines the type of non-negative integers (i.e. the natural numbers).
 
 We can then use our new data-type to simplify the specifications of our functions.  For example, consider the following implementation of the well-known absolute function:
 
-\begin{lstlisting}
+\begin{tcolorbox}\begin{lstlisting}[language=Whiley]
 function abs(int x) -> nat:
    if x >= 0:
       return x
    else:
       return -x
-\end{lstlisting}
+\end{lstlisting}\end{tcolorbox}
 
-Here, \lstinlinec{nat} is the declared return for \lstinlinec{abs()} and, hence, the invariant on \lstinline{nat} forms part of its post-condition.  We can see that, although variable \lstinlinec{x} is initially declared as having type \lstinlinec{int}, it is later consider to have type \lstinlinec{nat} in the true branch of the conditional.  In general, we consider that good use of constrained types is critical to ensuring that function specifications remain as readable as possible.
+Here, \clstinline{nat} is the declared return for \clstinline{abs()} and, hence, the invariant on \lstinline{nat} forms part of its post-condition.  We can see that, although variable \clstinline{x} is initially declared as having type \clstinline{int}, it is later consider to have type \clstinline{nat} in the true branch of the conditional.  In general, we consider that good use of constrained types is critical to ensuring that function specifications remain as readable as possible.
 
 As another example, let us consider the following declaration of a set as an array of unique values:
 
-\begin{lstlisting}
+\begin{tcolorbox}\begin{lstlisting}[language=Whiley]
 type set is ([int] xs) where 
   all { i in 0..|xs|, j in 0..|xs| | i != j ==> xs[i] != xs[j] }
-\end{lstlisting}
+\end{lstlisting}\end{tcolorbox}
 
-The invariant for type \lstinlinec{set} simply states that any two different elements have different values.  In a similar way, we can define the notion of a {\em sorted} array as follows:
+The invariant for type \clstinline{set} simply states that any two different elements have different values.  In a similar way, we can define the notion of a {\em sorted} array as follows:
 
-\begin{lstlisting}
+\begin{tcolorbox}\begin{lstlisting}[language=Whiley]
 type sorted is ([int] xs) where 
   |xs| >= 1 ==> all { i in 0 .. |xs|-1 | xs[i] <= xs[i+1] }
-\end{lstlisting} 
+\end{lstlisting}\end{tcolorbox} 
 
-The invariant for type \lstinlinec{sorted} says that, for any two adjacent elements, the first has a lower value than the second.  Using a type such as this, we can easily give the specification for a function which {\em sorts} an array as follows:
+The invariant for type \clstinline{sorted} says that, for any two adjacent elements, the first has a lower value than the second.  Using a type such as this, we can easily give the specification for a function which {\em sorts} an array as follows:
 
-\begin{lstlisting}
+\begin{tcolorbox}\begin{lstlisting}[language=Whiley]
 function sort([int] items) -> (sorted result):
    ...
-\end{lstlisting}
+\end{lstlisting}\end{tcolorbox}
 
-We can see that using the \lstinlinec{sorted} datatype helps to simplify the specification of our \lstinlinec{sort()} function above.  In general, we believe that good use of data type invariants is critical to ensuring specifications are succinct and easy to read.
+We can see that using the \clstinline{sorted} datatype helps to simplify the specification of our \clstinline{sort()} function above.  In general, we believe that good use of data type invariants is critical to ensuring specifications are succinct and easy to read.
 
 \section{Writing Specifications}
 
@@ -174,134 +174,134 @@ Typically, the more detailed our specification the less freedom is possible with
 
 %As an interesting example, consider the following two specifications for the same function: 
 
-\section*{Exercises}
+% \section*{Exercises}
 
-\begin{ex}
-The function \lstinlinec{neg()} returns the arithmetic negation of a value.
-For example, \lstinlinec{neg(1) = -1}.  An implementation of
-this function is given as follows:
-\begin{lstlisting}
-function neg(int x) => (int r):
-    return -x
-\end{lstlisting}
-Provide an appropriate {\em post-condition} for this function.
-\end{ex}
+% \begin{ex}
+% The function \clstinline{neg()} returns the arithmetic negation of a value.
+% For example, \clstinline{neg(1) = -1}.  An implementation of
+% this function is given as follows:
+% \begin{tcolorbox}\begin{lstlisting}[language=Whiley]
+% function neg(int x) => (int r):
+%     return -x
+% \end{lstlisting}\end{tcolorbox}
+% Provide an appropriate {\em post-condition} for this function.
+% \end{ex}
 
-\begin{ex}
-The \lstinlinec{swap} function accepts to integers and returns them
-with their order swapped.  The signature for the function is:
-\begin{lstlisting}
-function swap(int x, int y) => (int a, int b):
-    ...
-\end{lstlisting}
-Provide an appropriate specification and implementation for this function.
-\end{ex}
+% \begin{ex}
+% The \clstinline{swap} function accepts to integers and returns them
+% with their order swapped.  The signature for the function is:
+% \begin{tcolorbox}\begin{lstlisting}[language=Whiley]
+% function swap(int x, int y) => (int a, int b):
+%     ...
+% \end{lstlisting}\end{tcolorbox}
+% Provide an appropriate specification and implementation for this function.
+% \end{ex}
 
-\begin{ex}
+% \begin{ex}
 
-A {\em natural} number is an integer which is greater-than-or-equal to
-zero.  The following function adds three natural numbers together to produce a natural number:
-\begin{lstlisting}
-function sum3(int x, int y, int z) => (int r)
-// No parameter can be negative
-requires ...
-// Return value cannot be negative
-ensures ...:
-    //
-    return x + y + z
-\end{lstlisting}
-Complete the given \lstinlinec{requires} and \lstinlinec{ensures}
-clauses based on the given English descriptions.
+% A {\em natural} number is an integer which is greater-than-or-equal to
+% zero.  The following function adds three natural numbers together to produce a natural number:
+% \begin{tcolorbox}\begin{lstlisting}[language=Whiley]
+% function sum3(int x, int y, int z) => (int r)
+% // No parameter can be negative
+% requires ...
+% // Return value cannot be negative
+% ensures ...:
+%     //
+%     return x + y + z
+% \end{lstlisting}\end{tcolorbox}
+% Complete the given \clstinline{requires} and \clstinline{ensures}
+% clauses based on the given English descriptions.
 
-\end{ex}
+% \end{ex}
 
-\begin{ex}
-  The following function computes the absolute difference between two values:
+% \begin{ex}
+%   The following function computes the absolute difference between two values:
 
-\begin{lstlisting}
-function diff(int x, int y) => (int r):
-    //
-    if x > y:
-        return x - y
-    else:
-        return y - x
-\end{lstlisting}
+% \begin{tcolorbox}\begin{lstlisting}[language=Whiley]
+% function diff(int x, int y) => (int r):
+%     //
+%     if x > y:
+%         return x - y
+%     else:
+%         return y - x
+% \end{lstlisting}\end{tcolorbox}
 
-A {\em pre-condition} of this function is that parameter \lstinlinec{x}
-is between \lstinlinec{0} and \lstinlinec{255} (inclusive) and,
-likewise, that variable \lstinlinec{y} is between \lstinlinec{-128} and
-\lstinlinec{127} (inclusive).  Provide a partial specification for
-this function which constraints the ranges of the input and output
-variables as tightly as possible.
-\end{ex}
+% A {\em pre-condition} of this function is that parameter \clstinline{x}
+% is between \clstinline{0} and \clstinline{255} (inclusive) and,
+% likewise, that variable \clstinline{y} is between \clstinline{-128} and
+% \clstinline{127} (inclusive).  Provide a partial specification for
+% this function which constraints the ranges of the input and output
+% variables as tightly as possible.
+% \end{ex}
 
-\begin{ex}
-The Gregorian calendar is the most widely used organisation of dates.
-A well-known saying for remembering the number of days in each month
-is the following:
-\begin{quote}
-``Thirty days hath September, April, June and November.  All the rest
-have thirty-one, except February which has twenty-nine ...''
-\end{quote}
-Note, in this exercise, we will ignore the issue of leap years.  A
-simple function for returning a date can be defined as follws:
-\begin{lstlisting}
-constant Jan is 1
-constant Feb is 2
-constant Mar is 3
-constant Apr is 4
-constant May is 5
-constant Jun is 6
-constant Jul is 7
-constant Aug is 8
-constant Sep is 9
-constant Oct is 10
-constant Nov is 11
-constant Dec is 12
+% \begin{ex}
+% The Gregorian calendar is the most widely used organisation of dates.
+% A well-known saying for remembering the number of days in each month
+% is the following:
+% \begin{quote}
+% ``Thirty days hath September, April, June and November.  All the rest
+% have thirty-one, except February which has twenty-nine ...''
+% \end{quote}
+% Note, in this exercise, we will ignore the issue of leap years.  A
+% simple function for returning a date can be defined as follws:
+% \begin{tcolorbox}\begin{lstlisting}[language=Whiley]
+% constant Jan is 1
+% constant Feb is 2
+% constant Mar is 3
+% constant Apr is 4
+% constant May is 5
+% constant Jun is 6
+% constant Jul is 7
+% constant Aug is 8
+% constant Sep is 9
+% constant Oct is 10
+% constant Nov is 11
+% constant Dec is 12
 
-function getDate() => (int day, int month, int year):
-    ...
-\end{lstlisting}
-Provide a specification for this function to ensure the returned date
-is valid (ignoring leap years).  Furthermore, provide a simple
-implementation which meets this specification.
-\end{ex}
+% function getDate() => (int day, int month, int year):
+%     ...
+% \end{lstlisting}\end{tcolorbox}
+% Provide a specification for this function to ensure the returned date
+% is valid (ignoring leap years).  Furthermore, provide a simple
+% implementation which meets this specification.
+% \end{ex}
 
-\begin{ex}
-A well-known puzzle is that of the three water jugs.  In this
-exercise, we will consider a cut down version of this which consists
-of two water jugs: a small jug (containing three litres) and a large
-jug (containing five litres).  The goal is to complete the
-specification of the following function for pouring water from the
-small jug into the large jug:
+% \begin{ex}
+% A well-known puzzle is that of the three water jugs.  In this
+% exercise, we will consider a cut down version of this which consists
+% of two water jugs: a small jug (containing three litres) and a large
+% jug (containing five litres).  The goal is to complete the
+% specification of the following function for pouring water from the
+% small jug into the large jug:
 
-\begin{lstlisting}
-function pourSmall2Large(int smallJug, int largeJug) => 
-                        (int smallJugAfter, int largeJugAfter)
-// The small jug holds between 0 and 3 litres (before)
-requires ...
-// The large jug holds between 0 and 5 litres (before)
-requires ...
-// The small jug holds between 0 and 3 litres (after)
-ensures ...
-// The large jug holds between 0 and 5 litres (after)
-ensures ...
-// The amount in both jugs is unchanged by this function
-ensures ...
-// Afterwards, either the small jug is empty or the large jug is full
-ensures ...:
-    //
-    if smallJug + largeJug <= 5:
-        // indicates we're emptying the small jug
-        largeJug = largeJug + smallJug
-        smallJug = 0
-    else:
-        // indicates we're filling up the medium jug    
-        smallJug = largeJug + smallJug
-        largeJug = 5
-    // Done
-    return smallJug, largeJug
-\end{lstlisting}
-Complete the missing \lstinlinec{requires} and \lstinlinec{ensures}
-clauses based on the given English descriptions.  Does the implementation meet the given specification?
-\end{ex}
+% \begin{tcolorbox}\begin{lstlisting}[language=Whiley]
+% function pourSmall2Large(int smallJug, int largeJug) => 
+%                         (int smallJugAfter, int largeJugAfter)
+% // The small jug holds between 0 and 3 litres (before)
+% requires ...
+% // The large jug holds between 0 and 5 litres (before)
+% requires ...
+% // The small jug holds between 0 and 3 litres (after)
+% ensures ...
+% // The large jug holds between 0 and 5 litres (after)
+% ensures ...
+% // The amount in both jugs is unchanged by this function
+% ensures ...
+% // Afterwards, either the small jug is empty or the large jug is full
+% ensures ...:
+%     //
+%     if smallJug + largeJug <= 5:
+%         // indicates we're emptying the small jug
+%         largeJug = largeJug + smallJug
+%         smallJug = 0
+%     else:
+%         // indicates we're filling up the medium jug    
+%         smallJug = largeJug + smallJug
+%         largeJug = 5
+%     // Done
+%     return smallJug, largeJug
+% \end{lstlisting}\end{tcolorbox}
+% Complete the missing \clstinline{requires} and \clstinline{ensures}
+% clauses based on the given English descriptions.  Does the implementation meet the given specification?
+% \end{ex}

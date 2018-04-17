@@ -20,7 +20,7 @@ Software verification is the process of checking that a program meets its specif
 \section{Whiley}
 The Whiley programming language has been in active development since 2009.  The language was designed specifically to help the programmer eliminate bugs from his/her software.  The key feature is that Whiley allows programmers to write {\em specifications} for their functions, which are then checked by the compiler.  For example, here is the specification for the \lstinline{max()} function which returns the maximum of two integers:
 
-\begin{lstlisting}
+\begin{tcolorbox}\begin{lstlisting}[language=Whiley]
 function max(int x, int y) => (int z)
 // must return either x or y
 ensures x == z || y == z
@@ -31,7 +31,7 @@ ensures x <= z && y <= z:
         return x
     else:
         return y
-\end{lstlisting}
+\end{lstlisting}\end{tcolorbox}
 
 Here, we see our first piece of Whiley code.  This declares a function called \lstinline{max} which accepts two integers \lstinline{x} and \lstinline{y}, and returns an integer \lstinline{z}.  The body of the function simply compares the two parameters and returns the largest.
 The two \lstinline{requires} clauses form the function's {\em post-condition}, which is a guarantee made to any caller of this function.  In this case, the \lstinline{max} function guarantees to return one of the two parameters, and that the return will be as large as both of them.  In plain English, this means it will return the maximum of the two parameter values.

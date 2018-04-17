@@ -10,7 +10,7 @@ In this chapter, we begin the process of understanding how to check that our pro
 
 As a very simple example, consider the following function which accepts a positive integer and returns a
 non-negative integer (i.e. a natural number):
-\begin{lstlisting}
+\begin{tcolorbox}\begin{lstlisting}[language=Whiley]
 function decrement(int x) => (int y) 
 // Parameter x must be greater than zero
 requires x > 0
@@ -18,39 +18,39 @@ requires x > 0
 ensures y >= 0:
     //
     return x - 1
-\end{lstlisting}
-Here, the \lstinline{requires} and \lstinline{ensures} clauses define the function's precondition and postcondition.  With verification enabled, the Whiley compiler will verify that the implementation of this function meets its specification.  In fact, we can see this for ourselves by manually constructing an appropriate {\em verification condition} (that is, a logical condition whose truth establishes that the implementation meets its specification).  In this case, the appropriate verification condition is \lstinlinec{x > 0 ==> x-1 >= 0}.  Unfortunately, although constructing a verification condition by hand was possible in this case, in general it's difficult if not impossible for more complex functions.
+\end{lstlisting}\end{tcolorbox}
+Here, the \lstinline{requires} and \lstinline{ensures} clauses define the function's precondition and postcondition.  With verification enabled, the Whiley compiler will verify that the implementation of this function meets its specification.  In fact, we can see this for ourselves by manually constructing an appropriate {\em verification condition} (that is, a logical condition whose truth establishes that the implementation meets its specification).  In this case, the appropriate verification condition is \clstinline{x > 0 ==> x-1 >= 0}.  Unfortunately, although constructing a verification condition by hand was possible in this case, in general it's difficult if not impossible for more complex functions.
 
 \subsection{Assignments}
 
 We can reason simply about assignments by applying their effect to what we currently know.  The following illustrates:
 
-\begin{lstlisting}
+\begin{tcolorbox}\begin{lstlisting}[language=Whiley]
 // y < 0 
 x = y + 1
 // y < 0 $\land$ x = y + 1
-\end{lstlisting}
+\end{lstlisting}\end{tcolorbox}
 
-Here, we know \lstinlinec{y<0} is true before the assignment and that \lstinlinec{x == y + 1} must be true after it.  Furthermore, since \lstinlinec{y} is unaffected by the assignment it follows that \lstinlinec{y < 0} continues to hold.  From this, we can conclude, for example, that \lstinlinec{x < 1} is true afterwards.  
+Here, we know \clstinline{y<0} is true before the assignment and that \clstinline{x == y + 1} must be true after it.  Furthermore, since \clstinline{y} is unaffected by the assignment it follows that \clstinline{y < 0} continues to hold.  From this, we can conclude, for example, that \clstinline{x < 1} is true afterwards.  
 
 \subsection{Conditionals}
 
 Conditionals introduce information about variables into the program.  Consider the following snippet:
 
-\begin{lstlisting}
+\begin{tcolorbox}\begin{lstlisting}[language=Whiley]
 if x >= 0:
    // x $\ge$ 0
    ...
 else:
    // x < 0
    ...
-\end{lstlisting}
+\end{lstlisting}\end{tcolorbox}
 
-Here, we know nothing about variable \lstinlinec{x} before the statement.  However,, the conditional provides gives us more information.  On the true branch, we have that \lstinlinec{x >= 0} which follows immediately from the condition itself.  On the false branch, we have \lstinline{x < 0} which follows from the negated condition.
+Here, we know nothing about variable \clstinline{x} before the statement.  However,, the conditional provides gives us more information.  On the true branch, we have that \clstinline{x >= 0} which follows immediately from the condition itself.  On the false branch, we have \lstinline{x < 0} which follows from the negated condition.
 
-In the above example, information about variable \lstinlinec{x} is determined directly from the conditional itself.  However, information can also be determined about variables which are {\em not even used in the conditional}.  The following illustrates:
+In the above example, information about variable \clstinline{x} is determined directly from the conditional itself.  However, information can also be determined about variables which are {\em not even used in the conditional}.  The following illustrates:
 
-\begin{lstlisting}
+\begin{tcolorbox}\begin{lstlisting}[language=Whiley]
 int y = x + 1
 // y == x + 1
 if x >= 0:
@@ -59,30 +59,30 @@ if x >= 0:
 else:
    // x < 0 and y = x + 1
    ...
-\end{lstlisting}
+\end{lstlisting}\end{tcolorbox}
 
-Again, in this example we know nothing about either variable \lstinlinec{x} or \lstinlinec{y} beforehand.  After the assignment, we know the relationship between variable \lstinlinec{x} and \lstinlinec{y}.  Hence, on the true branch, we can conclude, for example, that \lstinlinec{y > 0}.  Similarly, on the false branch, we can conclude that \lstinlinec{y <= 0}.
+Again, in this example we know nothing about either variable \clstinline{x} or \clstinline{y} beforehand.  After the assignment, we know the relationship between variable \clstinline{x} and \clstinline{y}.  Hence, on the true branch, we can conclude, for example, that \clstinline{y > 0}.  Similarly, on the false branch, we can conclude that \clstinline{y <= 0}.
 
 \subsection{Invocations}
 
 To reason about a function call, we must first establish that its precondition is met.  Once we know this, we can then assume that its postcondition holds true for any value returned.  Consider the following example:
 
-\begin{lstlisting}
+\begin{tcolorbox}\begin{lstlisting}[language=Whiley]
 // x > 0
 x = decrement(x)
 // x $\ge$ 0
-\end{lstlisting}
+\end{lstlisting}\end{tcolorbox}
 
-Recall the definition of the \lstinlinec{decrement()} function from \S\ref{c_reasoning_forward}.  Since we know \lstinlinec{x > 0} is true before the function call, we know: firstly, that the precondition of \lstinlinec{decrement()} is satisfied; hence, secondly, that the postcondition of \lstinlinec{decrement()} implies \lstinlinec{x >= 0} after the statement.
+Recall the definition of the \clstinline{decrement()} function from \S\ref{c_reasoning_forward}.  Since we know \clstinline{x > 0} is true before the function call, we know: firstly, that the precondition of \clstinline{decrement()} is satisfied; hence, secondly, that the postcondition of \clstinline{decrement()} implies \clstinline{x >= 0} after the statement.
 
 \subsection{Records}
 Records are compound data types made up from one or more fields.  The fields of a record can be individually assigned, and this makes it easier to manage complex data.  As with general assignments, we can reason about assignments to records by considering the effect of the assignment on the given field:
 
-\begin{lstlisting}
+\begin{tcolorbox}\begin{lstlisting}[language=Whiley]
 // point.x > 0 $\land$ point.y > 0
 point.x = 0
 // point.x = 0 $\land$ point.y $\ge$ 0
-\end{lstlisting}
+\end{lstlisting}\end{tcolorbox}
 
 Here, we can see that the assignment to the field \lstinline{x} does not affect what is known about the other fields stored in the record (i.e. \lstinline{y}).
 
@@ -96,21 +96,21 @@ To reason about this array access, we must first show that the array index is {\
 \subsection{Writing Arrays}
 The elements of an array can be individually assigned and arrays make for a powerful building block for more complex data structures.  When dealing with arrays we can reason about the effect of an assignment to a specific element, if we know what that element was:
 
-\begin{lstlisting}
+\begin{tcolorbox}\begin{lstlisting}[language=Whiley]
 // $|xs| > 0\land\forall i.(0 \le i < |xs|\implies xs[i] > 0)$
 xs[0] = 0
 // $xs[0] == 0\land |xs| > 0\land\forall i.(0 \le i < |xs|\implies xs[i] > 0)$
-\end{lstlisting}
+\end{lstlisting}\end{tcolorbox}
 
 To reason about this assignment, we must first show the array index is within bounds (recall \S\ref{c_reasoning_reading_arrays}).  This follows because the index is \lstinline{0} and $|xs| > 0$ holds beforehand.  Now, before the assignment above we know that every element in the array is positive.  After the assignment, we have split our knowledge into two regions to reflect the most precise information we have at this point.  This was possible because we knew exactly which array index was being updated.
 
 In general, we do not often know which specific array element has been updated and, hence, we must assume that {\em any element} could have been updated:
 
-\begin{lstlisting}
+\begin{tcolorbox}\begin{lstlisting}[language=Whiley]
 // $n >= 0 \land n < |xs|\land\forall i.(0 \le i < |xs|\implies xs[i] > 0)$
 xs[n] = 0
 // $n >= 0 \land n < |xs|\land\forall i.(0 \le i < |xs|\implies xs[i] \ge 0)$
-\end{lstlisting}
+\end{lstlisting}\end{tcolorbox}
 
 Here, our reasoning is a little coarse as we have conservatively updated our knowledge by assuming that any possible element of the array could be updated.
 

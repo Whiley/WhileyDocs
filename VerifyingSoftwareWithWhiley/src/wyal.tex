@@ -1,0 +1,461 @@
+\chapter{Assertion Language}
+
+The Whiley Compiler (WyC) checks the correctness of Whiley programs by
+first converting them into assertions written in the Whiley Assertion
+Language (WyAL).  Then, it checks them using the Whiley Theorem Prover
+(WyTP) and, if all of the generated assertions (known as {\em
+  verification conditions}) hold, then the original program was
+correct.  This chapter provides a high-level introduction to the
+Whiley Assertion Language (WyAL).  The purpose is to help the reader
+understand {\em what} the system is trying to achieve without going
+into details about {\em how} it is achieved.  To that end, some
+discussion of how this relates to the Whiley language is provided.
+
+\section{Overview}
+The fundamental construct in WyAL is the \clstinline{assert} statement.
+The following illustrates a very simple example:
+\begin{tcolorbox}\begin{lstlisting}[language=WyAL]
+assert:
+  forall(int x):
+     if:
+       x > 0
+     then:
+       x >= 0
+\end{lstlisting}\end{tcolorbox}
+An assertion is simply a statement whose truth will be checked by the
+Whiley Theorem Prover (WyTP).  If the above were stored in a file
+\clstinline{test.wyal}, then we could perform this check as follows:
+\begin{verbatim}
+% wy verify test.wyal
+\end{verbatim}
+The tool accepts this without producing an error message, thus
+indicating that it believes this statement to be correct.  To
+understand what happens when an incorrect assertion is given, consider
+the following:
+\begin{tcolorbox}\begin{lstlisting}[language=WyAL]
+assert:
+  forall(int x):
+     if:
+       x >= 0
+     then:
+       x > 0
+\end{lstlisting}\end{tcolorbox}
+
+This assertion is incorrect because if, for example,
+\clstinline{x == 0} then it is clearly not the case that
+\clstinline{x > 0}.  As such, we have found a {\em counter-example}
+to our assertion.  Running WyTP identifies the problem:
+\begin{tcolorbox}\begin{lstlisting}
+./test.wyal:1: assertion failure
+assert:
+^^^^^^^
+\end{lstlisting}\end{tcolorbox}
+
+Assertions in WyAL are simply formulae written in an extended form of
+first-order logic.  The goal of WyTP is simply to ``decide'' whether
+or not such formulae are {\em satisfiable} or {\em unsatisfiable}.  
+
+
+\section{Syntax}
+As discussed above, the primary construct in WyAL is the
+\clstinline{assert} statement.  We now explore the syntax of
+\clstinline{assert} statements in an informal fashion.
+
+
+\subsection{Built-In Types}
+
+The set of types provided in WyAL exactly matches those found in
+Whiley.  This includes: {\em primitive types} (i.e. \clstinline{null},
+\clstinline{bool}, \clstinline{int} and \clstinline{any}; {\em array
+    types} (e.g. \clstinline{int[]}); {\em record types}
+  (e.g. \clstinline{\{int x, int y\}}); {\em union, intersection and
+    negation connectives} (e.g. \clstinline{int\|null}); and,
+  {\em reference types} (e.g. \clstinline{&int}).  We now explore these
+  in more detail.
+
+  \paragraph{Array types.} These have the general form \clstinline{T[]}
+  where \clstinline{T} is the {\em element type}.  They support the
+  {\em array access} (e.g. \clstinline{xs[i]}) and {\em array length}
+  (e.g. \clstinline{\|xs\|}) operators , and provide the {\em array
+    initialiser} (e.g. \clstinline{[1,2,3]}) and {\em array generator}
+  constructors (e.g. \clstinline{[0;n]}).  The following illustrates a
+  simple assertion involving arrays:
+
+\begin{tcolorbox}\begin{lstlisting}[language=WyAL]
+assert:
+   forall(int[] xs, int i):
+      if:
+         |xs| == 1
+         xs[i] == 0
+      then:
+         xs == [0]
+\end{lstlisting}\end{tcolorbox}
+
+This simple assertion employs both array access and length operators,
+as well as the array initialiser constructor.
+
+\paragraph{Record types.} These have the general form \clstinline{\{T1 f1,...,Tn fn\}} where \clstinline{f1} ... \clstinline{fn} denote the
+{\em field names}.  They support the {\em record access} operator and
+provide the {\em record initialiser} constructor.  The following
+illustrates a simple assertion involving records:
+
+\begin{tcolorbox}\begin{lstlisting}[language=WyAL]
+assert:
+   forall({int x, int y} point):
+      if:
+         point.x == 0
+         point.y == 0
+      then:
+         point == {x:0, y:0}
+\end{lstlisting}\end{tcolorbox}
+
+This employs both the record access operator
+(e.g. \clstinline{point.x}) and record initialiser constructor
+(e.g. \clstinline{\{x:0, y:0\}}).
+
+\paragraph{Union Types.}  These have the general form \clstinline{T1 \| ... \| Tn} where \clstinline{T1} ... \clstinline{Tn} denote the
+{\em element types}.  A variable of union type may hold any value
+permitted by one of its element types.  Unions support the {\em type
+  test} operator.  The following illustrates a simple assertion
+involving unions:
+\begin{tcolorbox}\begin{lstlisting}[language=WyAL]
+assert:
+   forall(int|null x, int y):
+      if:
+         x is int
+         x > y
+      then:
+         x != y
+\end{lstlisting}\end{tcolorbox}
+The positioning of \clstinline{x is int} is important here.  For
+example, if \clstinline{x > y} came before \clstinline{x is int}
+then the above would not compile.  This is because the type checker
+only assumes that \clstinline{x} has type \clstinline{int} after it sees
+\clstinline{x is int}, but not before.
+
+\subsection{User-Defined Types}
+ 
+The Whiley Assertion Language supports {\em user-defined types} which
+allow names to be given to types.  The following illustrates a simple
+example:
+\begin{tcolorbox}\begin{lstlisting}[language=WyAL]
+type nat is (int x) where x >= 0
+
+assert:
+   forall(nat x):
+      x >= 0
+\end{lstlisting}\end{tcolorbox}
+Here, a new type \clstinline{nat} has been defined to represent the
+{\em naturals} (i.e. the non-negative integers).  We say that
+\clstinline{nat} is a {\em constrained} type because it includes a type
+invariant (i.e. \clstinline{x >= 0}).  We note that type invariants
+are optional.
+
+In addition to allowing the definition of constrained types, we can
+also define {\em recursive} types.  The following illustrates a simple
+example:
+
+\begin{tcolorbox}\begin{lstlisting}[language=WyAL]
+type LinkedList is (null | { LinkedList next, nat data } l)
+
+assert:
+   forall(LinkedList x):
+      if:
+         !(x is null)
+      then:
+          x.data >= 0
+\end{lstlisting}\end{tcolorbox}
+This defines a linked list where each node holds a field
+\clstinline{data} of type \clstinline{nat}.  Observe how the type test
+operator is used to distinguish between a leaf node
+(i.e. \clstinline{null}) and a non-leaf node.
+
+\subsection{Blocks, Statements \& Expressions}
+
+% Talk about expression versus block syntax.
+% Talk about different kinds of statements supported.
+
+In WyAL a distinction is made between {\em statements} and {\em
+  expressions}.  The purpose of this distinction is purely syntactic
+as every statement corresponds to an equivalent expression.
+Statements aid readability of complex assertions and also help
+connect components of the assertion with the original Whiley program.
+The following illustrates a conditional in expression form:
+
+\begin{tcolorbox}\begin{lstlisting}[language=WyAL]
+assert:
+   forall(int x):
+       (x > 0) ==> (x >= 0)
+\end{lstlisting}\end{tcolorbox}
+
+This employs an implication expression rather than an \clstinline{if}
+statement (as seen before).  As another example, consider the
+following:
+
+\begin{tcolorbox}\begin{lstlisting}[language=WyAL]
+assert:
+   forall(int[] xs, int i):
+      if:
+         (i >= 0) && (i < |xs|)
+         forall(int i).(xs[i] >= 0)
+      then:
+         xs[i] >= 0
+\end{lstlisting}\end{tcolorbox}
+
+This illustrates a mixture of statement and expression forms.  For
+example, the \clstinline{forall} statement is shown in both statement
+and expression forms.  Likewise, multiple lines are used in the
+condition for the \clstinline{if} statement, and these constitute a
+statement block.  Furthermore, statements within a block are always
+conjuncted together.
+
+\subsubsection{Operator Precedence}
+
+Expressions in WyAL do not support operator precedence.  This does not
+mean that all operators have equal precedence but, rather, that {\em
+  ambiguous expressions are not permitted}.  For example,
+\clstinline{x < 0 \|\| x > 0} is syntactically incorrect as there is
+ambiguity between the precedence of the three operators involved.
+Instead, this expression should be written as \clstinline{(x < 0) \|\|
+  (x > 0)} to resolve the ambiguity (for example).
+
+\subsection{Macros}
+
+WyAL permits the definition of {\em macros} which are expanded at
+their call site.\footnote{Note, recursive macros are not currently
+  permitted}  Macros are helpful for grouping conditions together and
+reusing them.  The following illustrates a typical usage:
+
+\begin{tcolorbox}\begin{lstlisting}[language=WyAL]
+define invariant(int i) where:
+   i >= 0
+
+assert:
+   forall(int i):
+       if:
+          i == 0
+       then:
+          invariant(i)
+\end{lstlisting}\end{tcolorbox}
+
+Such an assertion may have been generated whilst checking a Whiley
+program consisting of the following snippet:
+\begin{tcolorbox}\begin{lstlisting}[language=Whiley]
+  ...
+  int i = 0
+  while i < |xs| where i >= 0:
+     ...
+\end{lstlisting}\end{tcolorbox}
+
+Here, macro \lstinline{invariant()} represents the loop invariant
+given above.  Thus, we see how macros can be used to aid in connecting
+the original Whiley program with the generated assertion.
+
+\subsection{Uninterpreted Functions}
+
+WyAL permits the definition of {\em uninterpreted functions}.  These
+introduce function signatures which can be used within expressions.
+The following illustrates:
+\begin{tcolorbox}\begin{lstlisting}[language=WyAL]
+function id(int x)->(int r)
+
+assert:
+   forall(int x, int y):
+      (x == y) ==> (id(x) == id(y))
+\end{lstlisting}\end{tcolorbox}
+
+The body of function \clstinline{id()} is unknown to the verifiers and,
+hence, is referred to as {\em uninterpreted}.  This reflects what the
+verifier is permitted to know when verifying programs in Whiley.  The
+only axiom known about uninterpreted functions is that, when given the
+same arguments, they produce the same result.
+
+\section{Verification Condition Generation}
+
+When verifying the correctness of a Whiley program, the Whiley
+Compiler generates assertions to be checked by WyTP.  These assertions
+are known as {\em verification conditions}, and the process of
+creating them as {\em verification condition generation}.  We now
+briefly examine this process as it provides valuable insight into the
+purpose of WyTP.
+
+As a first example, consider the following Whiley implementation of
+the well-known {\em absolute} function:
+
+\begin{tcolorbox}\begin{lstlisting}[language=Whiley]
+function abs(int x) -> (int r)
+ensures r >= 0
+ensures (r == x) || (r == -x):
+   //
+   if x >= 0:
+      return x
+   else:
+      return -x
+\end{lstlisting}\end{tcolorbox}
+
+This has two postconditions denoted by the \clstinline{ensures}
+clauses: the first states that the return value cannot be negative;
+the second states that the return value is either \clstinline{x} or its
+negation.  Both of these conditions must be true of {\em any possible}
+return value for the function to be considered correct.
+
+The Whiley Compiler performs verification condition generation by
+traversing the \gls{control_flow_graph} of the function in a
+path-sensitive fashion.  When a branch is encountered, the generator
+forks and proceeds independently down each path.  In this case, four
+verification conditions will be generated (i.e. since there are two
+\clstinline{ensures} clauses and two execution paths).  The following
+two verification conditions are generated for the first clause by each
+execution path:
+
+\begin{center}
+\begin{tabular}{c c c}
+\begin{minipage}[t]{0.45\textwidth}
+\begin{tcolorbox}\begin{lstlisting}[language=WyAL]
+assert:
+  forall(int x):
+    if:
+      x >= 0
+    then:
+      x >= 0
+\end{lstlisting}\end{tcolorbox}
+\end{minipage}&&
+\begin{minipage}[t]{0.45\textwidth}
+\begin{tcolorbox}\begin{lstlisting}[language=WyAL]
+  assert:
+    forall(int x):
+      if:
+        x < 0
+      then:
+        -x >= 0
+\end{lstlisting}\end{tcolorbox}
+\end{minipage}\\
+\end{tabular}
+\end{center}
+The left assertion corresponds to the execution path through the true
+branch of the \clstinline{if} statement in the original Whiley
+function; likewise, the right assertion corresponds to the path
+through the false branch.
+
+\subsection{Arrays}
+
+Arrays provide an interesting example as the array access operator
+causes verification conditions to be generated.  Specifically, such
+verification conditions are needed to ensure that all array accesses
+are within bounds.  The following illustrates a simple example in
+Whiley:
+
+\begin{tcolorbox}\begin{lstlisting}[language=Whiley]
+type Point is {int x, int y}
+
+function getPointX(int i, Point[] points) -> (int r)
+requires (i >= 0) && (i < |points|):
+    return points[i].x;
+\end{lstlisting}\end{tcolorbox}
+
+This simply extracts the \clstinline{x} component of a given
+\clstinline{Point} in an array.  The array access generates two
+verification conditions, including the following:
+\begin{tcolorbox}\begin{lstlisting}[language=WyAL]
+type Point is ({int x,int y} p)
+
+define getPointX_requires(int i, Point[] points) is:
+   (i >= 0) && (i < |points|)
+
+assert:
+  forall(int i, Point[] points):
+    if:
+      getPointX_requires(i,points)
+    then:
+      i < |points|
+\end{lstlisting}\end{tcolorbox}
+
+This assertion checks that, if the precondition of function
+\clstinline{getPointX()} holds, then \clstinline{i} is less than the
+length of \clstinline{points}.  The other verification condition
+generated is very similar, and ensures \clstinline{i} is not negative.
+
+\subsection{Loops}
+
+The process of generating verification conditions for loop is rather
+complex, and we will only give a brief overview here.  The main point
+is that a given loop invariant will generate two verification
+conditions: the first for checking the loop invariant holds on entry
+to the loop; the second for checking the loop invariant holds at end
+of the loop body, assuming it did at the start.  The following
+illustrates a very simple example:
+
+\begin{tcolorbox}\begin{lstlisting}[language=Whiley]
+function counter(int n) -> (int r):
+   //
+   int i = 0
+   //
+   while i < n where i >= 0:
+      i = i + 1
+   //
+   return i
+\end{lstlisting}\end{tcolorbox}
+
+This function simply counts up from \clstinline{0} to a given number
+\clstinline{n}.  It generates two verification conditions which look
+roughly as follows:
+
+\begin{center}
+\begin{tabular}{c c c}
+\begin{minipage}[t]{0.45\textwidth}
+\begin{tcolorbox}\begin{lstlisting}[language=WyAL]
+define inv(int x) where:
+  x >= 0
+
+assert:
+  forall(int i, int n):
+    if:
+      i == 0
+    then:
+      inv(i)
+
+\end{lstlisting}\end{tcolorbox}
+\end{minipage}&&
+\begin{minipage}[t]{0.45\textwidth}
+\begin{tcolorbox}\begin{lstlisting}[language=WyAL]
+define inv(int x) where:
+  x >= 0
+
+assert:
+  forall(int i, int n):
+    if:
+      inv(i)
+      i < n
+    then:
+      inv(i+1)
+\end{lstlisting}\end{tcolorbox}
+\end{minipage}\\
+\end{tabular}
+\end{center}
+
+The left assertion checks that the loop invariant holds on entry to
+the loop, whilst the right checks that it holds at the end of the body
+assuming it did at the start.  The second assertion includes the loop
+condition as this is known to hold within the loop body.
+
+% \subsection{References}
+
+% \section{Proofs}
+
+% We can examine the tools ``proof'' of this as follows:
+% \begin{tcolorbox}
+% \begin{verbatim}
+% % wy verify --proof test.wyal
+
+%  36. exists(int x).(((((x + 1) >= ((0 + 1) + 1))) ...    () 
+%  41. exists(int x).((x >= 1) && (0 >= (1 + x)))   (Simp 36) 
+%  40. (x >= 1) && (0 >= (1 + x))               (Exists-E 41) 
+%  37. x >= 1                                      (And-E 40) 
+%  39. 0 >= (1 + x)                                (And-E 40) 
+%  44. -1 >= 1                                  (Ieq-I 39,37) 
+%  20. false                                        (Simp 44) 
+% \end{verbatim}
+% \end{tcolorbox}
+% This proof simplify identifies the rules applied by WyTP in the order
+% they were applied.  For now, the details of this are not so important
+% and we will return to this later.

@@ -7,22 +7,15 @@
 \pagestyle{plain}
 \lstloadlanguages{Java}
 \lstset{
-        language=Java,
-        keywords={function, method, type, constant, assert, for, while, switch, is, if, case, return, export, native,
-          else, process, define, as, requires, ensures, where, no, new,
-          all, bool, int, byte, char, string, void, real, in, any,
-          null, var, public, protected, private, skip, break, do,
-          throws, catch, continue, default, try
-        },
         basicstyle=\small\ttfamily,
         commentstyle=\rmfamily\itshape,
         stringstyle=\small\itshape,
         moredelim=*[s][commentstyle]{/*}{*/}, % allows keyword highlighting inside comments
         morecomment=[l][commentstyle]{//},      % single line comments are set by...
-        backgroundcolor=\color{lightgray},
-        frame=single, % adds a frame around the code
-%        frameround=tttt,
-        framesep=0.25cm,
+        %backgroundcolor=\color{lightgray},
+        %frame=single, % adds a frame around the code
+        %frameround=tttt,
+        framesep=0.0cm,
         texcl,                                                          % ...LaTeX
         moredelim=[is][\ttfamily]{<code>}{</code>}, % allows setting code inside multi-line comments
         moredelim=*[s][\ttfamily]{/*@}{*/}, % JML annotations
@@ -39,11 +32,55 @@
         showtabs=false,
         columns=fullflexible,
         numberstyle=\tiny,
+        numbers=left,
         keepspaces=true,
         mathescape=true, % allows $ to switch in and out of math mode within listings
-        literate={->}{{$\rightarrow$}}1 
-           {tau}{{$\tau$}}1 {tau'}{{$\tau\prime$}}1 {(|}{{$\lpbar$}}1 
+        literate={tau}{{$\tau$}}1 {tau'}{{$\tau\prime$}}1 {(|}{{$\lpbar$}}1 {---}{{$\hole$}}1
            {-*-}{{$\times$}}1 {||_}{{$\lceilfloor$}}1 {_||}{{$\rceilfloor$}}1
            {/0}{{$\emptyset$}}1 {/bul}{{$\unit$}}1 {:->}{{$\mapsto$}}1
            {~}{$\sim$}1,
+}
+
+\definecolor{gray}{RGB}{215,215,215}
+\definecolor{darkgray}{RGB}{175,175,175}
+
+\definecolor{lightgray}{RGB}{225,225,225}
+\definecolor{verylightgray}{RGB}{245,245,245}
+\definecolor{whileybrown}{RGB}{213,195,151}
+\newcommand{\lstinlinec}[1]{\fcolorbox{lightgray}{verylightgray}{\lstinline{#1}}}
+
+
+\newcommand{\clstinline}[1]{\tcbox[tcbox raise
+  base,colback=gray!70,colframe=black,nobeforeafter,boxrule=0.5pt,arc=1.5pt,left=0mm,right=0mm,top=0mm,bottom=0mm]{\lstinline|#1|}}
+
+% ==========================================
+% Whiley LstListing Mode
+% ==========================================
+\lstdefinelanguage{Whiley}
+{
+  morekeywords={
+    function, method, type, constant, assert, assume,
+    while, switch, is, if, case, return, else, package, 
+    as, requires, ensures, where, no, new,
+    all, bool, int, byte, char, string, void, real, in, any,
+    null, var, public, protected, private, native, export, skip, break, do,
+    throws, catch, continue, default, try
+  },
+  sensitive=false,
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/}
+}
+
+% ==========================================
+% WyAL LstListing Mode
+% ==========================================
+
+\lstdefinelanguage{WyAL}
+{
+  morekeywords={
+    assert,define,exists,forall,if,then,is,type,function
+  },
+  sensitive=false,
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/}
 }

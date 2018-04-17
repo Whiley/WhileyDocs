@@ -8,20 +8,18 @@
 \usepackage{url} % for typesetting urls
 \usepackage{color}
 \usepackage{fancybox}
+\usepackage{tcolorbox}
 \usepackage{framed}
 \usepackage{hyperref}
 \usepackage[super,square]{natbib}
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{stmaryrd}
+\usepackage{tabularx}
 \usepackage[paperwidth=6in, paperheight=9in,lmargin=10mm,tmargin=10mm,bmargin=20mm,rmargin=10mm,twoside=true,marginpar=30mm]{geometry}
 %\usepackage[a4paper,lmargin=35mm,tmargin=35mm,bmargin=35mm,rmargin=35mm,twoside=false,marginpar=30mm]{geometry}
 
 % ------------------------------------------------------------------------
-\definecolor{lightgray}{RGB}{225,225,225}
-\definecolor{verylightgray}{RGB}{245,245,245}
-\definecolor{whileybrown}{RGB}{213,195,151}
-\newcommand{\lstinlinec}[1]{\fcolorbox{lightgray}{verylightgray}{\lstinline{#1}}}
 
 \newtheorem{ex}{Exercise}
 \newenvironment{eg}{\bigskip\par\noindent{\bf Example.}}{\hfill$\blacksquare$\bigskip}
@@ -35,7 +33,7 @@
 }{\end{minipage}\end{framed}}
 
 % ------------------------------------------------------------------------
-
+\input{../../WhileyLanguageSpecification/src/glossary}
 \input{listings}
 
 \title{\Huge Verifying Software with Whiley}
@@ -54,8 +52,12 @@
 \input{loopinvariants}
 \input{recursion}
 \part{Understanding the Verification Process}
-\input{vcg}
-\input{hoarelogic}
+\input{wytp}
+\input{wyal}
+\input{checking}
+\input{counterexamples}
+\input{automated_proving}
+%\input{hoarelogic}
 \appendix
 \newpage
 \section*{Appendix}
