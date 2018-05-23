@@ -78,8 +78,9 @@ A \gls{literal} is a source-level entity which describes a value of primitive ty
 \begin{syntax}
 \verb+Literal+ & $::=$ &  \verb+NullLiteral+ \\
   & $|$ & \verb+BoolLiteral+ \\
-  & $|$ & \verb+ByteLiteral+ \\
+  & $|$ & \verb+BinaryLiteral+ \\
   & $|$ & \verb+IntLiteral+ \\
+  & $|$ & \verb+HexLiteral+ \\
   & $|$ & \verb+CharacterLiteral+ \\
   & $|$ & \verb+StringLiteral+ \\
 \\
@@ -103,28 +104,37 @@ The \lstinline{bool} type (\S\ref{c_types_bool}) has two values expressed as the
 \end{syntax}
 
 
-\subsection{Byte Literals}
+\subsection{Binary Literals}
 
-The \lstinline{byte} type (\S\ref{c_types_byte}) has 256 values which are expressed as sequences of binary digits, followed by the suffix ``\lstinline{b}'' (e.g. \lstinline{0101b}).
+The \lstinline{byte} type (\S\ref{c_types_byte}) has 256 values which are expressed as sequences of binary digits, prefixed with ``\lstinline{0b}'' (e.g. \lstinline{0b0101}, \lstinline{0b1111_0101}, etc).
 
 
 \begin{syntax}
- \verb+ByteLiteral+ & $::=$ & \big(\ \token{0}\ $|$\ \token{1}\ \big)$^+$\ \token{b}\\
+ \verb+BinaryLiteral+ & $::=$ & \token{0}\ \token{b}\ \big(\ \token{0}\ $|$\ \token{1} $|$\ \token{\_}\ \big)$^+$\\
 \end{syntax}
 
-Byte literals do not need to contain exactly eight digits and, when fewer digits are given, are padded out to eight digits by appending zero's from the left (e.g. \lstinline{00101b} becomes \lstinline{00000101b}).
+Binary literals do not need to contain exactly eight digits and, when fewer digits are given, are padded out to eight digits by appending zero's from the left (e.g. \lstinline{0b00101} becomes \lstinline{0b00000101}).
 
 
 \subsection{Integer Literals}
 
-An {\em integer literal} is a sequence of numeric or hexadecimal digits (e.g. \lstinline{123456}, \lstinline{0xffaf}, etc) corresponding to a value of \lstinline{int} type (\S\ref{c_types_int}).
+An {\em integer literal} is a sequence of numeric digits (e.g. \lstinline{123456}, etc) corresponding to a value of \lstinline{int} type (\S\ref{c_types_int}).
 
 \begin{syntax}
-  \verb+IntLiteral+ & $::=$ & \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ \big)$^+$ \\
-  & $|$ & \token{0} \token{x}\ \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ $|$\ \token{a}\ $|$\ \ldots\ $|$\ \token{f}\ $|$\ \token{A}\ $|$\ \ldots\ $|$\ \token{F}\ \big)$^+$\\
+  \verb+IntLiteral+ & $::=$ & \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ $|$\ \token{\_}\ \big)$^+$ \\
 \end{syntax}
 
 Since integer values in Whiley are of arbitrary size (\S\ref{c_types_int}), there is no limit on the size of an integer literal.
+
+\subsection{Hexadecimal Literals}
+
+A {\em hexadecimal literal} is a sequence of hexadecimal digits (e.g. \lstinline{0xffaf}, etc) corresponding to a value of \lstinline{int} type (\S\ref{c_types_int}).
+
+\begin{syntax}
+  \verb+HexLiteral+ & $::=$ & \token{0} \token{x}\ \big( \token{0}\ $|$\ \ldots\ $|$\ \token{9}\ $|$\ \token{a}\ $|$\ \ldots\ $|$\ \token{f}\ $|$\ \token{A}\ $|$\ \ldots\ $|$\ \token{F}\ $|$\ \token{\_}\ \big)$^+$\\
+\end{syntax}
+
+Since integer values in Whiley are of arbitrary size (\S\ref{c_types_int}), there is no limit on the size of a hexadecimal literal.
 
 \subsection{Character Literals}
 
