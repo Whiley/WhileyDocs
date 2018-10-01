@@ -18,7 +18,7 @@ Type descriptors provide syntax for describing types and, in the remaining secti
 
 \begin{syntax}
   \verb+Type+ & $::=$ & \verb+UnionType+ \\
-              & $|$ & \verb+IntersectionType+ \\
+%              & $|$ & \verb+IntersectionType+ \\
               & $|$ & \verb+TermType+ \\
               &&\\
   \verb+TermType+ & $::=$ & \\
@@ -27,7 +27,7 @@ Type descriptors provide syntax for describing types and, in the remaining secti
   & $|$ & \verb+ReferenceType+ \\
   & $|$ & \verb+NominalType+ \\
   & $|$ & \verb+ArrayType+ \\
-  & $|$ & \verb+NegationType+ \\
+%  & $|$ & \verb+NegationType+ \\
   & $|$ & \verb+FunctionType+ \\
   & $|$ & \verb+MethodType+ \\
   & $|$ & \token{(}\ \verb+Type+\ \token{)}\\
@@ -40,7 +40,7 @@ Primitive types are the atomic building blocks of all types in Whiley.
 
 \begin{syntax}
   \verb+PrimitiveType+ & $::=$ & \\
-  & $|$ & \verb+AnyType+ \\
+%  & $|$ & \verb+AnyType+ \\
   & $|$ & \verb+VoidType+ \\
   & $|$ & \verb+NullType+ \\
   & $|$ & \verb+BoolType+ \\
@@ -133,26 +133,26 @@ This illustrates the well-known recursive function for computing numbers in the 
 
 \paragraph{Notes.}  Since integers in Whiley are of arbitrary size, {\em integer overflow} is not possible.  This contrasts with other languages (e.g. Java) that used {\em fixed-width} number representations (e.g. 32bit two's complement).  Furthermore, there is nothing equivalent to the constants found in such languages for representing the uppermost and least integers expressible (e.g. \lstinline{Integer.MIN_VALUE} and \lstinline{Integer.MAX_VALUE}, as found in Java).
 
-% =======================================================================
-% Any
-% =======================================================================
+% % =======================================================================
+% % Any
+% % =======================================================================
 
-\subsection{Any}
-\label{c_types_any}
+% \subsection{Any}
+% \label{c_types_any}
 
-The type \lstinline{any} represents the set of all possible values.  Thus, \lstinline{any} is the {\em top type} (i.e. $\top$) in the lattice of types and, hence, is the supertype of all other types.  Values of \lstinline{any} type support equality comparators (\S\ref{c_expr_equality}) and type tests (\S\ref{c_expr_type_tests}).
+% The type \lstinline{any} represents the set of all possible values.  Thus, \lstinline{any} is the {\em top type} (i.e. $\top$) in the lattice of types and, hence, is the supertype of all other types.  Values of \lstinline{any} type support equality comparators (\S\ref{c_expr_equality}) and type tests (\S\ref{c_expr_type_tests}).
 
-\begin{syntax}
-  \verb+AnyType+ & $::=$ & \token{any} \\
-\end{syntax}
+% \begin{syntax}
+%   \verb+AnyType+ & $::=$ & \token{any} \\
+% \end{syntax}
 
-\paragraph{Example.} The following illustrates a simple example of the \lstinline{any} type:
+% \paragraph{Example.} The following illustrates a simple example of the \lstinline{any} type:
 
-\lstinputlisting{../examples/ch4/eg_8.whiley}
+% \lstinputlisting{../examples/ch4/eg_8.whiley}
 
-Here, the function \lstinline{toInt} accepts {\em any valid Whiley value}, which includes all values of type \lstinline{int}, collections, records, etc.  The function then inspects the value that it has been passed and, in the case of values of type \lstinline{int}, just returns their value; for all other values, it returns \lstinline{0}.
+% Here, the function \lstinline{toInt} accepts {\em any valid Whiley value}, which includes all values of type \lstinline{int}, collections, records, etc.  The function then inspects the value that it has been passed and, in the case of values of type \lstinline{int}, just returns their value; for all other values, it returns \lstinline{0}.
 
-\paragraph{Notes.}  The any type is roughly comparable to the \lstinline{Object} type found in pure object-oriented languages.  However, in impure object-oriented languages which support primitive types, such as Java, this comparison often falls short because \lstinline{Object} is not a supertype of primitives such as \lstinline{int} or \lstinline{long}.
+% \paragraph{Notes.}  The any type is roughly comparable to the \lstinline{Object} type found in pure object-oriented languages.  However, in impure object-oriented languages which support primitive types, such as Java, this comparison often falls short because \lstinline{Object} is not a supertype of primitives such as \lstinline{int} or \lstinline{long}.
 
 % =======================================================================
 % Void 
@@ -291,7 +291,7 @@ The above illustrates the well-known {\em map} function, which maps all elements
 A union type is constructed from two or more component types and contains any value held in any of its components.  For example, the type \lstinline{null|int} is a union which holds either an integer value or \lstinline{null}.  The set of values defined by a union type \lstinline{T1|T2} is exactly the union of the sets defined by \lstinline{T1} and \lstinline{T2}.  In general, variables of union type support only equality comparators (\S\ref{c_expr_equality}) and type tests (\S\ref{c_expr_type_tests}).  See \S\ref{c_types_effective} for exceptions to this.
 
 \begin{syntax}
-  \verb+UnionType+ & $::=$ & \verb+IntersectionType+\ \big(\ \token{|}\ \verb+IntersectionType+\
+  \verb+UnionType+ & $::=$ & \verb+TermType+\ \big(\ \token{|}\ \verb+TermType+\
   \big)$^*$\\
 \end{syntax}
 
@@ -305,40 +305,40 @@ Here, a union type is used to construct a more expressive return value.  If no m
 % Intersections
 % =======================================================================
 
-\section{Intersections}
-\label{c_types_intersections}
+% \section{Intersections}
+% \label{c_types_intersections}
 
-An intersection type is constructed from two or more component types and contains any value held in all of its components.  For example, the type \lstinline{int[]&bool[]} is an intersection which holds any value which is both an instance of \lstinline{int[]} and \lstinline{bool[]} (in fact, no value meets this criteria).  Intersections are used, for example, to type variables on the true branch of a runtime type test (\S\ref{c_expr_type_tests}).  The set of values defined by an intersection type \lstinline{T1&T2} is exactly the intersection of the sets defined by \lstinline{T1} and \lstinline{T2}.  In general, variables of intersection type support only equality comparators (\S\ref{c_expr_equality}) and type tests (\S\ref{c_expr_type_tests}). See \S\ref{c_types_effective} for exceptions to this.
+% An intersection type is constructed from two or more component types and contains any value held in all of its components.  For example, the type \lstinline{int[]&bool[]} is an intersection which holds any value which is both an instance of \lstinline{int[]} and \lstinline{bool[]} (in fact, no value meets this criteria).  Intersections are used, for example, to type variables on the true branch of a runtime type test (\S\ref{c_expr_type_tests}).  The set of values defined by an intersection type \lstinline{T1&T2} is exactly the intersection of the sets defined by \lstinline{T1} and \lstinline{T2}.  In general, variables of intersection type support only equality comparators (\S\ref{c_expr_equality}) and type tests (\S\ref{c_expr_type_tests}). See \S\ref{c_types_effective} for exceptions to this.
 
-\begin{syntax}
-  \verb+IntersectionType+ & $::=$ & \verb+TermType+\ \big(\ \token{\&}\ \verb+TermType+\
-  \big)$^*$\\
-\end{syntax}
+% \begin{syntax}
+%   \verb+IntersectionType+ & $::=$ & \verb+TermType+\ \big(\ \token{\&}\ \verb+TermType+\
+%   \big)$^*$\\
+% \end{syntax}
 
-\paragraph{Example.} The following example illustrates an intersection type:
+% \paragraph{Example.} The following example illustrates an intersection type:
 
-\lstinputlisting{../examples/ch4/eg_18.whiley}
+% \lstinputlisting{../examples/ch4/eg_18.whiley}
 
-Here, the type \lstinline{Reader} is defined as any record containing a \lstinline{read(int)} method, whilst the type \lstinline{Writer} is defined as any record containing a \lstinline{write([byte])} method.  Then, the intersection type \lstinline{ReaderWriter} is defined as any record containing {\em both} a \lstinline{read(int)} and \lstinline{write([byte])} method.
+% Here, the type \lstinline{Reader} is defined as any record containing a \lstinline{read(int)} method, whilst the type \lstinline{Writer} is defined as any record containing a \lstinline{write([byte])} method.  Then, the intersection type \lstinline{ReaderWriter} is defined as any record containing {\em both} a \lstinline{read(int)} and \lstinline{write([byte])} method.
 
 % =======================================================================
 % Negations
 % =======================================================================
 
-\section{Negations}
-\label{c_types_negations}
+% \section{Negations}
+% \label{c_types_negations}
 
-A negation type is constructed from a component type and contains any value {\em not} held in its component.  For example, the type \lstinline{!int} is a negation which holds any non-integer value.  Negations are used, for example, to type variables on the false branch of a runtime type test.  The set of values defined by a negation type ${\tt !T_1}$ is exactly the set of all values less those defined by ${\tt T_1}$.  In general, variables of negation type support only equality comparators (\S\ref{c_expr_equality}) and type tests (\S\ref{c_expr_type_tests}).  See \S\ref{c_types_effective} for exceptions to this.
+% A negation type is constructed from a component type and contains any value {\em not} held in its component.  For example, the type \lstinline{!int} is a negation which holds any non-integer value.  Negations are used, for example, to type variables on the false branch of a runtime type test.  The set of values defined by a negation type ${\tt !T_1}$ is exactly the set of all values less those defined by ${\tt T_1}$.  In general, variables of negation type support only equality comparators (\S\ref{c_expr_equality}) and type tests (\S\ref{c_expr_type_tests}).  See \S\ref{c_types_effective} for exceptions to this.
 
-\begin{syntax}
-  \verb+NegationType+ & $::=$ & \token{!}\ \ \verb+TermType+\\
-\end{syntax}
+% \begin{syntax}
+%   \verb+NegationType+ & $::=$ & \token{!}\ \ \verb+TermType+\\
+% \end{syntax}
 
-\paragraph{Example.} The following example illustrates a negation type:
+% \paragraph{Example.} The following example illustrates a negation type:
 
-\lstinputlisting{../examples/ch4/eg_19.whiley}
+% \lstinputlisting{../examples/ch4/eg_19.whiley}
 
-Here, the function \lstinline{f()} accepts a parameter of any type, and returns a value which is permitted to be anything except \lstinline{null}.  The above also illustrates how the type test operator retypes variables on the false branch using negation types.
+% Here, the function \lstinline{f()} accepts a parameter of any type, and returns a value which is permitted to be anything except \lstinline{null}.  The above also illustrates how the type test operator retypes variables on the false branch using negation types.
 
 \section{Recursive Types}
 \label{c_types_recursive}
@@ -423,10 +423,10 @@ Although types are abstract entities we can (for the most part) imagine them as 
 Since types are defined in terms of the set of values they represent, it is possible for two distinct type descriptors to describe the same underlying type.  For example, \lstinline{int|null} is considered equivalent to \lstinline{null|int}.  Whilst this case is fairly easy to spot, others are not so obvious.  Some examples are given here to illustrate:
 
 \begin{itemize}
-\item \lstinline{!any} is equivalent to \lstinline{void} and, conversely, \lstinline{any} is equivalent to \lstinline{!void}
-\item \lstinline{int&!int} is equivalent to \lstinline{void} and, conversely, \lstinline{int|!int} is equivalent to \lstinline{any}
+% \item \lstinline{!any} is equivalent to \lstinline{void} and, conversely, \lstinline{any} is equivalent to \lstinline{!void}
+% \item \lstinline{int&!int} is equivalent to \lstinline{void} and, conversely, \lstinline{int|!int} is equivalent to \lstinline{any}
 \item \lstinline|{int$\;|\;$null f}| is equivalent to \lstinline|{int f}$\;|\;${null f}|
-\item \lstinline|{int$\;|\;$null f}&{bool$\;|\;$null f}| is equivalent to \lstinline|{null f}|
+% \item \lstinline|{int$\;|\;$null f}&{bool$\;|\;$null f}| is equivalent to \lstinline|{null f}|
 \end{itemize}
 
 % The definition of equivalence is given as follows:
@@ -440,7 +440,7 @@ Unfortunately, an infinite number of equivalences exist between the type descrip
 
 \subsection{Subtyping}
 \label{c_types_subtyping}
-Types in Whiley support the notion of {\em subtyping} where one type may be a {\em subtype} for another.  For example, the type \lstinline{int} is a subtype of \lstinline{any}.  Likewise, \lstinline{bool} is a subtype of \lstinline{bool|null}.  The {\em subtyping operator} is denoted by ``${\tt \le}$''; for example, ${\tt T_1\le T_2}$ indicates that type ${\tt T_1}$ is a subtype of ${\tt T_2}$.  The subtyping operator is {\em reflexive}, {\em transitive} and {\em anti-symmetric} with respect to the underlying types involved. 
+Types in Whiley support the notion of {\em subtyping} where one type may be a {\em subtype} for another.  For example, the type \lstinline{int} is a subtype of \lstinline{int|bool}.  Likewise, \lstinline{bool} is a subtype of \lstinline{bool|null}.  The {\em subtyping operator} is denoted by ``${\tt \le}$''; for example, ${\tt T_1\le T_2}$ indicates that type ${\tt T_1}$ is a subtype of ${\tt T_2}$.  The subtyping operator is {\em reflexive}, {\em transitive} and {\em anti-symmetric} with respect to the underlying types involved. 
 
 The subtyping operator is regarded as an algorithm for determining whether the type described by one type descriptor is a subtype of another.  The implementation of this algorithm is not straightforward and a full discussion of it is beyond the scope of this document.  Indeed, there are many possible implementations of this operator.  
 
