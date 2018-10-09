@@ -10,8 +10,8 @@ Two kinds of \gls{compilation_unit} are taken into consideration when compiling 
 \begin{syntax}
 \verb+SourceFile+ & $::=$ & \big[ \verb+PackageDecl+ \big] \\
 &  $\big($ & \verb+ImportDecl+\\
-& $|$ & $($\verb+Modifier+$)^*$ \verb+ConstantDecl+\\
 & $|$ & $($\verb+Modifier+$)^*$ \verb+TypeDecl+\\
+& $|$ & $($\verb+Modifier+$)^*$ \verb+StaticVarDecl+\\
 & $|$ & $($\verb+Modifier+$)^*$ \verb+FunctionDecl+\\
 & $|$ & $($\verb+Modifier+$)^*$ \verb+MethodDecl+ \\
 & $\big)^*$ &\\
@@ -120,35 +120,38 @@ The first declaration defines an unconstrained record type named \lstinline{Poin
 
 
 % =======================================================================
-% Constant Declarations
+% Static Declarations
 % =======================================================================
 
-\subsection{Variable Declarations}
+\subsection{Static Variable Declarations}
 \label{c_source_files_constant_decl}
 
-A {\em constant declaration} declares a named constant within a Whiley \gls{source_file}.  The declaration may refer to named constants in this or other source files, although it may not refer to itself (either directly or indirectly).
+A {\em static variable declaration} declares a top-level variable
+within a Whiley \gls{source_file} with an optional initialiser
+expression.
 
 \begin{syntax}
-  \verb+ConstantDecl+ & $::=$ & \token{constant}\ \verb+Ident+\
-  \token{is}\ \verb+Expr+\\
+  \verb+StaticVarDecl+ & $::=$ & \verb+Type+ \verb+Ident+\ \big[= \verb+Expr+\big]\\
 \end{syntax}
 
-The given {\em constant expression} is evaluated at {\em compile time}
-and must produce a constant value.  This prohibits the use of function
-or method calls within the constant expression.  However, general
-operators (e.g. for arithmetic) are permitted.
+The given {\em initialiser expression} may not directly or indirectly
+refer to itself and may only be omitted in conjunction with the
+\lstinline{native} modifier.  Initialiser expressions are also {\em
+  pure} and may not have \glspl{side_effect} (i.e. invoke methods or
+allocate on the heap).
 
-\paragraph{Examples.}  Some simple examples to illustrate constant declarations are:
+\paragraph{Examples.}  Some simple examples to illustrate static
+variable declarations are:
 
 \lstinputlisting{../examples/ch3/eg_4.whiley}
 
 The first declaration defines the constant \lstinline{TEN} to have the
-\lstinline{real} value \lstinline{10}.  The second
-declaration illustrates a more interesting constant expression which
-is evaluated to \lstinline{20} at compile time.
+\lstinline{int} value \lstinline{10}.  The second declaration defines
+a global variable initialised with the constant.
 
-\paragraph{Notes.}  A convention is that constants are named in upper
-case with underscores separating words.
+\paragraph{Notes.}  Since initialiser expressions across a compilation
+group form a directed acyclic graph, static variables can always be
+safely initialised.
 
 % =======================================================================
 % Function Declarations
@@ -157,7 +160,15 @@ case with underscores separating words.
 \subsection{Function Declarations}
 \label{c_source_files_function_decl}
 
-A {\em function declaration} defines a function within a Whiley \gls{source_file}.  Functions are {\em pure} and may not have \glspl{side_effect}.  This means they are guaranteed to return the same result given the same arguments, and are permitted within specifications (i.e. in type invariants, \gls{loop_invariant}s, and function/method \gls{precondition}s or \gls{postcondition}s).  Functions may call other functions, but may not call other methods.  Functions may not explicitly allocate memory on the heap and/or instigate concurrent computation.
+A {\em function declaration} defines a function within a Whiley
+\gls{source_file}.  Functions are {\em pure} and may not have
+\glspl{side_effect}.  This means they are guaranteed to return the
+same result given the same arguments, and are permitted within
+specifications (i.e. in type invariants, \gls{loop_invariant}s, and
+function/method \gls{precondition}s or \gls{postcondition}s).
+Functions may call other functions, but may not call other methods.
+Functions may not explicitly allocate memory on the heap and/or
+instigate concurrent computation.
 
 \begin{syntax}
   \verb+FunctionDecl+ & $::=$ & \token{function}\ \verb+Ident+\ \token{(}\ \verb+Parameters+\ \token{)}\ \token{->}\ \token{(}\ \verb+Parameters+\ \token{)}\\
