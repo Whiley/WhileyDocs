@@ -10,8 +10,8 @@ Two kinds of \gls{compilation_unit} are taken into consideration when compiling 
 \begin{syntax}
 \verb+SourceFile+ & $::=$ & \big[ \verb+PackageDecl+ \big] \\
 &  $\big($ & \verb+ImportDecl+\\
-& $|$ & $($\verb+Modifier+$)^*$ \verb+ConstantDecl+\\
 & $|$ & $($\verb+Modifier+$)^*$ \verb+TypeDecl+\\
+& $|$ & $($\verb+Modifier+$)^*$ \verb+VariableDecl+\\
 & $|$ & $($\verb+Modifier+$)^*$ \verb+FunctionDecl+\\
 & $|$ & $($\verb+Modifier+$)^*$ \verb+MethodDecl+ \\
 & $\big)^*$ &\\
@@ -126,14 +126,14 @@ The first declaration defines an unconstrained record type named \lstinline{Poin
 \subsection{Variable Declarations}
 \label{c_source_files_constant_decl}
 
-A {\em constant declaration} declares a named constant within a Whiley \gls{source_file}.  The declaration may refer to named constants in this or other source files, although it may not refer to itself (either directly or indirectly).
+A {\em variable declaration} declares a variable within a Whiley
+\gls{source_file} with an optional initialiser expression.
 
 \begin{syntax}
-  \verb+ConstantDecl+ & $::=$ & \token{constant}\ \verb+Ident+\
-  \token{is}\ \verb+Expr+\\
+  \verb+VariableDecl+ & $::=$ & \verb+Type+ \verb+Ident+\ \big[= \verb+Expr+\big]\\
 \end{syntax}
 
-The given {\em constant expression} is evaluated at {\em compile time}
+\hl{FIXME}{The} given {\em constant expression} is evaluated at {\em compile time}
 and must produce a constant value.  This prohibits the use of function
 or method calls within the constant expression.  However, general
 operators (e.g. for arithmetic) are permitted.
@@ -157,7 +157,15 @@ case with underscores separating words.
 \subsection{Function Declarations}
 \label{c_source_files_function_decl}
 
-A {\em function declaration} defines a function within a Whiley \gls{source_file}.  Functions are {\em pure} and may not have \glspl{side_effect}.  This means they are guaranteed to return the same result given the same arguments, and are permitted within specifications (i.e. in type invariants, \gls{loop_invariant}s, and function/method \gls{precondition}s or \gls{postcondition}s).  Functions may call other functions, but may not call other methods.  Functions may not explicitly allocate memory on the heap and/or instigate concurrent computation.
+A {\em function declaration} defines a function within a Whiley
+\gls{source_file}.  Functions are {\em pure} and may not have
+\glspl{side_effect}.  This means they are guaranteed to return the
+same result given the same arguments, and are permitted within
+specifications (i.e. in type invariants, \gls{loop_invariant}s, and
+function/method \gls{precondition}s or \gls{postcondition}s).
+Functions may call other functions, but may not call other methods.
+Functions may not explicitly allocate memory on the heap and/or
+instigate concurrent computation.
 
 \begin{syntax}
   \verb+FunctionDecl+ & $::=$ & \token{function}\ \verb+Ident+\ \token{(}\ \verb+Parameters+\ \token{)}\ \token{->}\ \token{(}\ \verb+Parameters+\ \token{)}\\
