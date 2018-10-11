@@ -1,11 +1,24 @@
-\chapter{Definite Assignment}
+\chapter{Definite (Un)Assignment}
 \label{c_definite_assignment}
 
-The Whiley programming language requires that variables are known at \gls{compile_time} to be {\em definitely assigned} (i.e. that they are defined before used).  A conservative approach is taken to determining whether or not this is the case.  This ensures the language can be compiled efficiently, but also means that some provably safe programs are not valid Whiley programs.  In this chapter, we specify the process by which definite assignment is determined.
+The Whiley programming language requires that variables are known at
+\gls{compile_time} to be {\em definitely assigned} (i.e. that they are
+defined before used) and, similarly, that \lstinline{final} variables
+are {\em definitely unassigned} at the point of assignment (i.e. that
+they are assigned at most once).  A conservative approach is taken to
+determining whether or not these requirements hold true.  This ensures
+the language can be compiled efficiently, but also means that some
+provably safe programs are not valid Whiley programs.  In this
+chapter, we specify the process by which definite assignment and
+unassignment are determined.  The mechanism underpinning this is a
+data-flow analysis over the control-flow graph of a function to
+determine the assignment status of all local variables.
 
 \section{Overview}
 
-The following illustrates a simple function which will be rejected by the compiler because it cannot determine definite assignment for all variables.  The function is said to {\em fail definite assignment}:
+The following illustrates a simple function which will be rejected by
+the compiler because it cannot determine definite assignment for all
+variables.  The function is said to {\em fail definite assignment}:
 
 \begin{lstlisting}
 function f(int x) -> (int r):
@@ -17,8 +30,38 @@ function f(int x) -> (int r):
    return x + y
 \end{lstlisting}
 
-In the above program, variable \lstinline{y} is {\em not} definitely assigned before its use in the \lstinline{return} statement.  This is because there is an \gls{execution_path} through the function which reaches the \lstinline{return} statement and on which variable \lstinline{y} is not defined (see Figure~\ref{f:c8_cfg_1}).  In fact, there are {\em two} possible execution paths through this function, but variable \lstinline{y} is only defined on one of them.  Observe that, since it is a parameter, variable \lstinline{x} is automatically considered to have been defined on entry to the function.
+In the above program, variable \lstinline{y} is {\em not} definitely
+assigned before its use in the \lstinline{return} statement.  This is
+because there is an \gls{execution_path} through the function which
+reaches the \lstinline{return} statement and on which variable
+\lstinline{y} is not defined (see Figure~\ref{f:c8_cfg_1}).  In fact,
+there are {\em two} possible execution paths through this function,
+but variable \lstinline{y} is only defined on one of them.  Observe
+that, since it is a parameter, variable \lstinline{x} is automatically
+considered to have been defined on entry to the function.
 
+In contrast, the following illustrates a simple function which will be
+rejected by the compiler because it cannot determine a
+\lstinline{final} variable is definitely unassigned at the point of
+assignment:
+
+\begin{lstlisting}
+function g(int x) -> (int r):
+   //
+   final int y = 0
+   //
+   if x < 0:
+       y = 1
+   //
+   return y
+\end{lstlisting}
+
+In the above program, the \lstinline{final} variable \lstinline{y} is
+{\em not} definitely unassigned at the assignment on line 5.  In other
+words, there is an \gls{execution_path} through the function on which
+variable \lstinline{y} is assigned more than once.  Such a path
+violates the intention of the \lstinline{final} modifier, which
+dictates that a variable should be assigned at most once.
 
 \begin{figure}[!t]
 \centering
@@ -30,7 +73,7 @@ In the above program, variable \lstinline{y} is {\em not} definitely assigned be
       very thick, 
       minimum size=5mm,
       minimum height=1cm,
-      minimum width=3cm,
+      minimum width=4cm,
       rounded corners=0.25cm
     }
     ]
@@ -49,7 +92,15 @@ In the above program, variable \lstinline{y} is {\em not} definitely assigned be
 
 \subsection{Loops}
 
-The treatment of loops with respect to definite assignment warrants special attention.  Recall the mechanism for determining definite assignment is conservative.  In the context of loops, it simply assumes {\em every loop can be executed zero or more times} (i.e. even if this is not correct).  The following illustrates:
+The treatment of loops with respect to definite (un)assignment
+warrants special attention.  Recall the mechanism for determining
+definite (un)assignment is conservative.  In the context of loops, it
+simply assumes {\em every loop can be executed zero or more times}
+(i.e. even if this is not correct).  From the perspective of definite
+assignment, this implies that a variable assignment within a loop {\em
+  may not occur}.  From the perspective of definite unassignment, this
+implies that a variable assignment within a loop {\em may occur}. The
+following illustrates:
 
 \begin{lstlisting}
 function f(int x) -> int:
@@ -62,7 +113,27 @@ function f(int x) -> int:
    return x + y
 \end{lstlisting}
 
-The above function fails definite assignment because variable \lstinline{y} is not defined when zero iterations of the loop are executed (e.g. when \lstinline{x==0} on entry).  To illustrate the conservative nature of definite assignment, consider this variation:
+The above function fails definite assignment because variable
+\lstinline{y} is not defined when zero iterations of the loop are
+executed (e.g. when \lstinline{x==0} on entry).  In contrast, the
+following illustrates a function which fails definite unassignment:
+
+\begin{lstlisting}
+function g(int x) -> int:
+   final int y = 0
+   //
+   while x < 0:
+       y = 1
+       x = x + 1
+   //
+   return x + y
+\end{lstlisting}
+
+The above function fails definite unassignment because variable
+\lstinline{y} is defined more than once when one or more iterations of
+the loop are executed (e.g. when \lstinline{x<0} on entry).  To
+illustrate the conservative nature of definite assignment, consider
+this variation:
 
 \begin{lstlisting}
 function ten() -> int:
@@ -76,11 +147,19 @@ function ten() -> int:
    return y
 \end{lstlisting}
 
-Here, it can be shown that \lstinline{y==1} must hold when the \lstinline{return} statement is reached.  Nevertheless, this function fails definite assignment because of the assumption that the loop executes {\em zero} or more iterations.
+Here, it can be shown that \lstinline{y==1} must hold when the
+\lstinline{return} statement is reached.  Nevertheless, this function
+fails definite assignment because of the assumption that the loop
+executes {\em zero} or more iterations.
 
 \subsection{Infeasible Paths}
 
-Functions and methods may contain \glslink{infeasible_path}{infeasible paths} which are valid execution paths that, in practice, cannot be executed.  The mechanism for checking definite assignment assumes for simplicity that any valid path can be executed.  This means that some programs will fail definite assignment, even though they can be shown as safe.   The following illustrates such a program:
+Functions and methods may contain \glslink{infeasible_path}{infeasible
+  paths} which are valid execution paths that, in practice, cannot be
+executed.  The mechanism for checking definite (un)assignment assumes
+for simplicity that any valid path can be executed.  This means that
+some programs will fail definite assignment, even though they can be
+shown as safe.  The following illustrates such a program:
 
 \begin{lstlisting}
 function abs(int x) -> int:
@@ -95,11 +174,25 @@ function abs(int x) -> int:
     return y
 \end{lstlisting}
 
-This function contains four valid execution paths which can be denoted by \lstinline{ff}, \lstinline{tf}, \lstinline{ft}, \lstinline{tt} where, for example, \lstinline{tf} represents the path where the first condition evaluates to \lstinline{true} and the second to \lstinline{false}.  However, it is easy to see that execution paths \lstinline{ff} and \lstinline{tt} are infeasible.  Furthermore, that on the other two paths, \lstinline{tf} and \lstinline{ft}, variable \lstinline{y} is definitely assigned at the \lstinline{return} statement.  Despite this, the above function fails definite assignment because the mechanism considers all valid paths whilst ignoring infeasible execution paths.
+This function contains four valid execution paths which can be denoted
+by \lstinline{ff}, \lstinline{tf}, \lstinline{ft}, \lstinline{tt}
+where, for example, \lstinline{tf} represents the path where the first
+condition evaluates to \lstinline{true} and the second to
+\lstinline{false}.  However, it is easy to see that execution paths
+\lstinline{ff} and \lstinline{tt} are infeasible.  Furthermore, that
+on the other two paths, \lstinline{tf} and \lstinline{ft}, variable
+\lstinline{y} is definitely assigned at the \lstinline{return}
+statement.  Despite this, the above function fails definite assignment
+because the mechanism considers all valid paths whilst ignoring
+infeasible execution paths.
 
 \subsection{Partial Assignments}
 
-A variable will never be considered definitely assigned after the application of one or more {\em partial assignments}.  The following illustrates a program which fails definite assignment even though it can be shown as safe:
+A variable will never be considered definitely assigned after the
+application of one or more {\em partial assignments}.  In contrast, a
+variable is no longer considered definitely unassigned in such case.
+The following illustrates a program which fails definite assignment
+even though it can be shown as safe:
 
 \begin{lstlisting}
 type Point is {int x, int y}
