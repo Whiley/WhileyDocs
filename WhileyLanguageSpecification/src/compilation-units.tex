@@ -53,14 +53,15 @@ Two named entities in the same category with different types are permitted in so
 When performing \gls{name_resolution}, the Whiley compiler first attempts to resolve names within the same source file.  For any remaining unresolved, the compiler examines imported entities in reverse declaration order.  Entities are imported using an \lstinline{import} declaration:
 
 \begin{syntax}
-\verb+ImportDecl+ & $::=$ & \token{import} \big[\ \verb+FromSpec+\ \big]\ \verb+Ident+\ \Big(\ \token{.} \ \big(\ \verb+Ident+\ $|$ \token{*}\big)\ \Big)$^*$\\
+\verb+ImportDecl+ & $::=$ & \token{import} \big[\verb+FromSpec+\big]\ \verb+Ident+\ \Big(\ \token{::} \ \big(\ \verb+Ident+\ $|$ \token{*}\big)\ \Big)$^*$ \big[\verb+WithSpec+\big]\\
 &&\\
-\verb+FromSpec+ & $::=$ & \big(\ \verb+Ident+ $|$ \token{*} \big) \token{from}\\
+\verb+FromSpec+ & $::=$ & \token{*} $|$ \Big(\ \verb+Ident+\ \big(\ \token{,}\ \verb+Ident+\ \big)$^*$ \Big) \token{from}\\
+\verb+WithSpec+ & $::=$ & \token{with}\ \token{*} $|$ \Big(\ \verb+Ident+\ \big(\ \token{,}\ \verb+Ident+\ \big)$^*$ \Big) \\
 \end{syntax}
 
 A declaration of the form ``\lstinline{import a.pkg.File}'' imports the \gls{compilation_unit} ``\lstinline{File}'' in package ``\lstinline{a.pkg}''.  Named entities (e.g. ``\lstinline{Entity}'') within that compilation unit can then be referenced using a {\em partially qualified} name which omits the package component (e.g. ``\lstinline{File.Entity}'').  
 
-A declaration of the form ``\lstinline{import Entity from a.pkg.File}'' imports the named entity ``\lstinline{Entity}'' from the \gls{compilation_unit} ``\lstinline{File}'' residing in package ``\lstinline{a.pkg}''.  Note, this does {\em not} import the compilation unit ``\lstinline{a.pkg.File}'' (and, hence, does not subsume the statement ``\lstinline{import a.pkg.File}'').
+A declaration of the form ``\lstinline{import Entity from a.pkg.File}'' imports the named entity ``\lstinline{Entity}'' from the \gls{compilation_unit} ``\lstinline{File}'' residing in package ``\lstinline{a.pkg}''.  Note, this does {\em not} import the compilation unit ``\lstinline{a.pkg.File}'' (and, hence, does not subsume the statement ``\lstinline{import a.pkg.File}'').  In contrast, a declaration of the form ``\lstinline{import a.pkg.File with Entity}'' imports both ``\lstinline{Entity}'' and the compilation unit ``\lstinline{a.pkg.File}''.
 
 A {\em wildcard} may be used in place of the compilation unit name to import {\em all} compilation units within the given package (e.g. ``\lstinline{import some.pkg.*}'').  A {\em wildcard} may be used in place of the entity name (e.g. ``\lstinline{import * from some.pkg.File}'') to import {\em all} named entities within the given compilation unit.  
 
