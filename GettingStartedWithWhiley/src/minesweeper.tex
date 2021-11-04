@@ -71,7 +71,7 @@ The corresponding function to \lstinline{getSquare()} provides a way to change t
 
 \lstinputlisting[firstline=67,lastline=72]{../examples/minesweeper.whiley}
 
-Here, the same calculation is performed as before to determine the actual position within the \lstinline{Board.squares} array.  This time, the \lstinline{Board.squares} array is updated with the new \lstinline{Square}.  Note that we must return the updated board in order for this change to be visible.  Notice also that we are not attempting to control how the \lstinline{Board.squares} array may be updated.  That is, any \lstinline{Square} can be passed into this function, even if it doesn't make sense in the wider context of the game.  This is because these simple provide a general-purpose mechanism for manipulating a \lstinline{Board}.
+Here, the same calculation is performed as before to determine the actual position within the \lstinline{Board.squares} array.  This time, the \lstinline{Board.squares} array is updated with the new \lstinline{Square}, and we must return the updated board for this to be visible (i.e. since arrays are passed-by-value).  Notice also that we are not attempting to control how the \lstinline{Board.squares} array may be updated.  That is, any \lstinline{Square} can be passed into this function, even if it doesn't make sense in the wider context of the game.  This is because these simple functions provide a general-purpose mechanism for manipulating a \lstinline{Board}.
 
 \subsection{Game Play}
 
@@ -95,7 +95,7 @@ This function does one of two things depending on the square being exposed.  Fir
 
 \lstinputlisting[firstline=126,lastline=129]{../examples/minesweeper.whiley}
 
-The final function we need for our implementation of minesweeper is that for determining when the game is actually over and, furthermore, whether the player has won or not.  This examines the board to see whether there are any exposed squares (in which case, the game is over and the player lost).  Furthermore, it checks whether or not every hidden square contains a bomb (in which case, the game is over and the player won).  This function is implemented as follows:
+The final function we need for our implementation of minesweeper is that for determining when the game is actually over and, furthermore, whether the player has won or not.  This examines the board to see whether there are any exposed squares which contain a bomb (in which case, the game is over and the player lost).  Furthermore, it checks whether or not every hidden square contains a bomb (in which case, the game is over and the player won).  This function is implemented as follows:
 
 \lstinputlisting[firstline=144,lastline=160]{../examples/minesweeper.whiley}
 

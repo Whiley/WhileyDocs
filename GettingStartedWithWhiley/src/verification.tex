@@ -64,8 +64,7 @@ to simplify it as follows:
 \lstinputlisting{../examples/verification_3.whiley}
 
 Here, the \lstinline{type} declaration includes a \lstinline{where}
-clause constraining the permissible values for the type ($\$$
-represents the variable whose type this will be).  Thus,
+clause constraining the permissible values for the type.  Thus,
 \lstinline{nat} defines the type of non-negative integers (i.e. the
 natural numbers).  Likewise, \lstinline{pos} gives the type of
 positive integers and is implicitly a subtype of \lstinline{nat}
@@ -162,9 +161,11 @@ with a given value:
 \lstinputlisting{../examples/verification_11.whiley}
 
 This example is surprisingly challenging to verify.  What we must do
-is ensure that the verified knows the size of \lstinline{items} is
-unchanged.  To do this, we introduce a {\em ghost} variable which
-holds its original size:
+is ensure that the verifier knows the size of \lstinline{items} is
+unchanged.~\footnote{Whilst it is obvious to us that its size cannot
+  change, this is unfortunately not (yet) obvious to the verifier.} To
+do this, we introduce a {\em ghost} variable which holds its original
+size:
 
 \begin{lstlisting}
    ...

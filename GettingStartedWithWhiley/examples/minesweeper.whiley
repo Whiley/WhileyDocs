@@ -183,7 +183,7 @@ method printSquare(Square sq):
         if sq.flagged:
             io.print("P")
         else:
-            io.print("O")
+            io.print("X")
     else if sq.holdsBomb:
         io.print("*")
     else if sq.rank == 0:
